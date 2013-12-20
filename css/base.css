@@ -1,0 +1,74 @@
+@charset "utf-8";
+/* CSS Document */
+
+p { 
+	font-size: .875em; /* 14px / 16px */ 
+	}
+h1 { 
+	font-size: 1.5em; /* 24px / 16px */ 
+	font-weight: normal; 
+	}
+h2 { 
+	font-size: 1.25em; /* 20px / 16px */ 
+	font-weight: normal; 
+	}
+h3 { 
+	font-size: 1.125em; /* 18px / 16px */ 
+	font-weight: normal; 
+	}
+h4 { 
+	font-size: 1.0em; /* 16px / 16px */ 
+	font-weight: normal; 
+	}
+h5 { 
+	font-size: 0.875em; /* 14px / 16px */ 
+	font-weight: normal; 
+	}
+h6 { 
+	font-size: 0.75em; /* 12px / 16px */ 
+	font-weight: normal; 
+	}
+nav {
+	text-align: center;
+}
+nav ul li {
+	display: inline;
+	font-size:  2.5em;
+}
+/*#maincontent {*/
+/*body {*/
+/*#wrapper {*/
+#maincontent {
+	background-image: url(../images/AALogoOpaque.png);
+	background-repeat: no-repeat;
+	-webkit-background-size: contain;
+	-moz-background-size: contain;
+	-o-background-size: contain;
+	background-size: contain;
+	background-position: center;
+}
+
+#wrapper {
+	margin-right: auto;
+	margin-left: auto;
+	font-family: 'Ribeye Marrow', cursive;
+}
+#wrapper header #title {
+	background-image: url(../images/headerOpaque2.png);
+	background-repeat: no-repeat;
+	-webkit-background-size: contain;
+	-moz-background-size: contain;
+	-o-background-size: contain;
+	background-size: contain;
+	background-position: center;
+	text-align: center;
+}
+#wrapper header #title h1 {
+	font-size:  3.5em;
+}
+#wrapper header #title h2 {
+	font-size:  2.5em;
+}
+#wrapper header #title h3 {
+	font-size:  2.5em;
+}

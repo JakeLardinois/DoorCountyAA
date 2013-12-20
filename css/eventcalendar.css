@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+
+/**************************************************************
+********* Formatting For Month Table and Text *****************
+**************************************************************/
+
+A	{ font-family:arial, helvetica; color:#00F; text-decoration:underline }
+SPAN	{ font-family:arial, helvetica }
+BODY	{ background-color:#FFF }
+
+table.EventCalendar
+{
+    width: 100%;
+}
+
+/**** month and year header at top of calendar ****/
+span.date_header { font-size:16px; font-family:arial, helvetica; font-weight:bold;}
+
+/**** color and size of calendar cells.  ****/
+td.day_cell { background-color:rgba(237, 236, 216, .5); height:80px; width: 95px; text-align: left;}
+td.empty_day_cell {height:80px; width: 95px; }
+td.today_cell { background-color:rgba(245, 244, 237, .5)#F5F4ED; height:80px; width: 95px; text-align: left;}
+
+/**** day number in upper left corner of each cell ****/
+.day_number { font-size:10px; font-family:verdana, arial, helvetica; color:#000 }
+
+/**** title_txt is the text for each post on main page ****/
+.title_txt { font-size:10px; font-family:verdana, arial, helvetica; color:#000 }
+.title_txt A:link { color:#00F; text-decoration:underline }
+.title_txt A:active { color:#00F; text-decoration:underline }
+.title_txt A:visited { color:#00F; text-decoration:underline }
+.title_txt A:hover { color:#00F; text-decoration:underline }
+
+/**** time line under title text when event time given ****/
+.time_str { font-size:9px; font-family:arial, helvetica }
+
+/**** column headers or days of the week ****/
+.column_header { background-color:#2663E2; font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold }
+
+/**** footprint text ****/
+.footprint { font-size:10px; font-family:verdana, arial, helvetica; color:#000; font-weight:bold; }
+.footprint A { font-size:10px; font-family:verdana, arial, helvetica; color:#00F; font-weight:bold; }
