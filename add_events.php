@@ -15,4 +15,5 @@ exit('Unable to connect to database.');
 $sql = "INSERT INTO evenement (title, start, end, url) VALUES (:title, :start, :end, :url)";
 $q = $bdd->prepare($sql);
 $q->execute(array(':title'=>$title, ':start'=>$start, ':end'=>$end,  ':url'=>$url));
+echo json_encode(array('Success' => true));
 ?>

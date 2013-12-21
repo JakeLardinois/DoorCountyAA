@@ -1,7 +1,40 @@
 // JavaScript source code
 
 function WireEvents() {
-    $('#btnPopupSave').click(function () {
+	var $frmAddEvent = $('#frmAddEvent');
+	
+	
+	$frmAddEvent.on('submit', function(ev){
+		ev.preventDefault();
+        //$('#popupEventForm').dialog('close');
+        var dataRow = {
+            'title': $('#description').val(), //could not use #title for some reason...
+            'url': $('#url').val(),
+            'start': $('#start').val(),
+            'end': $('#end').val()
+        }
+        //ClearPopupFormValues();
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/DoorCountyAA/add_events.php',
+            data: dataRow,
+            success: function (response) {
+				sValue = JSON.parse(response);
+                if (sValue.Success) {
+					
+                    $('#calendar').fullCalendar('refetchEvents');
+					
+                    alert('New event saved!');
+					$('#frmAddEvent').dialog('close');
+                }
+                else {
+                    alert('Error, could not save event!');
+                }
+            }
+        });
+    });
+	
+    /*$('#btnSave').click(function (event) {
         //$('#popupEventForm').dialog('close');
         var dataRow = {
             'title': $('#title').val(),
@@ -25,7 +58,7 @@ function WireEvents() {
                 }
             }
         });
-    });
+    });*/
 }
 
 function BuildCalendar() {
@@ -85,8 +118,9 @@ function BuildCalendar() {
             calendar.fullCalendar('unselect');
         },*/
         dayClick: function (date, allDay, jsEvent, view) {
-            $('#title').val("");
-            $('#url').val("");
+            //$('#title').val("");
+			//$('#test').val("");
+            //$('#url').val("");
             $('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
             $('#end').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
             ShowEventPopup(date);
@@ -142,7 +176,7 @@ function ShowEventPopup(date) {
     //ClearPopupFormValues();
     /*$('#popupEventForm').show();
     $('#eventTitle').focus(); */
-    $('#popupEventForm').dialog({
+    $('#AddEvent').dialog({
         modal: true,
         resizable: true,
         position: 'center',
