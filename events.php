@@ -3,7 +3,8 @@
  $json = array();
 
  // Query that retrieves events
- $requete = "SELECT * FROM evenement ORDER BY id";
+ //explicitly call out my fields-Notice how I get text 'true' 'false' from bool 1 or 0
+ $requete = "SELECT id, title, start, end, url, IF(allday,'true','false') FROM evenement ORDER BY id";
 
  // connection to the database
  try {

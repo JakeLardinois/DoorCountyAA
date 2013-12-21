@@ -11,10 +11,8 @@
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui-timepicker-addon.css">
     <title>Meetings & Events</title>
     <script type="application/javascript">
-		
         $(document).ready(function () {
 			BuildCalendar();
-			WireEvents();
         });
 		
 	</script>
@@ -26,8 +24,8 @@
         <div id="maincontent">
         	<div id='calendar'></div>
         </div>
-        <div id="AddEvent" style="display: none;">
-          <form id="frmAddEvent" name="test" > 
+        <div id="Event" style="display: none;">
+          <form id="frmEvent" > 
             <input type="hidden" id="eventID">
             
             <label>Event title</label>
@@ -42,14 +40,21 @@
             <label>End date</label>
             <input type="datetime" id="end" name="end" required><br />
             
-            <button type="submit" id="btnSave" >Save event</button>
+            <label>All Day Event</label>
+            <input type="checkbox" id="allday" name="allday" >
           </form>
         </div> 
         <?php require("./templates/footer.php"); ?>
     </div>
     <script type="text/javascript">
-		$('#start').datetimepicker();
-		$('#end').datetimepicker();
+		$('#start').datetimepicker({
+			timeFormat: "HH:mm:ss",
+			dateFormat: "yy-m-dd"
+			});
+		$('#end').datetimepicker({
+			timeFormat: "HH:mm:ss",
+			dateFormat: "yy-m-dd"
+			});
 	</script>
   </body>
 </html>

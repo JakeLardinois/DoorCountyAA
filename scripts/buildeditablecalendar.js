@@ -1,65 +1,6 @@
 // JavaScript source code
+//var calendar;
 
-function WireEvents() {
-	var $frmAddEvent = $('#frmAddEvent');
-	
-	
-	$frmAddEvent.on('submit', function(ev){
-		ev.preventDefault();
-        //$('#popupEventForm').dialog('close');
-        var dataRow = {
-            'title': $('#description').val(), //could not use #title for some reason...
-            'url': $('#url').val(),
-            'start': $('#start').val(),
-            'end': $('#end').val()
-        }
-        //ClearPopupFormValues();
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:8080/DoorCountyAA/add_events.php',
-            data: dataRow,
-            success: function (response) {
-				sValue = JSON.parse(response);
-                if (sValue.Success) {
-					
-                    $('#calendar').fullCalendar('refetchEvents');
-					
-                    alert('New event saved!');
-					$('#frmAddEvent').dialog('close');
-                }
-                else {
-                    alert('Error, could not save event!');
-                }
-            }
-        });
-    });
-	
-    /*$('#btnSave').click(function (event) {
-        //$('#popupEventForm').dialog('close');
-        var dataRow = {
-            'title': $('#title').val(),
-            'url': $('#url').val(),
-            'start': $('#start').val(),
-            'end': $('#end').val()
-        }
-        //ClearPopupFormValues();
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:8080/DoorCountyAA/add_events.php',
-            data: dataRow,
-            success: function (response) {
-                if (response == 'True') {
-                    $('#calendar').fullCalendar('refetchEvents');
-					$('#popupEventForm').dialog('close');
-                    alert('New event saved!');
-                }
-                else {
-                    alert('Error, could not save event!');
-                }
-            }
-        });
-    });*/
-}
 
 function BuildCalendar() {
     var date = new Date();
@@ -78,17 +19,19 @@ function BuildCalendar() {
         events: "http://localhost:8080/DoorCountyAA/events.php",
 
         timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
-
+		allDayDefault: false,
+		//allDaySlot: false,
 
 
         // Convert the allDay from string to boolean
-        eventRender: function (event, element, view) {
+        /*eventRender: function (event, element, view) {
             if (event.allDay === 'true') {
                 event.allDay = true;
             } else {
                 event.allDay = false;
             }
-        },
+        },*/
+		
         selectable: true,
         selectHelper: true,
         /*select: function (start, end, allDay) {
@@ -119,11 +62,11 @@ function BuildCalendar() {
         },*/
         dayClick: function (date, allDay, jsEvent, view) {
             //$('#title').val("");
-			//$('#test').val("");
+            //$('#test').val("");
             //$('#url').val("");
             $('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
             $('#end').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
-            ShowEventPopup(date);
+            ShowAddEventPopup(date);
         },
 
         editable: true,
@@ -152,7 +95,18 @@ function BuildCalendar() {
             });
         },
         eventClick: function (event) {
-            var decision = confirm("Do you really want to do that?");
+			$('#description').val(event.title);
+			$('#url').val(event.url);
+			$('#start').val($.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss"));
+			alert($.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss"));
+			$('#end').val($.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss"));
+			alert($.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss"));
+			$('#allday').prop('checked'); //allday
+			
+			ShowEditEventPopup(event);
+			return false; //stops the navigation to the URL
+			
+            /*var decision = confirm("Do you really want to do that?");
             if (decision) {
                 $.ajax({
                     type: "POST",
@@ -160,7 +114,7 @@ function BuildCalendar() {
                     data: "&id=" + event.id,
                     type: "POST",
                     success: function (json) {
-                        alert("Deleted Successfully");
+                        //alert("Deleted Successfully");
                     }
                 });
                 $('#calendar').fullCalendar('removeEvents', event.id);
@@ -168,21 +122,123 @@ function BuildCalendar() {
             }
             else {
 
-            }
+            }*/
         }
     });
 }
-function ShowEventPopup(date) {
+
+function ShowAddEventPopup(date) {
     //ClearPopupFormValues();
     /*$('#popupEventForm').show();
     $('#eventTitle').focus(); */
-    $('#AddEvent').dialog({
+    $('#Event').dialog({
         modal: true,
         resizable: true,
         position: 'center',
         width: 'auto',
         autoResize: true,
-        title: 'Add Event'
+        title: 'Add Event',
+        buttons: {
+            Ok: function () {
+                if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
+				
+                    var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
+                        'title': $('#description').val(), //could not use #title for some reason...
+                        'url': $('#url').val(),
+                        'start': $('#start').val(),
+                        'end': $('#end').val(),
+						'allday': $('#allday').prop('checked')
+                    }
+					//$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8080/DoorCountyAA/add_events.php',
+                        data: dataRow,
+                        success: function (response) {
+                            sValue = JSON.parse(response);
+                            if (sValue.Success) {
+                                $('#calendar').fullCalendar('refetchEvents');
+                                $('#Event').dialog('close');
+                                ClearFormValues();
+                            }
+                            else {
+                                alert('Error, could not save event!');
+                            }
+                        }
+                    });
+                }
+            }
+        }
     });
 }
+
+function ClearFormValues() {
+	$('#description').val('');
+	$('#url').val('');
+	$('#start').val('');
+	$('#end').val('');
+	$('#allday').prop('checked') == false; //allday
+}
+
+function ShowEditEventPopup(event) {
+    //ClearPopupFormValues();
+    /*$('#popupEventForm').show();
+    $('#eventTitle').focus(); */
+    $('#Event').dialog({
+        modal: true,
+        resizable: true,
+        position: 'center',
+        width: 'auto',
+        autoResize: true,
+        title: 'Add Event',
+        buttons: {
+			Delete: function () {
+				$.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/DoorCountyAA/delete_event.php",
+                    data: "&id=" + event.id,
+                    type: "POST",
+                    success: function (json) {
+                        //alert("Deleted Successfully");
+						$('#Event').dialog('close');
+                    }
+                });
+                $('#calendar').fullCalendar('removeEvents', event.id);
+				},
+            Update: function () {
+                if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
+				
+					
+                    var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
+                        'title': $('#description').val(), //could not use #title for some reason...
+                        'url': $('#url').val(),
+                        'start': $('#start').val(),
+                        'end': $('#end').val(),
+						'allday': $('#allday').prop('checked')
+                    }
+					//$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:8080/DoorCountyAA/add_events.php',
+                        data: dataRow,
+                        success: function (response) {
+                            sValue = JSON.parse(response);
+                            if (sValue.Success) {
+                                $('#calendar').fullCalendar('refetchEvents');
+                                $('#AddEvent').dialog('close');
+                                //ClearFormValues();
+                            }
+                            else {
+                                alert('Error, could not save event!');
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    });
+}
+
 
