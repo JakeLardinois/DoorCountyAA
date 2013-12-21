@@ -7,7 +7,7 @@
     <nav>
         <ul>
             <li><a href="index.php">Home</a> |</li>
-            <li><a href="events.php">Meetings & Events</a> |</li>
+            <li><a href="meetingsandevents.php">Meetings & Events</a> |</li>
             <li><a href="links.php">Links</a> |</li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
