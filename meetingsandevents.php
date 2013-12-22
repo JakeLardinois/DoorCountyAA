@@ -28,20 +28,25 @@
           <form id="frmEvent" > 
             <input type="hidden" id="eventID">
             
-            <label>Event title</label>
+            <label for="description">Event Title</label>
             <input type="text" id="description" name="description" required><br />
             
-            <label>URL</label>
+            <label for="url">URL</label>
             <input type="url" id="url" name="url" required><br />
             
-            <label>Start date</label>
+            <label for="start">Start date</label>
             <input type="datetime" id="start" name="start" required><br />
             
-            <label>End date</label>
+            <label for="end">End date</label>
             <input type="datetime" id="end" name="end" required><br />
             
-            <label>Recurring</label>
-            <input type="checkbox" id="recurring" name="recurring" >
+            <label for="repeats">Recurring</label>
+            <input type="checkbox" id="repeats" name="repeats" >
+            <div id="repeat-options" >
+                 Repeat every: day <input type="radio" value="1" name="repeat-freq" align="bottom">
+                 week <input type="radio" value="7" name="repeat-freq" align="bottom">
+                 two weeks <input type="radio" value="14" name="repeat-freq" align="bottom">
+            </div>
           </form>
         </div> 
         <?php require("./templates/footer.php"); ?>

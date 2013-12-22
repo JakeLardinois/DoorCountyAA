@@ -1,5 +1,5 @@
 // JavaScript source code
-//var calendar;
+var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 
 
 function BuildCalendar() {
@@ -65,7 +65,7 @@ function BuildCalendar() {
             //alert($.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss"));
             $('#end').val($.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss"));
             //alert($.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss"));
-            $('#recurring').prop('checked'); //allday
+            $('#repeats').prop('checked'); //recurring
 
             ShowEditEventPopup(event);
             return false; //stops the navigation to the URL of the event
@@ -83,24 +83,15 @@ function ShowAddEventPopup(date) {
         position: 'center',
         width: 'auto',
         autoResize: true,
-        title: 'Add Event',
+        title: 'Create Event',
         buttons: {
-            Ok: function () {
+            'Add': function () {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
-
-                    var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
-                        'title': $('#description').val(), //could not use #title for some reason...
-                        'url': $('#url').val(),
-                        'start': $('#start').val(),
-                        'end': $('#end').val(),
-                        'recurring': $('#recurring').prop('checked')
-                    }
-                    //$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
-
+				
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8080/DoorCountyAA/add_events.php',
-                        data: dataRow,
+                        url: SERVER_URL + 'add_events.php',
+                        data: $('#frmEvent').serialize(),
                         success: function (response) {
                             sValue = JSON.parse(response);
                             if (sValue.Success) {
@@ -124,7 +115,7 @@ function ClearFormValues() {
     $('#url').val('');
     $('#start').val('');
     $('#end').val('');
-    $('#recurring').prop('checked') == false; //allday
+    $('#repeats').prop('checked') == false; //recurring
 }
 
 function ShowEditEventPopup(event) {
@@ -137,7 +128,7 @@ function ShowEditEventPopup(event) {
         position: 'center',
         width: 'auto',
         autoResize: true,
-        title: 'Add Event',
+        title: 'Edit or Delete Event',
         buttons: {
             Delete: function () {
                 var decision = confirm("Do you really want delete this event?");
@@ -164,7 +155,7 @@ function ShowEditEventPopup(event) {
                         'url': $('#url').val(),
                         'start': $('#start').val(),
                         'end': $('#end').val(),
-                        'allday': $('#allday').prop('checked'),
+                        'allday': $('#repeats').prop('checked'),
                         'id': event.id
                     }
                     //$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
