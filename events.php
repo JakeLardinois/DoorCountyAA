@@ -1,15 +1,14 @@
 <?php
-	require_once './config/db_config.php';
+	require_once 'config/config.php';
 	
 	try { //I do a try catch in case there are problems with connecting to my db...
-	  $dbh = new PDO('mysql:host=localhost;dbname=fullcalendar', mysql_username, mysql_password);
+	  $dbh = new PDO('mysql:host='.mysql_hostname.';dbname='.mysql_dbname, mysql_username, mysql_password);
 	  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} 
-	catch(Exception $e) {
-		exit('Unable to connect to database.');
-	}
+	catch(Exception $e) { exit('Unable to connect to database.'); }
+	
 	//the below gets all the events from the events table; explicitly call out my fields-Notice how I get text 'true' 'false' from bool 1 or 0 in allday field
-    $stmt = $dbh->prepare("SELECT id, parent_id, title, start, end, url, IF(allday,'true','false')
+    $stmt = $dbh->prepare("SELECT id, parent_id, title, start, end, url, IF(allday,'true','false') AS allday
                            FROM events");
     $stmt->execute();
     $events = array();
@@ -20,8 +19,8 @@
         $eventArray['title'] = stripslashes($row['title']);
         $eventArray['start'] = $row['start'];
         $eventArray['end'] = $row['end'];
-		$eventArray['url'] = $row['end'];
-		$eventArray['allday'] = $row['end'];
+		$eventArray['url'] = $row['url'];
+		$eventArray['allday'] = $row['allday'];
         $events[] = $eventArray;
     }
 

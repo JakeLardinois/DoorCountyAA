@@ -16,7 +16,7 @@ function BuildCalendar() {
             right: 'month,agendaWeek,agendaDay'
         },
 
-        events: "http://localhost:8080/DoorCountyAA/events.php", //loads the events into json
+        events: SERVER_URL + 'events.php', //loads the events into json
 
         timeFormat: 'h:mm{ - h:mm}', // 'H(:mm)', // uppercase H for 24-hour clock
         allDayDefault: false,  //for some reason this allows the time to be displayed on the month view...
@@ -38,7 +38,7 @@ function BuildCalendar() {
             var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
-                url: 'http://localhost:8080/DoorCountyAA/update_events.php',
+                url: SERVER_URL + 'update_events.php',
                 data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
@@ -50,7 +50,7 @@ function BuildCalendar() {
             var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
-                url: 'http://localhost:8080/DoorCountyAA/update_events.php',
+                url: SERVER_URL + 'update_events.php',
                 data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
@@ -87,7 +87,7 @@ function ShowAddEventPopup(date) {
         buttons: {
             'Add': function () {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
-				
+
                     $.ajax({
                         type: 'POST',
                         url: SERVER_URL + 'add_events.php',
@@ -131,24 +131,41 @@ function ShowEditEventPopup(event) {
         title: 'Edit or Delete Event',
         buttons: {
             Delete: function () {
-                var decision = confirm("Do you really want delete this event?");
-                if (decision) {
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost:8080/DoorCountyAA/delete_event.php",
-                        data: "&id=" + event.id,
-                        type: "POST",
-                        success: function (json) {
-                            //alert("Deleted Successfully");
-                            $('#Event').dialog('close');
+                var decision = $.prompt("Do you really want delete this event or the series?", {
+                    title: "Delete?",
+                    buttons: { "Delete Event": 1, "Delete Series": 2, "Cancel": 0 },
+                    close: function (e, v, m, f) {
+                        if (v == 1) {
+                            $.ajax({
+                                type: "POST",
+                                url: SERVER_URL + 'delete_event.php',
+                                data: "&id=" + event.id,
+                                type: "POST",
+                                success: function (json) {
+                                    //alert("Deleted Successfully");
+                                    $('#Event').dialog('close');
+                                }
+                            });
+                            $('#calendar').fullCalendar('removeEvents', event.id);
                         }
-                    });
-                    $('#calendar').fullCalendar('removeEvents', event.id);
-                }
+                        if (v == 2) {
+							$.ajax({
+                                type: "POST",
+                                url: SERVER_URL + 'delete_eventseries.php',
+                                data: "&parent_id=" + event.parent_id,
+                                type: "POST",
+                                success: function (json) {
+                                    //alert("Deleted Successfully");
+                                    $('#Event').dialog('close');
+                                }
+                            });
+							$('#calendar').fullCalendar('refetchEvents');
+						}
+                    }
+                });
             },
             Update: function () {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
-
 
                     var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
                         'title': $('#description').val(), //could not use #title for some reason...
@@ -162,7 +179,7 @@ function ShowEditEventPopup(event) {
 
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:8080/DoorCountyAA/update_events.php',
+                        url: SERVER_URL + 'update_events.php',
                         data: dataRow,
                         success: function (response) {
                             sValue = JSON.parse(response);

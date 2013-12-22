@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <?php require("./templates/scripts.php"); ?>
     <script src="./scripts/fullcalendar.min.js"></script>
-    <script src="./scripts/buildeditablecalendar.js"></script>
+    <script src="./scripts/buildeditablecalendar.js"></script>//you could load a buildreadablecalendar.js and load that one based on if the user is authenticated...
     <script src="./scripts/jquery-ui-timepicker-addon.js"></script>
+    <script src="scripts/jquery-impromptu.min.js"></script>
     <?php require("./templates/css.php"); ?>
     <link rel="stylesheet" type="text/css" href="./css/fullcalendar.css">
     <link rel="stylesheet" type="text/css" href="./css/jquery-ui-timepicker-addon.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-impromptu.css">
     <title>Meetings & Events</title>
     <script type="application/javascript">
         $(document).ready(function () {

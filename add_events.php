@@ -1,5 +1,5 @@
 <?php
-    require_once './config/db_config.php';
+    require_once 'config/config.php';
 	
 	$objException = null;
     $title = $_POST['description']; 
@@ -18,10 +18,12 @@
 		else {$repeats = $_POST['repeats'];}	//else set it to whatever the value is that is being passed which needs to be a 0 or 1.
 	}
 
-	//place a try catch here for db connection exception
-	$dbh = new PDO('mysql:host=localhost;dbname=fullcalendar', mysql_username, mysql_password);
-	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // set the error mode to excptions
-	$dbh->beginTransaction();
+	try {
+		$dbh = new PDO('mysql:host='.mysql_hostname.';dbname='.mysql_dbname, mysql_username, mysql_password);
+		$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // set the error mode to excptions
+		$dbh->beginTransaction();
+	} catch(Exception $objException) { exit('Unable to connect to database.'); }
+	
 		
     if (!$repeats) {
         $repeat_freq = 0;  
