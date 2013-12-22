@@ -16,4 +16,5 @@ exit('Unable to connect to database.');
 $sql = "UPDATE evenement SET title=?, start=?, end=? WHERE id=?";
 $q = $bdd->prepare($sql);
 $q->execute(array($title,$start,$end,$id));
+echo json_encode(array('Success' => true));//sends json response back to ajax telling it it was successful...
 ?>

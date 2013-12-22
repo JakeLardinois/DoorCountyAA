@@ -40,8 +40,8 @@
             <label>End date</label>
             <input type="datetime" id="end" name="end" required><br />
             
-            <label>All Day Event</label>
-            <input type="checkbox" id="allday" name="allday" >
+            <label>Recurring</label>
+            <input type="checkbox" id="recurring" name="recurring" >
           </form>
         </div> 
         <?php require("./templates/footer.php"); ?>
