@@ -25,7 +25,7 @@
 	} catch(Exception $objException) { exit('Unable to connect to database.'); }
 	
 		
-    if (!$repeats) {
+    if (!$repeats) { //if it is not a repeating/recurring event
         $repeat_freq = 0;  
         try{
             $stmt = $dbh->prepare("INSERT INTO events_parent 
@@ -66,7 +66,7 @@
             $dbh->rollback();
         }
     }
-    else {
+    else { //if it is a repeating/recurring event
         $repeat_freq = $_POST['repeat-freq'];
         $until = (365/$repeat_freq);
         if ($repeat_freq == 1){

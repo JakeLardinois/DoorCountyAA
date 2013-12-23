@@ -1,6 +1,14 @@
 <?php
 	require_once 'config/config.php';
 	
+	//The below use of dates was from my disovery that FullCalendar passes start and end as parameters on it's http get for this .php file which is what populates the calendar
+	//with events. Otherwise my query was getting the entire result set and then letting FullCalendar only display the pertinant ones...
+	$objDate1 = new DateTime();
+	$objDate2 = new DateTime();
+	$start = $objDate1->setTimestamp($_GET['start']); //notice my use of HTTP GET instead of POST because this .php file is http getted...
+	$end = $objDate2->setTimestamp($_GET['end']);
+	
+	
 	try { //I do a try catch in case there are problems with connecting to my db...
 	  $dbh = new PDO('mysql:host='.mysql_hostname.';dbname='.mysql_dbname, mysql_username, mysql_password);
 	  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -9,7 +17,9 @@
 	
 	//the below gets all the events from the events table; explicitly call out my fields-Notice how I get text 'true' 'false' from bool 1 or 0 in allday field
     $stmt = $dbh->prepare("SELECT id, parent_id, title, start, end, url, IF(allday,'true','false') AS allday
-                           FROM events");
+                           FROM events
+						   WHERE start >= '".$start->format('Y/m/d')."' AND end <= '".$end->format('Y/m/d')."'"); //filters the result set for only records in the current time period
+	
     $stmt->execute();
     $events = array();
 

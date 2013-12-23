@@ -87,7 +87,6 @@ function ShowAddEventPopup(date) {
         buttons: {
             'Add': function () {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
-
                     $.ajax({
                         type: 'POST',
                         url: SERVER_URL + 'add_events.php',
@@ -131,11 +130,12 @@ function ShowEditEventPopup(event) {
         title: 'Edit or Delete Event',
         buttons: {
             Delete: function () {
-                var decision = $.prompt("Do you really want delete this event or the series?", {
+                var decision = $.prompt("Do you want delete this event or the series?", {
                     title: "Delete?",
                     buttons: { "Delete Event": 1, "Delete Series": 2, "Cancel": 0 },
                     close: function (e, v, m, f) {
                         if (v == 1) {
+							$.ajaxSetup({ async: false });
                             $.ajax({
                                 type: "POST",
                                 url: SERVER_URL + 'delete_event.php',
@@ -146,10 +146,12 @@ function ShowEditEventPopup(event) {
                                     $('#Event').dialog('close');
                                 }
                             });
+							$.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
                             $('#calendar').fullCalendar('removeEvents', event.id);
                         }
                         if (v == 2) {
-							$.ajax({
+							$.ajaxSetup({ async: false });//had to turn off asynchronous calls or else when series of events were deleted, the lag was such
+							$.ajax({						//that the database wouldn't respond fast enough before the events were refetched below...
                                 type: "POST",
                                 url: SERVER_URL + 'delete_eventseries.php',
                                 data: "&parent_id=" + event.parent_id,
@@ -159,6 +161,7 @@ function ShowEditEventPopup(event) {
                                     $('#Event').dialog('close');
                                 }
                             });
+							$.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
 							$('#calendar').fullCalendar('refetchEvents');
 						}
                     }
