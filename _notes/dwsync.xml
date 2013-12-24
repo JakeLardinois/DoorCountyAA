@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="test.php" server="www.doorcountyaa.org//public_html/" local="130317621582508819" remote="130320154800000000" Dst="1" />
+<file name="add_events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130322211820913242" remote="130322709000000000" Dst="1" />
+<file name="contact.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130320257354734171" remote="130322709000000000" Dst="1" />
+<file name="delete_event.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130322436985741933" remote="130322709000000000" Dst="1" />
+<file name="delete_eventseries.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130322201285270637" remote="130322709000000000" Dst="1" />
+<file name="events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130322875881104181" remote="130322874600000000" Dst="1" />
+<file name="index.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130320181474774085" remote="130322709000000000" Dst="1" />
+<file name="links.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130320256938370356" remote="130322709000000000" Dst="1" />
+<file name="meetingsandevents.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130323786696054030" remote="130323785400000000" Dst="1" />
+<file name="update_events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130322166036474522" remote="130322709000000000" Dst="1" />
 </dwsync>

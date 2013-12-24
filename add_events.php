@@ -1,5 +1,9 @@
 <?php
-    require_once 'config/config.php';
+	require_once 'config/config.php';
+	
+	//This prevents an unauthenticated user from utilizing the buildeditablecalendar.js file to add events; it is a failsafe measure since the first line against unauthorized
+	//access is loading buildreadonlycalendar.js for unauthenticated users.
+	if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){exit();} 
 	
 	$objException = null;
     $title = $_POST['description']; 

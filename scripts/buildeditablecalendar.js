@@ -1,5 +1,9 @@
 // JavaScript source code
+//localServer
 var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
+
+//Remote Server
+//var SERVER_URL = './'
 
 
 function BuildCalendar() {
@@ -201,5 +205,6 @@ function ShowEditEventPopup(event) {
         }
     });
 }
+
 
 

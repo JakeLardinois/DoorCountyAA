@@ -46,6 +46,9 @@ nav ul li {
 	-o-background-size: contain;
 	background-size: contain;
 	background-position: center;
+	margin-right: auto;
+	margin-left: auto;
+	width: 80%;
 }
 
 #wrapper {

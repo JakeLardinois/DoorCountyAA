@@ -1,12 +1,11 @@
 <?php
+	require_once('infrastructure/sharedfunctions.php'); //Brings in MySharedFunctions static methods
 	require_once 'config/config.php';
 	
 	//The below use of dates was from my disovery that FullCalendar passes start and end as parameters on it's http get for this .php file which is what populates the calendar
 	//with events. Otherwise my query was getting the entire result set and then letting FullCalendar only display the pertinant ones...
-	$objDate1 = new DateTime();
-	$objDate2 = new DateTime();
-	$start = $objDate1->setTimestamp($_GET['start']); //notice my use of HTTP GET instead of POST because this .php file is http getted...
-	$end = $objDate2->setTimestamp($_GET['end']);
+	$start = MySharedFunctions::GetDateTimeFromTimeStamp($_GET['start']); //notice my use of HTTP GET instead of POST because this .php file is http getted...
+	$end = MySharedFunctions::GetDateTimeFromTimeStamp($_GET['end']);
 	
 	
 	try { //I do a try catch in case there are problems with connecting to my db...
