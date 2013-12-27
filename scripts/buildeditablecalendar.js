@@ -20,7 +20,7 @@ function BuildCalendar() {
             right: 'month,agendaWeek,agendaDay'
         },
 
-        events: SERVER_URL + 'events.php', //loads the events into json
+        events: SERVER_URL + 'calendarfunctions/events.php', //loads the events into json
 
         timeFormat: 'h:mm{ - h:mm}', // 'H(:mm)', // uppercase H for 24-hour clock
         allDayDefault: false,  //for some reason this allows the time to be displayed on the month view...
@@ -42,7 +42,7 @@ function BuildCalendar() {
             var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
-                url: SERVER_URL + 'update_events.php',
+                url: SERVER_URL + 'calendarfunctions/update_events.php',
                 data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
@@ -54,7 +54,7 @@ function BuildCalendar() {
             var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
-                url: SERVER_URL + 'update_events.php',
+                url: SERVER_URL + 'calendarfunctions/update_events.php',
                 data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
@@ -93,7 +93,7 @@ function ShowAddEventPopup(date) {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
                     $.ajax({
                         type: 'POST',
-                        url: SERVER_URL + 'add_events.php',
+                        url: SERVER_URL + 'calendarfunctions/add_events.php',
                         data: $('#frmEvent').serialize(),
                         success: function (response) {
                             sValue = JSON.parse(response);
@@ -142,7 +142,7 @@ function ShowEditEventPopup(event) {
 							$.ajaxSetup({ async: false });
                             $.ajax({
                                 type: "POST",
-                                url: SERVER_URL + 'delete_event.php',
+                                url: SERVER_URL + 'calendarfunctions/delete_event.php',
                                 data: "&id=" + event.id,
                                 type: "POST",
                                 success: function (json) {
@@ -157,7 +157,7 @@ function ShowEditEventPopup(event) {
 							$.ajaxSetup({ async: false });//had to turn off asynchronous calls or else when series of events were deleted, the lag was such
 							$.ajax({						//that the database wouldn't respond fast enough before the events were refetched below...
                                 type: "POST",
-                                url: SERVER_URL + 'delete_eventseries.php',
+                                url: SERVER_URL + 'calendarfunctions/delete_eventseries.php',
                                 data: "&parent_id=" + event.parent_id,
                                 type: "POST",
                                 success: function (json) {
@@ -186,7 +186,7 @@ function ShowEditEventPopup(event) {
 
                     $.ajax({
                         type: 'POST',
-                        url: SERVER_URL + 'update_events.php',
+                        url: SERVER_URL + 'calendarfunctions/update_events.php',
                         data: dataRow,
                         success: function (response) {
                             sValue = JSON.parse(response);
@@ -206,5 +206,14 @@ function ShowEditEventPopup(event) {
     });
 }
 
-
+/*I used to have these in meatingsandevents.php because they need to be loaded at the bottom of the page. I moved them inside this script when I moved the loading
+of this entire script to the bottom of meetingsandevents.php...*/
+$('#start').datetimepicker({
+  timeFormat: "HH:mm:ss",
+  dateFormat: "yy-m-dd"
+});
+$('#end').datetimepicker({
+  timeFormat: "HH:mm:ss",
+  dateFormat: "yy-m-dd"
+});
 

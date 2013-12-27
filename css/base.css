@@ -38,23 +38,12 @@ nav ul li {
 /*#maincontent {*/
 /*body {*/
 /*#wrapper {*/
-#maincontent {
-	background-image: url(../images/AALogoOpaque.png);
-	background-repeat: no-repeat;
-	-webkit-background-size: contain;
-	-moz-background-size: contain;
-	-o-background-size: contain;
-	background-size: contain;
-	background-position: center;
-	margin-right: auto;
-	margin-left: auto;
-	width: 80%;
-}
 
 #wrapper {
 	margin-right: auto;
 	margin-left: auto;
 	font-family: 'Ribeye Marrow', cursive;
+	/*overflow: hidden;*/
 }
 #wrapper header #title {
 	background-image: url(../images/headerOpaque2.png);
@@ -74,4 +63,28 @@ nav ul li {
 }
 #wrapper header #title h3 {
 	font-size:  2.5em;
+}
+header {
+	/*clear:both;*/
+}
+#title {
+	/*clear:both;*/
+}
+#maincontent {
+	background-image: url(../images/AALogoOpaque.png);
+	background-repeat: no-repeat;
+	-webkit-background-size: contain;
+	-moz-background-size: contain;
+	-o-background-size: contain;
+	background-size: contain;
+	background-position: center;
+	margin-right: auto;
+	margin-left: auto;
+	width: 80%;
+}
+.footercontent {
+	text-align: center;
+}
+footer ul li {
+	display: inline;
 }
