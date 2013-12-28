@@ -1,4 +1,4 @@
-<?php require_once 'config/config.php'; ?> 
+<?php require_once 'infrastructure/dbconfig.php'; ?> 
 
 <footer>
 	<div id="login" style="display: none;">
@@ -16,7 +16,7 @@
         {// let the user access the authenticated page
 		
           /*echo "<a href=\"logout.php\">Logout</a>";*/
-          echo "<a href=\"javascript:loadChangePasswordDialog()\">Test</a>";
+          /*echo "<a href=\"javascript:loadChangePasswordDialog()\">Test</a>";*/
 		  
           echo "<ul>";
               
@@ -26,10 +26,12 @@
                   <li><a href=\"useradmin.php\">User Admin</a></li>
 				  <li><a href=\"changepassword.php\">Change Password</a></li>
                   <li><a href=\"userfunctions/logout.php\">Logout</a></li>";
+				  //<li><a href=\"javascript:logout()\">Logout</a></li>";
               } else {
                   echo "
                   <li><a href=\"changepassword.php\">Change Password</a></li>
                   <li><a href=\"userfunctions/logout.php\">Logout</a></li>";
+				  //<li><a href=\"javascript:logout()\">Logout</a></li>";
               }
           echo "</ul>";
         }
@@ -56,6 +58,7 @@
                 $_SESSION['auth'] = $auth;
                 $_SESSION['LoggedIn'] = 1;
                 
+				//since I already post login form, I don't need to do this also...
                 echo "<meta http-equiv='refresh' content='=2;meetingsandevents.php' />";
             }
             else

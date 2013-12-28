@@ -2,15 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <?php require("./templates/scripts.php"); ?>
-    <?php require("./templates/css.php"); ?>
+    <?php require_once("./templates/scripts.php"); ?>
+    <?php require_once("./templates/css.php"); ?>
     <title>Home Page</title>
   </head>
   
 
   <body>
 	<div id="wrapper">
-    	<?php require("./templates/header.php"); ?>
+    	<?php require_once("./templates/header.php"); ?>
         <div id="maincontent">
         	<br>
             <br>
@@ -28,7 +28,7 @@
           causes. Our primary purpose is to stay sober and help other alcoholics
           to achieve sobriety</p>
         </div>
-        <?php require("./templates/footer.php"); ?>
+        <?php require_once("./templates/footer.php"); ?>
     </div>
   </body>
 </html>

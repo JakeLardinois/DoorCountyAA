@@ -1,5 +1,5 @@
 <?php
-	require_once '../config/config.php';
+	require_once '../infrastructure/dbconfig.php';
 
 	//This prevents an unauthenticated user from utilizing the buildeditablecalendar.js file to delete events; it is a failsafe measure since the first line against unauthorized
 	//access is loading buildreadonlycalendar.js for unauthenticated users.

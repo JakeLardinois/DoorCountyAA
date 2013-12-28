@@ -1,5 +1,13 @@
 <?php
 
+class User {
+	public $userid;
+    public $username;
+	public $fname;
+    public $lname;
+	public $EmailAddress;
+    public $userlevel;
+}
 /*class DateTime extends DateTime
 {
     public static function setTimestamp( $timestamp )

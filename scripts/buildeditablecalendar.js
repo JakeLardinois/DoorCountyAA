@@ -5,9 +5,8 @@ var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
 //var SERVER_URL = './'
 
-
-function BuildCalendar() {
-    var date = new Date();
+$(document).ready(function () {
+	var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
@@ -75,7 +74,9 @@ function BuildCalendar() {
             return false; //stops the navigation to the URL of the event
         }
     });
-}
+	
+});
+
 
 function ShowAddEventPopup(date) {
     //ClearPopupFormValues();

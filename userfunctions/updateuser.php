@@ -1,10 +1,12 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>Untitled Document</title>
-</head>
+<?php 
+require_once '../infrastructure/dbconfig.php';
 
-<body>
-</body>
-</html>
+$id = $_POST['id'];
+$value = $_POST['value'];
+$rowId = $_POST['rowId'];
+$columnPosition = $_POST['columnPosition'];
+$columnId = $_POST['columnId'];
+$columnName = $_POST['columnName'];
+
+echo $value;
+?>

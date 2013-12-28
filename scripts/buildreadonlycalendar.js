@@ -5,9 +5,8 @@ var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
 //var SERVER_URL = './'
 
-
-function BuildCalendar() {
-    var date = new Date();
+$(document).ready(function () {
+	var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
@@ -20,7 +19,7 @@ function BuildCalendar() {
             right: 'month,agendaWeek,agendaDay'
         },
 
-        events: SERVER_URL + 'events.php', //loads the events into json
+        events: SERVER_URL + 'calendarfunctions/events.php', //loads the events into json
 
         timeFormat: 'h:mm{ - h:mm}', // 'H(:mm)', // uppercase H for 24-hour clock
         allDayDefault: false,  //for some reason this allows the time to be displayed on the month view...
@@ -37,7 +36,8 @@ function BuildCalendar() {
             return false; //stops the navigation to the URL of the event
         }
     });
-}
+});
+
 
 
 
