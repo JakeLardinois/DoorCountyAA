@@ -5,6 +5,7 @@
 	//access is loading buildreadonlycalendar.js for unauthenticated users.
 	if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){exit();} 
 	
+	$userid = $_SESSION['userid']; //used to tag created records
 	$objException = null;
     $title = $_POST['description']; 
 	$start = new DateTime($_POST['start']);
@@ -33,8 +34,8 @@
         $repeat_freq = 0;  
         try{
             $stmt = $dbh->prepare("INSERT INTO events_parent 
-                (title,start_date, start_time, end_time, weekday, repeats, repeat_freq, url, allday)
-                VALUES (:title,:start_date, :start_time, :end_time, :weekday, :repeats, :repeat_freq, :url, :allday)");
+                (title,start_date, start_time, end_time, weekday, repeats, repeat_freq, url, allday, createdby, updatedby)
+                VALUES (:title,:start_date, :start_time, :end_time, :weekday, :repeats, :repeat_freq, :url, :allday, :createdby, :updatedby)");
 
             $stmt->bindParam(':title', $title );
             $stmt->bindParam(':start_date', $start_date);
@@ -45,12 +46,14 @@
             $stmt->bindParam(':repeat_freq', $repeat_freq);
 			$stmt->bindParam(':url', $url);
 			$stmt->bindParam(':allday', $allday);
+			$stmt->bindParam(':createdby', $userid);
+			$stmt->bindParam(':updatedby', $userid);
             $stmt->execute();
             $last_id = $dbh->lastInsertId();
 
             $stmt = $dbh->prepare("INSERT INTO events 
-                (parent_id, title, start, end, url, allday)
-                VALUES (:parent_id, :title, :start, :end,  :url, :allday)");
+                (parent_id, title, start, end, url, allday, createdby, updatedby)
+                VALUES (:parent_id, :title, :start, :end,  :url, :allday, :createdby, :updatedby)");
 
 			$strTempStart = $start->format('Y/m/d H:i:s');//kept getting an 'Strict standards: Only variables should be passed by reference' error
 			$strTempEnd = $end->format('Y/m/d H:i:s');		//when format was placed in the below...
@@ -61,7 +64,8 @@
             $stmt->bindParam(':parent_id', $last_id);
 			$stmt->bindParam(':url', $url);
             $stmt->bindParam(':allday', $allday);
-			
+			$stmt->bindParam(':createdby', $userid);
+			$stmt->bindParam(':updatedby', $userid);
             $stmt->execute();
             $dbh->commit();
 
@@ -79,8 +83,8 @@
         
         try{
             $stmt = $dbh->prepare("INSERT INTO events_parent 
-                (title,start_date, start_time, end_time, weekday, repeats, repeat_freq, url, allday)
-                VALUES (:title, :start_date, :start_time, :end_time, :weekday, :repeats, :repeat_freq, :url, :allday)");
+                (title,start_date, start_time, end_time, weekday, repeats, repeat_freq, url, allday, createdby, updatedby)
+                VALUES (:title, :start_date, :start_time, :end_time, :weekday, :repeats, :repeat_freq, :url, :allday, :createdby, :updatedby)");
 
             $stmt->bindParam(':title', $title );
             $stmt->bindParam(':start_date', $start_date);
@@ -91,6 +95,8 @@
             $stmt->bindParam(':repeat_freq', $repeat_freq);
 			$stmt->bindParam(':url', $url);
             $stmt->bindParam(':allday', $allday);
+			$stmt->bindParam(':createdby', $userid);
+			$stmt->bindParam(':updatedby', $userid);
             $stmt->execute(); //executes the sql
             $last_id = $dbh->lastInsertId(); //gets the id (parent_id) of the newly created record
 
@@ -99,14 +105,16 @@
             for($x = 0; $x <$until; $x++){
 				
                 $stmt = $dbh->prepare("INSERT INTO events 
-                    (title, start, end, parent_id, url, allday)
-                    VALUES (:title, :start, :end, :parent_id, :url, :allday)");
+                    (title, start, end, parent_id, url, allday, createdby, updatedby)
+                    VALUES (:title, :start, :end, :parent_id, :url, :allday, :createdby, :updatedby)");
                 $stmt->bindParam(':title', $title );
                 $stmt->bindParam(':start', $strTempStart); //adds the datetime to the start and end fields of the event
                 $stmt->bindParam(':end', $strTempEnd);
                 $stmt->bindParam(':parent_id', $last_id);
 				$stmt->bindParam(':url', $url);
 				$stmt->bindParam(':allday', $allday);
+				$stmt->bindParam(':createdby', $userid);
+				$stmt->bindParam(':updatedby', $userid);
                 $stmt->execute();
 				
 				//adjusts the dates for the next iteration...

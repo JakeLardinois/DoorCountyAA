@@ -3,6 +3,23 @@
 //This session data is then accessed both client and server side...
 session_start();
 
+// 20 mins in seconds
+//$inactive = 1200;
+// inactive in seconds
+//$inactive = 10;
+//if( !isset($_SESSION['timeout']) )
+//$_SESSION['timeout'] = time() + $inactive; 
+//
+//$session_life = time() - $_SESSION['timeout'];
+//
+//if($session_life > $inactive)
+//{  
+//	session_destroy(); 
+//	//header("Location:index.php");     
+//}
+//$_SESSION['timeout']=time();
+
+
 /*******************************************************
 ************* MySQL Database Settings ******************
 *******************************************************/

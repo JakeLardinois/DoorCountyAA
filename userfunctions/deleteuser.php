@@ -1,9 +1,9 @@
 <?php
 	require_once '../infrastructure/dbconfig.php';
 
-	//This prevents an unauthenticated user from utilizing the buildeditablecalendar.js file to delete events; it is a failsafe measure since the first line against unauthorized
-	//access is loading buildreadonlycalendar.js for unauthenticated users.
+	//This prevents an unauthenticated user from deleting a user
 	if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){exit();}
+	if($_SESSION['auth'] < 2){exit();} //you must have access greater than 2 to delete a user
 	/* Values received via ajax */
 	$id = $_POST['id'];
 

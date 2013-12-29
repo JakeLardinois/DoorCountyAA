@@ -88,3 +88,15 @@ header {
 footer ul li {
 	display: inline;
 }
+
+/*The css for the errors done from jquery validate*/
+/*label.error { display: block; float: none; color: red; padding-left: 11.5em; vertical-align: top; }*/
+label.error { 
+	color: red;
+}
+
+.AddUserControl {
+	float:left; 
+	clear:left;
+	padding-bottom:10px;
+}

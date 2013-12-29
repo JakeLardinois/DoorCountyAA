@@ -5,6 +5,7 @@
 	//access is loading buildreadonlycalendar.js for unauthenticated users.
 	if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){exit();}
 
+	$userid = $_SESSION['userid']; //used to tag created records
 	/* Values received via ajax */
 	$id = $_POST['id'];
 	$title = $_POST['title'];
@@ -17,9 +18,13 @@
 	} catch(Exception $e) {
 		exit('Unable to connect to database.');
 	}
+	
+	//do some check here to make sure that a valid email address is entered if that is the column being updated..
+	
+	
 	// update the records
-	$sql = "UPDATE events SET title=?, start=?, end=? WHERE id=?";
+	$sql = "UPDATE events SET title=?, start=?, end=?, updatedby=? WHERE id=?";
 	$q = $bdd->prepare($sql);
-	$q->execute(array($title,$start,$end,$id));
+	$q->execute(array($title,$start,$end,$userid,$id));
 	echo json_encode(array('Success' => true));//sends json response back to ajax telling it it was successful...
 ?>
