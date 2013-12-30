@@ -1,3 +1,7 @@
+<?php /* A got an 'Warning: session_start() [function.session-start]: Cannot send session cache limiter - headers already sent' error when I had session_start()
+	executing in infrastructure/dbconfig.php only since my footer uses session data; the resolution was to put it here also... */
+	//session_start();  
+?>
 <!doctype html>
 <html>
   <head>

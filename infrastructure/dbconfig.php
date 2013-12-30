@@ -1,7 +1,7 @@
 <?php
 //This has to do with session state and creates a session or resumes the current one based on a session identifier passed via a GET or POST request, or passed via a cookie.
 //This session data is then accessed both client and server side...
-session_start();
+session_start(); 
 
 // 20 mins in seconds
 //$inactive = 1200;

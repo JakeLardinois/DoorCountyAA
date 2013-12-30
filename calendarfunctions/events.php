@@ -15,8 +15,9 @@
 	catch(Exception $e) { exit('Unable to connect to database.'); }
 	
 	//the below gets all the events from the events table; explicitly call out my fields-Notice how I get text 'true' 'false' from bool 1 or 0 in allday field
-    $stmt = $dbh->prepare("SELECT id, parent_id, title, start, end, url, IF(allday,'true','false') AS allday
-                           FROM events
+    $stmt = $dbh->prepare("SELECT id, events.parent_id, events.title, start, end, events.url, IF(events.allday,'true','false') AS allday, IF(repeats,'true','false') AS repeats, repeat_freq
+                           FROM `events` 
+						   INNER JOIN `events_parent` ON events.parent_id = events_parent.parent_id
 						   WHERE start >= '".$start->format('Y/m/d')."' AND end <= '".$end->format('Y/m/d')."'"); //filters the result set for only records in the current time period
 	
     $stmt->execute();
@@ -30,6 +31,8 @@
         $eventArray['end'] = $row['end'];
 		$eventArray['url'] = $row['url'];
 		$eventArray['allday'] = $row['allday'];
+		$eventArray['repeats'] = $row['repeats']; //($row['repeats'] == "1" ? true : false);
+		$eventArray['repeat_freq'] = $row['repeat_freq'];
         $events[] = $eventArray;
     }
 

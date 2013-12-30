@@ -1,10 +1,12 @@
 // JavaScript Document
-
-var oTable;
 //localServer
 var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
 //var SERVER_URL = './'
+
+var oTable;
+
+
 
 $(document).ready(function () {
     var oTimerId;

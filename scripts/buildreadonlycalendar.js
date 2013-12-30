@@ -1,7 +1,6 @@
 // JavaScript source code
 //localServer
 var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
-
 //Remote Server
 //var SERVER_URL = './'
 
@@ -21,7 +20,7 @@ $(document).ready(function () {
 
         events: SERVER_URL + 'calendarfunctions/events.php', //loads the events into json
 
-        timeFormat: 'h:mm{ - h:mm}', // 'H(:mm)', // uppercase H for 24-hour clock
+        timeFormat: 'h:mm{ - h:mmtt}', // 'H(:mm)', // uppercase H for 24-hour clock
         allDayDefault: false,  //for some reason this allows the time to be displayed on the month view...
         allDaySlot: false, //removes the all-day slot from the week veiw of the calendar
 

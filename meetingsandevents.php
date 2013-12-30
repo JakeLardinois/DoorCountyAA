@@ -1,3 +1,4 @@
+<?php //session_start(); ?>
 <!doctype html>
 <html>
   <head>
@@ -26,7 +27,7 @@
         </div>
         <div id="Event" style="display: none;">
           <form id="frmEvent" > 
-            <input type="hidden" id="eventID">
+            <input type="hidden" id="id" name="id" value="">
             
             <label for="description">Event Title</label>
             <input type="text" id="description" name="description" required><br />
@@ -40,12 +41,14 @@
             <label for="end">End date</label>
             <input type="datetime" id="end" name="end" required><br />
             
-            <label for="repeats">Recurring</label>
-            <input type="checkbox" id="repeats" name="repeats" >
-            <div id="repeat-options" >
-                 Repeat every: day <input type="radio" value="1" name="repeat-freq" align="bottom">
-                 week <input type="radio" value="7" name="repeat-freq" align="bottom">
-                 two weeks <input type="radio" value="14" name="repeat-freq" align="bottom">
+            <div id="repeatingoptions">
+              <label for="repeats">Recurring</label>
+              <input type="checkbox" id="repeats" name="repeats" >
+              <div id="repeat-options" >
+                   Repeat every: <input type="radio" value="1" name="repeat-freq" id="rad1days" align="bottom">day 
+                   <input type="radio" checked value="7" name="repeat-freq" id="rad7days"  align="bottom">week 
+                   <input type="radio" value="14" name="repeat-freq" id="rad14days" align="bottom">two weeks
+              </div>
             </div>
           </form>
         </div>
