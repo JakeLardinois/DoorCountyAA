@@ -4,7 +4,6 @@
  * (c) 2013 Adam Shaw
  */
 
-
 .fc {
 	direction: ltr;
 	text-align: left;
@@ -52,6 +51,7 @@ html .fc,
 .fc-header-title {
 	display: inline-block;
 	vertical-align: top;
+	font-size: 34px; /*Sets the font size for the header text*/
 	}
 	
 .fc-header-title h2 {

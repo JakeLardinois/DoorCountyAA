@@ -82,8 +82,9 @@ header {
 	margin-left: auto;
 	width: 80%;
 }
-.footercontent {
+footer {
 	text-align: center;
+	clear: both;
 }
 footer ul li {
 	display: inline;
@@ -99,4 +100,19 @@ label.error {
 	float:left; 
 	clear:left;
 	padding-bottom:10px;
+}
+.bigbook {
+	float: left;
+}
+.linklistitem {
+	padding: 10px;
+}
+.contactlistitem {
+	padding: 10px;
+}
+.contactlistL2 {
+	text-indent:50px;
+}
+.indextext {
+	font-size:  1.5em;
 }

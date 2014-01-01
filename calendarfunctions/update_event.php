@@ -8,9 +8,10 @@
 	$userid = $_SESSION['userid']; //used to tag created records
 	/* Values received via ajax */
 	$id = $_POST['id'];
-	$title = $_POST['title'];
-	$start = $_POST['start'];
-	$end = $_POST['end'];
+	//$title = $_POST['title'];
+	$title = $_POST['description'];
+	$start = new DateTime($_POST['start']);
+	$end = new DateTime($_POST['end']);
 
 	// connection to the database
 	try {
@@ -25,6 +26,6 @@
 	// update the records
 	$sql = "UPDATE events SET title=?, start=?, end=?, updatedby=? WHERE id=?";
 	$q = $bdd->prepare($sql);
-	$q->execute(array($title,$start,$end,$userid,$id));
+	$q->execute(array($title,$start->format('Y/m/d H:i:s'),$end->format('Y/m/d H:i:s'),$userid,$id));
 	echo json_encode(array('Success' => true));//sends json response back to ajax telling it it was successful...
 ?>

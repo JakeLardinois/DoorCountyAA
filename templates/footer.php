@@ -1,6 +1,8 @@
 <?php require_once 'infrastructure/dbconfig.php'; ?> 
 
 <footer>
+	<br>
+    <br>
 	<div id="login" style="display: none;">
       <form method="post" action="userfunctions/login.php" name="loginform" id="loginform">
         <fieldset>

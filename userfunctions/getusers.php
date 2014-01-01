@@ -1,6 +1,12 @@
 <?php
 	require_once '../infrastructure/dbconfig.php';
 	require_once '../infrastructure/customclasses.php';
+	
+	
+	//This prevents an unauthenticated user from getting a list of users
+	if(empty($_SESSION['LoggedIn']) && empty($_SESSION['Username'])){exit();}
+	if($_SESSION['auth'] < 2){exit();} //you must have access greater than 2 to view users
+	
     /*
      * Script:    DataTables server-side script for PHP and MySQL
      * Copyright: 2010 - Allan Jardine, 2012 - Chris Wright

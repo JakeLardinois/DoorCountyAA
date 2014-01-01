@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="add_events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130327974342098237" remote="130328215200000000" Dst="1" />
-<file name="delete_event.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130326762004856513" remote="130328215200000000" Dst="1" />
+<file name="add_events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130328262721532597" remote="130329034200000000" Dst="1" />
+<file name="delete_event.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130330585635440101" remote="130330588200000000" Dst="1" />
 <file name="delete_eventseries.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130326762005056524" remote="130328215200000000" Dst="1" />
-<file name="events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130326762005286538" remote="130328215200000000" Dst="1" />
+<file name="events.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130328898736202350" remote="130329034200000000" Dst="1" />
+<file name="update_event.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130329718982243894" remote="130330557600000000" Dst="1" />
+<file name="update_eventseries.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130329758470640914" remote="130330557600000000" Dst="1" />
+<file name="add_events.php" server="www.doorcountyaa.org//public_html/" local="130328262721532597" remote="130330820400000000" Dst="1" />
+<file name="delete_event.php" server="www.doorcountyaa.org//public_html/" local="130330585635440101" remote="130330820400000000" Dst="1" />
+<file name="delete_eventseries.php" server="www.doorcountyaa.org//public_html/" local="130326762005056524" remote="130330820400000000" Dst="1" />
+<file name="events.php" server="www.doorcountyaa.org//public_html/" local="130328898736202350" remote="130330820400000000" Dst="1" />
+<file name="update_event.php" server="www.doorcountyaa.org//public_html/" local="130329718982243894" remote="130330820400000000" Dst="1" />
+<file name="update_eventseries.php" server="www.doorcountyaa.org//public_html/" local="130329758470640914" remote="130330820400000000" Dst="1" />
 </dwsync>

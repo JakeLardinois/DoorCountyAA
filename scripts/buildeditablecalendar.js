@@ -1,8 +1,8 @@
 // JavaScript source code
 //localServer
-var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
+//var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
-//var SERVER_URL = './'
+var SERVER_URL = './'
 
 $(document).ready(function () {
     var date = new Date();
@@ -32,6 +32,9 @@ $(document).ready(function () {
             //$('#url').val("");
             $('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
             $('#end').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
+			//Maybe the below should be done in a reset function that is displayed anytime before the form shows up..
+			document.getElementById("repeatingoptions").style.visibility = 'visible';
+			document.getElementById("repeats").checked = false;
             ShowAddEventPopup(date);
         },
 
@@ -41,10 +44,10 @@ $(document).ready(function () {
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
                 url: SERVER_URL + 'calendarfunctions/update_event.php',
-                data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
+                data: 'description=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
-                    alert("Updated Successfully");
+                    //alert("Updated Successfully");
                 }
             });
         },
@@ -53,27 +56,32 @@ $(document).ready(function () {
             var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
             $.ajax({
                 url: SERVER_URL + 'calendarfunctions/update_event.php',
-                data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
+                data: 'description=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
                 type: "POST",
                 success: function (json) {
-                    alert("Updated Successfully");
+                    //alert("Updated Successfully");
                 }
             });
         },
         eventClick: function (event) {
             var isRecurring;
 
-			document.getElementById("id").value = event.id; // $('#eventID').val(event.id);
+			document.getElementById("id").value = event.id; //note that you populate by 'id' property, but data gets posted by the 'name' property
+			document.getElementById("parent_id").value = event.parent_id;
             $('#description').val(event.title);
             $('#url').val(event.url);
-            $('#start').val($.fullCalendar.formatDate(event.start, "yyyy-MM-dd hh:mmtt"));
+			
+			$('#start').val($.fullCalendar.formatDate(event.start, "yyyy-MM-dd hh:mmtt"));
+            //document.getElementById("start").value = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd hh:mmtt");
             //alert($.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss"));
-            $('#end').val($.fullCalendar.formatDate(event.end, "yyyy-MM-dd hh:mmtt"));
+			
+			$('#end').val($.fullCalendar.formatDate(event.end, "yyyy-MM-dd hh:mmtt"));
+            //document.getElementById("end").value = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd hh:mmtt")
             //alert($.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss"));
-
 
             isRecurring = (event.repeats == "true"); //this was the only setup I could get to properly function
             if (isRecurring) {
+				document.getElementById("repeatingoptions").style.visibility = 'visible';
                 document.getElementById("repeats").checked = isRecurring; //for some reason I had difficulty getting this to work and jquery handle didn'g function properly...
                 //alert(event.repeat_freq);
                 switch (parseInt(event.repeat_freq)) {
@@ -90,7 +98,9 @@ $(document).ready(function () {
                 ShowEditEventPopup(event);
             }
             else {
-                document.getElementById("repeatingoptions").style.visibility = 'hidden';
+                //document.getElementById("repeatingoptions").style.visibility = 'hidden';
+				document.getElementById("repeatingoptions").style.visibility = 'visible';
+				document.getElementById("repeats").checked = false;
                 ShowEditEventPopup(event);
             }
 
@@ -145,6 +155,81 @@ function ClearFormValues() {
     //$('#repeats').prop('checked') == false; //recurring
 }
 
+var objUpdatePrompts = {
+	state0: {
+		title: "Update Event or Event Series?",
+		html: 'Do you want update this event or the series?',
+		buttons: { "Update Event": 1, "Update Series": 2, "Cancel": 0 },
+		submit: function (e, v, m, f) { //my below if statement wasn't firing when using 'close:'
+			switch (v) {
+				case 0:
+					break;
+				case 1: //Chose to update the Event
+					$.ajaxSetup({ async: false });
+					$.ajax({
+						type: "POST",
+						url: SERVER_URL + 'calendarfunctions/update_event.php',
+						data: $('#frmEvent').serialize(), //.replace('description','title'),//for some reason I can't use title on my form, but this is what my php expects
+						type: "POST",													//so I just change the value here...UPDATE- For some reason this stopped being important...
+						success: function (json) {										//But I left it here for reference.
+							sValue = JSON.parse(json);
+							if (sValue.Success) {
+								$('#calendar').fullCalendar('refetchEvents');
+								$('#Event').dialog('close');
+								//ClearFormValues();
+							}
+							else {
+								alert('Error, could not save event!');
+							}
+						}
+					});
+					$.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
+					break;
+				case 2: //Chose to update the Event Series
+					e.preventDefault();
+					$.prompt.goToState('state1', true);
+					//return false;
+					break;
+				
+			}
+			//$.prompt.close();
+		}
+	},
+	state1: {
+		html: 'Are you sure? Updating the series deletes all past &amp; future events that are associated with it...  ',
+		buttons: { No: -1, Yes: 0 },
+		focus: 1, //puts the focus on No; I guess this value is an absolute? 
+		submit:function(e,v,m,f){
+			e.preventDefault();
+			if(v==0){
+				$.ajaxSetup({ async: false });
+				$.ajax({
+					type: "POST",
+					url: SERVER_URL + 'calendarfunctions/update_eventseries.php',
+					data: $('#frmEvent').serialize(), //.replace('description','title'),//for some reason I can't use title on my form, but this is what my php expects
+					type: "POST",													//so I just change the value here...UPDATE- For some reason this stopped being important...
+					success: function (json) {											//But I left it here for reference.
+						sValue = JSON.parse(json);
+						if (sValue.Success) {
+							$('#calendar').fullCalendar('refetchEvents');
+							$('#Event').dialog('close');
+							//ClearFormValues();
+						}
+						else {
+							alert('Error, could not save event!');
+						}
+					}
+				});
+				$.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
+				$.prompt.close();
+			}
+			else if(v==-1){
+				$.prompt.close();
+			}
+		}
+	}
+};
+
 function ShowEditEventPopup(event) {
     //ClearPopupFormValues();
     /*$('#popupEventForm').show();
@@ -170,7 +255,7 @@ function ShowEditEventPopup(event) {
                                 $.ajax({
                                     type: "POST",
                                     url: SERVER_URL + 'calendarfunctions/delete_event.php',
-                                    data: "&id=" + event.id,
+                                    data: "&id=" + event.id + "&parent_id=" + event.parent_id,
                                     type: "POST",
                                     success: function (json) {
                                         //alert("Deleted Successfully");
@@ -208,7 +293,7 @@ function ShowEditEventPopup(event) {
                                 $.ajax({
                                     type: "POST",
                                     url: SERVER_URL + 'calendarfunctions/delete_event.php',
-                                    data: "&id=" + event.id,
+                                    data: "&id=" + event.id + "&parent_id=" + event.parent_id,
                                     type: "POST",
                                     success: function (json) {
                                         //alert("Deleted Successfully");
@@ -225,72 +310,31 @@ function ShowEditEventPopup(event) {
             Update: function () {
                 if ($('#frmEvent')[0].checkValidity()) { //check if the data in the form passes appropriate validity checks
                     isRecurring = (event.repeats == "true");
-
+					
+					
                     if (isRecurring) {
-                        var decision = $.prompt("Do you want update this event or the series?", {
-                            title: "Update Event or Event Series?",
-                            buttons: { "Update Event": 1, "Update Series": 2, "Cancel": 0 },
-                            close: function (e, v, m, f) {
-                                if (v == 1) {
-                                    $.ajaxSetup({ async: false });
-                                    $.ajax({
-                                        type: "POST",
-                                        url: SERVER_URL + 'calendarfunctions/update_event.php',
-                                        data: $('#frmEvent').serialize().replace('description','title'),//for some reason I can't use title on my form, but this is what my php expects
-                                        type: "POST",													//so I just change the value here...
-                                        success: function (json) {
-                                            sValue = JSON.parse(json);
-                                            if (sValue.Success) {
-                                                $('#calendar').fullCalendar('refetchEvents');
-                                                $('#Event').dialog('close');
-                                                //ClearFormValues();
-                                            }
-                                            else {
-                                                alert('Error, could not save event!');
-                                            }
-                                        }
-                                    });
-                                    $.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
-                                }
-                                if (v == 2) {
-                                    $.ajaxSetup({ async: false });
-                                    $.ajax({
-                                        type: "POST",
-                                        url: SERVER_URL + 'calendarfunctions/update_eventseries.php',
-                                        data: $('#frmEvent').serialize().replace('description','title'),//for some reason I can't use title on my form, but this is what my php expects
-                                        type: "POST",													//so I just change the value here...
-                                        success: function (json) {
-                                            sValue = JSON.parse(json);
-                                            if (sValue.Success) {
-                                                $('#calendar').fullCalendar('refetchEvents');
-                                                $('#Event').dialog('close');
-                                                //ClearFormValues();
-                                            }
-                                            else {
-                                                alert('Error, could not save event!');
-                                            }
-                                        }
-                                    });
-                                    $.ajaxSetup({ async: true }); //Sets ajax back up to synchronous
-                                }
-                            }
-                        });
+						$.prompt(objUpdatePrompts);
                     }
                     else {
                         var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
-                            'title': $('#description').val(), //could not use #title for some reason...
+										//using $('#frmEvent').serialize() is easier, but I wanted to leave this here for reference...
+                            //'title': $('#description').val(), //could not use #title for some reason...
+							'description': $('#description').val(),
                             'url': $('#url').val(),
                             'start': $('#start').val(),
                             'end': $('#end').val(),
-                            'allday': $('#repeats').prop('checked'),
-                            'id': event.id
+                            //'allday': $('#repeats').prop('checked'),
+							'repeats': $('#repeats').prop('checked'),
+							'repeat-freq': $('input[name=repeat-freq]:checked').val(), //$('#repeat-freq').val()
+                            'id': event.id,
+							'parent_id': event.parent_id
                         }
                         //$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
 
                         $.ajax({
                             type: 'POST',
-                            url: SERVER_URL + 'calendarfunctions/update_event.php',
-                            data: dataRow,
+                            url: SERVER_URL + 'calendarfunctions/update_eventseries.php', //Upated this so that a non-recurring event could be made to recur...
+                            data: dataRow,												//this now entails the deletion and recreation of the original event.
                             success: function (response) {
                                 sValue = JSON.parse(response);
                                 if (sValue.Success) {

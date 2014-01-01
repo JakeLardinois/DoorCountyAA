@@ -1,4 +1,4 @@
-<?php //session_start(); ?>
+<?php session_start(); ?>
 <!doctype html>
 <html>
   <head>
@@ -28,6 +28,7 @@
         <div id="Event" style="display: none;">
           <form id="frmEvent" > 
             <input type="hidden" id="id" name="id" value="">
+            <input type="hidden" id="parent_id" name="parent_id" value="">
             
             <label for="description">Event Title</label>
             <input type="text" id="description" name="description" required><br />
