@@ -4,4 +4,8 @@
 <file name="copy document.psd" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130202582478269728" remote="130328219400000000" Dst="1" />
 <file name="file_types.psd" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130202582478039728" remote="130328219400000000" Dst="1" />
 <file name="printer.psd" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130202582477849728" remote="130328219400000000" Dst="1" />
+<file name="collection.psd" server="www.doorcountyaa.org//public_html/" local="130202582478419728" remote="130330822200000000" Dst="1" />
+<file name="copy document.psd" server="www.doorcountyaa.org//public_html/" local="130202582478269728" remote="130330822200000000" Dst="1" />
+<file name="file_types.psd" server="www.doorcountyaa.org//public_html/" local="130202582478039728" remote="130330822800000000" Dst="1" />
+<file name="printer.psd" server="www.doorcountyaa.org//public_html/" local="130202582477849728" remote="130330822800000000" Dst="1" />
 </dwsync>

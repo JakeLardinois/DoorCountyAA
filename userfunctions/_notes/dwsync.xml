@@ -7,4 +7,11 @@
 <file name="login.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130328289966420916" remote="130329034200000000" Dst="1" />
 <file name="logout.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130327037009395873" remote="130328226000000000" Dst="1" />
 <file name="updateuser.php" server="www.doorcountyaa.org//public_html/NewDCAA/" local="130327313473878737" remote="130328226000000000" Dst="1" />
+<file name="adduser.php" server="www.doorcountyaa.org//public_html/" local="130327370196753100" remote="130330828200000000" Dst="1" />
+<file name="changepassword.php" server="www.doorcountyaa.org//public_html/" local="130326270289361995" remote="130330828200000000" Dst="1" />
+<file name="deleteuser.php" server="www.doorcountyaa.org//public_html/" local="130327355860963139" remote="130330828200000000" Dst="1" />
+<file name="getusers.php" server="www.doorcountyaa.org//public_html/" local="130329128795630654" remote="130330828200000000" Dst="1" />
+<file name="login.php" server="www.doorcountyaa.org//public_html/" local="130328289966420916" remote="130330828200000000" Dst="1" />
+<file name="logout.php" server="www.doorcountyaa.org//public_html/" local="130327037009395873" remote="130330828200000000" Dst="1" />
+<file name="updateuser.php" server="www.doorcountyaa.org//public_html/" local="130327313473878737" remote="130330828200000000" Dst="1" />
 </dwsync>

@@ -1,0 +1,117 @@
+***************************************
+*** phpEventGallery Documentation ***
+***************************************
+http://www.phpcodeworks.com/pec/installation
+
+
+Contents:
+	I.   Summary
+	II.  Requirements
+	III. Instalation
+	IV.  Upgrade Instructions	
+	V.   License Information (GPL)
+
+
+I. Summary
+
+	phpEventCalendar is a mysql backed application that allows users to 
+	post and display events or notes on month-at-a-glance calendar. Because 
+	only authorized users can add events or posts, the calendar is perfect 
+	for individuals or organizations looking to communicate upcoming events 
+	to a larger audience. phpEventCalendar comes with a user administration 
+	panel, and two user levels. One user type can post/edit events, and add 
+	or edit users, while the other user type can only post/edit events.
+	
+II. Requirements
+
+	* PHP 4.1.0 or later
+
+	* MySQL 3.0 or higher
+	
+III. Installation
+
+	1. Download pec-x.y.tar.gz (or pec-x.y.tar for Windows users)
+	
+	2. Untar/unzip phpEventCalendar into a directory on your server. 
+	   Untarring/Unzipping with create a folder called phpEventCallendar, 
+	   which will contain all the files 
+	   
+	3. Make changes to config.php. The file is fairly well documented.
+	   
+	4. In a browser, go to the URL for the createtables.php file, included 
+	   in the distribution.  This step creates the database tables, and 
+	   give you a link to the calendar if successful. 
+	   
+	5. Login to the calendar (link is at bottom) with the default user:
+
+	    username: admin
+		password: password
+
+	   Once you are logged in, I recommend that you first visit the user 
+	   admin page (link at bottom), and change your password. 
+
+	6. Finally, delete the createtables.php file, and installation is 
+       	   complete.
+
+
+IV. Upgrading from v.0.2.1 to v.0.2.2: 
+
+	No special steps need to be taken to update from 0.2.1 to 0.2.2 accept
+	that you will want to replace the template and css files with the ones 
+	you customized for your 0.2.1 installation.
+
+IV. Upgrading from v.0.1 to v.0.2.2: 
+
+    * note: phpEventCalendar version 0.1 inserted a value of "00:00:00" into 
+      the database time fields if the user chose not to specify a start and 
+      end time when adding an event.  It was neccessary to change this behavior 
+      in v.0.2 to standardize the calendar's time functions, and to facilitate 
+      the addition of a 24 hour time format that displayed times in the range 
+      of 00:00 to 23:59. Version 0.2 inserts the value "55:55:55" as a 
+      "no-time" value. This arbitrary value needs to be inserted in all 
+      database records where both the start and end times are "00:00:00", if 
+      "no-time" events are to contine to display no time.  You accomplish this 
+      by running the script in step 8. However, be sure that everything else 
+      is working before you make the database adjustment, or you will not be 
+      able to revert back to version 0.1.
+	
+    1. Download pec-0.2.tar.gz (or pec-0.2.zip for Windows users) from the 
+       downloads page. 
+
+    2. If the directory on your server that contains your v.0.1 files is named 
+       "phpEventCalendar", then change the name of that directory, so it is
+       not overwritten when you untar/unzip the new release. 
+
+    3. Untar/unzip phpEventCalendar into a directory on your server. All files 
+       will untar/unzip under the folder "phpEventCallendar", which is part 
+       of the archive. 
+
+    4. Edit the config.php file. This file is completely different from the 
+       previous config.php file, and so do not try to copy over your old 
+       config.php file - it will not work 
+
+    5. Delete the createtables.php file 
+
+    6. Copy the template file you were using for version 0.1 to the "templates" 
+       directory under the new release directory 
+
+    7. The new release should now function properly, with one exception. 
+       Events that should display no time will show 12:00AM-12:00AM. The next 
+       step fixes this problem, but make sure everything else works as it 
+       should before continuing the next step. See the note above. 
+
+    8. In your favorite browser, go to the URL for the database_adjust.php 
+       file, which is in the upgrade directory under the directory for the 
+       new release. This file replaces the time value for events that have 
+       no start or end time with the new "no-time" value, which is "55:55:55".
+       See the note above. 
+
+    9. Your upgrade is complete 
+	
+V. License Information
+
+    These scripts are released under the terms of the GENERAL PUBLIC LICENSE 
+    (GPL).  See the enclosed file GPL to read the terms of the GENERAL PUBLIC 
+    LICENSE.  Or see http://www.gnu.org/copyleft/gpl.html
+	
+    phpEventCalendar by Isaac McGowan <isaac@ikemcg.com>

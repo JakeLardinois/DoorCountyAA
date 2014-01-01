@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/</loc>
+
+    <lastmod>2014-01-01</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/index.php</loc>
+
+    <lastmod>2014-01-01</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/meetingsandevents.php</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/links.php</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/contact.php</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/OldSite/index.htm</loc>
+
+    <lastmod>2014-01-01</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/OldSite/meetings.htm</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/OldSite/links.htm</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/OldSite/contact.htm</loc>
+
+    <lastmod>2014-06-06</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+
+  <url>
+
+    <loc>http://www.aadoorcounty.org/OldSite/calendar.htm</loc>
+
+    <lastmod>2014-11-07</lastmod>
+
+    <changefreq>monthly</changefreq>
+
+    <priority>1.0</priority>
+
+  </url>
+  
+</urlset>
+
+

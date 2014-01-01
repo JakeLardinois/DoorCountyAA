@@ -18,6 +18,7 @@ $(document).ready(function () {
             right: 'month,agendaWeek,agendaDay'
         },
 
+		weekMode: 'liquid', //This option is what set the number of weeks displayed in month view; default value is 'fixed' which shows 6 weeks for every month.
         events: SERVER_URL + 'calendarfunctions/events.php', //loads the events into json
 
         timeFormat: 'h:mm{ - h:mmtt}', // 'H(:mm)', // uppercase H for 24-hour clock

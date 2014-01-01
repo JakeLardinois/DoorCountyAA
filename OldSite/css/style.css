@@ -1,0 +1,478 @@
+body {
+	background-color:#FFFFFF;
+}
+
+table
+{
+    border: 0px;
+    border-spacing: 0px;
+	padding: 0px;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+table.MsoNormalTable
+{
+    border: 0px;
+    border-spacing: 0px;
+	padding: 0px;
+}
+
+td.meetinglocationUpperLeft
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.5pt;
+    border-left: 1.5pt;
+    border-bottom: 1.0pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationLowerLeft
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.5pt;
+    border-bottom: 1.5pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationLeft
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.5pt;
+    border-bottom: 1.0pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationRight
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.0pt;
+    border-bottom: 1.0pt;
+    border-right: 1.5pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationCenter
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.0pt;
+    border-bottom: 1.0pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationUpperCenter
+{
+    width: 111px;
+    vertical-align: top;
+    border-top: 1.5pt;
+    border-left: 1.0pt;
+    border-bottom: 1.0pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationLowerCenter
+{
+    width: 111px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.0pt;
+    border-bottom: 1.5pt;
+    border-right: 1.0pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetinglocationUpperRight
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.5pt;
+    border-left: 1.0pt;
+    border-bottom: 1.0pt;
+    border-right: 1.5pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+ td.meetinglocationLowerRight
+{
+    width: 74px;
+    vertical-align: top;
+    border-top: 1.0pt;
+    border-left: 1.0pt;
+    border-bottom: 1.5pt;
+    border-right: 1.5pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+
+td.meetingschedule
+{
+    width: 67.1pt;
+    vertical-align: top;
+    border-top: 1.5pt;
+    border-left: 1.0pt;
+    border-bottom: 1.5pt;
+    border-right: 1.5pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.meetingscheduleLeft
+{
+    width: 77.05pt;
+    vertical-align: middle;
+    border-top: 1.5pt;
+    border-left: 1.5pt;
+    border-bottom: 1.5pt;
+    border-right: 1.5pt;
+    border-color: WindowText;
+    border-style: solid;
+    padding: 0in 5.4pt 0in 5.4pt;
+}
+
+td.contactInfoDesc
+{
+    width: 117.75pt;
+    padding: 3.75pt 3.75pt 3.75pt 3.75pt;
+    font-family:Verdana;
+    color:red;
+    font-weight:bold;
+    border: 1px solid grey;
+}
+
+td.contactInfoNo
+{
+    width: 392.25pt;
+    padding:3.75pt 3.75pt 3.75pt 3.75pt;
+    font-family:Verdana;
+    color:#0033FF;
+    font-weight:bold;
+    border: 1px solid grey;
+}
+
+td.contactInfoEmail
+{
+    width: 392.25pt;
+    padding: 3.75pt 3.75pt 3.75pt 3.75pt;
+    font-family: "Times New Roman";
+    color: #0033FF;
+    font-weight: bold;
+    border: 1px solid grey;
+}
+
+td.contactInfoTitles
+{
+    background: #66CC99;
+    padding: 0in 0in 0in 0in;
+    font-size: 12.0pt;
+	font-family:"Times New Roman";
+	font-weight: bold;
+}
+
+td.linkInfo
+{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-align: justify;
+}
+
+td.link
+{
+    font-size: 3pt;
+}
+
+tr.WelcomeRow
+{
+    background-color: #CCCCCC;
+    border-color: #9933CC;
+}
+
+img
+{
+    border: 0px;
+}
+
+div.MsoNormal
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	text-align:center;
+}
+
+div.MsoTitle
+{
+    margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:16.0pt;
+	font-family:Arial;
+	font-weight:bold;
+}
+
+div.MsoSubtitle
+{
+    margin-top:0in;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:12.0pt;
+	font-family:Arial;
+	font-style:italic;
+}
+
+div.Section1
+{
+
+}
+
+div.MsoNormal1
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+}
+
+div.preamble
+{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+div.disclaimer
+{
+    font-size: smaller;
+    text-align: justify;
+}
+
+h1
+{
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:Arial;
+	text-decoration:underline;
+}
+
+p.MsoTitle
+{
+    margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:16.0pt;
+	font-family:Arial;
+	font-weight:bold;
+}
+
+p.MsoSubtitle
+{
+    margin-top:0in;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:12.0pt;
+	font-family: Times New Roman;
+	font-weight:bold;
+}
+
+p.MsoNormal
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	text-align:center;
+}
+
+p.MsoNormal1
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+}
+
+li.MsoSubtitle
+{
+    margin-top:0in;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:12.0pt;
+	font-family:Arial;
+	font-style:italic;
+}
+
+li.MsoTitle
+{
+    margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:16.0pt;
+	font-family:Arial;
+	font-weight:bold;
+}
+
+li.MsoNormal
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	text-align:center;
+}
+
+li.MsoNormal1
+{
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+}
+
+@page Section1
+{
+	margin:.4in .7in .4in .7in;
+}
+
+span.meetinglocationheadertext
+{
+    font-size: 9.0pt;
+}
+
+span.meetinglocation
+{
+    font-size: 8.0pt;
+}
+
+span.meetinglocationtown
+{
+    font-size: 8.0pt;
+}
+
+span.meetinglocationgroup
+{
+    font-size: 8.0pt;
+}
+
+span.meetinglocationplace
+{
+    font-size: 8.0pt;
+}
+
+span.meetinglocationAddress
+{
+    font-size: 8.0pt;
+}
+
+span.meetinglocationgroupNumbers
+{
+    font-size: 9.0pt;
+    color: Blue;
+    font-weight: bold;
+}
+
+span.meetinglocationTimes
+{
+    font-size: 9.0pt;
+    font-weight: bold;
+    color: Red;
+}
+
+span.meetingScheduleDays
+{
+    font-size: 9.0pt;
+}
+
+/*This is for the small date and time div tag*/
+.lstMod {
+	font-size:8pt;
+	text-align: right;
+	color:red;
+}
+
+/**************************************************************
+********* Formatting For Month Table and Text *****************
+**************************************************************/
+
+A	{ font-family:arial, helvetica; color:#00F; text-decoration:underline }
+SPAN	{ font-family:arial, helvetica }
+BODY	{ background-color:#FFF }
+
+table.EventCalendar
+{
+    width: 1000px;
+}
+
+/**** month and year header at top of calendar ****/
+span.date_header { font-size:16px; font-family:arial, helvetica; font-weight:bold;}
+
+/**** color and size of calendar cells.  ****/
+td.day_cell { background-color:#EDECD8; height:80px; width: 95px; text-align: left;}
+td.empty_day_cell { background-color:#EEEEEE; height:80px; width: 95px; }
+td.today_cell { background-color:#F5F4ED; height:80px; width: 95px; text-align: left;}
+
+/**** day number in upper left corner of each cell ****/
+.day_number { font-size:10px; font-family:verdana, arial, helvetica; color:#000 }
+
+/**** title_txt is the text for each post on main page ****/
+.title_txt { font-size:10px; font-family:verdana, arial, helvetica; color:#000 }
+.title_txt A:link { color:#00F; text-decoration:underline }
+.title_txt A:active { color:#00F; text-decoration:underline }
+.title_txt A:visited { color:#00F; text-decoration:underline }
+.title_txt A:hover { color:#00F; text-decoration:underline }
+
+/**** time line under title text when event time given ****/
+.time_str { font-size:9px; font-family:arial, helvetica }
+
+/**** column headers or days of the week ****/
+.column_header { background-color:#2663E2; font-size:12px; font-family:arial, helvetica; color:#FFFFFF; font-weight:bold }
+
+/**** footprint text ****/
+.footprint { font-size:10px; font-family:verdana, arial, helvetica; color:#000; font-weight:bold; }
+.footprint A { font-size:10px; font-family:verdana, arial, helvetica; color:#00F; font-weight:bold; }
