@@ -3,12 +3,12 @@
   
   mysql_connect(mysql_hostname, mysql_username, mysql_password) or die("MySQL Error: " . mysql_error());
   mysql_select_db(mysql_dbname) or die("MySQL Error: " . mysql_error()); 
-  $redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
   
   //mysql_real_escape_string cleans database input by keeping out the majority of the malicious code someone could put into the form
   //by stripping unwanted parts of whatever has been put in there.
   $username = mysql_real_escape_string($_POST['username']);
   $password = md5(mysql_real_escape_string($_POST['password']));//this takes the password and does an MD5 hash against it 
+  $redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
   
   $checklogin = mysql_query("SELECT * FROM users WHERE Username = '".$username."' AND Password = '".$password."'");
   if(mysql_num_rows($checklogin) == 1)
@@ -25,8 +25,12 @@
 	  $_SESSION['userid'] = $userid;
 	  //$_SESSION['timeout']=time();
 	  
-	  //since I already post login form, I don't need to do this also...
-	  echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">;";
+	  
+	  if(empty($redirect_url) || preg_match("/\/login/", $redirect_url))
+	  {
+		$redirect_url = "../meetingsandevents.php";
+	  }
+	  echo "<meta http-equiv=\"refresh\" content=\"0;URL=".$redirect_url."\">";
   }
   else { 
 ?>
@@ -35,8 +39,7 @@
     <head>
       <meta charset="utf-8">
       <?php
-          
-          echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">";
+          echo "<meta http-equiv=\"refresh\" content=\"0;URL=".$redirect_url."\">";
       ?>
       <title>Logging In</title>
       <script type="application/javascript">

@@ -17,7 +17,8 @@ exit;*/
     <meta charset="utf-8">
     <?php
 		$redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
-		echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">";
+		
+		echo "<meta http-equiv=\"refresh\" content=\"0;URL=".$redirect_url."\">";
 	?>
     <title>Change password</title>
     <script type="application/javascript">

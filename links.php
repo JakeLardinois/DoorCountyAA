@@ -31,15 +31,14 @@
                 	<a href="http://www.aagrapevine.org/" target="_blank">AA Grapevine</a> - the international journal of Alcoholics Anonymous, widely known as "our meeting in print". Their magazine, <em>The Grapevine</em>, is published every month.
                 </li>
                 <li class="linklistitem">
-                	
+                	<a href="./OldSite" target="_blank">The Old DoorCountyAA.org Website</a>
+                </li>
+                <li class="linklistitem">
                 	<audio controls id="drbobaudio">
                        <source src="./multimedia/DrBob1948.mp3" type="audio/mpeg">
                        Your browser does not support the audio element.
                      </audio> 
                      <label for="drbobaudio">Dr. Bob 1948 Detroit Michigan</label>
-                </li>
-                <li class="linklistitem">
-                	<a href="./OldSite" target="_blank">The Old DoorCountyAA.org Website</a>
                 </li>
             </ul>
             

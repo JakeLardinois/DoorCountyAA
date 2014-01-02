@@ -13,7 +13,7 @@ session_destroy();
     <meta charset="utf-8">
     <?php
         
-        echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">";
+        echo "<meta http-equiv=\"refresh\" content=\"0;URL=".$redirect_url."\">";
     ?>
     <title>Logging Out</title>
     <script type="application/javascript">
