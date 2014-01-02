@@ -1,8 +1,8 @@
 // JavaScript Document
 //localServer
-//var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
+var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
-var SERVER_URL = './'
+//var SERVER_URL = './'
 
 var oTable;
 

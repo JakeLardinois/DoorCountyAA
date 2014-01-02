@@ -24,15 +24,15 @@ session_start();
 ************* MySQL Database Settings ******************
 *******************************************************/
 //Local Settings
-/*define("mysql_dbname", "fullcalendar");				// db name
+define("mysql_dbname", "fullcalendar");				// db name
 define("mysql_username", "aanon_dbadmin");				// db username
 define("mysql_password", "***REMOVED***");				// db password
-define("mysql_hostname", "localhost");*/	// db server
+define("mysql_hostname", "localhost");	// db server
 
 //Remote Settings
-define("mysql_dbname", "aanon_fullcalendar");				// db name
+/*define("mysql_dbname", "aanon_fullcalendar");				// db name
 define("mysql_username", "aanon_dbadmin");				// db username
 define("mysql_password", "***REMOVED***");				// db password
-define("mysql_hostname", "localhost");		// db server
+define("mysql_hostname", "localhost");*/		// db server
 
 ?>

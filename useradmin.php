@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php //session_start(); ?>
 <!doctype html>
 <html>
   <head>
@@ -6,7 +6,7 @@
     <?php require_once("./templates/scripts.php"); ?>
     <?php require_once("./templates/css.php"); ?>
     <script src="scripts/buildusertable.js"></script>
-    <title>Links Page</title>
+    <title>User Administration Page</title>
     <script type="application/javascript">
 	</script>
   </head>

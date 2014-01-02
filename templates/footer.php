@@ -12,6 +12,31 @@
         </fieldset>
       </form>
     </div>
+    <div id="changepassword" style="display: none;">
+      <form method="post" action="userfunctions/changepassword.php" name="changepwform" id="changepwform">
+        <fieldset style="text-align:right">
+            <label for="password">Old Password:</label><input type="password" name="oldpassword" id="oldpassword" required /><br />
+            <label for="password">New Password:</label><input pattern="^((?=.*(\d|\W))(?=.*[a-zA-Z]).{8,})$" title="Alphanumeric and 8 characters in length" type="password" name="newpassword" id="newpassword" required /><br />
+            <label for="password">Re-Enter New Password:</label><input pattern="^((?=.*(\d|\W))(?=.*[a-zA-Z]).{8,})$" title="Alphanumeric and 8 characters in length" type="password" name="password_confirm" id="password_confirm" required /><br />
+            <input type="submit" name="changepw" id="changepw" value="Change Password" />
+        </fieldset>
+      </form>
+      <script language='javascript' type='text/javascript'>
+	  	var password = document.querySelector(' input[name=newpassword]');
+		var passwordConfirm = document.querySelector(' input[name=password_confirm]');
+		[].forEach.call([password, passwordConfirm], function(el) {
+			el.addEventListener('input', function() {
+				if (!el.validity.patternMismatch) {
+					if ( password.value === passwordConfirm.value ) {
+						try{password.setCustomValidity('')}catch(e){}
+					} else {
+						password.setCustomValidity("Password and password confirm doesn\'t match")
+					}
+				}
+			}, false)
+		});
+	  </script>
+    </div>
     <div class="footercontent">
 	  <?php
         if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username']))
@@ -24,12 +49,12 @@
               if ( $_SESSION['auth'] == 2 ) {
                   echo "
                   <li><a href=\"useradmin.php\">User Admin</a></li>
-				  <li><a href=\"changepassword.php\">Change Password</a></li>
+				  <li><a href=\"javascript:loadChangePasswordDialog()\">Change Password</a></li>
                   <li><a href=\"userfunctions/logout.php\">Logout</a></li>";
 				  //<li><a href=\"javascript:logout()\">Logout</a></li>";
               } else if ( $_SESSION['auth'] < 2){
                   echo "
-                  <li><a href=\"changepassword.php\">Change Password</a></li>
+                  <li><a href=\"javascript:loadChangePasswordDialog()\">Change Password</a></li>
                   <li><a href=\"userfunctions/logout.php\">Logout</a></li>";
 				  //<li><a href=\"javascript:logout()\">Logout</a></li>";
               }

@@ -1,9 +1,9 @@
 // JavaScript Document
 
 //localServer
-//var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
+var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
-var SERVER_URL = './'
+//var SERVER_URL = './'
 
 
 WebFont.load({
@@ -25,6 +25,17 @@ function loadLoginDialog() {
 }
 
 function loadChangePasswordDialog() {
+	$('#changepassword').dialog({
+        modal: true,
+        resizable: true,
+        position: 'center',
+        width: 'auto',
+        autoResize: true,
+        title: 'Change Password',
+        buttons: {}
+	});
+}
+/*function loadChangePasswordDialog() {
 	$.prompt("<label for=\"username\">Username:</label><input type=\"text\" name=\"username\" id=\"username\" />", {
 	  title: "Change Password?",
 	  buttons: { "Change Password": 1, "Cancel": 0 },
@@ -32,7 +43,7 @@ function loadChangePasswordDialog() {
 		  
 	  }
 	});
-}
+}*/
 
 //shows another way of doing an ajax post http://www.w3schools.com/ajax/ajax_xmlhttprequest_send.asp
 /*function logout() {
