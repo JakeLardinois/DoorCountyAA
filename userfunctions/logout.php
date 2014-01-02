@@ -3,23 +3,27 @@
 /*Notice how session_start() in this scenario gets ahold of the existing session and then destroys it...  session_start() can be used to start a session state
 	or as in this case where it gets ahold of the existing session in order to destroy it.*/
 session_start();
+$redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
 $_SESSION = array(); 
 session_destroy(); 
 ?>
-
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0;../meetingsandevents.php"> <!--redirects to the calendar page-->
+    <?php
+        
+        echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">";
+    ?>
     <title>Logging Out</title>
+    <script type="application/javascript">
+    </script>
   </head>
   <body>
-	<div id="wrapper">
+    <div id="wrapper">
         <div id="maincontent">
-        	Logging Out...
+            Logging Out...
         </div>
     </div>
   </body>
 </html>
-

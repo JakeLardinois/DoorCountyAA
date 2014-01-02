@@ -3,6 +3,7 @@
   
   mysql_connect(mysql_hostname, mysql_username, mysql_password) or die("MySQL Error: " . mysql_error());
   mysql_select_db(mysql_dbname) or die("MySQL Error: " . mysql_error()); 
+  $redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
   
   //mysql_real_escape_string cleans database input by keeping out the majority of the malicious code someone could put into the form
   //by stripping unwanted parts of whatever has been put in there.
@@ -25,7 +26,7 @@
 	  //$_SESSION['timeout']=time();
 	  
 	  //since I already post login form, I don't need to do this also...
-	  echo "<meta http-equiv='refresh' content='=2;../meetingsandevents.php' />";
+	  echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">;";
   }
   else { 
 ?>
@@ -33,10 +34,13 @@
   <html>
     <head>
       <meta charset="utf-8">
-      <meta http-equiv="refresh" content="0;../meetingsandevents.php"> <!--redirects to the calendar page-->
-      <title>Logging Out</title>
+      <?php
+          
+          echo "<meta http-equiv=\"refresh\" content=\"0;".$redirect_url."\">";
+      ?>
+      <title>Logging In</title>
       <script type="application/javascript">
-			alert('Login Failed!');
+            alert('Login Failed!');
       </script>
     </head>
     <body>
@@ -47,7 +51,6 @@
       </div>
     </body>
   </html>
- 
 <?php 
   }
 ?> 
