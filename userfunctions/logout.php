@@ -4,6 +4,8 @@
 	or as in this case where it gets ahold of the existing session in order to destroy it.*/
 session_start();
 $redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
+if (preg_match("/\/useradmin/", $redirect_url)){ $redirect_url = "../meetingsandevents.php";};//if your on the useradmin.php page then you should get redirected somewhere else...
+	
 $_SESSION = array(); 
 session_destroy(); 
 ?>

@@ -10,6 +10,9 @@
   $password = md5(mysql_real_escape_string($_POST['password']));//this takes the password and does an MD5 hash against it 
   $redirect_url = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "../meetingsandevents.php";
   
+  //to be used when I mess up password authentication
+  mysql_query("UPDATE users SET password ='".md5(mysql_real_escape_string('jl'))."' WHERE userid=1");
+  
   $checklogin = mysql_query("SELECT * FROM users WHERE Username = '".$username."' AND Password = '".$password."'");
   if(mysql_num_rows($checklogin) == 1)
   {
@@ -25,11 +28,10 @@
 	  $_SESSION['userid'] = $userid;
 	  //$_SESSION['timeout']=time();
 	  
-	  
-	  if(empty($redirect_url) || preg_match("/\/login/", $redirect_url))
+	  /*if(empty($redirect_url) || preg_match("/\/login/", $redirect_url))
 	  {
 		$redirect_url = "../meetingsandevents.php";
-	  }
+	  }*/
 	  echo "<meta http-equiv=\"refresh\" content=\"0;URL=".$redirect_url."\">";
   }
   else { 

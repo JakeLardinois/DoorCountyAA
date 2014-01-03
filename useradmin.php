@@ -39,6 +39,9 @@
                       <th>
                           userlevel
                       </th>
+                      <th>
+                          password
+                      </th>
                   </tr>
               </thead>
               <button id="btnAddNewRow">Add</button>

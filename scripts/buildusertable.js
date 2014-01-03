@@ -46,7 +46,8 @@ $(document).ready(function () {
             { "mDataProp": "fname" },
             { "mDataProp": "lname" },
             { "mDataProp": "EmailAddress" },
-            { "mDataProp": "userlevel" }]
+            { "mDataProp": "userlevel" },
+            { "mDataProp": "password" }]
     }).makeEditable({ //I kept getting the error "Object doesn't support property or method 'live'" until I changed line 1260 of jquery.dataTables.editable.js 'live' method to 'on'
         sUpdateURL: SERVER_URL + 'userfunctions/updateuser.php', // sUpdateVRUrl,
         sAddURL: SERVER_URL + 'userfunctions/adduser.php', // sAddVRUrl,
@@ -70,6 +71,7 @@ $(document).ready(function () {
                 //data: RequestCategories()
                 //submit: 'Save changes'//shows a submit button
             },
+			{},
         ]
     });
 

@@ -10,7 +10,7 @@
   $rowId = $_POST['rowId'];
   $columnPosition = $_POST['columnPosition'];
   $columnId = $_POST['columnId'];
-  $columnName = str_replace(' ', '',$_POST['columnName']);
+  $columnName = str_replace(array(' ', "\n", "\t", "\r"), '',$_POST['columnName']);//remove multiple characters from columnname...
   
   // connection to the database
   try {
@@ -23,7 +23,8 @@
 	  <th></th> tags in the html table that is defined for datatables, so this implementation will work as long as those column headers aren't changed*/
   $sql = "UPDATE users SET ".$columnName."=? WHERE userid=".$id;
   $q = $bdd->prepare($sql);
-  $q->execute(array($value));
+  if ($columnName == "password") {$q->execute(array(md5($value)));} //if your updating the password then store an md5 hash of the value...
+  else {$q->execute(array($value));}
   
   //echo json_encode(array('Success' => true));//sends json response back to ajax telling it it was successful...
   echo $value;

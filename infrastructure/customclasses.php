@@ -7,6 +7,7 @@ class User {
     public $lname;
 	public $EmailAddress;
     public $userlevel;
+	public $password;
 }
 /*class DateTime extends DateTime
 {
