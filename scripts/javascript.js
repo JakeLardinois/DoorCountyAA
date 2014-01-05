@@ -8,7 +8,7 @@ var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 
 WebFont.load({
   google: {
-	families: ['Ribeye Marrow', 'cursive', 'Tangerine']
+	families: ['Ribeye Marrow', 'cursive', 'Droid Sans Mono', 'Italianno']
   }
 });
 

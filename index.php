@@ -15,7 +15,7 @@
   <body>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
-        <div id="maincontent" style="overflow:hidden">
+        <div id="maincontent">
         	<br>
             <br>
             <br>

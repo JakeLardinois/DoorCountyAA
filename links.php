@@ -12,7 +12,7 @@
   <body>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
-        <div id="maincontent" style="overflow:hidden" >
+        <div id="maincontent">
         	<img style="float: left;" src="images/agegender.gif" width="433" height="397" alt="Age or Gender">
             <br>
             <br>
@@ -29,6 +29,9 @@
                 </li>
                 <li class="linklistitem">
                 	<a href="http://www.aagrapevine.org/" target="_blank">AA Grapevine</a> - the international journal of Alcoholics Anonymous, widely known as "our meeting in print". Their magazine, <em>The Grapevine</em>, is published every month.
+                </li>
+                <li class="linklistitem">
+                	<a href="multimedia/Now & Then December 2013.pdf" target="_blank">Now & Then December 2013</a>
                 </li>
                 <li class="linklistitem">
                 	<a href="./OldSite" target="_blank">The Old DoorCountyAA.org Website</a>

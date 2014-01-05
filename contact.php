@@ -12,7 +12,7 @@
   <body>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
-        <div id="maincontent" style="overflow:hidden">
+        <div id="maincontent">
             <img src="images/noflash_people.gif" width="757" height="197" alt="AA People">
         	<ul style="float: left;">
             	<li class="contactlistitem">

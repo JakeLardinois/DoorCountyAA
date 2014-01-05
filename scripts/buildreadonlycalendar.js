@@ -4,12 +4,38 @@ var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
 //var SERVER_URL = './'
 
+		
 $(document).ready(function () {
 	var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
 
+
+	//w = $('#calendar').css('width');
+	var beforePrint = function() {
+		// prepare calendar for printing
+		$('#calendar').css('width', '9.5in');
+		$('#calendar').fullCalendar('render');
+	};
+	var afterPrint = function() {
+		//$('#calendar').css('width', w);
+		$('#calendar').css('width', '');
+		$('#calendar').fullCalendar('render');
+	};
+	if (window.matchMedia) {
+		var mediaQueryList = window.matchMedia('print');
+		mediaQueryList.addListener(function(mql) {
+			if (mql.matches) {
+				beforePrint();
+			} else {
+				afterPrint();
+			}
+		});
+	}
+	window.onbeforeprint = beforePrint;
+	window.onafterprint = afterPrint;
+		
     var calendar = $('#calendar').fullCalendar({
         editable: true,
         header: {

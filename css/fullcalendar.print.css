@@ -28,5 +28,20 @@
 .fc-event .ui-resizable-handle {
 	display: none !important;
 	}
-	
-	
+
+/*Hides the <,>,today,month,week,day buttons during print*/
+.fc-button {
+	display: none !important;
+	}
+
+footer {
+	display: none !important;
+}
+
+header {
+	display: none !important;
+}
+
+.btnprint {
+	display: none !important;
+}
