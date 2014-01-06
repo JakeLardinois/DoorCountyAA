@@ -129,7 +129,7 @@ label.error {
 	/*display: none !important; The printable version just doesn't look good, so I disabled it here...*/
 	font-weight: bold;
 	float: right;
-	width: 93px;
+	/*width: 93px;*/
 	/*the below is how I get rounded corners on my buttons*/
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;

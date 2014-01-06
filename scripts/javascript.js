@@ -1,9 +1,9 @@
 // JavaScript Document
 
 //localServer
-var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
+//var SERVER_URL = 'http://localhost:8080/DoorCountyAA/'
 //Remote Server
-//var SERVER_URL = './'
+var SERVER_URL = './'
 
 
 WebFont.load({
@@ -35,6 +35,36 @@ function loadChangePasswordDialog() {
         buttons: {}
 	});
 }
+
+/*This function takes a screenshot of the calendar, creates a form, appends it to the DOM and then posts to the screenshot via the form to create a pdf*/
+function makecalendarpdf() {
+	//$('head').append('<link href="./css/fullcalendar.print.css" rel="stylesheet" type="text/css"/>'); //a method of appending a stylesheet
+	$(".fc-button").hide();/*Hides the <,>,today,month,week,day buttons*/
+	$(".fc-today").css("background", "#fff"); /*Removes the current day background coloring*/
+	
+	html2canvas(document.getElementById("calendar"), {
+		onrendered: function (canvas) {
+			var form = document.createElement("form");
+			form.setAttribute("method", "post");
+			form.setAttribute("action", SERVER_URL + "userfunctions/makepdf.php");
+
+			form.setAttribute("target", "view");
+
+			var hiddenField = document.createElement("input");
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", "image");
+			hiddenField.setAttribute("value", canvas.toDataURL());
+			form.appendChild(hiddenField);
+			document.body.appendChild(form);
+			//window.open('', 'view1');
+			//alert('fired in htm2canvas');
+			form.submit();
+			$(".fc-button").show();
+			$(".fc-today").css("background", "");
+		}
+	});
+}
+
 /*function loadChangePasswordDialog() {
 	$.prompt("<label for=\"username\">Username:</label><input type=\"text\" name=\"username\" id=\"username\" />", {
 	  title: "Change Password?",
