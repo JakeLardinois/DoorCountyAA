@@ -13,6 +13,7 @@
   
 
   <body>
+  	<?php include_once("./templates/analyticstracking.php") ?>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
         <div id="maincontent">

@@ -10,6 +10,7 @@
   
 
   <body>
+  	<?php include_once("./templates/analyticstracking.php") ?>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
         <div id="maincontent">
@@ -92,9 +93,6 @@
                     <ul class="contactlistL2">
                     	<li >
                         	<a href="mailto:webmaster@doorcountyaa.org">webmaster@doorcountyaa.org</a>
-                        </li>
-                        <li>
-                        	<a href="mailto:snowangelnm@yahoo.com">snowangelnm@yahoo.com</a>
                         </li>
                     </ul>
                 </li>

@@ -20,6 +20,7 @@
 	</script>
   </head>
   <body>
+  	<?php include_once("./templates/analyticstracking.php") ?>
 	<div id="wrapper">
         <?php require_once("./templates/header.php"); ?>
 		<br>

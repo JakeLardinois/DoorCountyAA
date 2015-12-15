@@ -316,7 +316,7 @@ function ShowEditEventPopup(event) {
 						$.prompt(objUpdatePrompts);
                     }
                     else {
-                        var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
+                        /*var dataRow = {	//create an object of variables and populate them with the html from the form; these then get passed to the php form via the URL...
 										//using $('#frmEvent').serialize() is easier, but I wanted to leave this here for reference...
                             //'title': $('#description').val(), //could not use #title for some reason...
 							'description': $('#description').val(),
@@ -328,13 +328,14 @@ function ShowEditEventPopup(event) {
 							'repeat-freq': $('input[name=repeat-freq]:checked').val(), //$('#repeat-freq').val()
                             'id': event.id,
 							'parent_id': event.parent_id
-                        }
-                        //$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
+                        }*/
+                        //$('#start').val($.fullCalendar.formatDate(date, "yyyy-MM-dd HH:mm:ss")); ,
 
                         $.ajax({
-                            type: 'POST',
-                            url: SERVER_URL + 'calendarfunctions/update_eventseries.php', //Upated this so that a non-recurring event could be made to recur...
-                            data: dataRow,												//this now entails the deletion and recreation of the original event.
+                            type: 'POST',													//Upated this so that a non-recurring event could be made to recur...
+                            url: SERVER_URL + 'calendarfunctions/update_eventseries.php', //this now entails the deletion and recreation of the original event.
+                            //data: dataRow, //I had to remove this because it was returning 'true' for my repeats variable and serialize returns 'on'
+							data: $('#frmEvent').serialize(),
                             success: function (response) {
                                 sValue = JSON.parse(response);
                                 if (sValue.Success) {

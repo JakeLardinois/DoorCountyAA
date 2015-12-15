@@ -12,6 +12,7 @@
 	$title = $_POST['description'];
 	$start = new DateTime($_POST['start']);
 	$end = new DateTime($_POST['end']);
+	$url = $_POST['url'];
 
 	// connection to the database
 	try {
@@ -24,8 +25,8 @@
 	
 	
 	// update the records
-	$sql = "UPDATE events SET title=?, start=?, end=?, updatedby=? WHERE id=?";
+	$sql = "UPDATE events SET title=?, start=?, end=?, url=?, updatedby=? WHERE id=?";
 	$q = $bdd->prepare($sql);
-	$q->execute(array($title,$start->format('Y/m/d H:i:s'),$end->format('Y/m/d H:i:s'),$userid,$id));
+	$q->execute(array($title,$start->format('Y/m/d H:i:s'),$end->format('Y/m/d H:i:s'), $url, $userid,$id));
 	echo json_encode(array('Success' => true));//sends json response back to ajax telling it it was successful...
 ?>

@@ -1,4 +1,4 @@
-<?php //session_start(); ?>
+<?php session_start(); ?>
 <!doctype html>
 <html>
   <head>
@@ -10,6 +10,7 @@
   
 
   <body>
+  	<?php include_once("./templates/analyticstracking.php") ?>
 	<div id="wrapper">
     	<?php require_once("./templates/header.php"); ?>
         <div id="maincontent">
@@ -31,10 +32,7 @@
                 	<a href="http://www.aagrapevine.org/" target="_blank">AA Grapevine</a> - the international journal of Alcoholics Anonymous, widely known as "our meeting in print". Their magazine, <em>The Grapevine</em>, is published every month.
                 </li>
                 <li class="linklistitem">
-                	<a href="multimedia/Now & Then December 2013.pdf" target="_blank">Now & Then December 2013</a>
-                </li>
-                <li class="linklistitem">
-                	<a href="./OldSite" target="_blank">The Old DoorCountyAA.org Website</a>
+                	<a href="multimedia/2015Area74SpringConference.pdf" target="_blank">2015 Area 74 Spring Conference Flyer</a>
                 </li>
                 <li class="linklistitem">
                 	<audio controls id="drbobaudio">
