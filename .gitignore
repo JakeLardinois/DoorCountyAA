@@ -2,6 +2,8 @@
 ## Eclipse
 #################
 
+/multimedia
+
 *.pydevproject
 .project
 .metadata
