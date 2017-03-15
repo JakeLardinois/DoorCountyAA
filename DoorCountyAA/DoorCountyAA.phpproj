@@ -545,6 +545,7 @@
     <Compile Include="wp-content\plugins\akismet\readme.txt" />
     <Compile Include="wp-content\plugins\akismet\wrapper.php" />
     <Compile Include="wp-content\plugins\hello.php" />
+    <Compile Include="wp-content\plugins\JakesHelloWorld\jakes_hello_world.php" />
     <Compile Include="wp-content\plugins\index.php" />
     <Compile Include="wp-content\plugins\the-events-calendar\common\src\admin-views\app-shop.php" />
     <Compile Include="wp-content\plugins\the-events-calendar\common\src\admin-views\event-log.php" />
@@ -2159,6 +2160,7 @@
     <Folder Include="wp-content\plugins\akismet\_inc" />
     <Folder Include="wp-content\plugins\akismet" />
     <Folder Include="wp-content\plugins" />
+    <Folder Include="wp-content\plugins\JakesHelloWorld\" />
     <Folder Include="wp-content\plugins\the-events-calendar\" />
     <Folder Include="wp-content\plugins\the-events-calendar\common\" />
     <Folder Include="wp-content\plugins\the-events-calendar\common\lang\" />
@@ -2467,6 +2469,7 @@
     <Folder Include="wp-includes" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wp-content\plugins\JakesHelloWorld\jakes_hello_world.htm" />
     <Content Include="wp-content\plugins\the-events-calendar\common\lang\tribe-common-af.mo" />
     <Content Include="wp-content\plugins\the-events-calendar\common\lang\tribe-common-af.po" />
     <Content Include="wp-content\plugins\the-events-calendar\common\lang\tribe-common-ar.mo" />
