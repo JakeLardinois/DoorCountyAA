@@ -1,3 +1,29 @@
-﻿<div>
+﻿<input type="hidden" id="ajaxURL" name="ajaxURL" value="##host##/wp-admin/admin-ajax.php" />
+
+<div>
     My name is ##jake##!
 </div>
+
+<script>
+
+    jQuery(document).ready(function() {
+        alert("foo!");
+
+
+        jQuery.ajax({
+            type: 'POST',
+            data: { action: 'jakes_hello_world_ajax', survey_code: "foomanchu" },
+            url: jQuery("#ajaxURL").val(),
+            success: function (value) {
+                if (value !== "Survey code not found.") {
+                    //NDC found. Remove error message if exists.
+                    var res = JSON.parse(value);
+                } else {
+                    //NDC NOT found. Set message on page to retry.
+                    jQuery("#SurveyCodeFail").removeClass('errorLabelNone');
+                    jQuery("#SurveyCodeFail").addClass('errorLabelShow');
+                }
+            }
+        });
+    });
+</script>

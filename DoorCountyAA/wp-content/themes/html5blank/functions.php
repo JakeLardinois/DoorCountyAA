@@ -449,4 +449,18 @@ function html5_shortcode_demo_2($atts, $content = null) // Demo Heading H2 short
     return '<h2>' . $content . '</h2>';
 }
 
+
+function jakes_hello_world_ajax(){
+    $surveyCode = $_POST["survey_code"];
+
+    //here is where you could do an API call...
+
+    if ($surveyCode == null) {
+        die ("Survey code not found.");
+    } else {
+        die (json_encode($surveyCode));
+    }
+}
+add_action("wp_ajax_jakes_hello_world_ajax", "jakes_hello_world_ajax");
+
 ?>

@@ -13,6 +13,7 @@ Domain Path: /languages
 add_shortcode('JakesHelloWorldShort', 'process_HelloWorld');
 function process_HelloWorld() {
     $returnHTML = file_get_contents('jakes_hello_world.htm', true);
+    $returnHTML = str_replace("##host##", "http://localhost:19320/", $returnHTML);
     $returnHTML = str_replace("##jake##", "Jake", $returnHTML);
 
     return $returnHTML;
