@@ -46,6 +46,8 @@
                     <?php html5blank_nav(); ?>
                 </nav>
                 <!-- /nav -->
-
+                <div class="alignright">
+                    <?php get_template_part('searchform'); ?>
+                </div>
             </header>
 			<!-- /header -->
