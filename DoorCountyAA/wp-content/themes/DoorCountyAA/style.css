@@ -79,7 +79,15 @@ input:focus {
 	width:95%;
 	margin:0 auto;
 	position:relative;
+    background-image: url(./img/AALogoOpaque.png);
+    background-repeat: no-repeat;
+    -webkit-background-size: contain;
+	-moz-background-size: contain;
+	-o-background-size: contain;
+    background-size: contain;
+	background-position: center;
 }
+
 /* header */
 .header {
 
@@ -115,24 +123,44 @@ input:focus {
 
 /* Change the link color on hover */
 .nav li a:hover {
-    background-color: #555;
-    color: white;
+    background-color: #d9edf7;
+    /*color: white;*/
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 /* sidebar */
 .sidebar {
-
+	float: left;
+    Width: 100%;
+	position: relative;
+    position: relative !important; /* Make sure sticky sidebar doesn't affect to print */
 }
 /* footer */
 .footer {
+    font-size:  .9em;
+	text-align: center;
+	clear: both;
+}
 
+.footer ul li {
+	display: inline;
 }
 
 /*------------------------------------*\
     PAGES
 \*------------------------------------*/
 
+.linklistitem {
+	padding: 10px;
+}
 
+.contactlistitem {
+	padding: 10px;
+}
+.contactlistL2 {
+	text-indent:50px;
+}
 
 /*------------------------------------*\
     IMAGES
@@ -200,6 +228,10 @@ input:focus {
 	background:#04A4CC;
 	color:#FFF;
 	text-shadow:none;
+}
+
+.bigbook {
+	float: left;
 }
 
 /*------------------------------------*\
