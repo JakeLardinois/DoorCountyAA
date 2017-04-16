@@ -161,7 +161,7 @@ class Tribe__Events__Embedded_Maps {
 
 	protected function enqueue_map_scripts() {
 		// Setup Google Maps API
-		$url  = apply_filters( 'tribe_events_google_maps_api', 'https://maps.google.com/maps/api/js?key=AIzaSyBfiFmiQs-XFnsXwcNKysA5_u0E93XWDxk' );
+		$url  = apply_filters( 'tribe_events_google_maps_api', 'https://maps.google.com/maps/api/js' );
 		wp_enqueue_script( 'tribe_events_google_maps_api', $url, array(), false, true );
 
 		// Setup our own script used to initialize each map
