@@ -147,7 +147,13 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 		$first_meta_query = Tribe__Utils__Array::get( $this->query->meta_query->queries, array( 0 ), false );
 
 		// If not set or it does not relate to the EventStartDate, bail
-		if ( ! $first_meta_query || '_EventStartDate' !== $first_meta_query['key'] ) {
+		if (
+			! $first_meta_query
+			|| (
+				'_EventStartDate' !== $first_meta_query['key']
+				&& '_EventStartDateUTC' !== $first_meta_query['key']
+			)
+		) {
 			return $orderby_sql;
 		}
 

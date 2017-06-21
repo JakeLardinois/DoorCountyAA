@@ -10,6 +10,7 @@ for ( $i = 1; $i <= 12; $i++ ) {
 	$interval_options[] = array( 'id' => $i, 'text' => $i );
 }
 $delete_this_button = esc_html__( 'Delete', 'tribe-events-calendar-pro' );
+$label = __( 'Event Series:', 'tribe-events-calendar-pro' );
 ?>
 
 <div id="tribe-row-delete-dialog">
@@ -18,7 +19,13 @@ $delete_this_button = esc_html__( 'Delete', 'tribe-events-calendar-pro' );
 </div>
 
 <tr class="recurrence-row tribe-datetime-block">
-	<td class="recurrence-rules-header"><?php esc_html_e( 'Event Series:', 'tribe-events-calendar-pro' ); ?></td>
+	<td class="recurrence-rules-header">
+		<?php if ( function_exists( 'tribe_community_events_field_label' ) ) : ?>
+			<?php tribe_community_events_field_label( 'EventSeries', $label ); ?>
+		<?php else: ?>
+			<label><?php echo esc_html( $label ); ?></label>
+		<?php endif; ?>
+	</td>
 	<td>
 		<div id="tribe-recurrence-staging"></div>
 		<script type="text/x-handlebars-template" id="tmpl-tribe-recurrence">
@@ -239,7 +246,7 @@ $delete_this_button = esc_html__( 'Delete', 'tribe-events-calendar-pro' );
 			</div>
 
 		</script>
-		<button id="tribe-add-recurrence" class="tribe-add-recurrence button">
+		<button id="tribe-add-recurrence" class="tribe-add-recurrence button tribe-button tribe-button-secondary">
 			<span class="has-no-recurrence">
 				<?php esc_html_e( 'Schedule multiple events', 'tribe-events-calendar-pro' ); ?>
 			</span>

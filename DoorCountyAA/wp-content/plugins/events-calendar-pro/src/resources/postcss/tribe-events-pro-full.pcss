@@ -619,15 +619,49 @@
 	}
 }
 
-.tribe-events-list .tribe-events-photo-event .tribe-events-event-details {
-	float: none;
-	padding: 15px;
-	word-wrap: break-word;
-}
+.tribe-events-list {
+	.tribe-events-loop {
+		.tribe-events-photo-event {
+			.entry-title a {
+				transition: .2s ease-in;
+			}
 
-.tribe-events-loop .tribe-events-photo-event .tribe-events-list-event-description {
-	float: none;
-	margin-top: 10px;
+			.tribe-events-event-image {
+				float: none;
+				margin: 0;
+				width: 100%;
+			}
+
+			.tribe-events-event-cost {
+				display: none;
+			}
+
+			.date-divider {
+				padding: 0 5px;
+			}
+
+			.tribe-events-event-details {
+				float: none;
+				padding: 15px;
+				word-wrap: break-word;
+			}
+
+			.tribe-events-list-event-description {
+				float: none;
+				margin-top: 10px;
+			}
+
+			.tribe-events-event-meta .recurringinfo {
+				display: block;
+				margin: 8px 0 0;
+			}
+		}
+
+		.type-tribe_events .tribe-events-event-meta {
+			margin: 0 0 8px 0;
+			padding-right: 0;
+		}
+	}
 }
 
 .tribe-events-photo #tribe-events-content .tribe-events-list-event-description p,
@@ -644,16 +678,6 @@
 	margin-top: 1em;
 }
 
-.tribe-events-photo .tribe-events-loop .type-tribe_events .tribe-events-event-meta {
-	margin: 0 0 8px 0;
-	padding-right: 0;
-}
-
-.tribe-events-list .tribe-events-loop .tribe-events-photo-event .tribe-events-event-meta .recurringinfo {
-	display: block;
-	margin: 8px 0 0;
-}
-
 .tribe-events-loop .tribe-events-photo-event .recurringinfo .tribe-events-divider {
 	display: none;
 }
@@ -663,26 +687,6 @@
 	line-height: 1.2;
 	margin-bottom: 10px;
 	padding-right: 0;
-}
-
-.tribe-events-photo-event {
-	.entry-title a {
-		transition: .2s ease-in;
-	}
-
-	.tribe-events-event-image {
-		float: none;
-		margin: 0;
-		width: 100%;
-	}
-
-	.tribe-events-event-cost {
-		display: none;
-	}
-
-	.date-divider {
-		padding: 0 5px;
-	}
 }
 
 .tribe-events-photo {

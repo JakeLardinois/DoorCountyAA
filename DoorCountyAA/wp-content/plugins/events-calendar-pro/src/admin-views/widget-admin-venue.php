@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 	<p>
 		<input class="checkbox" type="checkbox" value="1" <?php checked( $instance['hide_if_empty'], true ); ?> id="<?php echo esc_attr( $this->get_field_id( 'hide_if_empty' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'hide_if_empty' ) ); ?>" />
-		<label for="<?php echo esc_attr( $this->get_field_id( 'hide_if_empty' ) ); ?>"><?php esc_html_e( 'Hide this widget if there are no upcoming events:', 'tribe-events-calendar-pro' ); ?></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'hide_if_empty' ) ); ?>"><?php esc_html_e( 'Hide this widget if there are no upcoming events', 'tribe-events-calendar-pro' ); ?></label>
 	</p>
 	<p>
 		<?php $jsonld_enable = ( isset( $instance['jsonld_enable'] ) && $instance['jsonld_enable'] ) || false === $this->updated; ?>

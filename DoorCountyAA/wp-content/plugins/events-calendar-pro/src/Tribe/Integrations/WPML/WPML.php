@@ -27,6 +27,15 @@ class Tribe__Events__Pro__Integrations__WPML__WPML extends Tribe__Events__Integr
 	protected $translations;
 
 	/**
+	 * Tribe__Events__Pro__Integrations__WPML__WPML constructor.
+	 *
+	 * @param Tribe__Events__Pro__Integrations__WPML__API__Translations|null $translations
+	 */
+	public function __construct( Tribe__Events__Pro__Integrations__WPML__API__Translations $translations = null ) {
+		$this->translations = $translations ? $translations : new Tribe__Events__Pro__Integrations__WPML__API__Translations();
+	}
+
+	/**
 	 * The class singleton constructor.
 	 *
 	 * @return Tribe__Events__Pro__Integrations__WPML__WPML
@@ -37,15 +46,6 @@ class Tribe__Events__Pro__Integrations__WPML__WPML extends Tribe__Events__Integr
 		}
 
 		return self::$instance;
-	}
-
-	/**
-	 * Tribe__Events__Pro__Integrations__WPML__WPML constructor.
-	 *
-	 * @param Tribe__Events__Pro__Integrations__WPML__API__Translations|null $translations
-	 */
-	public function __construct( Tribe__Events__Pro__Integrations__WPML__API__Translations $translations = null ) {
-		$this->translations = $translations ? $translations : new Tribe__Events__Pro__Integrations__WPML__API__Translations();
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Tribe__Events__Pro__Integrations__WPML__WPML extends Tribe__Events__Integr
 		$listener = Tribe__Events__Pro__Integrations__WPML__Event_Listener::instance();
 
 		if ( ! $defaults->has_set_defaults() ) {
-			add_action( 'icl_save_settings', array( $defaults, 'set_defaults' ) );
+			add_action( 'wpml_parse_config_file', array( $defaults, 'setup_config_file' ) );
 		}
 
 		add_action( 'tribe_events_pro_recurring_event_instance_inserted', array( $listener, 'handle_recurring_event_creation' ),
@@ -116,7 +116,7 @@ class Tribe__Events__Pro__Integrations__WPML__WPML extends Tribe__Events__Integr
 		add_filter( 'tribe_events_rewrite_i18n_domains', array( $filters, 'filter_tribe_events_rewrite_i18n_domains' ) );
 		add_filter( 'tribe_events_pro_all_link_frag', array( $filters, 'filter_tribe_events_pro_all_link_frag' ), 10, 2 );
 		add_filter( 'tribe_events_pro_get_all_link', array( $filters, 'filter_tribe_events_pro_get_all_link' ), 20, 2 );
-		add_filter( 'post_type_link', array( $filters, 'move_wpml_slug_translation_filter' ), -1 );
+		add_filter( 'post_type_link', array( $filters, 'move_wpml_slug_translation_filter' ), - 1 );
 
 		// WPML filters
 		add_filter( 'wpml_is_redirected', array( $filters, 'filter_wpml_is_redirected_event' ), 10, 3 );

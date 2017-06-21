@@ -1,3 +1,5 @@
+@custom-media --tablet (max-width: 782px);
+
 /******* Recurrence Rule visibility *******/
 .recurrence-row td {
 	border-top: 1px solid #dfdfdf;
@@ -126,6 +128,13 @@
 
 		.tribe-recurrence-details {
 			display: block;
+
+			.tribe-field-start_time,
+			.tribe-field-end_time {
+				@media (--tablet) {
+					width: 80px;
+				}
+			}
 		}
 	}
 

@@ -580,7 +580,7 @@ class Tribe__Events__Pro__Recurrence__Meta {
 		wp_enqueue_style(
 			Tribe__Events__Main::POSTTYPE . '-recurrence',
 			tribe_events_pro_resource_url( 'events-recurrence.css' ),
-			array( 'tribe-common-admin' ),
+			array( 'tribe-select2-css', 'tribe-common-admin' ),
 			apply_filters( 'tribe_events_pro_css_version', Tribe__Events__Pro__Main::VERSION )
 		);
 
@@ -687,6 +687,10 @@ class Tribe__Events__Pro__Recurrence__Meta {
 		if ( ! $recurrence_data ) {
 			$recurrence_data = get_post_meta( $post_id, '_EventRecurrence', true );
 		}
+
+		// Update the recurrence data if needed (useful for rules created pre-4.4)
+		$rules_updater = new Tribe__Events__Pro__Recurrence__Rule_Updater( $post_id, $recurrence_data );
+		$recurrence_data = $rules_updater->update_if_required();
 
 		if ( is_array( $recurrence_data ) ) {
 			if (
@@ -1041,6 +1045,10 @@ class Tribe__Events__Pro__Recurrence__Meta {
 			'exclusions' => array(),
 		);
 
+		// Used in generating all-day durations below.
+		$parent_start_date = strtotime( get_post_meta( $event_id, '_EventStartDate', true ) );
+		$parent_end_date   = strtotime( get_post_meta( $event_id, '_EventEndDate', true ) );
+
 		if ( ! $recurrence_meta['rules'] ) {
 			$recurrences[] = new Tribe__Events__Pro__Null_Recurrence();
 
@@ -1095,8 +1103,13 @@ class Tribe__Events__Pro__Recurrence__Meta {
 					&& 'yes' === $recurrence['custom']['same-time']
 					&& tribe_event_is_all_day( $event_id )
 				) {
-					// In the current implementation, all days events are 1 sec short of being 24hrs in duration
-					$duration = DAY_IN_SECONDS - 1;
+					// In the current implementation, events are considered "all day"
+					// when their length is 1 second short of being 24hrs in duration.
+					// We need to factor this in as follows to preserve duration
+					// of multiday all-day events
+					$diff       = $parent_end_date - $parent_start_date;
+					$num_days   = absint( $diff / DAY_IN_SECONDS ) + 1;
+					$duration   = ( $num_days * DAY_IN_SECONDS ) - 1;
 				}
 
 				$start = strtotime( get_post_meta( $event_id, '_EventStartDate', true ) . '+00:00' );
@@ -1466,8 +1479,17 @@ class Tribe__Events__Pro__Recurrence__Meta {
 			return;
 		}
 
+		// Handle different string conversions based on recurring end type.
 		if ( empty( $rule['end'] ) ) {
-			$series_end = _x( 'an unspecified date', 'An unspecified end date', 'tribe-events-calendar-pro' );
+
+			// If the events are single events, use the dates of those single instances.
+			if ( 'date' === $type && isset( $rule['custom']['date']['date'] ) ) {
+				$series_end = date( tribe_get_date_format( true ), strtotime( $rule['custom']['date']['date'] ) );
+
+			// Otherwise there's no end date specified.
+			} else {
+				$series_end = _x( 'an unspecified date', 'An unspecified end date', 'tribe-events-calendar-pro' );
+			}
 		} else {
 			$series_end = date( tribe_get_date_format( true ), strtotime( $rule['end'] ) );
 		}

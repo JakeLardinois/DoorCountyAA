@@ -2,7 +2,7 @@
 /*
 Plugin Name: The Events Calendar PRO
 Description: The Events Calendar PRO, a premium add-on to the open source The Events Calendar plugin (required), enables recurring events, custom attributes, venue pages, new widgets and a host of other premium features.
-Version: 4.4.5
+Version: 4.4.11.1
 Author: Modern Tribe, Inc.
 Author URI: http://m.tri.be/20
 Text Domain: tribe-events-calendar-pro
@@ -36,6 +36,10 @@ function Tribe_ECP_Load() {
 
 	$classes_exist = class_exists( 'Tribe__Events__Main' ) && class_exists( 'Tribe__Events__Pro__Main' );
 	$version_ok = $classes_exist && defined( 'Tribe__Events__Main::VERSION' ) && version_compare( Tribe__Events__Main::VERSION, Tribe__Events__Pro__Main::REQUIRED_TEC_VERSION, '>=' );
+
+	if ( class_exists( 'Tribe__Main' ) && ! is_admin() && ! class_exists( 'Tribe__Events__Pro__PUE__Helper' ) ) {
+		tribe_main_pue_helper();
+	}
 
 	if ( apply_filters( 'tribe_ecp_to_run_or_not_to_run', $version_ok ) ) {
 		add_filter( 'tribe_tec_addons', 'tribe_init_ecp_addon' );
@@ -122,7 +126,7 @@ function tribe_init_events_pro_autoloading() {
 	}
 	$autoloader = Tribe__Autoloader::instance();
 
-	$autoloader->register_prefix( 'Tribe__Events__Pro__', dirname( __FILE__ ) . '/src/Tribe' );
+	$autoloader->register_prefix( 'Tribe__Events__Pro__', dirname( __FILE__ ) . '/src/Tribe', 'events-calendar-pro' );
 
 	// deprecated classes are registered in a class to path fashion
 	foreach ( glob( dirname( __FILE__ ) . '/src/deprecated/*.php' ) as $file ) {
