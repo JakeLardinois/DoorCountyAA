@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1261,7 +1265,7 @@ msgstr "Aktif Varsayılan organizatör: %s"
 msgid "The current default venue is: %s"
 msgstr "Aktif Varsayılan mekan: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr "Adres:"
 
@@ -1269,7 +1273,7 @@ msgstr "Adres:"
 msgid "The current default address is: %s"
 msgstr "Aktif Varsayılan adres: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -1277,7 +1281,7 @@ msgstr "Ayarlar"
 msgid "The current default city is: %s"
 msgstr "Aktif Varsayılan ilçe: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Mekan güncellendi. <a href=\"%s\">Mekanı görüntüle</a>"
 
@@ -1286,7 +1290,7 @@ msgid "The current default state is: %s"
 msgstr "Şu anki varsayılan eyalet: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Mekan yayımlandı. <a href=\"%s\">Mekanı görüntüle</a>"
 
@@ -1294,7 +1298,7 @@ msgstr "Mekan yayımlandı. <a href=\"%s\">Mekanı görüntüle</a>"
 msgid "The current default province is: %s"
 msgstr "Aktif Varsayılan şehir: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Mekan girildi. <a target=\"_blank\" href=\"%s\">Mekanı önizleme</a>"
 
@@ -1302,7 +1306,7 @@ msgstr "Mekan girildi. <a target=\"_blank\" href=\"%s\">Mekanı önizleme</a>"
 msgid "The current default postal code/zip code is: %s"
 msgstr "Aktif varsayılan posta kodu: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Mekan <strong>%1$s</strong> için ayrıldı. <a target=\"_blank\" href=\"%2$s\">Mekanı önizleme</a>"
 
@@ -1311,7 +1315,7 @@ msgid "The current default country is: %s"
 msgstr "Aktif varsayılan ülke: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
@@ -1319,7 +1323,7 @@ msgstr "M j, Y @ G:i"
 msgid "The current default phone is: %s"
 msgstr "Aktif varsayılan telefon: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Mekan taslağı güncellendi. <a target=\"_blank\" href=\"%s\">Mekanı önizleme</a>"
 
@@ -1328,7 +1332,7 @@ msgstr "Mekan taslağı güncellendi. <a target=\"_blank\" href=\"%s\">Mekanı �
 msgid "Date out of range."
 msgstr "Tarih kapsam dışında"
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Organizatör güncellendi. <a href=\"%s\">Organizatörü görüntüle</a>"
 
@@ -1336,7 +1340,7 @@ msgstr "Organizatör güncellendi. <a href=\"%s\">Organizatörü görüntüle</a
 msgid "Recurring %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Organizatör yayımlandı. <a href=\"%s\">Organizatörü görüntüle</a>"
 
@@ -1344,7 +1348,7 @@ msgstr "Organizatör yayımlandı. <a href=\"%s\">Organizatörü görüntüle</a
 msgid "(See all)"
 msgstr "(Hepsini görüntüle)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Organizatör girildi. <a target=\"_blank\" href=\"%s\">Organizatör önizleme</a>"
 
@@ -1352,7 +1356,7 @@ msgstr "Organizatör girildi. <a target=\"_blank\" href=\"%s\">Organizatör öni
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Önceki Hafta"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Organizatör <strong>%1$s</strong> için ayrıldı. <a target=\"_blank\" href=\"%2$s\">Organizatör önizleme</a>"
 
@@ -1360,7 +1364,7 @@ msgstr "Organizatör <strong>%1$s</strong> için ayrıldı. <a target=\"_blank\"
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Gelecek Hafta <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Organizatör taslağı güncellendi. <a target=\"_blank\" href=\"%s\">Organizatör önizleme</a>"
 
@@ -1369,7 +1373,7 @@ msgstr "Organizatör taslağı güncellendi. <a target=\"_blank\" href=\"%s\">Or
 msgid "%s List Navigation"
 msgstr ""
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Destek"
 
@@ -1377,7 +1381,7 @@ msgstr "Destek"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Tüm Eklentileri Görüntüle"
 
@@ -1385,16 +1389,16 @@ msgstr "Tüm Eklentileri Görüntüle"
 msgid "Next %s <span>&raquo;</span>"
 msgstr ""
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Hafta"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Daha fazlası için"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Foto"
 
@@ -1402,7 +1406,7 @@ msgstr "Foto"
 msgid "Related %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Haftası"
 
@@ -1727,8 +1731,8 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Şu anda tekrarlayan serideki tüm etkinlikleri düzenlemektesiniz."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
-msgstr "Bu etkinliğe ait %d girdi %s aracılığıyla yaratıldı. <a href=\"%s\">Daha çok öğren.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
+msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
 msgid ""
@@ -2221,7 +2225,7 @@ msgstr ""
 msgid "Default city"
 msgstr "Varsayılan ilçe"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Mekan verisini fixle"
 
@@ -2229,7 +2233,7 @@ msgstr "Mekan verisini fixle"
 msgid "Default state"
 msgstr "Varsayılan Eyalet"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Yer bilgisi içermeyen mekanlarınız bulunmakta. <a href='%s'>Yer bilgilerini oluşturmak için tıklayınız.</a>."
 
@@ -2237,7 +2241,7 @@ msgstr "Yer bilgisi içermeyen mekanlarınız bulunmakta. <a href='%s'>Yer bilgi
 msgid "Default province"
 msgstr "Varsayılan şehir"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "%d mekan için  yer bilgileri fix edilmiş veriler."
 
@@ -2289,7 +2293,6 @@ msgstr "hafta"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Gösterilecek etkinlik sayısı:"
 

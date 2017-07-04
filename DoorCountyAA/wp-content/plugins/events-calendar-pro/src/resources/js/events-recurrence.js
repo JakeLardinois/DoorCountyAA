@@ -143,6 +143,14 @@ tribe_events_pro_admin.recurrence = {
 			data.end = moment( data.end ).format( this.date_format );
 		}
 
+		// Ensure the custom date - if set - is in the expected format
+		// @todo replace this with a common helper for retrieving deeply nested values once available
+		try {
+			if ( data.custom.date.date ) {
+				data.custom.date.date = moment( data.custom.date.date ).format( this.date_format );
+			}
+		} catch ( e ) {}
+
 		this.$recurrence_staging.append( this.recurrence_template( data ) );
 
 		var $rule = this.$recurrence_staging.find( '.tribe-event-recurrence' );

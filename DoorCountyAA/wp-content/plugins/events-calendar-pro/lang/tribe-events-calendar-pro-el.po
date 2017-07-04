@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1261,7 +1265,7 @@ msgstr "Ο τρέχων προεπιλεγμένος οργανωτής είνα
 msgid "The current default venue is: %s"
 msgstr "Ο τρέχων προεπιλεγμένος Χώρος Διεξαγωγής είναι: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr "Διεύθυνση:"
 
@@ -1269,7 +1273,7 @@ msgstr "Διεύθυνση:"
 msgid "The current default address is: %s"
 msgstr "Η τρέχουσα προεπιλεγμένη διεύθυνση είναι: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
@@ -1277,7 +1281,7 @@ msgstr "Ρυθμίσεις"
 msgid "The current default city is: %s"
 msgstr "Η τρέχουσα προεπιλεγμένη πόλη είναι: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Ο χώρος διεξαγωγής ανανεώθηκε. <a href=\"%s\">Προβολή χώρου</a>"
 
@@ -1286,7 +1290,7 @@ msgid "The current default state is: %s"
 msgstr "Η τρέχουσα προεπιλεγμένη πολιτεία είναι: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Ο χώρος διεξαγωγής δημοσιεύτηκε. <a href=\"%s\">Προβολή χώρου</a>"
 
@@ -1294,7 +1298,7 @@ msgstr "Ο χώρος διεξαγωγής δημοσιεύτηκε. <a href=\"%
 msgid "The current default province is: %s"
 msgstr "Η τρέχουσα προεπιλεγμένη περιοχή είναι: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Ο χώρος διεξαγωγής καταχωρήθηκε. <a target=\"_blank\" href=\"%s\">Προεπισκόπηση χώρου</a>"
 
@@ -1302,7 +1306,7 @@ msgstr "Ο χώρος διεξαγωγής καταχωρήθηκε. <a target=\
 msgid "The current default postal code/zip code is: %s"
 msgstr "Ο τρέχων προεπιλεγμένος ταχυδρομικός κωδικός είναι: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Εκδηλώσεις προγραμματισμένες για: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Προεπισκόπηση χώρου</a>"
 
@@ -1311,7 +1315,7 @@ msgid "The current default country is: %s"
 msgstr "Η τρέχουσα προεπιλεγμένη χώρα είναι: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
@@ -1319,7 +1323,7 @@ msgstr "M j, Y @ G:i"
 msgid "The current default phone is: %s"
 msgstr "Το τρέχον προεπιλεγμένο τηλέφωνο είναι: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Το προσχέδιο του χώρου διεξαγωγής ανανεώθηκε. <a target=\"_blank\" href=\"%s\">Προεπισκόπηση χώρου</a>"
 
@@ -1328,7 +1332,7 @@ msgstr "Το προσχέδιο του χώρου διεξαγωγής αναν�
 msgid "Date out of range."
 msgstr "Ημερομηνία εκτός ορίων."
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Ο διοργανωτής ανανεώθηκε. <a href=\"%s\">Προβολή διοργανωτή</a>"
 
@@ -1336,7 +1340,7 @@ msgstr "Ο διοργανωτής ανανεώθηκε. <a href=\"%s\">Προβ�
 msgid "Recurring %s"
 msgstr "Επαναλαμβανόμενη %s"
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Ο διοργανωτής δημοσιεύτηκε. <a href=\"%s\">Προβολή διοργανωτή</a>"
 
@@ -1344,7 +1348,7 @@ msgstr "Ο διοργανωτής δημοσιεύτηκε. <a href=\"%s\">Πρ�
 msgid "(See all)"
 msgstr "(Προβολή όλων)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Ο διοργανωτής καταχωρήθηκε. <a target=\"_blank\" href=\"%s\">Προεπισκόπηση διοργανωτή</a>"
 
@@ -1352,7 +1356,7 @@ msgstr "Ο διοργανωτής καταχωρήθηκε. <a target=\"_blank\"
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Προηγούμενη Εβδομάδα"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Ο διοργανωτής προγραμματίστηκε για: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Προεπισκόπηση διοργανωτή</a>"
 
@@ -1360,7 +1364,7 @@ msgstr "Ο διοργανωτής προγραμματίστηκε για: <stro
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Επόμενη Εβδομάδα <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Το προσχέδιο του διοργανωτή ανανεώθηκε. <a target=\"_blank\" href=\"%s\">Προεπισκόπηση διοργανωτή</a>"
 
@@ -1369,7 +1373,7 @@ msgstr "Το προσχέδιο του διοργανωτή ανανεώθηκε
 msgid "%s List Navigation"
 msgstr "Περιήγηση λίστας %s"
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Υποστήριξη"
 
@@ -1377,7 +1381,7 @@ msgstr "Υποστήριξη"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr "<span>&laquo;</span> Προηγούμενη %s"
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Προβολή όλων των Προσθέτων"
 
@@ -1385,16 +1389,16 @@ msgstr "Προβολή όλων των Προσθέτων"
 msgid "Next %s <span>&raquo;</span>"
 msgstr "Επόμενη %s <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Εβδομάδα"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Ανακαλύψτε περισσότερα"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Φωτογραφία"
 
@@ -1402,7 +1406,7 @@ msgstr "Φωτογραφία"
 msgid "Related %s"
 msgstr "Σχετικές %sς"
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Εβδομάδα του"
 
@@ -1727,8 +1731,8 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Αυτή τη στιγμή επεξεργάζεστε όλες τις εκδηλώσεις σε μια επαναλήψιμη σειρά."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
-msgstr "%d επαναλήψεις αυτής της εκδήλωσης έχουν δημιουργηθεί μέσω %s. <a href=\"%s\">Μάθετε περισσότερα.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
+msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
 msgid ""
@@ -2221,7 +2225,7 @@ msgstr "Γεωγραφικό μήκος"
 msgid "Default city"
 msgstr "Προεπιλεγμένη πόλη"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Επιδιόρθωση δεδομένων χώρων διεξαγωγής"
 
@@ -2229,7 +2233,7 @@ msgstr "Επιδιόρθωση δεδομένων χώρων διεξαγωγή�
 msgid "Default state"
 msgstr "Προεπιλεγμένη περιοχή"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Έχετε χώρους διεξαγωγής για τους οποίους δεν έχουμε πληροφορίες εντοπισμού γεωγραφικής θέσης (Geolocation). <a href='%s'>Πατήστε εδώ για δημιουργία</a>."
 
@@ -2237,7 +2241,7 @@ msgstr "Έχετε χώρους διεξαγωγής για τους οποίο�
 msgid "Default province"
 msgstr "Προεπιλεγμένος δήμος"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Επιδιόρθωση δεδομένων εντοπισμού γεωγραφικής θέσης για %d χώρους διεξαγωγής"
 
@@ -2289,7 +2293,6 @@ msgstr "week"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Πλήθος εκδηλώσεων που προβάλλονται:"
 

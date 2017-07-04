@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1263,7 +1267,7 @@ msgstr "Trenutni privzeti organizator je: %s"
 msgid "The current default venue is: %s"
 msgstr "Trenutno privzeto prizorišče je: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr ""
 
@@ -1271,7 +1275,7 @@ msgstr ""
 msgid "The current default address is: %s"
 msgstr "Trenutni privzet naslov je: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Nastavitve"
 
@@ -1279,7 +1283,7 @@ msgstr "Nastavitve"
 msgid "The current default city is: %s"
 msgstr "Trenutno privzeto mesto je: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Prizorišče posodobljeno.  <a href=\"%s\">Ogled prizorišča</a>"
 
@@ -1288,7 +1292,7 @@ msgid "The current default state is: %s"
 msgstr "Trenutna privzeta zvezna država je: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Prizorišče objavljeno. <a href=\"%s\">Ogled prizorišča</a>"
 
@@ -1296,7 +1300,7 @@ msgstr "Prizorišče objavljeno. <a href=\"%s\">Ogled prizorišča</a>"
 msgid "The current default province is: %s"
 msgstr "Trenutna privzeta provinca je: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Prizorišče vnešeno. <a target=\"_blank\" href=\"%s\">Predogled prizorišča</a>"
 
@@ -1304,7 +1308,7 @@ msgstr "Prizorišče vnešeno. <a target=\"_blank\" href=\"%s\">Predogled prizor
 msgid "The current default postal code/zip code is: %s"
 msgstr "Trenutna privzeta poštna številka je: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Prizorišče predvideno za: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Predogled prizorišča</a>"
 
@@ -1313,7 +1317,7 @@ msgid "The current default country is: %s"
 msgstr "Trenutna privzeta država je: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
@@ -1321,7 +1325,7 @@ msgstr "M j, Y @ G:i"
 msgid "The current default phone is: %s"
 msgstr "Trenutna privzeta telefonska številka je: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Osnutek prizorišča posodobljen. <a target=\"_blank\" href=\"%s\">Predogled prizorišča</a>"
 
@@ -1330,7 +1334,7 @@ msgstr "Osnutek prizorišča posodobljen. <a target=\"_blank\" href=\"%s\">Predo
 msgid "Date out of range."
 msgstr "Datum izven dosega"
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Organizator posodobljen. <a href=\"%s\">Ogled organizatorja</a>"
 
@@ -1338,7 +1342,7 @@ msgstr "Organizator posodobljen. <a href=\"%s\">Ogled organizatorja</a>"
 msgid "Recurring %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Organizator objavljen. <a href=\"%s\">Ogled organizatorja</a>"
 
@@ -1346,7 +1350,7 @@ msgstr "Organizator objavljen. <a href=\"%s\">Ogled organizatorja</a>"
 msgid "(See all)"
 msgstr "(poglej vse)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Organizator vnešen. <a target=\"_blank\" href=\"%s\">Predogled organizatorja</a>"
 
@@ -1354,7 +1358,7 @@ msgstr "Organizator vnešen. <a target=\"_blank\" href=\"%s\">Predogled organiza
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Prejšnji teden"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Organizator predviden za: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Predogled organizatorja</a>"
 
@@ -1362,7 +1366,7 @@ msgstr "Organizator predviden za: <strong>%1$s</strong>. <a target=\"_blank\" hr
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Naslednji teden <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Osnutek organizatorja posodobljen. <a target=\"_blank\" href=\"%s\">Predogled organizatorja</a>"
 
@@ -1371,7 +1375,7 @@ msgstr "Osnutek organizatorja posodobljen. <a target=\"_blank\" href=\"%s\">Pred
 msgid "%s List Navigation"
 msgstr ""
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Podpora"
 
@@ -1379,7 +1383,7 @@ msgstr "Podpora"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Ogled vseh dodatkov"
 
@@ -1387,16 +1391,16 @@ msgstr "Ogled vseh dodatkov"
 msgid "Next %s <span>&raquo;</span>"
 msgstr ""
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Teden"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Preberite več"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Fotografija"
 
@@ -1404,7 +1408,7 @@ msgstr "Fotografija"
 msgid "Related %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Teden od"
 
@@ -1729,8 +1733,8 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Trenutno urejate vse dogodke v ponavljajoči seriji."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
-msgstr "%d instance tega eventa so bile kreirane skozi %s. <a href=\"%s\">Izvedi več.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
+msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
 msgid ""
@@ -2223,7 +2227,7 @@ msgstr ""
 msgid "Default city"
 msgstr "Privzeto mesto"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Nastavi/popravi podatke prizorišč."
 
@@ -2231,7 +2235,7 @@ msgstr "Nastavi/popravi podatke prizorišč."
 msgid "Default state"
 msgstr "Privzeta zvezna država"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Imate prizorišča za katere nimamo geolokacijskih podatkov. <a href='%s'>Kliknite tukaj, da jih ustvarite</a>."
 
@@ -2239,7 +2243,7 @@ msgstr "Imate prizorišča za katere nimamo geolokacijskih podatkov. <a href='%s
 msgid "Default province"
 msgstr "Privzeta provinca"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Popravljeni geolokacijski podatki za %d prizorišč."
 
@@ -2291,7 +2295,6 @@ msgstr "teden"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Število dogodkov za ogled:"
 

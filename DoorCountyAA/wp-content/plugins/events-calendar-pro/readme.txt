@@ -5,7 +5,7 @@ Tags: events, calendar, event, venue, organizer, dates, date, google maps, confe
 Donate link: http://m.tri.be/29
 Requires at least: 3.9
 Tested up to: 4.8
-Stable tag: 4.4.11.1
+Stable tag: 4.4.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,21 @@ Our Premium Plugins:
 * <a href="http://m.tri.be/fa" target="_blank">The Events Calendar: Filter Bar</a>
 
 == Changelog ==
+
+= [4.4.13] 2017-06-28 =
+
+* Fix - Ensure that the necessary assets to support location-based searching are available to [tribe_events] embedded views (our thanks to @Miroslav for highlighting this issue!) [80469]
+* Fix - Make sure that the correct date format is used and the recurrence description works for "once"-type recurrence rules (our thanks to Robert and others in the forums for flagging this) [75211]
+* Fix - Change how event title is generated for This Week Widget to be inline with other widgets and views [44204]
+* Tweak - Update the mini calendar widget events count parameter label to avoid confusion [41067]
+* Tweak - Never ending & long term recurrence "learn more" link now points at a more helpful resource and opens up in a new window [35065]
+
+= [4.4.12] 2017-06-22 =
+
+* Tweak - Improved how Cost field looks and it's consistency across views [71092 & 71094]
+* Tweak - Added actions: `tribe_events_inside_cost`
+* Tweak - Changed views: `pro/map/single-event`, `pro/map/single-featured`
+* Language - 0 new strings added, 50 updated, 0 fuzzied, and 0 obsoleted [tribe-events-calendar-pro]
 
 = [4.4.11.1] 2017-06-15 =
 

@@ -123,7 +123,7 @@ class Tribe__Events__Pro__Recurrence__Meta {
 		$start_dates     = tribe_get_recurrence_start_dates( get_the_ID() );
 		$count           = count( $start_dates );
 		$last            = end( $start_dates );
-		$pending_message = __( '%d instances of this event have been created through %s. <a href="%s">Learn more.</a>', 'tribe-events-calendar-pro' );
+		$pending_message = __( '%d instances of this event have been created through %s. <a href="%s" target="_blank">Learn more.</a>', 'tribe-events-calendar-pro' );
 		$pending_message = '<p>' . sprintf( $pending_message, $count, date_i18n( tribe_get_date_format( true ), strtotime( $last ) ), 'http://m.tri.be/lq' ) . '</p>';
 
 		return Tribe__Admin__Notices::instance()->render( 'created-recurrences', $pending_message );

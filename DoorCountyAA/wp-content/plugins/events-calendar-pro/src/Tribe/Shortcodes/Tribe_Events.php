@@ -84,6 +84,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 
 		$this->set_view_attribute();
 
+		add_action( 'tribe_events_pro_tribe_events_shortcode_prepare', array( $this, 'prepare_assets' ) );
 		add_action( 'tribe_events_pro_tribe_events_shortcode_prepare', array( $this, 'prepare_query' ) );
 		add_action( 'tribe_events_pro_tribe_events_shortcode_prepare_day', array( $this, 'prepare_day' ) );
 		add_action( 'tribe_events_pro_tribe_events_shortcode_prepare_list', array( $this, 'prepare_list' ) );
@@ -170,6 +171,14 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 		 * @param Tribe__Events__Pro__Shortcodes__Tribe_Events $shortcode
 		 */
 		do_action( 'tribe_events_pro_tribe_events_shortcode_prepare_view', $this->atts[ 'view' ], $this );
+	}
+
+	/**
+	 * Ensures supporting assets are available to the embedded views.
+	 */
+	public function prepare_assets() {
+		// Scripts to support PRO views
+		Tribe__Events__Pro__Main::instance()->enqueue_pro_scripts( true, true );
 	}
 
 	/**

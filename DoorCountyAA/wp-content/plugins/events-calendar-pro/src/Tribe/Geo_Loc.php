@@ -580,6 +580,7 @@ class Tribe__Events__Pro__Geo_Loc {
 	 */
 	public function get_venues_in_geofence( $lat, $lng, $geofence_radio = null ) {
 
+		$lat = floatval( $lat );
 
 		if ( empty( $geofence_radio ) ) {
 			$geofence_radio = $this->get_geofence_size();

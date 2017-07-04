@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr "Ongeldige voorbeeld van 'n herhalende geleentheid was versoek ($1%s) word verwys na $2%s"
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr "alle"
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr "$template_object word verwag as 'n regte objek"
 
@@ -851,7 +855,7 @@ msgstr "Afstand eenheid"
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr "Die lengte- en breedtegrade vir jou Plek kon nie gaan haal word nie. Die Google Maps API daaglikse navraag limiet is bereik!"
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr "Events Calendar PRO"
 
@@ -1261,7 +1265,7 @@ msgstr "Die huidige standaard organiseerder is: %s"
 msgid "The current default venue is: %s"
 msgstr "Die huidige standaard plek is: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr "Adres:"
 
@@ -1269,7 +1273,7 @@ msgstr "Adres:"
 msgid "The current default address is: %s"
 msgstr "Die huidige standaard adres is: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Verstellings"
 
@@ -1277,7 +1281,7 @@ msgstr "Verstellings"
 msgid "The current default city is: %s"
 msgstr "Die huidige standaard stad is: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Plek opgedateer. <a href=\"%s\">Besigtig plek</a>"
 
@@ -1286,7 +1290,7 @@ msgid "The current default state is: %s"
 msgstr "Die huidige standaard staat is: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Plek gepubliseer. <a href=\"%s\">Besigtig plek</a>"
 
@@ -1294,7 +1298,7 @@ msgstr "Plek gepubliseer. <a href=\"%s\">Besigtig plek</a>"
 msgid "The current default province is: %s"
 msgstr "Die huidige standaard provinsie is: %s "
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Plek ingedien. <a target=\"_blank\" href=\"%s\">Voorskou van die plek</a>"
 
@@ -1302,7 +1306,7 @@ msgstr "Plek ingedien. <a target=\"_blank\" href=\"%s\">Voorskou van die plek</a
 msgid "The current default postal code/zip code is: %s"
 msgstr "Die huidige standaard poskode is: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Plek geskeduleer vir: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Besigtig Plek</a>"
 
@@ -1311,7 +1315,7 @@ msgid "The current default country is: %s"
 msgstr "Die huidige standaard land is: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
@@ -1319,7 +1323,7 @@ msgstr "M j, Y @ G:i"
 msgid "The current default phone is: %s"
 msgstr "Die huidige standaard telefoon is: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr ""
 
@@ -1328,7 +1332,7 @@ msgstr ""
 msgid "Date out of range."
 msgstr "Datum buite die omvang van die reeks."
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr ""
 
@@ -1336,7 +1340,7 @@ msgstr ""
 msgid "Recurring %s"
 msgstr "Herhalende %s"
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr ""
 
@@ -1344,7 +1348,7 @@ msgstr ""
 msgid "(See all)"
 msgstr "(Sien alles)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr ""
 
@@ -1352,7 +1356,7 @@ msgstr ""
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Vorige Week"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Organiseerder geskeduleer vir: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Besigtig organiseerder</a>"
 
@@ -1360,7 +1364,7 @@ msgstr "Organiseerder geskeduleer vir: <strong>%1$s</strong>. <a target=\"_blank
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Volgende Week <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr ""
 
@@ -1369,7 +1373,7 @@ msgstr ""
 msgid "%s List Navigation"
 msgstr "%s Lys Navigasie"
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Ondersteuning"
 
@@ -1377,7 +1381,7 @@ msgstr "Ondersteuning"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr "<span>&laquo;</span> Vorige %s"
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Besigtig Alle byvoegings"
 
@@ -1385,16 +1389,16 @@ msgstr "Besigtig Alle byvoegings"
 msgid "Next %s <span>&raquo;</span>"
 msgstr "Vorige %s <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Week"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Vind meer uit"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Beeld"
 
@@ -1402,7 +1406,7 @@ msgstr "Beeld"
 msgid "Related %s"
 msgstr "Verwante %s"
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Week Van"
 
@@ -1727,7 +1731,7 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Jy wysig tans al die gebeure in 'n herhalende reeks."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
 msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
@@ -2221,7 +2225,7 @@ msgstr "Lengtegraad"
 msgid "Default city"
 msgstr "Standaard Stad"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Maak plekke se inligting reg."
 
@@ -2229,7 +2233,7 @@ msgstr "Maak plekke se inligting reg."
 msgid "Default state"
 msgstr "Standaard Staat"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Jy het plekke waarvoor ons nie geo-ligging inligting het nie. <a href='%s'> Klik hier </a> om dit te genereer."
 
@@ -2237,7 +2241,7 @@ msgstr "Jy het plekke waarvoor ons nie geo-ligging inligting het nie. <a href='%
 msgid "Default province"
 msgstr "Standaard provinsie"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Vaste geo-ligging inligting vir %d plekke"
 
@@ -2289,7 +2293,6 @@ msgstr "week"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Aantal gebeurtenisse om te wys:"
 

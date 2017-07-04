@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1262,7 +1266,7 @@ msgstr "Súčasný predvolený organizátor je:  %s"
 msgid "The current default venue is: %s"
 msgstr "Súčasné predvolené miesto konania je:  %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr "Adresa:"
 
@@ -1270,7 +1274,7 @@ msgstr "Adresa:"
 msgid "The current default address is: %s"
 msgstr "Súčasná predvolená adresa je:  %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Nastavenia"
 
@@ -1278,7 +1282,7 @@ msgstr "Nastavenia"
 msgid "The current default city is: %s"
 msgstr "Súčasné predvolené mesto je:  %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Miesto udalosti aktualizované. <a href=\"%s\">Zobraziť miesto udalosti</a>"
 
@@ -1287,7 +1291,7 @@ msgid "The current default state is: %s"
 msgstr "Súčasný predvolený štát je:  %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Miesto udalosti publikované. <a href=\"%s\">Zobraziť miesto udalosti</a>"
 
@@ -1295,7 +1299,7 @@ msgstr "Miesto udalosti publikované. <a href=\"%s\">Zobraziť miesto udalosti</
 msgid "The current default province is: %s"
 msgstr "Súčasný predvolený región je:  %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Miesto udalosti odoslané. <a target=\"_blank\" href=\"%s\">Náhľad miesta udalosti</a>"
 
@@ -1303,7 +1307,7 @@ msgstr "Miesto udalosti odoslané. <a target=\"_blank\" href=\"%s\">Náhľad mie
 msgid "The current default postal code/zip code is: %s"
 msgstr "Súčasné predvolené PSČ je:  %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Miesto udalosti naplánovaný na: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Náhľad miesta udalosti</a>"
 
@@ -1312,7 +1316,7 @@ msgid "The current default country is: %s"
 msgstr "Súčasná predvolená krajina je:  %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G:i"
 
@@ -1320,7 +1324,7 @@ msgstr "M j, Y @ G:i"
 msgid "The current default phone is: %s"
 msgstr "Súčasný predvolený telefón je:  %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Koncept miesta udalosti aktualizovaný. <a target=\"_blank\" href=\"%s\">Náhľad miesta udalosti</a>"
 
@@ -1329,7 +1333,7 @@ msgstr "Koncept miesta udalosti aktualizovaný. <a target=\"_blank\" href=\"%s\"
 msgid "Date out of range."
 msgstr "Dátum mimo rozsah."
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Organizátor aktualizovaný. <a href=\"%s\">Zobraziť organizátora</a>"
 
@@ -1337,7 +1341,7 @@ msgstr "Organizátor aktualizovaný. <a href=\"%s\">Zobraziť organizátora</a>"
 msgid "Recurring %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Organizátor publikovaný. <a href=\"%s\">Zobraziť organizátora</a>"
 
@@ -1345,7 +1349,7 @@ msgstr "Organizátor publikovaný. <a href=\"%s\">Zobraziť organizátora</a>"
 msgid "(See all)"
 msgstr "(Zobraziť všetko)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Organizátor odoslaný. <a target=\"_blank\" href=\"%s\">Nahľad organizátora</a>"
 
@@ -1353,7 +1357,7 @@ msgstr "Organizátor odoslaný. <a target=\"_blank\" href=\"%s\">Nahľad organiz
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Minulý týždeň"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Organizátor naplánovaný na: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Náhľad organizátora</a>"
 
@@ -1361,7 +1365,7 @@ msgstr "Organizátor naplánovaný na: <strong>%1$s</strong>. <a target=\"_blank
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Nasledujúci týždeň <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Koncept organizátora aktualizovaný. <a target=\"_blank\" href=\"%s\">Náhľad organizátora</a>"
 
@@ -1370,7 +1374,7 @@ msgstr "Koncept organizátora aktualizovaný. <a target=\"_blank\" href=\"%s\">N
 msgid "%s List Navigation"
 msgstr ""
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Podpora"
 
@@ -1378,7 +1382,7 @@ msgstr "Podpora"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Zobraziť všetky doplnky"
 
@@ -1386,16 +1390,16 @@ msgstr "Zobraziť všetky doplnky"
 msgid "Next %s <span>&raquo;</span>"
 msgstr ""
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Týždeň"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Vyhľadať viac informácií"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Foto"
 
@@ -1403,7 +1407,7 @@ msgstr "Foto"
 msgid "Related %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "V týždni"
 
@@ -1728,8 +1732,8 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Práve upravujete všetky opakujúce sa udalosti v kategórii."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
-msgstr "%d inštancia udalosti je vytvorená pomocou %s. <a href=\"%s\">Viac informácií.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
+msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
 msgid ""
@@ -2222,7 +2226,7 @@ msgstr ""
 msgid "Default city"
 msgstr "Prednastavené mesto"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Opraviť dáta pre miesta konania udalosti"
 
@@ -2230,7 +2234,7 @@ msgstr "Opraviť dáta pre miesta konania udalosti"
 msgid "Default state"
 msgstr "Prednastavený štát"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Pre niektoré miesta konania udalostí nie sú k dispozícii geolokačné informácie. <a href='%s'>Kliknite tu pre ich vytvorenie</a>."
 
@@ -2238,7 +2242,7 @@ msgstr "Pre niektoré miesta konania udalostí nie sú k dispozícii geolokačn�
 msgid "Default province"
 msgstr "Prednastavený kraj"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Geolokačné dáta boli nastavené pre %d miesto konania"
 
@@ -2290,7 +2294,6 @@ msgstr "týždeň"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Počet zobrazených udalostí:"
 

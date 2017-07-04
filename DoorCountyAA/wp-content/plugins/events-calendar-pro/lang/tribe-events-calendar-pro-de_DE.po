@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Events Calendar Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-05-26 21:04:43+0000\n"
+"PO-Revision-Date: 2017-06-15 21:24:21+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
-#: src/admin-views/widget-admin-venue.php:37
-msgid "Hide this widget if there are no upcoming events"
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/admin-views/widget-admin-venue.php:37
+msgid "Hide this widget if there are no upcoming events"
+msgstr "Verstecke dieses Widget wenn keine anstehenden Veranstaltungen vorhanden sind"
+
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr "%s: "
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr "Es wurde eine ungültige Instanz eines Serientermins angefragt ($1%s). Weiterleitung zu $2%s"
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr "alle"
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr "$template_object sollte ein aktuelles Objekt sein"
 
@@ -851,7 +855,7 @@ msgstr "Streckeneinheit"
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr "Der Längen- und Breitengrad des Veranstaltungsortes konnte nicht ermittelt werden. Das tägliche Google Maps API Limit wurde erreicht."
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr "Veranstaltungskalender PRO"
 
@@ -1261,7 +1265,7 @@ msgstr "Der aktuelle Standard Veranstalter ist: %s"
 msgid "The current default venue is: %s"
 msgstr "Der aktuelle Standard Veranstaltungsort ist: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr "Adresse: "
 
@@ -1269,7 +1273,7 @@ msgstr "Adresse: "
 msgid "The current default address is: %s"
 msgstr "Die aktuelle Standard Anschrift ist: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1277,7 +1281,7 @@ msgstr "Einstellungen"
 msgid "The current default city is: %s"
 msgstr "Die aktuelle Standard Stadt ist: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Veranstaltungsort aktualisiert. <a href=\"%s\">Zeige Veranstaltungsort</a>"
 
@@ -1286,7 +1290,7 @@ msgid "The current default state is: %s"
 msgstr "Der aktuelle Standard Bundesstaat ist: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Veranstaltungsort veröffentlicht. <a href=\"%s\">Zeige Veranstaltungsort</a>"
 
@@ -1294,7 +1298,7 @@ msgstr "Veranstaltungsort veröffentlicht. <a href=\"%s\">Zeige Veranstaltungsor
 msgid "The current default province is: %s"
 msgstr "Der aktuelle Standard für Bundesland/Kanton/Provinz ist: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Veranstaltungsort übermittelt. <a target=\"_blank\" href=\"%s\">Zeige Vorschau</a>"
 
@@ -1302,7 +1306,7 @@ msgstr "Veranstaltungsort übermittelt. <a target=\"_blank\" href=\"%s\">Zeige V
 msgid "The current default postal code/zip code is: %s"
 msgstr "Die aktuelle Standard PLZ ist: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Veranstaltungsort geplant für : <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Zeige Vorschau</a>"
 
@@ -1311,7 +1315,7 @@ msgid "The current default country is: %s"
 msgstr "Das aktuelle Standard Land ist: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "d.m.Y um G:i"
 
@@ -1319,7 +1323,7 @@ msgstr "d.m.Y um G:i"
 msgid "The current default phone is: %s"
 msgstr "Die aktuelle Standard Telefonnummer ist: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Entwurf des Veranstaltungsortes aktualisiert. <a target=\"_blank\" href=\"%s\">Zeige Vorschau</a>"
 
@@ -1328,7 +1332,7 @@ msgstr "Entwurf des Veranstaltungsortes aktualisiert. <a target=\"_blank\" href=
 msgid "Date out of range."
 msgstr "Datum außerhalb des Bereichs."
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Veranstalter aktualisiert. <a href=\"%s\">Veranstalter anzeigen</a>"
 
@@ -1336,7 +1340,7 @@ msgstr "Veranstalter aktualisiert. <a href=\"%s\">Veranstalter anzeigen</a>"
 msgid "Recurring %s"
 msgstr "Serientermin für %s"
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Veranstalter veröffentlicht. <a href=\"%s\">Veranstalter anzeigen</a>"
 
@@ -1344,7 +1348,7 @@ msgstr "Veranstalter veröffentlicht. <a href=\"%s\">Veranstalter anzeigen</a>"
 msgid "(See all)"
 msgstr "(Alle anzeigen)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Veranstalter übermittelt. <a target=\"_blank\" href=\"%s\">Zeige Vorschau</a>"
 
@@ -1352,7 +1356,7 @@ msgstr "Veranstalter übermittelt. <a target=\"_blank\" href=\"%s\">Zeige Vorsch
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "&laquo; Vorherige Woche"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Veranstalter geplant für: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Vorschau Veranstalter</a>"
 
@@ -1360,7 +1364,7 @@ msgstr "Veranstalter geplant für: <strong>%1$s</strong>. <a target=\"_blank\" h
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Nächste Woche &raquo;"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Entwurf des Veranstalters aktualisiert. <a target=\"_blank\" href=\"%s\">Vorschau Veranstalter</a>"
 
@@ -1369,7 +1373,7 @@ msgstr "Entwurf des Veranstalters aktualisiert. <a target=\"_blank\" href=\"%s\"
 msgid "%s List Navigation"
 msgstr "%s Listennavigation"
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Support"
 
@@ -1377,7 +1381,7 @@ msgstr "Support"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr "<span>&laquo;</span> Vorherige %s"
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Alle Add-Ons anzeigen"
 
@@ -1385,16 +1389,16 @@ msgstr "Alle Add-Ons anzeigen"
 msgid "Next %s <span>&raquo;</span>"
 msgstr "Nächste %s <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Woche"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Erfahren Sie mehr"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Foto"
 
@@ -1402,7 +1406,7 @@ msgstr "Foto"
 msgid "Related %s"
 msgstr "Ähnliche %s"
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Woche vom"
 
@@ -1727,8 +1731,8 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Sie bearbeiten gerade alle Veranstaltungen einer Terminserie."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
-msgstr "%d Termine für diese Veranstaltung wurden bis zum %s angelegt. <a href=\"%s\">Erfahren Sie mehr.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
+msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
 msgid ""
@@ -2221,7 +2225,7 @@ msgstr "Längengrad"
 msgid "Default city"
 msgstr "Standard Stadt"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Veranstaltungsortdaten reparieren"
 
@@ -2229,7 +2233,7 @@ msgstr "Veranstaltungsortdaten reparieren"
 msgid "Default state"
 msgstr "Standard Bundesstaat (nur USA)"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Es gibt Veranstaltungsorte für die keine Geo-Daten vorliegen. <a href='%s'>Hier klicken um sie zu erzeugen</a>."
 
@@ -2237,7 +2241,7 @@ msgstr "Es gibt Veranstaltungsorte für die keine Geo-Daten vorliegen. <a href='
 msgid "Default province"
 msgstr "Standard Bundesland / Kanton / Provinz"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Geodaten für %d Veranstaltungsorte korrigiert"
 
@@ -2289,7 +2293,6 @@ msgstr "Woche"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Anzahl der anzuzeigenden Veranstaltungen:"
 

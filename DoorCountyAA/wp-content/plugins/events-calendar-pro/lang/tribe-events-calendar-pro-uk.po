@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1262,7 +1266,7 @@ msgstr "Поточний організатор за замовчуванням:
 msgid "The current default venue is: %s"
 msgstr "Поточне місце за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr ""
 
@@ -1270,7 +1274,7 @@ msgstr ""
 msgid "The current default address is: %s"
 msgstr "Поточна адреса за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -1278,7 +1282,7 @@ msgstr "Налаштування"
 msgid "The current default city is: %s"
 msgstr "Поточне місто за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr ""
 
@@ -1287,7 +1291,7 @@ msgid "The current default state is: %s"
 msgstr "Поточна область за замовчуванням: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr ""
 
@@ -1295,7 +1299,7 @@ msgstr ""
 msgid "The current default province is: %s"
 msgstr "Поточний регіон за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr ""
 
@@ -1303,7 +1307,7 @@ msgstr ""
 msgid "The current default postal code/zip code is: %s"
 msgstr "Поточний поштовий індекс за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr ""
 
@@ -1312,7 +1316,7 @@ msgid "The current default country is: %s"
 msgstr "Поточна країна за замовчуванням: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr ""
 
@@ -1320,7 +1324,7 @@ msgstr ""
 msgid "The current default phone is: %s"
 msgstr "Поточний телефон за замовчуванням: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr ""
 
@@ -1329,7 +1333,7 @@ msgstr ""
 msgid "Date out of range."
 msgstr "Дата поза діапазоном"
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr ""
 
@@ -1337,7 +1341,7 @@ msgstr ""
 msgid "Recurring %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr ""
 
@@ -1345,7 +1349,7 @@ msgstr ""
 msgid "(See all)"
 msgstr ""
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr ""
 
@@ -1353,7 +1357,7 @@ msgstr ""
 msgid "<span>&laquo;</span> Previous Week"
 msgstr ""
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr ""
 
@@ -1361,7 +1365,7 @@ msgstr ""
 msgid "Next Week <span>&raquo;</span>"
 msgstr ""
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr ""
 
@@ -1370,7 +1374,7 @@ msgstr ""
 msgid "%s List Navigation"
 msgstr ""
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Підтримка"
 
@@ -1378,7 +1382,7 @@ msgstr "Підтримка"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Переглянути усі доповнення"
 
@@ -1386,16 +1390,16 @@ msgstr "Переглянути усі доповнення"
 msgid "Next %s <span>&raquo;</span>"
 msgstr ""
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Тиждень"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Дізнатися більше"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Фото"
 
@@ -1403,7 +1407,7 @@ msgstr "Фото"
 msgid "Related %s"
 msgstr ""
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Тиждень"
 
@@ -1728,7 +1732,7 @@ msgid "You are currently editing all events in a recurring series."
 msgstr ""
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
 msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
@@ -2212,7 +2216,7 @@ msgstr "Довгота"
 msgid "Default city"
 msgstr "Місто за замовчуванням"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Фіксовані дані місць"
 
@@ -2220,7 +2224,7 @@ msgstr "Фіксовані дані місць"
 msgid "Default state"
 msgstr "Область за замовчуванням"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "У вас є місця, на які не вказано інформації про геолокацію. <a href='%s'>Натисніть тут для генерації</a>."
 
@@ -2228,7 +2232,7 @@ msgstr "У вас є місця, на які не вказано інформа�
 msgid "Default province"
 msgstr "Регіон за замовчуванням"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Основні дані геолокації для %d місць"
 
@@ -2280,7 +2284,6 @@ msgstr "тиждень"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Номера подій для показу:"
 

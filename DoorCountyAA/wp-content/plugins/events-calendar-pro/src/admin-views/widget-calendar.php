@@ -5,7 +5,7 @@
 </p>
 
 <p>
-	<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Number of events to show:', 'tribe-events-calendar-pro' ); ?>
+	<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Number of events to list below the mini calendar:', 'tribe-events-calendar-pro' ); ?>
 		<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>"
 		       id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"
 		       value="<?php echo esc_attr( strip_tags( $instance['count'] ) ); ?>" />

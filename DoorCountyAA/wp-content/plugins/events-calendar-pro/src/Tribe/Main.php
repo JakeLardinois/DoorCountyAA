@@ -49,9 +49,8 @@ if ( ! class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		 */
 		public $shortcodes;
 
-		const REQUIRED_TEC_VERSION = '4.5.4';
-
-		const VERSION = '4.4.11.1';
+		const REQUIRED_TEC_VERSION = '4.5.6';
+		const VERSION = '4.4.13';
 
 		private function __construct() {
 			$this->pluginDir = trailingslashit( basename( EVENTS_CALENDAR_PRO_DIR ) );
@@ -1303,10 +1302,13 @@ if ( ! class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		/**
 		 * Enqueue the proper PRO scripts as necessary.
 		 *
+		 * @param bool $force
+		 * @param bool $footer
+		 *
 		 * @return void
 		 */
-		public function enqueue_pro_scripts() {
-			if ( tribe_is_event_query() ) {
+		public function enqueue_pro_scripts( $force = false, $footer = false ) {
+			if ( $force || tribe_is_event_query() ) {
 				// @TODO filter the tribe_events_resource_url() function
 				$path = Tribe__Events__Pro__Template_Factory::getMinFile( tribe_events_pro_resource_url( 'tribe-events-pro.js' ), true );
 				wp_enqueue_script(
@@ -1317,7 +1319,7 @@ if ( ! class_exists( 'Tribe__Events__Pro__Main' ) ) {
 						'tribe-events-calendar-script',
 					),
 					apply_filters( 'tribe_events_pro_js_version', self::VERSION ),
-					false
+					$footer
 				);
 
 				$geoloc = Tribe__Events__Pro__Geo_Loc::instance();
@@ -1331,7 +1333,6 @@ if ( ! class_exists( 'Tribe__Events__Pro__Main' ) ) {
 				$data = apply_filters( 'tribe_events_pro_localize_script', $data, 'Tribe__Events__Pro__Main', 'tribe-events-pro' );
 
 				wp_localize_script( 'tribe-events-pro', 'TribeEventsPro', $data );
-
 			}
 		}
 

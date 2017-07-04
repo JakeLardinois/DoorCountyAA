@@ -10,11 +10,15 @@ msgstr ""
 "X-Generator: GlotPress/1.0-alpha-1100\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/admin-views/widget-calendar.php:8
+msgid "Number of events to list below the mini calendar:"
+msgstr ""
+
 #: src/admin-views/widget-admin-venue.php:37
 msgid "Hide this widget if there are no upcoming events"
 msgstr ""
 
-#: src/Tribe/Main.php:1326
+#: src/Tribe/Main.php:1329
 msgctxt "Event title map marker prefix"
 msgid "%s: "
 msgstr ""
@@ -787,11 +791,11 @@ msgctxt "debug recurrence"
 msgid "Invalid instance of a recurring event was requested ($1%s) redirecting to $2%s"
 msgstr ""
 
-#: src/Tribe/Main.php:1604 src/Tribe/Main.php:1673
+#: src/Tribe/Main.php:1606 src/Tribe/Main.php:1675
 msgid "all"
 msgstr ""
 
-#: src/Tribe/Shortcodes/Tribe_Events.php:489
+#: src/Tribe/Shortcodes/Tribe_Events.php:498
 msgid "$template_object is expected to be an actual object"
 msgstr ""
 
@@ -851,7 +855,7 @@ msgstr ""
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Main.php:1879
+#: src/Tribe/Main.php:1881
 msgid "Events Calendar PRO"
 msgstr ""
 
@@ -1261,7 +1265,7 @@ msgstr "Penyelenggara default saat ini adalah: %s"
 msgid "The current default venue is: %s"
 msgstr "Tempat default saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1327
+#: src/Tribe/Main.php:1330
 msgid "Address: "
 msgstr ""
 
@@ -1269,7 +1273,7 @@ msgstr ""
 msgid "The current default address is: %s"
 msgstr "Alamat default saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1441
+#: src/Tribe/Main.php:1443
 msgid "Settings"
 msgstr "Pengaturan"
 
@@ -1277,7 +1281,7 @@ msgstr "Pengaturan"
 msgid "The current default city is: %s"
 msgstr "Kota default saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1469
+#: src/Tribe/Main.php:1471
 msgid "Venue updated. <a href=\"%s\">View venue</a>"
 msgstr "Venue diperbarui. <a href=\"%s\">View venue</a>"
 
@@ -1286,7 +1290,7 @@ msgid "The current default state is: %s"
 msgstr "Negara bagian default saat ini adalah: %s"
 
 #. translators: %s: date and time of the revision
-#: src/Tribe/Main.php:1471
+#: src/Tribe/Main.php:1473
 msgid "Venue published. <a href=\"%s\">View venue</a>"
 msgstr "Tempat diterbitkan. <a href=\"%s\">Lihat tempat</a>"
 
@@ -1294,7 +1298,7 @@ msgstr "Tempat diterbitkan. <a href=\"%s\">Lihat tempat</a>"
 msgid "The current default province is: %s"
 msgstr "Provinsi default saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1472
+#: src/Tribe/Main.php:1474
 msgid "Venue submitted. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Tempat disampaikan. <a target=\"_blank\" href=\"%s\">Preview tempat</a>"
 
@@ -1302,7 +1306,7 @@ msgstr "Tempat disampaikan. <a target=\"_blank\" href=\"%s\">Preview tempat</a>"
 msgid "The current default postal code/zip code is: %s"
 msgstr "Kode pos default saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1474
+#: src/Tribe/Main.php:1476
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
 msgstr "Tempat dijadwalkan untuk:<strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview tempat</a>"
 
@@ -1311,7 +1315,7 @@ msgid "The current default country is: %s"
 msgstr "Negara default saat ini adalah: %s"
 
 #. translators: Publish box date format, see http://php.net/date
-#: src/Tribe/Main.php:1476 src/Tribe/Main.php:1486
+#: src/Tribe/Main.php:1478 src/Tribe/Main.php:1488
 msgid "M j, Y @ G:i"
 msgstr "M j, Y @ G: i"
 
@@ -1319,7 +1323,7 @@ msgstr "M j, Y @ G: i"
 msgid "The current default phone is: %s"
 msgstr "Telepon standar saat ini adalah: %s"
 
-#: src/Tribe/Main.php:1478
+#: src/Tribe/Main.php:1480
 msgid "Venue draft updated. <a target=\"_blank\" href=\"%s\">Preview venue</a>"
 msgstr "Draft tempat diperbarui. <a target=\"_blank\" href=\"%s\">Preview tempat</a>"
 
@@ -1328,7 +1332,7 @@ msgstr "Draft tempat diperbarui. <a target=\"_blank\" href=\"%s\">Preview tempat
 msgid "Date out of range."
 msgstr "Tanggal luar jangkauan."
 
-#: src/Tribe/Main.php:1480
+#: src/Tribe/Main.php:1482
 msgid "Organizer updated. <a href=\"%s\">View organizer</a>"
 msgstr "Penyelenggara diperbarui. <a href=\"%s\">View penyelenggara</a>"
 
@@ -1336,7 +1340,7 @@ msgstr "Penyelenggara diperbarui. <a href=\"%s\">View penyelenggara</a>"
 msgid "Recurring %s"
 msgstr "berulang %s"
 
-#: src/Tribe/Main.php:1481
+#: src/Tribe/Main.php:1483
 msgid "Organizer published. <a href=\"%s\">View organizer</a>"
 msgstr "Penyelenggara diterbitkan.<a href=\"%s\">Lihat penyelenggara</a>"
 
@@ -1344,7 +1348,7 @@ msgstr "Penyelenggara diterbitkan.<a href=\"%s\">Lihat penyelenggara</a>"
 msgid "(See all)"
 msgstr "(Lihat semua)"
 
-#: src/Tribe/Main.php:1482
+#: src/Tribe/Main.php:1484
 msgid "Organizer submitted. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Penyelenggara disampaikan. <a target=\"_blank\" href=\"%s\">Preview penyelenggara</a>"
 
@@ -1352,7 +1356,7 @@ msgstr "Penyelenggara disampaikan. <a target=\"_blank\" href=\"%s\">Preview peny
 msgid "<span>&laquo;</span> Previous Week"
 msgstr "<span>&laquo;</span> Minggu Sebelumnya"
 
-#: src/Tribe/Main.php:1484
+#: src/Tribe/Main.php:1486
 msgid "Organizer scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview organizer</a>"
 msgstr "Penyelenggara dijadwalkan untuk:  <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview peenyelenggara</a>"
 
@@ -1360,7 +1364,7 @@ msgstr "Penyelenggara dijadwalkan untuk:  <strong>%1$s</strong>. <a target=\"_bl
 msgid "Next Week <span>&raquo;</span>"
 msgstr "Minggu berikutnya <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1488
+#: src/Tribe/Main.php:1490
 msgid "Organizer draft updated. <a target=\"_blank\" href=\"%s\">Preview organizer</a>"
 msgstr "Rancangan penyelenggara diperbarui. <a target=\"_blank\" href=\"%s\">Preview penyelenggara</a>"
 
@@ -1369,7 +1373,7 @@ msgstr "Rancangan penyelenggara diperbarui. <a target=\"_blank\" href=\"%s\">Pre
 msgid "%s List Navigation"
 msgstr ""
 
-#: src/Tribe/Main.php:1548
+#: src/Tribe/Main.php:1550
 msgid "Support"
 msgstr "Dukungan"
 
@@ -1377,7 +1381,7 @@ msgstr "Dukungan"
 msgid "<span>&laquo;</span> Previous %s"
 msgstr "<span>&laquo;</span> Sebelumnya %s"
 
-#: src/Tribe/Main.php:1550
+#: src/Tribe/Main.php:1552
 msgid "View All Add-Ons"
 msgstr "Lihat Semua Add-On"
 
@@ -1385,16 +1389,16 @@ msgstr "Lihat Semua Add-On"
 msgid "Next %s <span>&raquo;</span>"
 msgstr "Selanjutnya %s <span>&raquo;</span>"
 
-#: src/Tribe/Main.php:1779
+#: src/Tribe/Main.php:1781
 msgid "Week"
 msgstr "Minggu"
 
-#: src/views/pro/map/single-event.php:75
-#: src/views/pro/map/single-featured.php:74 src/views/pro/week/mobile.php:24
+#: src/views/pro/map/single-event.php:74
+#: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
 msgstr "Ketahui lebih lanjut"
 
-#: src/Tribe/Main.php:1797
+#: src/Tribe/Main.php:1799
 msgid "Photo"
 msgstr "Foto"
 
@@ -1402,7 +1406,7 @@ msgstr "Foto"
 msgid "Related %s"
 msgstr "Terkait %s"
 
-#: src/Tribe/Main.php:1814
+#: src/Tribe/Main.php:1816
 msgid "Week Of"
 msgstr "Minggu"
 
@@ -1727,7 +1731,7 @@ msgid "You are currently editing all events in a recurring series."
 msgstr "Anda sedang mengedit semua acara dalam serangkaian berulang."
 
 #: src/Tribe/Recurrence/Meta.php:126
-msgid "%d instances of this event have been created through %s. <a href=\"%s\">Learn more.</a>"
+msgid "%d instances of this event have been created through %s. <a href=\"%s\" target=\"_blank\">Learn more.</a>"
 msgstr ""
 
 #: src/Tribe/Recurrence/Scripts.php:37
@@ -2221,7 +2225,7 @@ msgstr ""
 msgid "Default city"
 msgstr "Kota default"
 
-#: src/Tribe/Geo_Loc.php:821
+#: src/Tribe/Geo_Loc.php:822
 msgid "Fix venues data"
 msgstr "Perbaiki data tempat"
 
@@ -2229,7 +2233,7 @@ msgstr "Perbaiki data tempat"
 msgid "Default state"
 msgstr "Negara Bagian default"
 
-#: src/Tribe/Geo_Loc.php:865
+#: src/Tribe/Geo_Loc.php:866
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Anda memiliki tempat yang kami tidak memiliki informasi Geolocation. <a href='%s'>Klik di sini untuk generate itu</a>."
 
@@ -2237,7 +2241,7 @@ msgstr "Anda memiliki tempat yang kami tidak memiliki informasi Geolocation. <a 
 msgid "Default province"
 msgstr "Provinsi default"
 
-#: src/Tribe/Geo_Loc.php:891
+#: src/Tribe/Geo_Loc.php:892
 msgid "Fixed geolocation data for %d venues"
 msgstr "Data geolocation tetap untuk %d tempat"
 
@@ -2289,7 +2293,6 @@ msgstr "minggu"
 
 #: src/admin-views/widget-admin-advanced-list.php:17
 #: src/admin-views/widget-admin-venue.php:27
-#: src/admin-views/widget-calendar.php:8
 msgid "Number of events to show:"
 msgstr "Jumlah acara yang ditunjukkan:"
 
