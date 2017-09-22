@@ -6,7 +6,7 @@
  * Override this template in your own theme by creating a file at [your-theme]/tribe-events/list/venue-nav.php
  *
  * @package TribeEventsCalendar
- * @version 4.3.1
+ * @version 4.4.16
  *
  */
 
@@ -23,7 +23,7 @@ $page     = $wp_query->get( 'paged', 1 );
 $venue_id = $wp_query->get( 'venue' );
 
 $has_previous = $page != 1;
- ?>
+?>
 
 <h3 class="screen-reader-text" tabindex="0"><?php echo esc_html( sprintf( esc_html__( '%s List Navigation', 'the-events-calendar' ), $events_label_plural ) ); ?></h3>
 <ul class="tribe-events-sub-nav">

@@ -3,9 +3,9 @@
 Contributors: ModernTribe, barry.hughes, bordoni, borkweb, brianjessee, brook-tribe, faction23, geoffgraham, ggwicz, jazbek, jbrinley, joshlimecuda, leahkoerper, lucatume, mastromktg, mat-lipe, mdbitz, neillmcshea, nicosantos, peterchester, reid.peifer, roblagatta, ryancurban, shane.pearlman, thatdudebutch,  zbtirrell
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, modern tribe, tribe, widget, pro
 Donate link: http://m.tri.be/29
-Requires at least: 3.9
-Tested up to: 4.8
-Stable tag: 4.4.13
+Requires at least: 4.5
+Tested up to: 4.8.1
+Stable tag: 4.4.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,45 @@ Our Premium Plugins:
 * <a href="http://m.tri.be/fa" target="_blank">The Events Calendar: Filter Bar</a>
 
 == Changelog ==
+
+= [4.4.17] 2017-09-06 =
+
+* Fix - Meta building for Recurrence has a few more conditionals to prevent Fatals [80319]
+* Fix - Setup postdata in Week view so that the default template tags can be used in theme overrides (thank you ThemeFusion for recommending this!) [85600]
+* Fix - Resolved issue where the warning for tickets on recurring events sometimes failed to display [87201]
+* Tweak - A hidden input that detects if the event is recurring [81726]
+* Tweak - Changed views: `pro/week/single-event.php`
+* Language - 1 new strings added, 31 updated, 0 fuzzied, and 0 obsoleted
+
+= [4.4.16] 2017-08-24 =
+
+* Feature - Added ability to filter events by location through WP_Query arguments `tribe_geoloc`, `tribe_geoloc_lat`, and `tribe_geoloc_lng` [81861]
+* Fix - Restored functionality to Map View and location search, which were both failing under certain circumstances with certain venues [38836]
+* Fix - Lock down the low-risk queries for posterity in Tribe__Events__Pro__Geo_Loc with $wpdb->prepare [84484]
+* Fix - Recurrence bug with updating weekly rules, used w date format instead of N [83525]
+* Fix - Enqueue the Minical Widget's stylesheet and scripts in the <head> when possible [76438]
+* Fix - Added default highlight color for featured events in the Advanced List Widget (thank you @jhoughton1 and @solel for reporting this) [82678]
+* Fix - Fixed translation issue with custom fields label on event editor page [84627]
+* Fix - Improve accuracy of "Next Events" link on single-venue pages, so that it only shows when there are truly more events to see [83266]
+* Fix - Fixed issue where the Google Maps script and its Geolocation script would load on events archive views (other than Map View) even when the "Hide location search" option was checked (thanks to Teresa A.) [85285]
+* Tweak - Added per-event CSS class in Week view, it indexes how many events start at the same time allowing unique CSS for each [65415]
+* Tweak - New hook: `tribe_geoloc_pre_get_venues_in_geofence` for circumventing get_venues_in_geofence database query. [83375]
+* Tweak - New hooks: `tribe_events_single_venue_posts_per_page` and `tribe_venue_upcoming_events`
+* Tweak - Updated views: `src/views/pro/list/venue-nav.php`
+* Compatibility - Minimum supported version of WordPress is now 4.5
+* Language - 0 new strings added, 6 updated, 0 fuzzied, and 0 obsoleted [tribe-events-calendar-pro]
+
+= [4.4.15] 2017-07-26 =
+
+* Fix - Box-sizing issue with mini calendar widget on some themes. Thanks to @schreml for reporting this. [68087]
+* Add - Action hooks before and after recurring meta fields. [73826]
+
+= [4.4.14] 2017-07-13 =
+
+* Fix - Do not generate exclusions for recurring events simply because the child instances have falled outside of the configured cleanup range [80582]
+* Fix - Consolidate generation of /all/ and single recurring event permalink logic within Events Calendar PRO [74153]
+* Fix - Improve compatibility with WP SEO Premium and stop redirect rules from being generated inappropriately when recurring events are updated [74938]
+* Fix - Default to showing upcoming event instances in the /all/ view (but fallback on showing expired events if no upcoming events remain in the series) [74852]
 
 = [4.4.13] 2017-06-28 =
 

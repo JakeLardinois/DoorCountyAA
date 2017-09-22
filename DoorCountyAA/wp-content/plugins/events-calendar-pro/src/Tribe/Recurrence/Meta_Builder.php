@@ -146,10 +146,15 @@ class Tribe__Events__Pro__Recurrence__Meta_Builder {
 	}
 
 	private function get_zero_array() {
+		$data_recurrence = null;
+		if ( ! empty( $this->data['recurrence'] ) ) {
+			$data_recurrence = (array) $this->data['recurrence'];
+		}
+
 		return array(
 			'rules'       => array(),
-			'exclusions' => array(),
-			'description' => empty( $this->data['recurrence']['description'] ) ? null : sanitize_text_field( $this->data['recurrence']['description'] ),
+			'exclusions'  => array(),
+			'description' => empty( $data_recurrence['description'] ) ? null : sanitize_text_field( $data_recurrence['description'] ),
 		);
 	}
 }

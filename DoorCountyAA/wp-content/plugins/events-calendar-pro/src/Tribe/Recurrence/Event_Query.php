@@ -67,7 +67,7 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 			$this->query->set( 'post_parent', $this->parent_event->ID );
 			$this->query->set( 'post_status', $status );
 			$this->query->set( 'posts_per_page', tribe_get_option( 'postsPerPage', 10 ) );
-			$this->query->set( 'tribe_remove_date_filters', true );
+			$this->query->set( 'tribe_remove_date_filters', $this->should_remove_date_filters() );
 
 			// Configure what this page actually is
 			$this->query->is_singular = false;
@@ -176,5 +176,56 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 		 * @param WP_Query $query
 		 */
 		return apply_filters( 'tribe_events_pro_all_event_query_orderby_sql', $orderby_sql, $original_orderby_sql, $this->query );
+	}
+
+	/**
+	 * Indicates if date filters should be removed for /all/ queries or not.
+	 *
+	 * Removing the date filters will expose past events from the series, while keeping
+	 * them means only upcoming instances will be queried for.
+	 *
+	 * The default is to only ever remove date filters in the context of the main query
+	 * and then only if there are no upcoming events in the series. The twin goals are
+	 * to provide more relevant data to typical users (most visitors won't want to see
+	 * expired events for a series) while avoiding 404s (which would happen if we apply
+	 * date filters but there are no upcoming events in the series).
+	 *
+	 * @since 4.4.14
+	 *
+	 * @return bool
+	 */
+	protected function should_remove_date_filters() {
+		$remove_date_filters = false;
+
+		$upcoming_instances = tribe_get_events( array(
+			'post_parent'    => $this->parent_event->ID,
+			'eventDisplay'   => 'list',
+			'fields'         => 'ids',
+			'posts_per_page' => 1,
+		) );
+
+		if ( ! count( $upcoming_instances ) && $this->query->is_main_query() ) {
+			$remove_date_filters = true;
+		}
+
+		/**
+		 * Dictates whether date filters should be removed for the /all/ page query or not.
+		 *
+		 * Removing the date filters means *all* instances including past event instances will
+		 * be queried for. Not removing them means only upcoming instances will be returned:
+		 * the default behaviour is to remove them only if there are no upcoming events in the
+		 * series.
+		 *
+		 * @since 4.4.14
+		 *
+		 * @param bool     $remove_date_filters
+		 * @param WP_Query $query
+		 * @param WP_Post  $series_parent
+		 */
+		return apply_filters( 'tribe_events_pro_all_events_view_remove_date_filters',
+			$remove_date_filters,
+			$this->query,
+			$this->parent_event
+		);
 	}
 }

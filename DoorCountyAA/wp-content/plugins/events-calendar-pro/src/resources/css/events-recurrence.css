@@ -54,6 +54,11 @@
 	color: #fff;
 }
 
+label.tribe-recurrence-active-label,
+input[type="checkbox"].tribe-recurrence-active {
+	display: none;
+}
+
 .tribe-divider-bottom {
 	border-bottom: 1px solid #dfdfdf;
 	padding: 0 5px 10px 0;

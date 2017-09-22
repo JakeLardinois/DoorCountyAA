@@ -14,7 +14,7 @@ $events_label_singular = tribe_get_event_label_singular();
 	<tbody>
 		<tr>
 			<td colspan="2" class="tribe_sectionheader">
-				<h4><?php esc_html_e( sprintf( __( 'Additional %s Fields', 'tribe-events-calendar-pro' ), $events_label_singular ) ); ?></h4>
+				<h4><?php echo esc_html( sprintf( __( 'Additional %1$s Fields', 'tribe-events-calendar-pro' ), $events_label_singular ) ); ?></h4>
 			</td>
 		</tr>
 		<?php foreach ( $customFields as $customField ): ?>

@@ -22,20 +22,36 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 *                     HTML otherwise.
 	 */
 	function tribe_venue_upcoming_events( $post_id = false, array $args = array() ) {
-		$page = ! empty( $args['page'] ) ? $args['page'] : 1;
 
+		$page    = ! empty( $args['page'] ) ? $args['page'] : 1;
 		$post_id = Tribe__Events__Main::postIdHelper( $post_id );
+
+		/**
+		 * Allow for cusotmizing the number of events that show on each single-venue page.
+		 *
+		 * @since 4.4.16
+		 *
+		 * @param int $posts_per_page The number of events to show.
+		 */
+		$events_per_page = apply_filters( 'tribe_events_single_venue_posts_per_page', 100 );
 
 		if ( $post_id ) {
 			$args = array(
 				'venue'          => $post_id,
 				'eventDisplay'   => 'list',
-				'posts_per_page' => apply_filters( 'tribe_events_single_venue_posts_per_page', 100 ),
+				'posts_per_page' => $events_per_page,
 				'paged'          => $page,
 			);
 
 			$html = tribe_include_view_list( $args );
 
+			/**
+			 * Allows for customizing the markup of the list of events on single-venue pages.
+			 *
+			 * @since 4.4.16
+			 *
+			 * @param string $html The markup of events retrieved for the single-venue page.
+			 */
 			return apply_filters( 'tribe_venue_upcoming_events', $html );
 		}
 
@@ -84,14 +100,31 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		}
 
 		$post_id = Tribe__Main::post_id_helper( $venue_id );
+
 		if ( ! tribe_is_venue( $post_id ) ) {
 			return false;
 		}
 
+		// Grab Post IDs of events currently on the page to ensure they don't erroneously show up on the "Next" page.
+		global $wp_query;
+
+		$events_on_this_page = wp_list_pluck( $wp_query->posts, 'ID' );
+
+		/**
+		 * Allow for cusotmizing the number of events that show on each single-venue page.
+		 *
+		 * @since 4.4.16
+		 *
+		 * @param int $posts_per_page The number of events to show.
+		 */
+		$events_per_page = apply_filters( 'tribe_events_single_venue_posts_per_page', 100 );
+
 		$args = array(
 			'venue'          => $venue_id,
-			'page'           => $page + 1,
-			'posts_per_page' => apply_filters( 'tribe_events_single_venue_posts_per_page', 100 ),
+			'paged'          => $page,
+			'posts_per_page' => $events_per_page,
+			'post__not_in'   => $events_on_this_page,
+			'start_date'     => tribe_format_date( current_time( 'timestamp' ), true, 'Y-m-d H:i:00' ),
 		);
 
 		$events = tribe_get_events( $args );

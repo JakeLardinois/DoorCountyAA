@@ -42,6 +42,25 @@ class Tribe__Events__Pro__Integrations__Manager {
 	}
 
 	/**
+	 * Loads WP SEO / WP SEO Premium integration classes and event listeners.
+	 *
+	 * @since 4.4.14
+	 *
+	 * @return bool
+	 */
+	private function load_wpseo_integration() {
+		if ( ! class_exists( 'WPSEO_Premium' ) ) {
+			return false;
+		}
+
+		tribe_singleton( 'pro.integrations.wp-seo', 'Tribe__Events__Pro__Integrations__WP_SEO__WP_SEO', array( 'hook' ) );
+		tribe( 'pro.integrations.wp-seo' );
+
+		return true;
+	}
+
+
+	/**
 	 * Conditionally loads the classes needed to integrate with third-party plugins.
 	 *
 	 * Third-party plugin integration classes and methods will be loaded only if
@@ -49,5 +68,6 @@ class Tribe__Events__Pro__Integrations__Manager {
 	 */
 	public function load_integrations() {
 		$this->load_wpml_integration();
+		$this->load_wpseo_integration();
 	}
 }

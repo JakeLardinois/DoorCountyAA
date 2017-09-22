@@ -55,7 +55,7 @@
  * medium and large.
  */
 .tribe-section-s {
-    padding: 5px 0;
+	padding: 5px 0;
 
 	&:first-of-type {
 		padding-top: 0;
@@ -67,7 +67,7 @@
 }
 
 .tribe-section-m {
-    padding: 10px 0;
+	padding: 10px 0;
 
 	&:first-of-type {
 		padding-top: 0;
@@ -79,7 +79,7 @@
 }
 
 .tribe-section-l {
-    padding: 20px 0;
+	padding: 20px 0;
 
 	&:first-of-type {
 		padding-top: 0;
@@ -113,18 +113,14 @@
 /* grid structure */
 .tribe-events-grid {
 	border: 1px solid #bbb;
-	-webkit-box-sizing: border-box;
-	   -moz-box-sizing: border-box;
-	        box-sizing: border-box;
+	box-sizing: border-box;
 	font-size: 12px;
 	margin: 0 auto .6em;
 	position: relative;
 	width: 100%;
 
 	* {
-		-webkit-box-sizing: border-box;
-		   -moz-box-sizing: border-box;
-		        box-sizing: border-box;
+		box-sizing: border-box;
 	}
 
 	.tribe-scroller {
@@ -153,18 +149,13 @@
 
 		& > .scroller-pane {
 			background: rgba(0,0,0,.25);
-			-webkit-border-radius: 5px;
-			   -moz-border-radius: 5px;
-			        border-radius: 5px;
+			border-radius: 5px;
 			bottom: 0;
 			opacity: .01;
 			position: absolute;
 			right: 0;
 			top: 0;
-			-webkit-transition: .2s;
-			   -moz-transition: .2s;
-			     -o-transition: .2s;
-			        transition: .2s;
+			transition: .2s;
 			visibility: hidden\9; /* Target only IE7 and IE8 with this hack */
 			width: 10px;
 			z-index: 1000;
@@ -172,9 +163,7 @@
 			& > .scroller-slider {
 				background: #444;
 				background: rgba(0,0,0,.5);
-				-webkit-border-radius: 3px;
-				   -moz-border-radius: 3px;
-				        border-radius: 3px;
+				border-radius: 3px;
 				margin: 0 1px;
 				position: relative;
 			}
@@ -334,8 +323,7 @@
 	background-color: #e6e6e6;
 	background-color: rgba(221, 221, 221, .75);
 	border: 1px solid #ccc;
-	-webkit-border-radius: 3px;
-	        border-radius: 3px;
+	border-radius: 3px;
 	cursor: pointer;
 	width: 100%;
 }
@@ -787,10 +775,7 @@
 	display: block;
 	padding: 3px 6px;
 	text-decoration: none;
-	-webkit-transition: .1s ease-in-out;
-	   -moz-transition: .1s ease-in-out;
-	     -o-transition: .1s ease-in-out;
-	        transition: .1s ease-in-out;
+	transition: .1s ease-in-out;
 
 	&:hover {
 		background: #f5f5f5;
@@ -840,8 +825,7 @@
 
 .tribe-events-distance {
 	background-color: #666;
-	-webkit-border-radius: 3px;
-	        border-radius: 3px;
+	border-radius: 3px;
 	color: #fff;
 	display: inline-block;
 	font-size: 14px;
@@ -861,11 +845,7 @@
 	left: 0;
 	position: absolute;
 	top: 0;
-	-moz-transition: all 1s linear;
-	 -ms-transition: all 1s linear;
-	  -o-transition: all 1s linear;
-	     transition: all 1s linear;
-	webkit-transition: all 1s linear;
+	transition: all 1s linear;
 	width: 100%;
 	z-index: 4;
 
@@ -884,8 +864,7 @@
 	.tribe-events-map-wrap {
 		background: #eee;
 		border: 1px solid #ddd;
-		-webkit-border-radius: 3px;
-		        border-radius: 3px;
+		border-radius: 3px;
 		float: right;
 		margin: 5px 0 30px 30px;
 		padding: 5px;
@@ -1045,13 +1024,9 @@ h3.tribe-events-related-events-title {
 .tribe-events-single ul.tribe-related-events {
 	li {
 		background: #fafafa;
-		border: none;
 		border: 1px solid #eee;
-		-webkit-border-radius: 3px;
-		        border-radius: 3px;
-		-webkit-box-sizing: border-box;
-		   -moz-box-sizing: border-box;
-		        box-sizing: border-box;
+		border-radius: 3px;
+		box-sizing: border-box;
 		float: left;
 		font-size: .9em;
 		font-weight: normal;
@@ -1136,7 +1111,7 @@ h3.tribe-events-related-events-title {
 		display: inline;
 	}
 
-	 .duration {
+	.duration {
 		display: inline;
 	}
 
@@ -1158,7 +1133,6 @@ h3.tribe-events-related-events-title {
 	}
 
 	.tribe-event-featured {
-		background: transparent;
 		border-bottom: 1px dotted #2f2f2f;
 		margin-top: .75rem;
 		padding-bottom: .75rem;
@@ -1182,6 +1156,7 @@ h3.tribe-events-related-events-title {
 		}
 
 		.tribe-mini-calendar-event {
+			background: var(--featured-event-bg);
 			border: 0;
 			margin-bottom: 0;
 			padding-bottom: 16px;
@@ -1382,7 +1357,7 @@ div.tribe-countdown-text {
 			}
 		}
 
-		 .tribe-venue-description {
+		.tribe-venue-description {
 			clear: both;
 			display: block;
 			float: left;
@@ -1442,6 +1417,19 @@ div.tribe-countdown-text {
 .tribe-events-list-photo-description {
 	width: 100%;
 }
+
+
+/* Twenty Seventeen Compat
+========================================================================== */
+
+.tribe-mini-calendar-list-wrapper,
+.tribe-events-adv-list-widget {
+	.tribe-event-featured .tribe-mini-calendar-event a {
+		box-shadow: none;
+	}
+}
+
+
 
 /* = Events Venue Widget
    @ Template: widgets/venue-widget.php

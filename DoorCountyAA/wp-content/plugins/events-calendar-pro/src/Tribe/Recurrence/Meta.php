@@ -386,7 +386,21 @@ class Tribe__Events__Pro__Recurrence__Meta {
 				self::children()->permanently_delete_all( $post_id );
 			} else {
 				$recurrence_meta = get_post_meta( $parent, '_EventRecurrence', true );
-				$recurrence_meta = self::add_date_exclusion_to_recurrence( $recurrence_meta, get_post_meta( $post_id, '_EventStartDate', true ) );
+
+				/**
+				 * Controls whether exclusions should be generated for deleted child events.
+				 *
+				 * @param bool $should_generate_exclusion
+				 * @param int  $post_id
+				 * @param int  $parent
+				 */
+				if ( apply_filters( 'tribe_events_pro_should_generate_exclusion_for_deleted_event', true, $post_id, $parent ) ) {
+					$recurrence_meta = self::add_date_exclusion_to_recurrence(
+						$recurrence_meta,
+						get_post_meta( $post_id, '_EventStartDate', true )
+					);
+				}
+
 				update_post_meta( $parent, '_EventRecurrence', $recurrence_meta );
 			}
 		}

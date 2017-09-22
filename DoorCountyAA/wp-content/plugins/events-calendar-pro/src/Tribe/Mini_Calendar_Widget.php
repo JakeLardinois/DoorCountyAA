@@ -9,6 +9,10 @@ class Tribe__Events__Pro__Mini_Calendar_Widget extends WP_Widget {
 		);
 
 		parent::__construct( 'tribe-mini-calendar', __( 'Events Calendar', 'tribe-events-calendar-pro' ), $widget_ops );
+
+		if ( is_active_widget( false, false, $this->id_base ) ) {
+			Tribe__Events__Pro__Mini_Calendar::instance()->register_assets();
+		}
 	}
 
 	public function widget( $args, $instance ) {

@@ -93,6 +93,7 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Map' ) ) {
 			}
 
 			$query       = Tribe__Events__Query::getEvents( $defaults, true );
+
 			$have_events = ( 0 < $query->found_posts );
 
 			if ( $have_events && Tribe__Events__Pro__Geo_Loc::instance()->is_geoloc_query() ) {

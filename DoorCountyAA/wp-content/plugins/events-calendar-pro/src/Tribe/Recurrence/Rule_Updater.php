@@ -203,7 +203,7 @@ class Tribe__Events__Pro__Recurrence__Rule_Updater {
 		if ( 'Weekly' === $custom_rule['type'] ) {
 			$custom_rule['week'] = array(
 				'day' => array(
-					date_i18n( 'w', Tribe__Events__Timezones::event_start_timestamp( $this->post_id ) ),
+					date_i18n( 'N', Tribe__Events__Timezones::event_start_timestamp( $this->post_id ) ),
 				),
 			);
 		}
