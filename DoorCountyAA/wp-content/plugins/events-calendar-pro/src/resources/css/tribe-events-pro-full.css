@@ -1212,6 +1212,11 @@ h3.tribe-events-related-events-title {
 	padding-bottom: 16px;
 }
 
+.tribe-mini-calendar-list-wrapper .tribe-event-featured .tribe-mini-calendar-event .tribe-event-image, .tribe-events-adv-list-widget .tribe-event-featured .tribe-mini-calendar-event .tribe-event-image {
+	line-height: 0;
+	overflow: hidden;
+}
+
 .tribe-mini-calendar-list-wrapper .tribe-event-featured .tribe-mini-calendar-event .list-info, .tribe-events-adv-list-widget .tribe-event-featured .tribe-mini-calendar-event .list-info {
 	margin-bottom: 0;
 }

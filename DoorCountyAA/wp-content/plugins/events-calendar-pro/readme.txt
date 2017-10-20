@@ -4,8 +4,8 @@ Contributors: ModernTribe, barry.hughes, bordoni, borkweb, brianjessee, brook-tr
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, modern tribe, tribe, widget, pro
 Donate link: http://m.tri.be/29
 Requires at least: 4.5
-Tested up to: 4.8.1
-Stable tag: 4.4.17
+Tested up to: 4.8.2
+Stable tag: 4.4.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -202,6 +202,11 @@ Our Premium Plugins:
 * <a href="http://m.tri.be/fa" target="_blank">The Events Calendar: Filter Bar</a>
 
 == Changelog ==
+
+= [4.4.18] 2017-10-04 =
+
+* Feature - Add link to the featured image in the Advanced List widget. New filter introduced to control this: `tribe_events_list_widget_featured_image_link` (props to @cabadaj007  for the feature request) [88521]
+* Tweak - Add the possibility of importing Venue Overwrite Coordinates in Aggregator (thanks Christopher Curry for reporting) [84393]
 
 = [4.4.17] 2017-09-06 =
 

@@ -100,6 +100,9 @@ class Tribe__Events__Pro__Geo_Loc {
 		add_action( 'tribe_events_pre_get_posts', array( $this, 'setup_geoloc_in_query' ) );
 		add_filter( 'tribe_events_list_inside_before_loop', array( $this, 'add_event_distance' ) );
 
+		add_filter( 'tribe_events_importer_venue_array', array( $this, 'filter_aggregator_add_overwrite_geolocation_value' ), 10, 4 );
+		add_filter( 'tribe_events_importer_venue_column_names', array( $this, 'filter_aggregator_add_overwrite_geolocation_column' ) );
+
 		add_action( 'admin_notices', array( $this, 'maybe_notify_about_google_over_limit' ) );
 	}
 
@@ -238,6 +241,38 @@ class Tribe__Events__Pro__Geo_Loc {
 		);
 
 		return $views;
+	}
+
+	/**
+	 * Filter of the Values for Venues and add Overwrite Coordinates
+	 *
+	 * @since  4.4.18
+	 *
+	 * @param  array                                          $venue     Venue Array for creating the Post
+	 * @param  WP_Post                                        $record    Aggregator Record Post
+	 * @param  int                                            $venue_id  Which Venue ID this belongs to
+	 * @param  Tribe__Events__Importer__File_Importer_Venues  $importer  Importer with the CSV data
+	 *
+	 * @return array
+	 */
+	public function filter_aggregator_add_overwrite_geolocation_value( $venue, $record, $venue_id, $importer ) {
+		$venue['OverwriteCoords'] = $importer->get_value_by_key( $record, 'venue_overwrite_coords' );
+		return $venue;
+	}
+
+	/**
+	 * Filter of the Columns for Venues and add Overwrite Coordinates
+	 *
+	 * @since  4.4.18
+	 *
+	 * @param  array  $columns  Previous columns
+	 *
+	 * @return array
+	 */
+	public function filter_aggregator_add_overwrite_geolocation_column( $columns ) {
+		$columns['venue_overwrite_coords'] = esc_html__( 'Venue Overwrite Coordinates', 'the-events-calendar' );
+
+		return $columns;
 	}
 
 	/**
@@ -683,7 +718,7 @@ class Tribe__Events__Pro__Geo_Loc {
 								THEN meta_value
 							END AS lng
 						FROM $wpdb->postmeta
-						WHERE 
+						WHERE
 							meta_key = %s
 							OR meta_key = %s
 					) AS coords

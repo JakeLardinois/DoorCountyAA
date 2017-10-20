@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Events Calendar Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-08-27 20:41:04+0000\n"
+"PO-Revision-Date: 2017-09-29 07:31:46+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -11,9 +11,13 @@ msgstr ""
 "Language: de\n"
 "Project-Id-Version: Events Calendar Pro\n"
 
+#: src/Tribe/Geo_Loc.php:273
+msgid "Venue Overwrite Coordinates"
+msgstr "Überschreiben der Veranstaltungsort Koordinaten"
+
 #: src/admin-views/event-recurrence.php:273
 msgid "Recurring Events Active"
-msgstr ""
+msgstr "Aktive Serientermine"
 
 #: src/admin-views/widget-calendar.php:8
 msgid "Number of events to list below the mini calendar:"
@@ -818,12 +822,12 @@ msgctxt "debug recurrence"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: src/Tribe/Geo_Loc.php:496
+#: src/Tribe/Geo_Loc.php:531
 msgctxt "debug geodata"
 msgid "empty response"
 msgstr "leere Antwort"
 
-#: src/Tribe/Geo_Loc.php:495
+#: src/Tribe/Geo_Loc.php:530
 msgctxt "debug geodata"
 msgid "Geocode request failed ($1%s - $2%s)"
 msgstr "Geocode Anfrage fehlgeschlagen ($1%s - $2%s)"
@@ -852,11 +856,11 @@ msgstr "Zeiten:"
 msgid "Events Calendar PRO"
 msgstr "Veranstaltungskalender PRO"
 
-#: src/Tribe/Geo_Loc.php:547
+#: src/Tribe/Geo_Loc.php:582
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr "Der Längen- und Breitengrad des Veranstaltungsortes konnte nicht ermittelt werden. Das tägliche Google Maps API Limit wurde erreicht."
 
-#: src/Tribe/Geo_Loc.php:158
+#: src/Tribe/Geo_Loc.php:161
 msgid "Distance unit"
 msgstr "Streckeneinheit"
 
@@ -890,7 +894,7 @@ msgid_plural "View All %1$s %2$s"
 msgstr[0] "Zeige %1$s %2$s"
 msgstr[1] "Zeige alle %1$s %2$s"
 
-#: src/views/pro/widgets/modules/single-event.php:177
+#: src/views/pro/widgets/modules/single-event.php:194
 msgctxt "list separator for final two elements"
 msgid "and"
 msgstr "und"
@@ -2159,75 +2163,75 @@ msgstr "Eingeben: %s %s"
 msgid "%d %s"
 msgstr "%d %s"
 
-#: src/Tribe/Geo_Loc.php:1015
+#: src/Tribe/Geo_Loc.php:1050
 msgid "Fixed geolocation data for %d venues"
 msgstr "Geodaten für %d Veranstaltungsorte korrigiert"
 
-#: src/Tribe/Geo_Loc.php:989
+#: src/Tribe/Geo_Loc.php:1024
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Es gibt Veranstaltungsorte für die keine Geo-Daten vorliegen. <a href='%s'>Hier klicken um sie zu erzeugen</a>."
 
-#: src/Tribe/Geo_Loc.php:945
+#: src/Tribe/Geo_Loc.php:980
 msgid "Fix venues data"
 msgstr "Veranstaltungsortdaten reparieren"
 
-#: src/Tribe/Geo_Loc.php:301
+#: src/Tribe/Geo_Loc.php:336
 msgid "Longitude"
 msgstr "Längengrad"
 
-#: src/Tribe/Geo_Loc.php:300
+#: src/Tribe/Geo_Loc.php:335
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: src/Tribe/Geo_Loc.php:296
+#: src/Tribe/Geo_Loc.php:331
 msgid "Use latitude + longitude"
 msgstr "Benutze Breite + Länge"
 
-#: src/Tribe/Geo_Loc.php:271
+#: src/Tribe/Geo_Loc.php:306
 msgid "Location"
 msgstr "Standort"
 
-#: src/Tribe/Geo_Loc.php:270
+#: src/Tribe/Geo_Loc.php:305
 msgid "Near"
 msgstr "In der Nähe von"
 
-#: src/Tribe/Geo_Loc.php:236
+#: src/Tribe/Geo_Loc.php:239
 msgid "Map"
 msgstr "Karte"
 
-#: src/Tribe/Geo_Loc.php:181
+#: src/Tribe/Geo_Loc.php:184
 msgid "Removes location search field from the events bar on all views except for map view."
 msgstr "Entfernt das Standortsuchfeld für alle Anzeigen außer für die Kartenansicht."
 
-#: src/Tribe/Geo_Loc.php:180
+#: src/Tribe/Geo_Loc.php:183
 msgid "Hide location search"
 msgstr "Standortsuche ausblenden"
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "You have %d venues for which we don't have geolocation data. We need to use the Google Maps API to get that information. Doing this may take a while (approximately 1 minute for every 200 venues)."
 msgstr "Es gibt %d Veranstaltungsorte, für die keine Geo-Daten vorhanden sind. Die Google Maps API wird verwendet, um diese Informationen zu erhalten. Die Durchführung kann eine Weile dauern (etwa 1 Minute für 200 Veranstaltungsorte)."
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "Fix geolocation data"
 msgstr "Repariere Geo-Daten"
 
-#: src/Tribe/Geo_Loc.php:165 src/Tribe/Geo_Loc_Filter.php:26
+#: src/Tribe/Geo_Loc.php:168 src/Tribe/Geo_Loc_Filter.php:26
 msgid "Kilometers"
 msgstr "Kilometer"
 
-#: src/Tribe/Geo_Loc.php:164 src/Tribe/Geo_Loc_Filter.php:23
+#: src/Tribe/Geo_Loc.php:167 src/Tribe/Geo_Loc_Filter.php:23
 msgid "Miles"
 msgstr "Meilen"
 
-#: src/Tribe/Geo_Loc.php:151
+#: src/Tribe/Geo_Loc.php:154
 msgid "Set the distance that the location search covers (find events within X distance units of location search input)."
 msgstr "Die Entfernung, welche die Standortsuche abdeckt, festlegen (finde Veranstaltungen mit Entfernung X im Umkreis des eingegebenen Veranstaltungsortes)"
 
-#: src/Tribe/Geo_Loc.php:149
+#: src/Tribe/Geo_Loc.php:152
 msgid "Map view search distance limit"
 msgstr "Entfernungslimit für Suche in Kartenansicht"
 
-#: src/Tribe/Geo_Loc.php:111
+#: src/Tribe/Geo_Loc.php:114
 msgid "Distance"
 msgstr "Entfernung"
 

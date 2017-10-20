@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Events Calendar Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-02-13 04:15:27+0000\n"
+"PO-Revision-Date: 2017-09-13 08:00:38+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,10 @@ msgstr ""
 "X-Generator: GlotPress/2.3.1\n"
 "Language: cs_CZ\n"
 "Project-Id-Version: Events Calendar Pro\n"
+
+#: src/Tribe/Geo_Loc.php:273
+msgid "Venue Overwrite Coordinates"
+msgstr ""
 
 #: src/admin-views/event-recurrence.php:273
 msgid "Recurring Events Active"
@@ -145,15 +149,15 @@ msgstr ""
 
 #: src/admin-views/event-recurrence.php:292
 msgid "Event will not occur:"
-msgstr ""
+msgstr "Akce se nebude konat:"
 
 #: src/admin-views/event-recurrence.php:264
 msgid "Add more events"
-msgstr ""
+msgstr "Přidat akci"
 
 #: src/admin-views/event-recurrence.php:261
 msgid "Schedule multiple events"
-msgstr ""
+msgstr "Naplánovat více akcí"
 
 #: src/admin-views/event-recurrence.php:252
 #: src/admin-views/event-recurrence.php:482
@@ -195,7 +199,7 @@ msgstr ""
 #: src/admin-views/event-recurrence.php:115
 #: src/admin-views/event-recurrence.php:367
 msgid "months"
-msgstr ""
+msgstr "měsíc"
 
 #: src/admin-views/event-recurrence.php:112
 #: src/admin-views/event-recurrence.php:364
@@ -213,7 +217,7 @@ msgstr ""
 
 #: src/admin-views/event-recurrence.php:13
 msgid "Event Series:"
-msgstr ""
+msgstr "Opakování:"
 
 #: src/admin-views/event-recurrence.php:27
 msgid "Are you sure you want to delete this exclusion?"
@@ -818,12 +822,12 @@ msgctxt "debug recurrence"
 msgid "Unknown"
 msgstr "Neznámá"
 
-#: src/Tribe/Geo_Loc.php:496
+#: src/Tribe/Geo_Loc.php:531
 msgctxt "debug geodata"
 msgid "empty response"
 msgstr "prázdná odpověď"
 
-#: src/Tribe/Geo_Loc.php:495
+#: src/Tribe/Geo_Loc.php:530
 msgctxt "debug geodata"
 msgid "Geocode request failed ($1%s - $2%s)"
 msgstr "Požadavek na geokódování se nezdařil ($1%s - $2%s)"
@@ -852,11 +856,11 @@ msgstr "Počet opakování:"
 msgid "Events Calendar PRO"
 msgstr "Events Calendar PRO"
 
-#: src/Tribe/Geo_Loc.php:547
+#: src/Tribe/Geo_Loc.php:582
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr "U vašeho místa konání se nepodařila zjistit zeměpisná šířka a délka. Bylo dosaženo denního limitu dotazů na Google Maps API."
 
-#: src/Tribe/Geo_Loc.php:158
+#: src/Tribe/Geo_Loc.php:161
 msgid "Distance unit"
 msgstr "Jednotka vzdálenosti"
 
@@ -891,7 +895,7 @@ msgstr[0] "Zobrazit %2$s (%1$s)"
 msgstr[1] "Zobrazit všechny %2$s (%1$s)"
 msgstr[2] "Zobrazit všechny %2$s (%1$s)"
 
-#: src/views/pro/widgets/modules/single-event.php:177
+#: src/views/pro/widgets/modules/single-event.php:194
 msgctxt "list separator for final two elements"
 msgid "and"
 msgstr "a"
@@ -2160,75 +2164,75 @@ msgstr "Typ: %s %s"
 msgid "%d %s"
 msgstr "%d %s"
 
-#: src/Tribe/Geo_Loc.php:1015
+#: src/Tribe/Geo_Loc.php:1050
 msgid "Fixed geolocation data for %d venues"
 msgstr "Geolokační data byla opravena pro %d míst"
 
-#: src/Tribe/Geo_Loc.php:989
+#: src/Tribe/Geo_Loc.php:1024
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "U některých míst konání nejsou k dispozici geolokační informace. <a href='%s'>Klikněte zde pro jejich vytvoření</a>."
 
-#: src/Tribe/Geo_Loc.php:945
+#: src/Tribe/Geo_Loc.php:980
 msgid "Fix venues data"
 msgstr "Opravit data u míst konání"
 
-#: src/Tribe/Geo_Loc.php:301
+#: src/Tribe/Geo_Loc.php:336
 msgid "Longitude"
 msgstr "Zeměpisná délka"
 
-#: src/Tribe/Geo_Loc.php:300
+#: src/Tribe/Geo_Loc.php:335
 msgid "Latitude"
 msgstr "Zeměpisná šířka"
 
-#: src/Tribe/Geo_Loc.php:296
+#: src/Tribe/Geo_Loc.php:331
 msgid "Use latitude + longitude"
 msgstr "Použijte zeměpisnou šířku + délku"
 
-#: src/Tribe/Geo_Loc.php:271
+#: src/Tribe/Geo_Loc.php:306
 msgid "Location"
 msgstr "Místo"
 
-#: src/Tribe/Geo_Loc.php:270
+#: src/Tribe/Geo_Loc.php:305
 msgid "Near"
 msgstr "Blízko"
 
-#: src/Tribe/Geo_Loc.php:236
+#: src/Tribe/Geo_Loc.php:239
 msgid "Map"
 msgstr "Mapa"
 
-#: src/Tribe/Geo_Loc.php:181
+#: src/Tribe/Geo_Loc.php:184
 msgid "Removes location search field from the events bar on all views except for map view."
 msgstr "Odstraní pole pro hledání místa z lišty akcí u všech zobrazení kromě mapového."
 
-#: src/Tribe/Geo_Loc.php:180
+#: src/Tribe/Geo_Loc.php:183
 msgid "Hide location search"
 msgstr "Skrýt hledání místa"
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "You have %d venues for which we don't have geolocation data. We need to use the Google Maps API to get that information. Doing this may take a while (approximately 1 minute for every 200 venues)."
 msgstr "U %d míst konání nejsou k dispozici geolokační informace. Pro jejich získání musíme použít Google Maps API. To může chvíli trvat (asi 1 minutu na každých 200 míst)."
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "Fix geolocation data"
 msgstr "Opravit geolokační data"
 
-#: src/Tribe/Geo_Loc.php:165 src/Tribe/Geo_Loc_Filter.php:26
+#: src/Tribe/Geo_Loc.php:168 src/Tribe/Geo_Loc_Filter.php:26
 msgid "Kilometers"
 msgstr "Kilometry"
 
-#: src/Tribe/Geo_Loc.php:164 src/Tribe/Geo_Loc_Filter.php:23
+#: src/Tribe/Geo_Loc.php:167 src/Tribe/Geo_Loc_Filter.php:23
 msgid "Miles"
 msgstr "Míle"
 
-#: src/Tribe/Geo_Loc.php:151
+#: src/Tribe/Geo_Loc.php:154
 msgid "Set the distance that the location search covers (find events within X distance units of location search input)."
 msgstr "Nastavte vzdálenost pro hledání místa (nalezne akce v dosahu X jednotek vzdálenosti od hledaného místa)."
 
-#: src/Tribe/Geo_Loc.php:149
+#: src/Tribe/Geo_Loc.php:152
 msgid "Map view search distance limit"
 msgstr "Limit vzdálenosti pro hledání v mapovém zobrazení"
 
-#: src/Tribe/Geo_Loc.php:111
+#: src/Tribe/Geo_Loc.php:114
 msgid "Distance"
 msgstr "Vzdálenost"
 

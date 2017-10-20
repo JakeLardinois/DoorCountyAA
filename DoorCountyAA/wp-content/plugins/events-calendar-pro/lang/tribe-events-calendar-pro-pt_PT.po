@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Events Calendar Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-06-01 22:50:02+0000\n"
+"PO-Revision-Date: 2017-10-01 00:07:18+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,10 @@ msgstr ""
 "X-Generator: GlotPress/2.3.1\n"
 "Language: pt\n"
 "Project-Id-Version: Events Calendar Pro\n"
+
+#: src/Tribe/Geo_Loc.php:273
+msgid "Venue Overwrite Coordinates"
+msgstr ""
 
 #: src/admin-views/event-recurrence.php:273
 msgid "Recurring Events Active"
@@ -31,7 +35,7 @@ msgstr ""
 #: src/admin-views/widget-admin-advanced-list.php:127
 msgctxt "events list widget setting"
 msgid "Limit to featured events only"
-msgstr ""
+msgstr "Limitar apenas a eventos em destaque"
 
 #: src/admin-views/recurrence/years.php:63
 msgid "the same day"
@@ -754,11 +758,11 @@ msgstr ""
 
 #: src/views/pro/list/venue-nav.php:42
 msgid "Next %s"
-msgstr ""
+msgstr "Próximos %s"
 
 #: src/views/pro/list/venue-nav.php:34
 msgid "Previous %s"
-msgstr ""
+msgstr "%s anteriores"
 
 #: src/admin-views/widget-admin-advanced-list.php:111
 #: src/admin-views/widget-admin-this-week.php:147
@@ -772,7 +776,7 @@ msgstr ""
 #: src/admin-views/widget-admin-venue.php:43
 #: src/admin-views/widget-calendar.php:87
 msgid "Generate JSON-LD data"
-msgstr ""
+msgstr "Gerar dados JSON-LD"
 
 #: src/admin-views/tribe-options-mobile.php:33
 msgid "Change the default view for Mobile users."
@@ -796,7 +800,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:72
 msgid "all"
-msgstr ""
+msgstr "tudo"
 
 #: src/Tribe/Main.php:560
 msgctxt "debug recurrence"
@@ -818,12 +822,12 @@ msgctxt "debug recurrence"
 msgid "Unknown"
 msgstr ""
 
-#: src/Tribe/Geo_Loc.php:496
+#: src/Tribe/Geo_Loc.php:531
 msgctxt "debug geodata"
 msgid "empty response"
 msgstr ""
 
-#: src/Tribe/Geo_Loc.php:495
+#: src/Tribe/Geo_Loc.php:530
 msgctxt "debug geodata"
 msgid "Geocode request failed ($1%s - $2%s)"
 msgstr ""
@@ -852,11 +856,11 @@ msgstr ""
 msgid "Events Calendar PRO"
 msgstr "Events Calendar PRO"
 
-#: src/Tribe/Geo_Loc.php:547
+#: src/Tribe/Geo_Loc.php:582
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr ""
 
-#: src/Tribe/Geo_Loc.php:158
+#: src/Tribe/Geo_Loc.php:161
 msgid "Distance unit"
 msgstr ""
 
@@ -888,9 +892,9 @@ msgstr "Não existem Eventos Hoje"
 msgid "View %1$s %2$s"
 msgid_plural "View All %1$s %2$s"
 msgstr[0] "Ver %1$s %2$s"
-msgstr[1] "Ver Tudo %1$s %2$s"
+msgstr[1] "Ver todos os %1$s %2$s"
 
-#: src/views/pro/widgets/modules/single-event.php:177
+#: src/views/pro/widgets/modules/single-event.php:194
 msgctxt "list separator for final two elements"
 msgid "and"
 msgstr "e"
@@ -958,7 +962,7 @@ msgstr "uma data não-especificada"
 
 #: src/admin-views/widget-admin-countdown.php:21
 msgid "Single Event"
-msgstr "Evento único"
+msgstr "Evento"
 
 #: src/Tribe/Customizer/Photo_View.php:106
 msgid "Photo Background Color"
@@ -974,7 +978,7 @@ msgstr "Vista de Mês/ Semana"
 
 #: src/Tribe/Customizer/Photo_View.php:75
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
-msgstr "As opções seleccionadas aqui irão anular aquilo que foi seleccionado nas secções \"Tema Geral\" e \"Elementos Globais\""
+msgstr "As opções seleccionadas aqui irão substituir o que for seleccionado nas secções \"Opções gerais do tema\" e \"Elementos globais\"."
 
 #: src/Tribe/Countdown_Widget.php:53 src/Tribe/Countdown_Widget.php:102
 msgid "Hooray!"
@@ -1126,7 +1130,7 @@ msgstr "Não existem %s futuros."
 
 #: src/views/pro/widgets/list-widget.php:67
 msgid "There are no upcoming %s at this time."
-msgstr "Não existem %s futuros."
+msgstr "De momento não existem próximos %s."
 
 #: src/views/pro/widgets/list-widget.php:59
 msgid "View More&hellip;"
@@ -1160,7 +1164,7 @@ msgstr "Horas"
 
 #: src/views/pro/week/loop-grid-allday.php:18
 msgid "All Day"
-msgstr "Dia todo"
+msgstr "Todo o dia"
 
 #: src/views/pro/single-organizer.php:32 src/views/pro/single-venue.php:36
 msgid "&larr; Back to %s"
@@ -1173,7 +1177,7 @@ msgstr "%s Relacionados"
 #: src/views/pro/map/single-event.php:74
 #: src/views/pro/map/single-featured.php:73 src/views/pro/week/mobile.php:24
 msgid "Find out more"
-msgstr "Saber mais"
+msgstr "Saiba mais"
 
 #: src/views/pro/map/nav.php:32 src/views/pro/photo/nav.php:31
 msgid "Next %s <span>&raquo;</span>"
@@ -1186,7 +1190,7 @@ msgstr "<span>&laquo;</span> Anterior %s"
 #: src/views/pro/list/venue-nav.php:28 src/views/pro/map/nav.php:20
 #: src/views/pro/photo/nav.php:20
 msgid "%s List Navigation"
-msgstr "Navegação de Lista %s"
+msgstr "Lista de navegação de %s"
 
 #: src/functions/template-tags/week.php:228
 msgid "Next Week <span>&raquo;</span>"
@@ -1207,7 +1211,7 @@ msgstr "%s Recorrente"
 #: src/functions/template-tags/general.php:606
 #: src/functions/template-tags/general.php:629
 msgid "Date out of range."
-msgstr "Data fora do alcance."
+msgstr "Data fora do intervalo."
 
 #: src/functions/template-tags/general.php:443
 msgid "The current default phone is: %s"
@@ -1536,7 +1540,7 @@ msgstr "eventos"
 #: src/admin-views/event-recurrence.php:55
 #: src/admin-views/event-recurrence.php:309
 msgid "event"
-msgstr "evento\t"
+msgstr "evento"
 
 #: src/admin-views/event-meta.php:17
 msgid "Additional %1$s Fields"
@@ -1760,7 +1764,7 @@ msgstr ", "
 
 #: src/Tribe/Recurrence/Meta.php:1625
 msgid " and "
-msgstr " e"
+msgstr " e "
 
 #: src/Tribe/Recurrence/Meta.php:1623
 msgid ", and "
@@ -1796,7 +1800,7 @@ msgstr "Junho"
 
 #: src/Tribe/Recurrence/Meta.php:1259 src/Tribe/Recurrence/Meta.php:1609
 msgid "May"
-msgstr "Maio"
+msgstr "Mai"
 
 #: src/Tribe/Recurrence/Meta.php:1258 src/Tribe/Recurrence/Meta.php:1608
 msgid "April"
@@ -1973,11 +1977,11 @@ msgstr "Os dados de evento recorrente ainda estão a ser gerados para este event
 #: src/Tribe/Recurrence/Queue_Realtime.php:106
 #: src/Tribe/Recurrence/Queue_Realtime.php:185
 msgid "%d%% complete"
-msgstr "%d%% completo"
+msgstr "%d%% concluído"
 
 #: src/Tribe/Recurrence/Queue_Realtime.php:81
 msgid "Completed!"
-msgstr "Completo!"
+msgstr "Concluído!"
 
 #: src/Tribe/Mini_Calendar_Widget.php:11 src/Tribe/Mini_Calendar_Widget.php:28
 #: src/Tribe/Mini_Calendar_Widget.php:77
@@ -2002,7 +2006,7 @@ msgstr "Semana"
 
 #: src/Tribe/Main.php:1567
 msgid "View All Add-Ons"
-msgstr "Ver todos os Add-Ons"
+msgstr "Ver todos os add-ons"
 
 #: src/Tribe/Main.php:1565
 msgid "Support"
@@ -2035,7 +2039,7 @@ msgstr "Rascunho Local atualizado. <a target=\"_blank\" href=\"%s\">Pré-visuali
 #. translators: Publish box date format, see http://php.net/date
 #: src/Tribe/Main.php:1493 src/Tribe/Main.php:1503
 msgid "M j, Y @ G:i"
-msgstr "j \\d\\e M \\d\\e Y \\à\\s G:i"
+msgstr "j \\d\\e F \\d\\e Y @ G:i"
 
 #: src/Tribe/Main.php:1491
 msgid "Venue scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview venue</a>"
@@ -2056,7 +2060,7 @@ msgstr "Local atualizado. <a href=\"%s\">Ver Local</a>"
 
 #: src/Tribe/Main.php:1458
 msgid "Settings"
-msgstr "Configurações"
+msgstr "Definições"
 
 #: src/Tribe/Main.php:1345
 msgid "Address: "
@@ -2159,75 +2163,75 @@ msgstr "Tipo: %s %s"
 msgid "%d %s"
 msgstr "%d %s"
 
-#: src/Tribe/Geo_Loc.php:1015
+#: src/Tribe/Geo_Loc.php:1050
 msgid "Fixed geolocation data for %d venues"
 msgstr "Dados de geolocalização corrigidos para %d locais"
 
-#: src/Tribe/Geo_Loc.php:989
+#: src/Tribe/Geo_Loc.php:1024
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Você tem locais para os quais nós não temos informação geolocalizada. a href='%s'>Clique aqui para a gerar</a>."
 
-#: src/Tribe/Geo_Loc.php:945
+#: src/Tribe/Geo_Loc.php:980
 msgid "Fix venues data"
 msgstr "Corrigir dados de locais"
 
-#: src/Tribe/Geo_Loc.php:301
+#: src/Tribe/Geo_Loc.php:336
 msgid "Longitude"
 msgstr "Longitude"
 
-#: src/Tribe/Geo_Loc.php:300
+#: src/Tribe/Geo_Loc.php:335
 msgid "Latitude"
 msgstr "Latitude"
 
-#: src/Tribe/Geo_Loc.php:296
+#: src/Tribe/Geo_Loc.php:331
 msgid "Use latitude + longitude"
 msgstr "Usar Latitude +  Longitude"
 
-#: src/Tribe/Geo_Loc.php:271
+#: src/Tribe/Geo_Loc.php:306
 msgid "Location"
 msgstr "Localização"
 
-#: src/Tribe/Geo_Loc.php:270
+#: src/Tribe/Geo_Loc.php:305
 msgid "Near"
 msgstr "Perto"
 
-#: src/Tribe/Geo_Loc.php:236
+#: src/Tribe/Geo_Loc.php:239
 msgid "Map"
 msgstr "Mapa"
 
-#: src/Tribe/Geo_Loc.php:181
+#: src/Tribe/Geo_Loc.php:184
 msgid "Removes location search field from the events bar on all views except for map view."
 msgstr "Remove o campo de pesquisa de localização da barra de eventos em todas as vistas excepto na vista de mapa."
 
-#: src/Tribe/Geo_Loc.php:180
+#: src/Tribe/Geo_Loc.php:183
 msgid "Hide location search"
 msgstr "Esconder pesquisa de local"
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "You have %d venues for which we don't have geolocation data. We need to use the Google Maps API to get that information. Doing this may take a while (approximately 1 minute for every 200 venues)."
 msgstr ""
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "Fix geolocation data"
 msgstr "Corrigir dados de geolocalização"
 
-#: src/Tribe/Geo_Loc.php:165 src/Tribe/Geo_Loc_Filter.php:26
+#: src/Tribe/Geo_Loc.php:168 src/Tribe/Geo_Loc_Filter.php:26
 msgid "Kilometers"
 msgstr "Quilómetros"
 
-#: src/Tribe/Geo_Loc.php:164 src/Tribe/Geo_Loc_Filter.php:23
+#: src/Tribe/Geo_Loc.php:167 src/Tribe/Geo_Loc_Filter.php:23
 msgid "Miles"
 msgstr "Milhas"
 
-#: src/Tribe/Geo_Loc.php:151
+#: src/Tribe/Geo_Loc.php:154
 msgid "Set the distance that the location search covers (find events within X distance units of location search input)."
 msgstr "Defina a distância que a pesquisa de localização cobre (encontrar eventos dentro de X unidades de distância dentro da localização)"
 
-#: src/Tribe/Geo_Loc.php:149
+#: src/Tribe/Geo_Loc.php:152
 msgid "Map view search distance limit"
 msgstr "Limite de distância de pesquisa na vista de mapa"
 
-#: src/Tribe/Geo_Loc.php:111
+#: src/Tribe/Geo_Loc.php:114
 msgid "Distance"
 msgstr "Distância"
 
@@ -2257,11 +2261,11 @@ msgstr "Data de Fim da Recorrência"
 
 #: src/Tribe/Advanced_List_Widget.php:131
 msgid "Upcoming Events"
-msgstr "Próximos Eventos"
+msgstr "Próximos eventos"
 
 #: src/Tribe/Advanced_List_Widget.php:27
 msgid "Events List"
-msgstr "Lista de Eventos"
+msgstr "Lista de eventos"
 
 #: src/Tribe/Advanced_List_Widget.php:22
 msgid "A widget that displays the next upcoming x events."
@@ -2269,7 +2273,7 @@ msgstr "Widget que mostra os próximos eventos."
 
 #: src/Tribe/APM_Filters/Title_Filter.php:12
 msgid "Search"
-msgstr "Pesquisa"
+msgstr "Pesquisar"
 
 #: src/Tribe/APM_Filters/Recur_Filter.php:16
 msgid "No"
@@ -2315,7 +2319,7 @@ msgstr "Categ. Eventos"
 
 #: src/Tribe/APM_Filters/APM_Filters.php:82
 msgid "Event Cost"
-msgstr "Preço"
+msgstr "Custo do evento"
 
 #: src/Tribe/APM_Filters/APM_Filters.php:77
 msgid "End Date"
@@ -2323,7 +2327,7 @@ msgstr "Data de fim"
 
 #: src/Tribe/APM_Filters/APM_Filters.php:72
 msgid "Start Date"
-msgstr "Data de ínício"
+msgstr "Data de início"
 
 #: events-calendar-pro.php:86
 msgid "To begin using Events Calendar PRO, please install the latest version of <a href=\"%s\" class=\"thickbox\" title=\"%s\">The Events Calendar</a>."

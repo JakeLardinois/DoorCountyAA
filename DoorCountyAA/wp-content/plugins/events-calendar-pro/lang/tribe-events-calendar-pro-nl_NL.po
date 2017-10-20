@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Events Calendar Pro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-03-23 00:26:18+0000\n"
+"PO-Revision-Date: 2017-10-02 09:29:14+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -10,6 +10,10 @@ msgstr ""
 "X-Generator: GlotPress/2.3.1\n"
 "Language: nl\n"
 "Project-Id-Version: Events Calendar Pro\n"
+
+#: src/Tribe/Geo_Loc.php:273
+msgid "Venue Overwrite Coordinates"
+msgstr ""
 
 #: src/admin-views/event-recurrence.php:273
 msgid "Recurring Events Active"
@@ -35,7 +39,7 @@ msgstr ""
 
 #: src/admin-views/recurrence/years.php:63
 msgid "the same day"
-msgstr ""
+msgstr "dezelfde dag"
 
 #: src/admin-views/recurrence/years.php:37
 msgid "Which month will the event recur in?"
@@ -44,15 +48,15 @@ msgstr ""
 #: src/admin-views/recurrence/years.php:36
 msgctxt "Begins the line indicating on which month the event will occur"
 msgid "in"
-msgstr ""
+msgstr "in"
 
 #: src/admin-views/recurrence/years.php:30
 msgid "years"
-msgstr ""
+msgstr "jaren"
 
 #: src/admin-views/recurrence/years.php:27
 msgid "year"
-msgstr ""
+msgstr "jaar"
 
 #: src/admin-views/recurrence/weeks.php:7
 msgctxt "Begins the line indicating what day of the week the event will occur on"
@@ -76,22 +80,22 @@ msgstr "tot"
 #: src/admin-views/recurrence/time.php:30
 msgctxt "number suffix for numbers ending in something other than 1, 2, or 3"
 msgid "%1$sth day"
-msgstr ""
+msgstr "%1$se dag"
 
 #: src/admin-views/recurrence/time.php:25
 msgctxt "number suffix for numbers ending in 3"
 msgid "%1$srd day"
-msgstr ""
+msgstr "%1$se dag"
 
 #: src/admin-views/recurrence/time.php:20
 msgctxt "number suffix for numbers ending in 2"
 msgid "%1$snd day"
-msgstr ""
+msgstr "%1$se dag"
 
 #: src/admin-views/recurrence/time.php:15
 msgctxt "number suffix for numbers ending in 1"
 msgid "%1$sst day"
-msgstr ""
+msgstr "%1$se dag"
 
 #: src/admin-views/recurrence/time.php:12
 msgid "next day"
@@ -213,7 +217,7 @@ msgstr "Verwijder Deze"
 
 #: src/admin-views/event-recurrence.php:13
 msgid "Event Series:"
-msgstr ""
+msgstr "Evenementen reeks:"
 
 #: src/admin-views/event-recurrence.php:27
 msgid "Are you sure you want to delete this exclusion?"
@@ -221,7 +225,7 @@ msgstr ""
 
 #: src/admin-views/event-recurrence.php:26
 msgid "Are you sure you want to delete these events?"
-msgstr ""
+msgstr "Weet je zeker dat je deze evenementen wilt verwijderen?"
 
 #: src/Tribe/Recurrence/Validator.php:146
 msgid "Yearly custom recurrences with a different day must have either a date or day specified."
@@ -617,87 +621,87 @@ msgstr ""
 
 #: src/Tribe/Recurrence/Strings.php:45
 msgid "the 31st day of the month"
-msgstr ""
+msgstr "de 31e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:44
 msgid "the 30th day of the month"
-msgstr ""
+msgstr "de 30e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:43
 msgid "the 29th day of the month"
-msgstr ""
+msgstr "de 29e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:42
 msgid "the 28th day of the month"
-msgstr ""
+msgstr "de 28e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:41
 msgid "the 27th day of the month"
-msgstr ""
+msgstr "de 27e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:40
 msgid "the 26th day of the month"
-msgstr ""
+msgstr "de 26e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:39
 msgid "the 25th day of the month"
-msgstr ""
+msgstr "de 25e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:38
 msgid "the 24th day of the month"
-msgstr ""
+msgstr "de 24e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:37
 msgid "the 23rd day of the month"
-msgstr ""
+msgstr "de 23e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:36
 msgid "the 22nd day of the month"
-msgstr ""
+msgstr "de 22e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:35
 msgid "the 21st day of the month"
-msgstr ""
+msgstr "de 21e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:34
 msgid "the 20th day of the month"
-msgstr ""
+msgstr "de 20e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:33
 msgid "the 19th day of the month"
-msgstr ""
+msgstr "de 19e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:32
 msgid "the 18th day of the month"
-msgstr ""
+msgstr "de 18e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:31
 msgid "the 17th day of the month"
-msgstr ""
+msgstr "de 17e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:30
 msgid "the 16th day of the month"
-msgstr ""
+msgstr "de 16e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:29
 msgid "the 15th day of the month"
-msgstr ""
+msgstr "de 15e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:28
 msgid "the 14th day of the month"
-msgstr ""
+msgstr "de 14e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:27
 msgid "the 13th day of the month"
-msgstr ""
+msgstr "de 13e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:26
 msgid "the 12th day of the month"
-msgstr ""
+msgstr "de 12e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:25
 msgid "the 11th day of the month"
-msgstr ""
+msgstr "de 11e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:24
 msgid "the 10th day of the month"
@@ -705,11 +709,11 @@ msgstr ""
 
 #: src/Tribe/Recurrence/Strings.php:23
 msgid "the 9th day of the month"
-msgstr ""
+msgstr "de 9e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:22
 msgid "the 8th day of the month"
-msgstr ""
+msgstr "de 8e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:21
 msgid "the 7th day of the month"
@@ -725,19 +729,19 @@ msgstr "de 5e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:18
 msgid "the 4th day of the month"
-msgstr "de 4de dag van de maand"
+msgstr "de 4e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:17
 msgid "the 3rd day of the month"
-msgstr "de 3de dag van de maand"
+msgstr "de 3e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:16
 msgid "the 2nd day of the month"
-msgstr ""
+msgstr "de 2e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:15
 msgid "the 1st day of the month"
-msgstr ""
+msgstr "de 1e dag van de maand"
 
 #: src/Tribe/Recurrence/Strings.php:14
 msgid "%1$s"
@@ -745,7 +749,7 @@ msgstr ""
 
 #: src/Tribe/Recurrence/Strings.php:13
 msgid "All day"
-msgstr ""
+msgstr "De hele dag"
 
 #: src/Tribe/Recurrence/Meta.php:1252
 msgctxt "placeholder used where the true day of the day is determined dynamically"
@@ -818,12 +822,12 @@ msgctxt "debug recurrence"
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: src/Tribe/Geo_Loc.php:496
+#: src/Tribe/Geo_Loc.php:531
 msgctxt "debug geodata"
 msgid "empty response"
 msgstr "leeg antwoord"
 
-#: src/Tribe/Geo_Loc.php:495
+#: src/Tribe/Geo_Loc.php:530
 msgctxt "debug geodata"
 msgid "Geocode request failed ($1%s - $2%s)"
 msgstr "Geocode aanvraag mislukt ($1%s - $2%s)"
@@ -852,11 +856,11 @@ msgstr "Tijden:"
 msgid "Events Calendar PRO"
 msgstr "Events Calendar PRO"
 
-#: src/Tribe/Geo_Loc.php:547
+#: src/Tribe/Geo_Loc.php:582
 msgid "The latitude and longitude for your venue could not be fetched. The Google Maps API daily query limit has been reached!"
 msgstr "De breedtegraad en lengtegraad voor je Locatie kon niet opgehaald worden. Het dagelijkse query limiet van de Google Maps API is bereikt!"
 
-#: src/Tribe/Geo_Loc.php:158
+#: src/Tribe/Geo_Loc.php:161
 msgid "Distance unit"
 msgstr "Afstandseenheid"
 
@@ -890,7 +894,7 @@ msgid_plural "View All %1$s %2$s"
 msgstr[0] "Bekijk %1$s %2$s"
 msgstr[1] "Bekijk alle %1$s %2$s"
 
-#: src/views/pro/widgets/modules/single-event.php:177
+#: src/views/pro/widgets/modules/single-event.php:194
 msgctxt "list separator for final two elements"
 msgid "and"
 msgstr "en"
@@ -1540,7 +1544,7 @@ msgstr "evenement"
 
 #: src/admin-views/event-meta.php:17
 msgid "Additional %1$s Fields"
-msgstr ""
+msgstr "Extra %1$s velden"
 
 #: src/admin-views/event-meta-options.php:116
 msgid "Are you sure you wish to remove this field and its data from all events? Once you click OK this cannot be undone."
@@ -2159,75 +2163,75 @@ msgstr "Type: %s%s"
 msgid "%d %s"
 msgstr "%d %s"
 
-#: src/Tribe/Geo_Loc.php:1015
+#: src/Tribe/Geo_Loc.php:1050
 msgid "Fixed geolocation data for %d venues"
 msgstr "Geolocatiedata voor %d locaties geüpdatet"
 
-#: src/Tribe/Geo_Loc.php:989
+#: src/Tribe/Geo_Loc.php:1024
 msgid "You have venues for which we don't have Geolocation information. <a href='%s'>Click here to generate it</a>."
 msgstr "Je hebt locaties waarvoor géén geolocatie-informatie aanwezig is. <a href='%s'>Klik hier on deze aan te maken</a>."
 
-#: src/Tribe/Geo_Loc.php:945
+#: src/Tribe/Geo_Loc.php:980
 msgid "Fix venues data"
 msgstr "Update locatiedata"
 
-#: src/Tribe/Geo_Loc.php:301
+#: src/Tribe/Geo_Loc.php:336
 msgid "Longitude"
 msgstr "breedtegraad ( long )"
 
-#: src/Tribe/Geo_Loc.php:300
+#: src/Tribe/Geo_Loc.php:335
 msgid "Latitude"
 msgstr "Breedtegraad ( lat )"
 
-#: src/Tribe/Geo_Loc.php:296
+#: src/Tribe/Geo_Loc.php:331
 msgid "Use latitude + longitude"
 msgstr "Gebruik breedtegraad + lengtegraad"
 
-#: src/Tribe/Geo_Loc.php:271
+#: src/Tribe/Geo_Loc.php:306
 msgid "Location"
 msgstr "Locatie"
 
-#: src/Tribe/Geo_Loc.php:270
+#: src/Tribe/Geo_Loc.php:305
 msgid "Near"
 msgstr "Dichtbij"
 
-#: src/Tribe/Geo_Loc.php:236
+#: src/Tribe/Geo_Loc.php:239
 msgid "Map"
 msgstr "Kaart"
 
-#: src/Tribe/Geo_Loc.php:181
+#: src/Tribe/Geo_Loc.php:184
 msgid "Removes location search field from the events bar on all views except for map view."
 msgstr "Verwijdert het locatiezoekveld uit de evenementenbalk bij alle weergaven behalve de kaartweergave."
 
-#: src/Tribe/Geo_Loc.php:180
+#: src/Tribe/Geo_Loc.php:183
 msgid "Hide location search"
 msgstr "Verberg zoeken op locatie"
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "You have %d venues for which we don't have geolocation data. We need to use the Google Maps API to get that information. Doing this may take a while (approximately 1 minute for every 200 venues)."
 msgstr "Je hebt %d locaties waarvoor géén geolocatie-informatie aanwezig is. We gebruiken de Google Maps API om deze informatie te vinden. Dit kan een tijdje duren (ongeveer 1 minuut per 200 locaties)."
 
-#: src/Tribe/Geo_Loc.php:171
+#: src/Tribe/Geo_Loc.php:174
 msgid "Fix geolocation data"
 msgstr "Geolocatiedata updaten"
 
-#: src/Tribe/Geo_Loc.php:165 src/Tribe/Geo_Loc_Filter.php:26
+#: src/Tribe/Geo_Loc.php:168 src/Tribe/Geo_Loc_Filter.php:26
 msgid "Kilometers"
 msgstr "Kilometers"
 
-#: src/Tribe/Geo_Loc.php:164 src/Tribe/Geo_Loc_Filter.php:23
+#: src/Tribe/Geo_Loc.php:167 src/Tribe/Geo_Loc_Filter.php:23
 msgid "Miles"
 msgstr "Miles"
 
-#: src/Tribe/Geo_Loc.php:151
+#: src/Tribe/Geo_Loc.php:154
 msgid "Set the distance that the location search covers (find events within X distance units of location search input)."
 msgstr "Geef de maximale afstand voor de zoekopdracht op locatie (vind evenementen binnen X afstandeenheden van de locatieinvoer)."
 
-#: src/Tribe/Geo_Loc.php:149
+#: src/Tribe/Geo_Loc.php:152
 msgid "Map view search distance limit"
 msgstr "Bovengrens voor zoekafstand in kaartweergave"
 
-#: src/Tribe/Geo_Loc.php:111
+#: src/Tribe/Geo_Loc.php:114
 msgid "Distance"
 msgstr "Afstand"
 
