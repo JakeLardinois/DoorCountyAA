@@ -105,7 +105,7 @@ class Tribe__Events__iCal {
 			$view = $wp_query->query_vars['eventDisplay'];
 		}
 
-		$text = apply_filters( 'tribe_events_ical_export_text', esc_html__( 'Export Events', 'the-events-calendar' ) );
+		$text = apply_filters( 'tribe_events_ical_export_text', esc_html__( 'Export Meetings', 'the-events-calendar' ) );
 		$title = esc_html__( 'Use this to share calendar data with Google Calendar, Apple iCal and other compatible apps', 'the-events-calendar' );
 		$ical  = '<a class="tribe-events-ical tribe-events-button" title="' . $title . '" href="' . esc_url( tribe_get_ical_link() ) . '">+ ' . $text . '</a>';
 
