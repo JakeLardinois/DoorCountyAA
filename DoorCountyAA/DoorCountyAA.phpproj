@@ -1399,6 +1399,8 @@
     <Compile Include="wp-content\themes\DoorCountyAA\tag.php" />
     <Compile Include="wp-content\themes\DoorCountyAA\template-demo.php" />
     <Compile Include="wp-content\themes\DoorCountyAA\tribe-events\modules\bar.php" />
+    <Compile Include="wp-content\themes\DoorCountyAA\tribe-events\month\single-day.php" />
+    <Compile Include="wp-content\themes\DoorCountyAA\tribe-events\pro\widgets\this-week\loop-grid-day.php" />
     <Compile Include="wp-content\themes\twentyfifteen\css\editor-style.css" />
     <Compile Include="wp-content\themes\twentyfifteen\css\ie.css" />
     <Compile Include="wp-content\themes\twentyfifteen\css\ie7.css" />
@@ -2613,7 +2615,10 @@
     <Folder Include="wp-content\themes\DoorCountyAA\languages\" />
     <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\" />
     <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\modules\" />
+    <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\month\" />
     <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\pro\" />
+    <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\pro\widgets\" />
+    <Folder Include="wp-content\themes\DoorCountyAA\tribe-events\pro\widgets\this-week\" />
     <Folder Include="wp-content\themes\twentyfifteen\css" />
     <Folder Include="wp-content\themes\twentyfifteen\genericons" />
     <Folder Include="wp-content\themes\twentyfifteen\inc" />
