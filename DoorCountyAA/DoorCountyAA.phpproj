@@ -2737,6 +2737,7 @@
     <Folder Include="wp-includes" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DeveloperReadMe.txt" />
     <Content Include="wp-content\plugins\events-calendar-pro\lang\tribe-events-calendar-pro-af.mo" />
     <Content Include="wp-content\plugins\events-calendar-pro\lang\tribe-events-calendar-pro-af.po" />
     <Content Include="wp-content\plugins\events-calendar-pro\lang\tribe-events-calendar-pro-bg_BG.mo" />
