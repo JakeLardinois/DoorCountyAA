@@ -1,302 +1,179 @@
-#eum-dashboard-app {
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+  color: gray; }
+
+.advanced-premium {
+  max-width: 800px; }
+
+.eum-dashboard-app {
   width: 99%;
   margin: 30px auto 0; }
-  #eum-dashboard-app:after {
+  .eum-dashboard-app:after {
     display: inline-block;
     width: 100%;
     content: '';
     clear: both; }
 
-#eum-dashboard-wrappers {
-  clear: both;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-  justify-content: space-between;
-  -webkit-flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
-
-/* CSS hack for uneven items */
-#eum-dashboard-wrappers:after {
-  content: ' ';
-  display: block;
-  width: 100%;
-  max-width: 32%; }
-
-.dashboard-main-wrapper {
-  width: 100%;
-  max-width: 32%;
-  display: inline-block;
-  text-align: left;
-  vertical-align: top;
-  margin-bottom: 30px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-#dashboard-main-columns {
-  margin-bottom: 30px; }
-
-#dashboard-main-columns .dashboard-main-wrapper:last-child {
-  padding: 0; }
-
-.dashboard-item-wrapper {
-  background: #e4e4e4;
-  /* Old browsers */
-  border-radius: 0px 0px 10px 10px;
-  -moz-border-radius: 0px 0px 10px 10px;
-  -webkit-border-radius: 0px 0px 10px 10px;
-  border: 0px solid #eb3835;
-  overflow: hidden;
-  color: #000;
-  font-weight: 700; }
-
-.dashboard-main-header {
-  background: #111014;
-  border-radius: 10px 10px 0px 0px;
-  -moz-border-radius: 10px 10px 0px 0px;
-  -webkit-border-radius: 10px 10px 0px 0px;
-  border: 1px solid #e4e4e4;
-  padding: 15px 10px;
-  color: #fafafa;
-  font-size: 14px;
-  font-weight: 400; }
-
-.dashboard-item-choice input {
-  max-height: 0;
-  max-width: 0;
-  opacity: 0;
-  visibility: 0; }
-  .dashboard-item-choice input:disabled {
-    opacity: 0;
-    visibility: 0; }
-
-.dashboard-item-choice input + label {
-  display: block;
+.toggle-wrapper {
   position: relative;
-  text-indent: -5000px;
-  height: 19px;
-  width: 37px;
-  border-radius: 15px;
-  float: right; }
-  .dashboard-item-choice input + label:before {
-    content: "";
-    position: absolute;
-    display: block;
-    height: 20px;
-    width: 40px;
-    top: 0;
-    left: 0;
-    border-radius: 15px;
-    background: rgba(19, 191, 17, 0);
-    box-shadow: inset 0 0 0px 1px #e33524;
-    -moz-transition: .25s ease-in-out;
-    -webkit-transition: .25s ease-in-out;
-    transition: .25s ease-in-out; }
-  .dashboard-item-choice input + label:after {
-    content: "";
-    position: absolute;
-    display: block;
-    height: 12px;
-    width: 12px;
-    top: 4px;
-    left: 5px;
-    border-radius: 15px;
-    background: #e33524;
-    -moz-transition: .25s ease-in-out;
-    -webkit-transition: .25s ease-in-out;
-    transition: .25s ease-in-out; }
+  display: inline-block;
+  margin-right: 10px; }
+  @media only screen and (max-width: 600px) {
+    .toggle-wrapper {
+      display: block;
+      margin-right: 0; } }
 
-.dashboard-item-choice .mpsum-spinner {
-  float: right; }
-
-.dashboard-main-wrapper input:checked:before {
+/* Let's give some toggle switches some love */
+/* From https://codepen.io/koenigsegg1/pen/QjZNVP */
+.eum-hidden {
   display: none; }
 
-.dashboard-main-wrapper input:checked + label:before {
-  width: 40px;
-  background: rgba(208, 208, 208, 0.3);
-  box-shadow: inset 0 0 0px 1px #0daf88; }
-
-.dashboard-main-wrapper input:checked + label:after {
-  left: 23px;
-  background: #25af76; }
-
-.dashboard-main-wrapper input:disabled + label:after {
-  background: gray; }
-
-#dashboard-main-outputs .dashboard-hide {
+input[type=checkbox].eum-hidden {
   display: none; }
+  input[type=checkbox].eum-hidden:checked ~ .toggle {
+    background: #009688;
+    left: 20.8px;
+    transition: .5s; }
+  input[type=checkbox].eum-hidden:checked ~ .switch {
+    background: #6DBEB7;
+    transition: .5s; }
 
-.dashboard-item-header {
-  clear: both;
-  float: left;
-  width: 60%;
-  font-weight: 100; }
-
-.dashboard-item {
-  cursor: pointer;
-  clear: both;
-  border-bottom: 1px solid #d2d2d2;
-  padding: 18px 15px;
-  overflow: hidden;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-  .dashboard-item:first-child {
-    border-top: none; }
-  .dashboard-item:hover {
-    background: #ececec;
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease; }
-
-.dashboard-item-header {
-  color: #888;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-
-.dashboard-item.active .dashboard-item-header {
-  color: #000;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-
-.dashboard-item.active .dashboard-item-header.input-radio {
+.toggle-wrapper label {
+  margin-left: 50px;
   font-weight: 700; }
 
-.dashboard-item-header.input-radio {
-  color: #555;
-  font-weight: 400; }
+.eum-toggle-button {
+  font-size: 13px !important; }
 
-.dashboard-tab-item {
-  background: #FFF;
-  width: 50%;
-  float: left;
-  text-align: center;
-  overflow: hidden;
-  color: #ddd; }
+.eum-input-label {
+  font-weight: 700; }
 
-.dashboard-tab-item a,
-.dashboard-tab-item a:link,
-.dashboard-tab-item a:active,
-.dashboard-tab-item a:visited {
+.switch {
   display: block;
-  width: 100%;
-  background: #FFF;
-  color: #aaa;
-  text-decoration: none;
-  padding: 15px 0;
-  text-transform: uppercase; }
+  width: 40px;
+  height: 16px;
+  background: #939393;
+  border-radius: 8px;
+  position: absolute;
+  top: 3px;
+  transition: .5s; }
 
-.dashboard-tab-item.active a {
-  font-weight: 800;
-  color: #000;
-  border-bottom: 2px solid #1990f8; }
+.toggle {
+  height: 22.4px;
+  width: 22.4px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0.8px 1.6px rgba(0, 0, 0, 0.4);
+  transition: .5s; }
 
-.dashboard-tab-content.active {
-  display: block; }
-
-.dashboard-tab-content {
-  display: none; }
-
-.dashboard-tab {
-  overflow: hidden;
-  border: 1px solid #e4e4e4;
-  border-top: none; }
-
-.dashboard-item-wrapper {
-  max-height: 700px;
-  overflow: auto;
-  padding-bottom: 20px; }
-
-.dashboard-item-wrapper p {
-  padding: 15px;
-  padding-bottom: 0;
-  margin-bottom: 0; }
-
-/*
-.dashboard-main-wrapper:nth-child( odd ) {
-  clear: left;
-}
-*/
 .multi-choice {
   clear: both;
   margin-top: 20px; }
 
-label {
-  font-weight: 100 !important; }
+.eum-section {
+  position: relative;
+  border-bottom: 1px solid #eaeaea;
+  padding: 20px; }
+  .eum-section .mpsum-spinner {
+    display: inline-block;
+    margin-right: 20px; }
+  .eum-section.eum-disabled:after {
+    position: absolute;
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #c9c9c9;
+    opacity: 0.3;
+    z-index: 1000;
+    cursor: not-allowed;
+    top: 0;
+    left: 0; }
 
-.multi-choice-item input[type=radio] {
+.eum-section-group {
+  padding: 0; }
+  @media only screen and (min-width: 783px) {
+    .eum-section-group {
+      margin-left: 180px; } }
+  .eum-section-group .eum-section h3 {
+    margin-top: 0; }
+  .eum-section-group .eum-section:last-child {
+    border-bottom: none; }
+
+@media only screen and (min-width: 783px) {
+  h2.eum-section-group-title {
+    float: left;
+    width: 170px; } }
+
+.eum-section input[type=radio] {
   -webkit-appearance: none;
   /* remove default */
-  margin: 10px;
+  margin: 0 10px;
   width: 15px;
   height: 16px;
   border-radius: 12px;
   cursor: pointer;
   vertical-align: middle;
   outline: none;
-  border: 1px solid #e33524;
-  background-color: #dddddd;
+  border: 1px solid #dddddd;
+  background-color: #ffffff;
   -webkit-transition: background-position 0.15s cubic-bezier(0.8, 0, 1, 1), -webkit-transform 0.25s cubic-bezier(0.8, 0, 1, 1); }
 
-.multi-choice-item input[type=checkbox]:checked:before,
-.multi-choice-item input[type=radio]:checked:before {
-  background-color: #0daf88 !important; }
+.eum-section input[type=radio]:checked:before {
+  display: none; }
 
-.multi-choice-item input[type=checkbox]:checked,
-.multi-choice-item input[type="radio"]:checked {
+.eum-section input[type="radio"]:checked {
   -webkit-transition: background-position 0.2s 0.15s cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.25s cubic-bezier(0, 0, 0.2, 1);
   background: #25af76;
-  border: 1px solid #0daf88; }
+  border: 1px solid #999; }
 
-.multi-choice-item input[type="radio"]:checked:disabled {
+.eum-section input[type="radio"]:checked:disabled {
   background: grey; }
 
-.multi-choice-item input[type=radio]:active {
-  -webkit-transform: scale(1.5);
-  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0, 0, 0.2, 1);
-  background: #25af76; }
+input[type=email].eum-input-email {
+  background: #FFF;
+  box-shadow: none;
+  font-size: 14px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  min-width: 500px; }
+  @media only screen and (max-width: 510px) {
+    input[type=email].eum-input-email {
+      min-width: 100%; } }
 
-.multi-choice-item input[type="radio"]:active:disabled {
-  background: inherit; }
-
-/* The up/down direction logic */
-#dashboard-main-outputs input,
-#dashboard-main-outputs input:active {
-  background-position: 0 24px; }
-
-#dashboard-main-outputs input:checked {
-  background-position: 0 0; }
-
-#dashboard-main-outputs input:checked ~ input,
-#dashboard-main-outputs input:checked ~ input:active {
-  background-position: 0 -24px; }
+.wp-core-ui button.eum-save {
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 .button.delete {
   background-color: #e14d43;
   color: #FFF; }
 
 .mpsum-error,
-.mpsum-notice {
+.mpsum-notice,
+.mpsum-success {
   background: #fff;
   border-left: 4px solid #dc3232;
   -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
@@ -306,14 +183,116 @@ label {
   margin: 5px 0 15px;
   color: #ff0000; }
 
+.mpsum-error.mpsum-bold,
+.mpsum-notice.mpsum-bold,
+.mpsum-success.mpsum-bold {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em;
+  font-weight: 700; }
+
+.mpsum-error.mpsum-regular,
+.mpsum-notice.mpsum-regular,
+.mpsum-success.mpsum-regular {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 1em; }
+
+.mpsum-success {
+  border-left-color: #55ac7b;
+  color: #000; }
+
 .mpsum-notice {
   border-left-color: #00a0d2;
   color: #000; }
 
-.mpsum-error p,
-.mpsum-notice p {
-  margin: 0.5em 0;
-  padding: 2px; }
+.mpsum-clear {
+  clear: both; }
+
+.mpsum-small {
+  font-size: 1.0em;
+  line-height: 1.1; }
+
+.mpsum-medium {
+  font-size: 1.3em;
+  line-height: 1.3; }
+
+.mpsum-large {
+  font-size: 1.8em;
+  line-height: 1.4; }
+
+.mpsum-caption {
+  text-align: center;
+  font-weight: 700; }
+
+.mpsum-advanced-premium-features {
+  background: #FFF;
+  border: 1px solid #aeaeae;
+  position: relative;
+  color: #24282d;
+  box-shadow: 0px 3px 11px rgba(0, 0, 0, 0.1);
+  padding: 20px; }
+  .mpsum-advanced-premium-features h3 {
+    text-align: center; }
+
+.premium-only-desc {
+  padding: 1.4em;
+  border: 1px solid #DEDEDE;
+  border-radius: 4px;
+  margin-top: 2em;
+  background: #f7f7f7; }
+
+.premium-only-desc h4 {
+  margin-top: .4em; }
+
+.eum-advanced-menu-premium-only {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  background: #dcdcdc;
+  padding: 4px 6px;
+  line-height: 1;
+  border-radius: 3px; }
+
+.mpsum-advanced-premium-list {
+  list-style-type: none;
+  margin-left: 0; }
+  .mpsum-advanced-premium-list:before {
+    display: none; }
+  .mpsum-advanced-premium-list:after {
+    display: none; }
+  .mpsum-advanced-premium-list li {
+    clear: left;
+    float: none;
+    font-size: 1.3em;
+    line-height: 1.3;
+    padding: 10px;
+    margin-bottom: 10px; }
+    .mpsum-advanced-premium-list li:after {
+      content: "";
+      display: table;
+      clear: both; }
+    .mpsum-advanced-premium-list li strong {
+      clear: left;
+      float: left;
+      display: block;
+      min-width: 25%; }
+      @media only screen and (max-width: 700px) {
+        .mpsum-advanced-premium-list li strong {
+          float: none;
+          min-width: 100%; } }
+    .mpsum-advanced-premium-list li .mpsum-list-description {
+      display: block;
+      float: left;
+      width: 75%; }
+      @media only screen and (max-width: 700px) {
+        .mpsum-advanced-premium-list li .mpsum-list-description {
+          float: none;
+          width: 100%; } }
 
 .eum-ratings-nag li {
   display: inline-block;
@@ -322,38 +301,394 @@ label {
 .eum-ratings-nag a {
   display: inline-block; }
 
-@media only screen and (max-width: 1200px) {
-  #eum-dashboard-app {
-    width: 100%; } }
+.toggle-wrapper button,
+.toggle-wrapper a {
+  padding: 5px 10px;
+  display: inline-block;
+  background: #f8f8f8;
+  border-right: 0;
+  border-color: #CCC;
+  box-shadow: 0 1px 0 #CCC;
+  font-size: 1.2em;
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  align-items: flex-start;
+  text-align: center;
+  text-rendering: auto;
+  color: initial;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+  margin: 0em;
+  -webkit-appearance: button;
+  appearance: button; }
+  .toggle-wrapper button:first-child, .toggle-wrapper button:first-of-type,
+  .toggle-wrapper a:first-child,
+  .toggle-wrapper a:first-of-type {
+    border-radius: 5px 0px 0px 5px; }
+  .toggle-wrapper button:last-child,
+  .toggle-wrapper a:last-child {
+    border-radius: 0px 5px 5px 0px;
+    border-right: 1px solid #CCC; }
+  .toggle-wrapper button:not(:last-child),
+  .toggle-wrapper a:not(:last-child) {
+    border-right: none; }
+  .toggle-wrapper button.eum-active,
+  .toggle-wrapper a.eum-active {
+    background: #25af76;
+    border-color: #1a8a59;
+    box-shadow: 0 1px 0 #1a8a59;
+    color: #FFF;
+    -webkit-appearance: inherit;
+    appearance: inherit; }
+    .toggle-wrapper button.eum-active.eum-disabled,
+    .toggle-wrapper a.eum-active.eum-disabled {
+      background: #dc3332;
+      border-color: #ab2d2d;
+      box-shadow: 0 1px 0 #ab2d2d; }
+  @media only screen and (max-width: 600px) {
+    .eum-section .toggle-wrapper button, .eum-section
+    .toggle-wrapper a {
+      display: block;
+      width: 100%;
+      border-radius: 0 0 0 0;
+      border: 1px solid #CCC;
+      font-size: 1.2em;
+      padding: 12px 15px; }
+      .eum-section .toggle-wrapper button:not(:last-child), .eum-section
+      .toggle-wrapper a:not(:last-child) {
+        border: 1px solid #CCC;
+        border-bottom: none; }
+      .eum-section .toggle-wrapper button.eum-active, .eum-section
+      .toggle-wrapper a.eum-active {
+        border-color: #1a8a59; }
+      .eum-section .toggle-wrapper button:first-child, .eum-section .toggle-wrapper button:first-of-type, .eum-section
+      .toggle-wrapper a:first-child, .eum-section
+      .toggle-wrapper a:first-of-type {
+        border-radius: 5px 5px 0 0; }
+      .eum-section .toggle-wrapper button:last-child, .eum-section
+      .toggle-wrapper a:last-child {
+        border-radius: 0 0 5px 5px; } }
 
-@media only screen and (max-width: 1000px) {
-  #eum-dashboard-app .dashboard-main-wrapper {
-    width: 48.5%;
-    max-width: 48.5%;
-    padding: 0; }
-  .dashboard-item-wrapper {
-    min-height: auto;
-    max-height: 700px;
-    overflow: auto; } }
-
-@media only screen and (max-width: 782px) {
-  #eum-dashboard-app .dashboard-main-wrapper {
-    width: 98.5%;
-    max-width: 98.5%; }
-  #eum-dashboard-app {
-    margin-top: 20px; }
-  #eum-dashboard-app input[type=radio]:checked:before {
-    margin: 0 !important; } }
+@media only screen and (max-width: 600px) {
+  .toggle-wrapper[class*="toggle-wrapper-"] button, .toggle-wrapper[class*="toggle-wrapper-"] a {
+    font-size: 1.2em !important;
+    padding: 12px 15px; } }
 
 .eum-button {
-  padding: 20 10px;
+  padding: 20px 10px;
   display: block;
   width: 90%;
   margin: 0 auto;
   margin-top: 20px !important; }
 
-.swal2-confirm {
+.eum-button-cta {
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  font-size: 1.3em;
+  text-align: center; }
+  .eum-button-cta a {
+    position: relative;
+    display: inline-block;
+    border-radius: 4px;
+    background: #d06e38;
+    border-color: rgba(223, 105, 38, 0.95);
+    background-color: rgba(223, 105, 38, 0.95);
+    text-decoration: none;
+    padding: 16px;
+    width: 320px;
+    border: 2px solid;
+    color: #FFFFFF;
+    font-weight: 500; }
+    .eum-button-cta a:hover {
+      background: #df6926 !important;
+      border-color: #df6926 !important; }
+      .eum-button-cta a:hover:after {
+        opacity: 1;
+        right: 10px; }
+    .eum-button-cta a:after {
+      content: '>';
+      display: inline-block;
+      position: absolute;
+      opacity: 0;
+      top: 14px;
+      right: -20px;
+      transition: 0.5s; }
+    .eum-button-cta a:hover, .eum-button-cta a:visited, .eum-button-cta a:focus {
+      color: #FFFFFF; }
+    @media only screen and (max-width: 500px) {
+      .eum-button-cta a {
+        width: 90%; } }
+
+.eum-status {
+  font-style: italic;
+  display: inline-block;
+  color: #9c9c9c; }
+
+.eum-sub-section {
+  margin-top: 20px;
+  background: #F5F5F5;
+  border-radius: 5px; }
+  .eum-sub-section > div {
+    padding: 15px; }
+    .eum-sub-section > div:not(:last-child) {
+      border-bottom: 1px solid #DDD; }
+
+/* These styles are for the plugins/themes screen for versions less than WordPress 4.9 */
+.plugins .plugin-title .dashicons,
+.plugins .plugin-title img {
+  float: left;
+  padding: 3px 10px 0 0;
+  width: 64px;
+  height: 64px; }
+
+.plugins .plugin-title .dashicons:before {
+  padding: 2px;
+  background-color: #eee;
+  box-shadow: inset 0 0 10px rgba(160, 165, 170, 0.15);
+  font-size: 60px;
+  color: #B4B9BE; }
+
+.updates-table-screenshot {
+  float: left;
+  padding: 0 10px 5px 0;
+  width: 85px;
+  height: 64px; }
+
+.theme-title strong {
+  display: block; }
+
+.eum-plugins-name-actions {
+  margin-left: 75px; }
+
+.eum-themes-name-actions {
+  margin-left: 100px; }
+
+.eum-plugins-name-actions h3,
+.eum-themes-name-actions h3 {
+  margin: 0; }
+
+.eum-plugins-name-actions h4,
+.eum-themes-name-actions h4 {
+  margin: 15px 0 5px; }
+
+body .plugins .active td,
+body .plugins .active th {
+  background: #FFF; }
+
+body .plugins .active th.check-column {
+  border-left: 4px solid #25af76; }
+
+body .plugins .inactive th.check-column {
+  border-left: 4px solid #d44e1c; }
+
+#footer-thankyou img {
+  max-width: 100px; }
+
+#eum-save-settings {
+  padding: 20px 10px;
+  font-size: 24px;
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+  height: auto;
+  line-height: 13px; }
+
+#eum-save-settings-warning {
+  position: fixed;
+  right: 10px;
+  bottom: 30px;
+  width: auto;
+  display: none;
+  z-index: 2; }
+
+.warning {
+  color: #333;
+  padding: 5px;
+  border: 1px solid #F00;
+  background-color: #f0a5a4;
+  border-radius: 5px;
+  margin: 15px 0; }
+  .warning p {
+    margin: 0; }
+
+#result {
+  margin-top: 20px; }
+  #result:empty {
+    display: none; }
+  #result .updated p {
+    font-weight: bold; }
+
+#logs-filter {
+  clear: left; }
+
+#eum-adv-settings-container {
+  display: flex;
+  padding-top: 20px; }
+
+#eum-adv-settings-menu > div {
+  width: 280px;
+  font-size: .9rem; }
+  @media screen and (min-width: 767px) {
+    #eum-adv-settings-menu > div {
+      border-right: 1px solid #aeaeae; } }
+  #eum-adv-settings-menu > div > div {
+    padding: 5px 0 5px 10px;
+    cursor: pointer;
+    color: #797979;
+    position: relative; }
+    @media screen and (max-width: 768px) {
+      #eum-adv-settings-menu > div > div {
+        position: relative; }
+        #eum-adv-settings-menu > div > div:not(.active-menu):not(.eum-advanced-settings-container)::before {
+          content: '';
+          display: block;
+          width: 10px;
+          height: 10px;
+          position: absolute;
+          top: calc(50% - 2px);
+          right: 15px;
+          border-right: 1px solid #CCC;
+          border-bottom: 1px solid #CCC;
+          transform: translateY(-50%) rotate(45deg); }
+        #eum-adv-settings-menu > div > div.active-menu .eum-advanced-menu-text {
+          font-weight: 700; }
+        #eum-adv-settings-menu > div > div .eum-advanced-menu-text {
+          font-size: 22px; } }
+    #eum-adv-settings-menu > div > div .material-icons {
+      font-size: 16px;
+      color: #CECECE;
+      margin-right: 5px;
+      line-height: 20px;
+      vertical-align: bottom; }
+      @media screen and (max-width: 768px) {
+        #eum-adv-settings-menu > div > div .material-icons {
+          font-size: 22px; } }
+    #eum-adv-settings-menu > div > div .eum-advanced-menu-premium-only {
+      position: absolute;
+      display: block;
+      right: 6px;
+      top: 6px;
+      box-shadow: -20px 0 15px rgba(241, 241, 241, 0.73); }
+      @media screen and (max-width: 768px) {
+        #eum-adv-settings-menu > div > div .eum-advanced-menu-premium-only {
+          top: 11px; } }
+    #eum-adv-settings-menu > div > div.premium-only {
+      color: #b3b3b3; }
+  #eum-adv-settings-menu > div .anonymize-updates label {
+    display: block;
+    margin: 10px 0; }
+  #eum-adv-settings-menu > div .active-menu {
+    border: 1px solid #aeaeae;
+    position: relative;
+    color: #24282d;
+    box-shadow: 0px 3px 11px rgba(0, 0, 0, 0.1); }
+    @media screen and (min-width: 767px) {
+      #eum-adv-settings-menu > div .active-menu {
+        background: #f1f1f1;
+        border-right: 1px solid #f1f1f1;
+        box-shadow: -2px 1px 2px rgba(0, 0, 0, 0.11);
+        left: 1px; } }
+    #eum-adv-settings-menu > div .active-menu .material-icons {
+      color: #dd600e; }
+  @media screen and (max-width: 768px) {
+    #eum-adv-settings-menu > div {
+      float: none;
+      width: 100%; } }
+
+#eum-adv-settings {
+  flex: 1;
+  padding-left: 20px; }
+  #eum-adv-settings p {
+    margin: .8em 0;
+    line-height: 1.2; }
+  #eum-adv-settings .anonymize-updates label {
+    display: block;
+    margin: 10px 0; }
+
+.eum-advanced-settings-container {
   display: none; }
 
-.swal2-cancel {
-  display: none !important; }
+input#eum-webhook-url {
+  width: 50%; }
+
+@media screen and (max-width: 768px) {
+  #eum-adv-settings-container {
+    flex-direction: column; }
+  #eum-adv-settings-menu {
+    width: 100%;
+    border: 0; }
+    #eum-adv-settings-menu > li {
+      float: left;
+      margin-right: 15px; }
+      #eum-adv-settings-menu > li.active-menu {
+        border: 0;
+        background: transparent;
+        font-weight: bold;
+        box-shadow: none; }
+  #eum-adv-settings {
+    float: none;
+    width: 100%; } }
+
+@keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+.eum-advanced-settings-container {
+  display: none;
+  opacity: 0; }
+
+.eum-advanced-settings-container.active {
+  animation: fadein 1s;
+  opacity: 1; }
+
+@media screen and (max-width: 768px) {
+  #eum-adv-settings-menu > div {
+    width: 100%;
+    margin: 0;
+    padding: 0; }
+    #eum-adv-settings-menu > div > div {
+      display: block;
+      width: 100%;
+      padding: 10px 5px 10px 10px;
+      background: #FFF;
+      margin: 2px 0;
+      box-sizing: border-box; }
+      #eum-adv-settings-menu > div > div.eum-advanced-settings-container {
+        padding: 20px;
+        background: #FAFAFA;
+        border: 1px solid #CCC;
+        position: relative;
+        margin-top: -3px; }
+        #eum-adv-settings-menu > div > div.eum-advanced-settings-container::before {
+          content: ' ';
+          display: block;
+          position: absolute;
+          top: -1px;
+          right: 13px;
+          width: 10px;
+          height: 10px;
+          background: #FFF;
+          border-bottom: 1px solid #CCC;
+          border-right: 1px solid #CCC;
+          transform: translateY(-5px) rotate(45deg); }
+        #eum-adv-settings-menu > div > div.eum-advanced-settings-container > *:first-child {
+          margin-top: 0; } }
+
+@keyframes eum_rotate {
+  from {
+    opacity: 1;
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.eum_saving_popup img {
+  animation: eum_rotate 2s linear infinite; }

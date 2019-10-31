@@ -1,192 +1,192 @@
 <?php
+if (!defined('ABSPATH')) die('No direct access.');
 /**
  * Easy Updates Manager admin controller.
- *
  * Initializes the admin panel options and load the admin dependencies
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since 5.0.0
  */
 class MPSUM_Admin {
-	
+
 	/**
-	* Holds the class instance.
-	*
-	* @since 5.0.0
-	* @access static
-	* @var MPSUM_Admin $instance
-	*/
+	 * Holds the class instance.
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 * @var MPSUM_Admin $instance
+	 */
 	private static $instance = null;
-	
+
 	/**
-	* Holds the URL to the admin panel page
-	*
-	* @since 5.0.0
-	* @access static
-	* @var string $url
-	*/
+	 * Holds the URL to the admin panel page
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 * @var string $url
+	 */
 	private static $url = '';
-	
+
 	/**
-	* Holds the slug to the admin panel page
-	*
-	* @since 5.0.0
-	* @access static
-	* @var string $slug
-	*/
+	 * Holds the slug to the admin panel page
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 * @var string $slug
+	 */
 	private static $slug = 'mpsum-update-options';
-	
+
 	/**
-	* Set a class instance.
-	*
-	* Set a class instance.
-	*
-	* @since 5.0.0 
-	* @access static
-	*
-	*/
+	 * Set a class instance.
+	 *
+	 * Set a class instance.
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 */
 	public static function run() {
-		if ( null == self::$instance ) {
+		if (null == self::$instance) {
 			self::$instance = new self;
 		}
 		return self::$instance;
-	} //end get_instance	
-	
+	} //end get_instance
+
 	/**
-	* Class constructor.
-	*
-	* Initialize the class
-	*
-	* @since 5.0.0
-	* @access private
-	*
-	*/
+	 * Class constructor.
+	 *
+	 * Initialize the class
+	 *
+	 * @since 5.0.0
+	 * @access private
+	 */
 	private function __construct() {
-		add_action( 'init', array( $this, 'init' ), 9 );
-		add_filter( 'set-screen-option', array( $this, 'add_screen_option_save' ), 10, 3 );
+		add_action('init', array( $this, 'init' ), 9);
+		add_filter('set-screen-option', array( $this, 'add_screen_option_save' ), 10, 3);
+		add_filter('admin_footer_text', array( $this, 'ratings_nag' ));
 	} //end constructor
-	
+
 	/**
-	* Save the screen options.
-	*
-	* Save the screen options.
-	*
-	* @since 6.2.0 
-	* @access static
-	*
-	* @return string URL to the admin panel page.
-	*/
+	 * Save the screen options.
+	 *
+	 * @since 6.2.0
+	 * @param string $status Screen option status
+	 * @param string $option Screen option
+	 * @param string $value  Screen value
+	 * @return string Returns value if succeeds, otherwise status
+	 */
 	public function add_screen_option_save( $status, $option, $value ) {
-		return MPSUM_Admin_Screen_Options::save_options( $status, $option, $value );
+		return MPSUM_Admin_Screen_Options::save_options($status, $option, $value);
 	}
-	
+
 	/**
-	* Return the URL to the admin panel page.
-	*
-	* Return the URL to the admin panel page.
-	*
-	* @since 5.0.0 
-	* @access static
-	*
-	* @return string URL to the admin panel page.
-	*/
+	 * Return the URL to the admin panel page.
+	 *
+	 * Return the URL to the admin panel page.
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 *
+	 * @return string URL to the admin panel page.
+	 */
 	public static function get_url() {
 		$url = self::$url;
-		if ( empty( $url ) ) {
-			if ( is_multisite() ) {
-				$url = add_query_arg( array( 'page' => self::get_slug() ), network_admin_url( 'index.php' ) );	
+		if (empty($url)) {
+			if (is_multisite()) {
+				$url = add_query_arg(array( 'page' => self::get_slug() ), network_admin_url('index.php'));
 			} else {
-				$url = add_query_arg( array( 'page' => self::get_slug() ), admin_url( 'index.php' ) );
+				$url = add_query_arg(array( 'page' => self::get_slug() ), admin_url('index.php'));
 			}
 			self::$url = $url;
 		}
 		return $url;
 	}
-	
+
 	/**
-	* Return the slug for the admin panel page.
-	*
-	* Return the slug for the admin panel page.
-	*
-	* @since 5.0.0 
-	* @access static
-	*
-	* @return string slug to the admin panel page.
-	*/
+	 * Return the slug for the admin panel page.
+	 *
+	 * Return the slug for the admin panel page.
+	 *
+	 * @since 5.0.0
+	 * @access static
+	 *
+	 * @return string slug to the admin panel page.
+	 */
 	public static function get_slug() {
 		return self::$slug;
 	}
-	
+
 	/**
-	* Initialize the admin menu.
-	*
-	* Initialize the admin menu.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see __construct
-	* @internal Uses init action
-	*
-	*/
+	 * Initialize the admin menu.
+	 *
+	 * Initialize the admin menu.
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see __construct
+	 * @internal Uses init action
+	 */
 	public function init() {
-		
-		//Plugin and Theme actions
-		if ( is_multisite() ) {
-			add_action( 'network_admin_menu', array( $this, 'init_network_admin_menus' ) );
+
+		// Plugin and Theme actions
+		if (is_multisite()) {
+			add_action('network_admin_menu', array($this, 'init_network_admin_menus'));
+			add_action('wp_before_admin_bar_render', array($this, 'add_networkadmin_page'));
 		} else {
-			add_action( 'admin_menu', array( $this, 'init_single_site_admin_menus' ) );
+			add_action('admin_menu', array($this, 'init_single_site_admin_menus'));
 		}
-		
-		//Add settings link to plugins screen
+		add_action('admin_bar_menu', array($this, 'add_admin_bar'), 100);
+
+		// Disable information bar in modal popup
+		add_action('admin_head', array($this, 'maybe_disable_plugin_information_bar'));
+
+		// Add settings link to plugins screen
 		$prefix = is_multisite() ? 'network_admin_' : '';
-		add_action( $prefix . 'plugin_action_links_' . MPSUM_Updates_Manager::get_plugin_basename(), array( $this, 'plugin_settings_link' ) );
-		
-		//todo - maybe load these conditionally based on $_REQUEST[ 'tab' ] param
-		$core_options = MPSUM_Updates_Manager::get_options( 'core' );
-		new MPSUM_Admin_Dashboard( self::get_slug() );
-		new MPSUM_Admin_Plugins( self::get_slug() );
-		new MPSUM_Admin_Themes( self::get_slug() );
-		if ( isset( $core_options[ 'logs' ] ) && 'on' == $core_options[ 'logs' ] ) {
-    		new MPSUM_Admin_Logs( self::get_slug() );
+		add_action($prefix . 'plugin_action_links_' . MPSUM_Updates_Manager::get_plugin_basename(), array( $this, 'plugin_settings_link' ));
+
+		// todo - maybe load these conditionally based on $_REQUEST[ 'tab' ] param
+		$core_options = MPSUM_Updates_Manager::get_options('core');
+		new MPSUM_Admin_Dashboard(self::get_slug());
+		new MPSUM_Admin_Plugins(self::get_slug());
+		new MPSUM_Admin_Themes(self::get_slug());
+		new MPSUM_Admin_Logs(self::get_slug());
+		new MPSUM_Admin_Core(self::get_slug());
+		new MPSUM_Admin_Advanced(self::get_slug());
+		if (!Easy_Updates_Manager()->is_premium()) {
+			new MPSUM_Advanced_Premium();
 		}
-		new MPSUM_Admin_Core( self::get_slug() );
-		new MPSUM_Admin_Advanced( self::get_slug() );
-		
+
 		MPSUM_Admin_Screen_Options::maybe_save_dashboard_screen_option();
-		
-	}	
-	
+
+	}
+
 	/**
-	* Initializes the help screen.
-	*
-	* Initializes the help screen.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see init
-	* @internal Uses load_{$hook} action
-	*
-	*/
+	 * Initializes the help screen.
+	 *
+	 * Initializes the help screen.
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see init
+	 * @internal Uses load_{$hook} action
+	 */
 	public function init_help_screen() {
 		new MPSUM_Admin_Help();
 	}
-	
+
 	/**
-	* Initializes the screen options.
-	*
-	* Initializes the screen options.
-	*
-	* @since 6.2
-	* @access public
-	* @see init
-	* @internal Uses load_{$hook} action
-	*
-	*/
+	 * Initializes the screen options.
+	 *
+	 * Initializes the screen options.
+	 *
+	 * @since 6.2
+	 * @access public
+	 * @see init
+	 * @internal Uses load_{$hook} action
+	 */
 	public function init_screen_options() {
 		MPSUM_Admin_Screen_Options::run();
 	}
-	
+
 	/**
 	 * Returns formatted array of EUM options
 	 *
@@ -196,621 +196,99 @@ class MPSUM_Admin {
 	 * @access public
 	 *
 	 * @return array EUM implementation options
-	 *
 	 */
 	private function get_options_for_default() {
 		$options = MPSUM_Updates_Manager::get_options();
-		if ( ! isset( $options[ 'core' ] ) ) {
-			$options[ 'core' ] = MPSUM_Admin_Core::get_defaults();
+		if (! isset($options['core'])) {
+			$options['core'] = MPSUM_Admin_Core::get_defaults();
 		}
-		if ( ! isset( $options[ 'plugins' ] ) ) {
-			$options[ 'plugins' ] = array();	
+		if (! isset($options['plugins'])) {
+			$options['plugins'] = array();
 		}
-		if ( ! isset( $options[ 'themes' ] ) ) {
-			$options[ 'themes' ] = array();	
+		if (! isset($options['themes'])) {
+			$options['themes'] = array();
 		}
-		if ( ! isset( $options[ 'plugins_automatic' ] ) ) {
-			$options[ 'plugins_automatic' ] = array();	
+		if (! isset($options['plugins_automatic'])) {
+			$options['plugins_automatic'] = array();
 		}
-		if ( ! isset( $options[ 'themes_automatic' ] ) ) {
-			$options[ 'themes_automatic' ] = array();	
+		if (! isset($options['themes_automatic'])) {
+			$options['themes_automatic'] = array();
 		}
-		return $options;
-		
-	}
-	
-	/**
-	 * Returns whether a JSON component should be disabled or not.
-	 *
-	 * Returns whether a JSON component should be disabled or not.
-	 *
-	 * @since 6.3
-	 * @access public
-	 *
-	 * @param string $option - Option to check
-	 * @param string $context - Option context
-	 * @return bool True of disabled, false if not
-	 *
-	 */
-	private function get_json_maybe_disabled( $option, $context = 'core' ) {
-		$options = $this->get_options_for_default();
-		if ( 'off' == $options[ 'core' ][ 'all_updates' ] && 'all_updates' != $option ) {
-			// $context disables an entire section
-			switch( $context ) {
-				case 'plugins':
-				case 'themes':
-				case 'plugins_automatic':
-				case 'themes_automatic':
-				case 'core':
-					return true;
-					break;
-			}
-				
-		} elseif ( 'off' == $options[ 'core' ][ 'plugin_updates' ] && 'plugin_updates' !== $option ) {
-			switch( $context ) {
-				case 'plugins':
-				case 'plugins_automatic':
-					return true;
-					break;
-			}
-			switch( $option ) {
-				case 'automatic_plugin_updates':
-					return true;
-					break;
-			}
-		} elseif( 'off' == $options[ 'core' ][ 'core_updates' ] && 'core_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_major_updates':
-				case 'automatic_minor_updates':
-				case 'automatic_development_updates':
-				case 'automatic_plugin_updates':
-				case 'automatic_theme_updates':
-				case 'automatic_translation_updates':
-					return true;
-					break;
-			}
-			switch( $context ) {
-				case 'plugins_automatic':
-				case 'themes_automatic':
-					return true;
-					break;
-			}
-		
-		} elseif ( 'off' == $options[ 'core' ][ 'translation_updates' ] && 'translation_updates' != $option ) {
-					
+		if (!isset($options['logs'])) {
+			$options['logs'] = array();
+		}
+		if (!isset($options['advanced'])) {
+			$options['advanced'] = array();
+		}
 
-			switch( $option ) {
-				case 'automatic_translation_updates':
-					return true;
-					break;
-			}
-		} elseif ( 'off' == $options[ 'core' ][ 'theme_updates' ] && 'theme_updates' != $option ) {
-			switch( $context ) {
-				case 'themes':
-				case 'themes_automatic':
-					return true;
-					break;
-			}
-			switch( $option ) {
-				case 'automatic_theme_updates':
-					return true;
-					break;
-			}
-		}
-		
-		switch( $context ) {
-			case 'plugins_automatic':
-				if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'on' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'off' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'default' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'individual' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-					if ( false !== array_search( $option, $options[ 'plugins' ] ) ) {
-						return true;
-					}
-					return false;
-				}
-				break;
-			case 'themes_automatic':
-				if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'on' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'off' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'default' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-					return true;
-				} else if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'individual' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-					if ( false !== array_search( $option, $options[ 'themes' ] ) ) {
-						return true;
-					}
-					return false;
-				}
-				break;
-		}
-		return false;
+		return $options;
+
 	}
-	
+
 	/**
-	 * Returns whether a JSON component should be enabled or not.
+	 * When more details modal pops up, maybe disable the footer
 	 *
-	 * Returns whether a JSON component should be enabled or not.
-	 *
-	 * @since 6.3
-	 * @access public
-	 *
-	 * @param string $option - Option to check
-	 * @param string $context - Option context
-	 * @return bool True of enabled, false if not
-	 *
+	 * @return void
 	 */
-	private function get_json_maybe_checked( $option, $context = 'core' ) {
-		$options = $this->get_options_for_default();
-		if ( 'off' == $options[ 'core' ][ 'all_updates' ] && 'all_updates' != $option ) {
-			// $context disables an entire section
-			switch( $context ) {
-				case 'plugins':
-				case 'themes':
-				case 'plugins_automatic':
-				case 'themes_automatic':
-				case 'core':
-					return false;
-					break;
-			}	
-		} elseif ( 'off' == $options[ 'core' ][ 'translation_updates' ] && 'translation_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_translation_updates':
-					return false;
-					break;
-			}
-		} elseif( 'off' == $options[ 'core' ][ 'core_updates' ] && 'core_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_major_updates':
-				case 'automatic_minor_updates':
-				case 'automatic_development_updates':
-				case 'automatic_plugin_updates':
-				case 'automatic_theme_updates':
-				case 'automatic_translation_updates':
-					return false;
-					break;
-			}
-			switch( $context ) {
-				case 'plugins_automatic':
-				case 'themes_automatic':
-					return false;
-					break;
-			}
-		
-		} elseif ( 'off' == $options[ 'core' ][ 'theme_updates' ] && 'theme_updates' != $option ) {
-			switch( $context ) {
-				case 'themes':
-				case 'themes_automatic':
-					return false;
-					break;
-			}
-		} elseif ( 'off' == $options[ 'core' ][ 'plugin_updates' ] && 'plugin_updates' != $option ) {
-			switch( $context ) {
-				case 'plugins':
-				case 'plugins_automatic':
-					return false;
-					break;
-			}
+	public function maybe_disable_plugin_information_bar() {
+
+		// When the more details modal shows up on the plugins tab, it displays an information footer for active
+		// or inactive installs. It also shows when a plugin is available to update.
+		// This will inject styles into the modal hiding the information bar to prevent
+		// any kind of confusion.
+		if (isset($_GET['eum_action']) && 'EUM_modal' === $_GET['eum_action']) {
+			echo '<style>#plugin-information-footer{display:none;}</style>';
 		}
-		
-		if( isset( $options[ $context ][ $option ] ) && 'on' == $options[ $context ][ $option ] ) {
-			return true;	
-		} else {
-			switch( $context ) {
-				case 'plugins':
-					$option_search = array_search( $option, $options[ $context ] );
-					if ( false === $option_search ) {
-						return true;
-					} else {
-						return false;
-					}
-					break;
-				case 'themes':
-					$option_search = array_search( $option, $options[ $context ] );
-					if ( false === $option_search ) {
-						return true;
-					} else {
-						return false;
-					}
-					break;
-				case 'plugins_automatic':
-					if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'on' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-						return true;
-					} else if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'default' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-						return false;
-					} else if ( isset( $options[ 'core' ][ 'automatic_plugin_updates' ] ) && 'individual' == $options[ 'core' ][ 'automatic_plugin_updates' ] ) {
-						$option_search = array_search( $option, $options[ $context ] );
-						if ( false === $option_search  || ( false !== array_search( $option, $options[ 'plugins' ] ) ) ) {
-							return false;
-						} else {
-							return true;
-						}
-					}
-					break;
-				case 'themes_automatic':
-					if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'on' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-						return true;
-					} else if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'default' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-						return false;
-					} else if ( isset( $options[ 'core' ][ 'automatic_theme_updates' ] ) && 'individual' == $options[ 'core' ][ 'automatic_theme_updates' ] ) {
-						$option_search = array_search( $option, $options[ $context ] );
-						if ( false === $option_search || ( false !== array_search( $option, $options[ 'themes' ] ) ) ) {
-							return false;
-						} else {
-							return true;
-						}
-					}
-					break;
-			}
-			return false;
-		}
-		return false;
 	}
-	
+
 	/**
-	 * Returns whether a JSON component should be selected or not.
+	 * Enqueue scripts
 	 *
-	 * Returns whether a JSON component should be selected or not.
-	 *
-	 * @since 6.3
-	 * @access public
-	 *
-	 * @param string $option - Option to check
-	 * @param string $context - Option context
-	 * @return string value of selected index
-	 *
+	 * @return void
 	 */
-	private function get_json_maybe_selected( $option, $context = 'core' ) {
-		$options = $this->get_options_for_default();
-		if ( 'off' == $options[ 'core' ][ 'all_updates' ] && 'all_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_plugin_updates':
-				case 'automatic_theme_updates':
-					return 'off';
-					break;
-				default:
-					break;
-			}	
-		} elseif ( 'off' == $options[ 'core' ][ 'plugin_updates' ] && 'plugin_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_plugin_updates':
-					return 'off';
-					break;
-			}
-		} elseif ( 'off' == $options[ 'core' ][ 'theme_updates' ] && 'theme_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_theme_updates':
-					return 'off';
-					break;
-			}
-		} elseif( 'off' == $options[ 'core' ][ 'core_updates' ] && 'core_updates' != $option ) {
-			switch( $option ) {
-				case 'automatic_theme_updates':
-				case 'automatic_plugin_updates':
-					return 'off';
-					break;
-			}	
-		}
-		
-		return $options[ $context ][ $option ];
-	}
-	
-	/**
-	 * Returns JSON options for use in React
-	 *
-	 * Returns JSON options for use in React.
-	 *
-	 * @since 6.3
-	 * @access public
-	 */
-	public function get_json_options() {
-		$options = MPSUM_Updates_Manager::get_options();
-		
-		$boxes = array();
-		$boxes[] = array(
-			'title' => __( 'WordPress Updates', 'stops-core-theme-and-plugin-updates' ),
-			'component' => 'ToggleWrapper',
-			'items' => array(
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'All Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'all_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'all_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'all_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'WordPress Core Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'core_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'core_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'core_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'All Plugin Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'plugin_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'plugin_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'plugin_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'All Theme Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'theme_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'theme_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'theme_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'All Translation Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'translation_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'translation_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'translation_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				)
-				
-			),
-		);
-		$boxes[] = array(
-			'title' => __( 'Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
-			'items' => array(
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'Major Releases', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_major_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_major_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'automatic_major_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'Minor Releases', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_minor_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_minor_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'automatic_minor_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'Development Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_development_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_development_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'automatic_development_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'Translation Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_translation_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_translation_updates' ),
-					'checked' => $this->get_json_maybe_checked( 'automatic_translation_updates' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-				array(
-					'component' => 'ToggleItemRadio',
-					'title' => __( 'Automatic Plugin Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_plugin_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_plugin_updates' ),
-					'checked' => $this->get_json_maybe_selected( 'automatic_plugin_updates' ),
-					'loading' => false,
-					'context' => 'core',
-					'choices' => array(
-						array(
-							'id'    => 'automatic_plugin_on',
-							'label' => __( 'Enabled', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'on'
-						),
-						array(
-							'id'    => 'automatic_plugin_off',
-							'label' => __( 'Disabled', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'off'
-						),
-						array(
-							'id'    => 'automatic_plugin_default',
-							'label' => __( 'Default', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'default'
-						),
-						array(
-							'id'    => 'automatic_plugin_individual',
-							'label' => __( 'Select Individually', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'individual'
-						)
-					)
-				),
-				array(
-					'component' => 'ToggleItemRadio',
-					'title' => __( 'Automatic Theme Updates', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'automatic_theme_updates',
-					'disabled' => $this->get_json_maybe_disabled( 'automatic_theme_updates' ),
-					'checked' => $this->get_json_maybe_selected( 'automatic_theme_updates' ),
-					'loading' => false,
-					'context' => 'core',
-					'choices' => array(
-						array(
-							'id'    => 'automatic_theme_on',
-							'label' => __( 'Enabled', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'on'
-						),
-						array(
-							'id'    => 'automatic_theme_off',
-							'label' => __( 'Disabled', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'off'
-						),
-						array(
-							'id'    => 'automatic_theme_default',
-							'label' => __( 'Default', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'default'
-						),
-						array(
-							'id'    => 'automatic_theme_individual',
-							'label' => __( 'Select Individually', 'stops-core-theme-and-plugin-updates' ),
-							'value' => 'individual'
-						)
-					)
-				)
-			)
-		);
-		$plugins = get_plugins();
-		$plugin_items = array(); 
-		$plugin_automatic_items = array();
-		foreach( $plugins as $plugin_slug => $plugin_data ) {
-			$plugin_items[] = array(
-				'component' => 'ToggleItem',
-				'title' => $plugin_data[ 'Name' ],
-				'id' => $plugin_slug,
-				'name' => 'plugins',
-				'disabled' => $this->get_json_maybe_disabled( $plugin_slug, 'plugins' ),
-				'checked' => $this->get_json_maybe_checked( $plugin_slug, 'plugins' ),
-				'loading' => false,
-				'context' => 'plugins',
-			);
-			$plugin_automatic_items[] = array(
-				'component' => 'ToggleItem',
-				'title' => $plugin_data[ 'Name' ],
-				'id' => $plugin_slug,
-				'name' => 'plugins',
-				'disabled' => $this->get_json_maybe_disabled( $plugin_slug, 'plugins_automatic' ),
-				'checked' => $this->get_json_maybe_checked( $plugin_slug, 'plugins_automatic' ),
-				'loading' => false,
-				'context' => 'plugins_automatic',
-			); 
-		}
-		$themes = wp_get_themes();
-		$theme_items = array(); 
-		$theme_automatic_items = array();
-		foreach( $themes as $theme_slug => $theme_data ) {
-			$theme_items[] = array(
-				'component' => 'ToggleItem',
-				'title' => $theme_data->Name,
-				'id' => $theme_slug,
-				'name' => 'themes',
-				'disabled' => $this->get_json_maybe_disabled( $theme_slug, 'themes' ),
-				'checked' => $this->get_json_maybe_checked( $theme_slug, 'themes' ),
-				'loading' => false,
-				'context' => 'themes',
-			);
-			$theme_automatic_items[] = array(
-				'component' => 'ToggleItem',
-				'title' => $theme_data->Name,
-				'id' => $theme_slug,
-				'name' => 'themes',
-				'disabled' => $this->get_json_maybe_disabled( $theme_slug, 'themes_automatic' ),
-				'checked' => $this->get_json_maybe_checked( $theme_slug, 'themes_automatic' ),
-				'loading' => false,
-				'context' => 'themes_automatic',
-			);
-		}
-		$boxes[] = array(
-			'title' => __( 'Plugin and Theme Updates', 'stops-core-theme-and-plugin-updates' ),
-			'items' => array( 
-				array(
-					'id'        => 'plugins-themes',
-					'component' => 'ToggleTabs',
-					'active'    => 'plugin-updates',
-					'tabs' => array(
-						array(
-							'id'        => 'plugin-updates',
-							'label'     => __( 'Plugin Updates', 'stops-core-theme-and-plugin-updates' ),
-							'items'     => $plugin_items,
-							'context'   => 'plugins'
-						),
-						array(
-							'id'        => 'theme-updates',
-							'label'     => __( 'Theme Updates', 'stops-core-theme-and-plugin-updates' ),
-							'items'     => $theme_items,
-							'context'   => 'themes'
-						)
-					)
-				)
-			),
-		);
-		$boxes[] = array(
-			'title' => __( 'Plugin and Theme Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
-			'items' => array( 
-				array(
-					'id'        => 'plugins-themes-automatic',
-					'component' => 'ToggleTabs',
-					'active'    => 'plugin-updates-automatic',
-					'tabs' => array(
-						array(
-							'id'        => 'plugin-updates-automatic',
-							'label'     => __( 'Plugin Updates', 'stops-core-theme-and-plugin-updates' ),
-							'items'     => $plugin_automatic_items,
-							'context'   => 'plugins_automatic'
-						),
-						array(
-							'id'        => 'theme-updates-automatic',
-							'label'     => __( 'Theme Updates', 'stops-core-theme-and-plugin-updates' ),
-							'items'     => $theme_automatic_items,
-							'context'   => 'themes_automatic'
-						)
-					)
-				)
-			)
-		);
-		$boxes[] = array(
-			'title' => __( 'WordPress Notifications', 'stops-core-theme-and-plugin-updates' ),
-			'component' => 'ToggleWrapper',
-			'items' => array(
-				array(
-					'component' => 'ToggleItem',
-					'title' => __( 'Core E-mails', 'stops-core-theme-and-plugin-updates' ),
-					'name' => 'notification_core_update_emails',
-					'disabled' => $this->get_json_maybe_disabled( 'notification_core_update_emails' ),
-					'checked' => $this->get_json_maybe_checked( 'notification_core_update_emails' ),
-					'loading' => false,
-					'context' => 'core'
-				),
-			),
-		);
-		return $boxes;
-	}
-	
 	public function enqueue_scripts() {
-    	$pagenow = isset( $_GET[ 'page' ] ) ? $_GET[  'page' ] : false;
-    	$is_active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : false;
-    	
-    	//Check to make sure we're on the mpsum admin page
-    	if ( $pagenow != 'mpsum-update-options' ) {
-            return;	
-        }
-        
-        // Get user data
-        $user_id = get_current_user_id();
-		$dashboard_showing = get_user_meta( $user_id, 'mpsum_dashboard', true );
-		
+
+		// Get active page and active tab fore enqueuing
+		$pagenow = isset($_GET['page']) ? $_GET['page'] : false;
+		$is_active_tab = isset($_GET['tab']) ? $_GET['tab'] : false;
+
+		// Check to make sure we're on the mpsum admin page
+		if ('mpsum-update-options' != $pagenow) {
+			return;
+		}
+		$min_or_not = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ? '' : '.min';
+
+		// Get user data
+		$user_id = get_current_user_id();
+		$dashboard_showing = get_user_meta($user_id, 'mpsum_dashboard', true);
+
 		// Get options
-		$options = MPSUM_Updates_Manager::get_options( 'core' );
-        
-        wp_enqueue_script( 'sweetalert', MPSUM_Updates_Manager::get_plugin_url( '/js/source/sweetalert2.js' ), array( 'jquery' ), '6.6.6', true );
-        //wp_enqueue_script( 'sweetalert2', MPSUM_Updates_Manager::get_plugin_url( '/js/source/sweetalert2.common.js' ), array( 'sweetalert', 'jquery' ), '6.6.6', true );
-        
-    	wp_enqueue_script( 'mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url( '/js/admin.js' ), array( 'jquery' ), '20170801', true );
-    	
-    	$user_id = get_current_user_id();
-		$dashboard_showing = get_user_meta( $user_id, 'mpsum_dashboard', true );
-		if ( ! $dashboard_showing ) {
+		$options = MPSUM_Updates_Manager::get_options('core');
+
+		// Modal dependencies on the plugins tab
+		if ('plugins' === $is_active_tab) {
+			wp_enqueue_script('plugin-install');
+			wp_enqueue_script('updates');
+			wp_enqueue_script('common');
+			wp_enqueue_style('common');
+			wp_enqueue_script('thickbox');
+			wp_enqueue_style('thickbox');
+		}
+
+		wp_enqueue_script('jquery-blockui', MPSUM_Updates_Manager::get_plugin_url('/js/jquery.blockUI' . $min_or_not . '.js'), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
+		wp_enqueue_script('jquery-serializejson', MPSUM_Updates_Manager::get_plugin_url('/js/jquery.serializejson' . $min_or_not . '.js'), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
+		wp_enqueue_script('mpsum_dashboard_js', MPSUM_Updates_Manager::get_plugin_url('/js/eum-admin' . $min_or_not .'.js'), array( 'jquery', 'wp-ajax-response' ), EASY_UPDATES_MANAGER_VERSION, true);
+		wp_enqueue_script('mpsum_dashboard_react', MPSUM_Updates_Manager::get_plugin_url('/js/admin' . $min_or_not . '.js'), array( 'jquery', 'mpsum_dashboard_js' ), EASY_UPDATES_MANAGER_VERSION, true);
+
+
+		$user_id = get_current_user_id();
+		$dashboard_showing = get_user_meta($user_id, 'mpsum_dashboard', true);
+		if (! $dashboard_showing) {
 			$dashboard_showing = 'on';
 		}
-		
+
 		$options = $options = MPSUM_Updates_Manager::get_options();
-		
+
 		/**
 		 * Filter whether a ratings nag is enabled/disabled or not
 		 *
@@ -818,222 +296,455 @@ class MPSUM_Admin {
 		 *
 		 * @param bool true to show ratings nag, false if not
 		 */
-		$ratings_nag_showing = apply_filters( 'mpsum_ratings_nag', true );
-		if ( isset( $options[ 'core' ][ 'ratings_nag' ] ) && false == $options[ 'core' ][ 'ratings_nag' ] ) {
+		$ratings_nag_showing = apply_filters('mpsum_ratings_nag', true);
+		if (isset($options['core']['ratings_nag']) && false == $options['core']['ratings_nag']) {
 			$ratings_nag_showing = false;
 		}
-		
-		/**
-		 * Filter whether a tracking nag is enabled/disabled or not
-		 *
-		 * @since 6.3.3
-		 *
-		 * @param bool true to show tracking nag, false if not
-		 */
-		$tracking_nag_showing = apply_filters( 'mpsum_tracking_nag', true );
-		if ( isset( $options[ 'core' ][ 'tracking_nag' ] ) && 'off' == $options[ 'core' ][ 'tracking_nag' ] ) {
-			$tracking_nag_showing = 'off';
-		}
-		
-		$has_wizard = 'off';
-		$maybe_has_wizard = MPSUM_Updates_Manager::get_options( 'core' );
-		if ( empty( $maybe_has_wizard ) ) {
-			$has_wizard = 'on';
-		}
-		
-		//  tracking_nag
-    	wp_localize_script( 'mpsum_dashboard', 'mpsum', array( 
-    		'spinner'           => MPSUM_Updates_Manager::get_plugin_url( '/images/spinner.gif' ),
-    		'tabs'              => _x( 'Tabs', 'Show or hide admin tabs', 'stops-core-theme-and-plugin-updates' ),
-    		'dashboard'         => _x( 'Show Dashboard', 'Show or hide the dashboard', 'stops-core-theme-and-plugin-updates' ),
-    		'dashboard_showing' => $dashboard_showing,
-    		'enabled' => __( 'Enabled', 'stops-core-theme-and-plugin-updates' ),
-    		'disabled' => __( 'Disabled', 'stops-core-theme-and-plugin-updates' ),
-    		'admin_nonce' => wp_create_nonce( 'mpsum_options_save' ),
-    		'ratings_nag' => array(
-	    		'text' => __( 'Hey there! If Easy Updates Manager has helped you, can you do us a HUGE favor and give us a rating? THANKS! - The Easy Updates Manager team', 'stops-core-theme-and-plugin-updates' ),
-	    		'url' => 'https://wordpress.org/support/plugin/stops-core-theme-and-plugin-updates/reviews/#new-post',
-	    		'affirm' => __( 'Sure! Absolutely.', 'stops-core-theme-and-plugin-updates' ),
-	    		'cancel' => __( 'No thanks!', 'stops-core-theme-and-plugin-updates' ),
-	    		'enabled' => $ratings_nag_showing
-    		),
-    		'tracking_nag' => array(
-	    		'text' => __( 'Please help us improve this plugin. We are working on a new admin interface for you, and we need your help. Once a month you can automatically send us helpful data on how you are using the plugin. You can always turn it off later in the Advanced section.', 'stops-core-theme-and-plugin-updates' ),
-	    		'url' => 'https://easyupdatesmanager.com/tracking/',
-	    		'affirm' => __( 'Sure! Absolutely!', 'stops-core-theme-and-plugin-updates' ),
-	    		'cancel' => __( 'No Thanks, but Good Luck!', 'stops-core-theme-and-plugin-updates' ),
-	    		'help' => __( 'Learn More.', 'stops-core-theme-and-plugin-updates' ),
-	    		'enabled' => $tracking_nag_showing
-	    	),
-	    	'welcome' => __( 'Welcome to Easy Updates Manager.', 'stops-core-theme-and-plugin-updates' ),
-	    	'welcome_intro' =>  __( 'What would you like to do?', 'stops-core-theme-and-plugin-updates' ),
-	    	'welcome_automatic' =>  __( 'Turn on Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
-	    	'welcome_disable' =>  __( 'Disable All Updates (not recommended)', 'stops-core-theme-and-plugin-updates' ),
-	    	'welcome_skip' =>  __( 'Configure Manually', 'stops-core-theme-and-plugin-updates' ),
-	    	'new_user' => $has_wizard,
-    	) );
-    	wp_enqueue_style( 'mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url( '/css/style.css' ), array(), '20170801' );
-    	wp_enqueue_style( 'sweetalert2', MPSUM_Updates_Manager::get_plugin_url( '/css/sweetalert2.css' ), array(), '20170801' );
-    }
-	
+
+		$I18N = array(
+			'default'                                    => _x('Default', 'Option as Default', 'stops-core-theme-and-plugin-updates'),
+			'on'                                         => _x('On', 'Option enabled', 'stops-core-theme-and-plugin-updates'),
+			'off'                                        => _x('Off', 'Option disabled', 'stops-core-theme-and-plugin-updates'),
+			'nothing'                                         => __('Nothing', 'stops-core-theme-and-plugin-updates'),
+			'everything'                                        => __('Everything', 'stops-core-theme-and-plugin-updates'),
+			'custom'                                     => _x('Custom', 'Option allows for configuration', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates_default_status'           => __('You have selected default. WordPress will behave as if this plugin is not installed for automatic updates.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates_on_status'                => __('Automatic updates are on for everything.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates_off_status'               => __('Automatic updates are off for everything.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates_custom_status'            => __('You have selected to customize the updates below.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates'                          => __('Automatic updates', 'stops-core-theme-and-plugin-updates'),
+			'automatic_updates_description'              => __('These options will enable or disable automatic updates (background updates) of certain parts of WordPress. Select Custom for more flexibility. Leave as Default to allow WordPress to decide (currently that means automatic updates for minor releases of WordPress core, and no others).', 'stops-core-theme-and-plugin-updates'),
+			'major_releases'                             => __('Major WordPress Releases', 'stops-core-theme-and-plugin-updates'),
+			'major_releases_description'                 => __('Automatically update to new major releases of WordPress (e.g., 4.1, 4.2, 4.3).', 'stops-core-theme-and-plugin-updates'),
+			'major_releases_label_on'                    => __('Enable Major Releases', 'stops-core-theme-and-plugin-updates'),
+			'major_releases_label_on_status'             => __('Automatic major release updates are now turned on.', 'stops-core-theme-and-plugin-updates'),
+			'major_releases_label_off'                   => __('Disable Major Releases', 'stops-core-theme-and-plugin-updates'),
+			'major_releases_label_off_status'            => __('Automatic major release updates are now turned off.', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases'                             => _x('Minor WordPress Releases', 'Minor point releases for WordPress', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases_description'                 => __('Automatically update to new minor releases in your current series (e.g., 4.1.1, 4.1.2, 4.1.3).', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases_label_on'                    => __('Enable Minor Releases', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases_label_on_status'             => __('Automatic minor release updates are now turned on.', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases_label_off'                   => __('Disable Minor Releases', 'stops-core-theme-and-plugin-updates'),
+			'minor_releases_label_off_status'            => __('Automatic minor release updates are now turned off.', 'stops-core-theme-and-plugin-updates'),
+			'development_releases'                       => _x('Development Updates (Core)', 'Beta and RC releases for WordPress core', 'stops-core-theme-and-plugin-updates'),
+			'development_releases_description'           => __('Allow your install to receive development updates for WordPress core (for advanced users only)', 'stops-core-theme-and-plugin-updates'),
+			'development_releases_label_on'              => __('Enable WordPress Development Updates', 'stops-core-theme-and-plugin-updates'),
+			'development_releases_label_on_status'       => __('Automatic development release updates are now turned on.', 'stops-core-theme-and-plugin-updates'),
+			'development_releases_label_off'             => __('Disable Development Updates', 'stops-core-theme-and-plugin-updates'),
+			'development_releases_label_off_status'      => __('Automatic development release updates are now turned off.', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases'                       => _x('Translation Updates', 'Enable or disable translation updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases_description'           => __('Automatically update your translations.', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases_label_on'              => __('Enable Translation Updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases_label_on_status'       => __('Automatic translation updates are now turned on.', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases_label_off'             => __('Disable Translation Updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_releases_label_off_status'      => __('Automatic translation updates are now turned off.', 'stops-core-theme-and-plugin-updates'),
+			'select_individually'                        => __('Select Individually', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates'                   => __('Automatic Plugin Updates', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates_description'       => __('Automatically update your plugins. Select always on, always off, the WordPress default, or select plugins individually using the Plugins tab.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates_default_status'    => __('Automatic updates for plugins are now at their default setting (default is off).', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates_on_status'         => __('Automatic updates for plugins are now on.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates_off_status'        => __('Automatic updates for plugins are now off.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_plugin_updates_individual_status' => __('Automatic updates for plugins can be customized in the Plugins tab.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates'                    => __('Automatic Theme Updates', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates_description'        => __('Automatically update your themes. Select always on, always off, the WordPress default, or select themes individually using the Themes tab.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates_default_status'     => __('Automatic updates for themes are now at their default setting (default is off).', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates_on_status'          => __('Automatic updates for themes are now on.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates_off_status'         => __('Automatic updates for themes are now off.', 'stops-core-theme-and-plugin-updates'),
+			'automatic_theme_updates_individual_status'  => __('Automatic updates for themes can be customized in the Themes tab.', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates'                            => __('Disable all updates', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates_description'                => __('This is a master switch and will enable or disable updates for the WordPress installation. Switching updates off is not recommended.', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates_label_on'                   => __('Enable Updates', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates_label_on_status'            => __('Updates are allowed; however, you still need to configure the updates below.', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates_label_off'                  => __('Disable All Updates', 'stops-core-theme-and-plugin-updates'),
+			'disable_updates_label_off_status'           => __('All updates are disabled. Individual updates settings (i.e. for automatic updates and for plugin/theme/translation updates) below will be ignored.', 'stops-core-theme-and-plugin-updates'),
+			'logs'                                       => _x('Logs', 'Log what is stored when assets update', 'stops-core-theme-and-plugin-updates'),
+			'logs_description'                           => __('Logs will show you what assets have updated and will show up in the Logs tab.', 'stops-core-theme-and-plugin-updates'),
+			'logs_url'                                   => sprintf('<a href="%s" class="%s" id="%s">%s</a>', esc_url(add_query_arg(array('tab' => 'logs'), MPSUM_Admin::get_url())), 'nav-tab', 'eum-logs', esc_html__('Logs', 'stops-core-theme-and-plugin-updates')),
+			'logs_label_on'                              => __('Enable Logs', 'stops-core-theme-and-plugin-updates'),
+			'logs_label_on_status'                       => __('Logs are enabled. You will find Logs in the Logs tab.', 'stops-core-theme-and-plugin-updates'),
+			'logs_label_off'                             => __('Disable Logs', 'stops-core-theme-and-plugin-updates'),
+			'logs_label_off_status'                      => __('Logs are disabled.', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag'                                => _x('Browser nag', 'WordPress shows a warning for older browsers', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag_description'                    => __('Enables or disables the browser nag in the dashboard for logged-in users using older browsers.', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag_label_on'                       => __('Enable the Browser Nag', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag_label_on_status'                => __('The Browser Nag for older browsers is on.', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag_label_off'                      => __('Disable the Browser Nag', 'stops-core-theme-and-plugin-updates'),
+			'browser_nag_label_off_status'               => __('The Browser Nag for older browsers is off.', 'stops-core-theme-and-plugin-updates'),
+			'version_footer'                             => __('WordPress version in the dashboard footer', 'stops-core-theme-and-plugin-updates'),
+			'version_footer_description'                 => __('Enables or disables the WordPress version from showing in the footer of the dashboard.', 'stops-core-theme-and-plugin-updates'),
+			'version_footer_label_on'                    => __('Enable the Version in the Footer', 'stops-core-theme-and-plugin-updates'),
+			'version_footer_label_on_status'             => __('Showing the WordPress version in the footer is on.', 'stops-core-theme-and-plugin-updates'),
+			'version_footer_label_off_status'            => __('Showing the WordPress version in the footer is off.', 'stops-core-theme-and-plugin-updates'),
+			'version_footer_label_off'                   => __('Disable the Version in the Footer', 'stops-core-theme-and-plugin-updates'),
+			'emails'                                     => __('Core notification e-mails', 'stops-core-theme-and-plugin-updates'),
+			'emails_description'                         => __('WordPress periodically sends update notification e-mails, such as in the case of automatic updates. By default, the email address used is the one in Settings->General, but you can override this below.', 'stops-core-theme-and-plugin-updates'),
+			'emails_label_on'                            => __('Enable Core Notification E-mails', 'stops-core-theme-and-plugin-updates'),
+			'emails_label_on_status'                     => __('E-mail notifications are on. You can configure which e-mail addresses are sent to below.', 'stops-core-theme-and-plugin-updates'),
+			'emails_label_off'                           => __('Disable Core Notification E-mails', 'stops-core-theme-and-plugin-updates'),
+			'emails_label_off_status'                    => __('E-mail notifications are off', 'stops-core-theme-and-plugin-updates'),
+			'emails_placeholder'                         => __('Add an e-mail address', 'stops-core-theme-and-plugin-updates'),
+			'emails_input_label'                         => __('Enter comma-separated e-mail addresses', 'stops-core-theme-and-plugin-updates'),
+			'emails_invalid'                             => __('One or more e-mail addresses are invalid.', 'stops-core-theme-and-plugin-updates'),
+			'emails_saveed'                              => __('Your email address settings have been successfully saved.', 'stops-core-theme-and-plugin-updates'),
+			'emails_save'                                => __('Save E-mail Addresses', 'stops-core-theme-and-plugin-updates'),
+			'emails_save_empty'                          => __('Please enter an e-mail address', 'stops-core-theme-and-plugin-updates'),
+			'emails_saving'                              => __('Saving...', 'stops-core-theme-and-plugin-updates'),
+			'core_updates'                               => __('WordPress core updates', 'stops-core-theme-and-plugin-updates'),
+			'core_updates_description'                   => __('This allows you to disable or enable all core updates, including automatic updates.', 'stops-core-theme-and-plugin-updates'),
+			'core_updates_label_on'                      => __('Enable Core Updates', 'stops-core-theme-and-plugin-updates'),
+			'core_updates_label_on_status'               => __('Core updates are enabled.', 'stops-core-theme-and-plugin-updates'),
+			'core_updates_label_off'                     => __('Disable Core Updates', 'stops-core-theme-and-plugin-updates'),
+			'core_updates_label_off_status'              => __('Core updates are disabled.', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates'                             => __('Plugin updates', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates_description'                 => __('This allows you to disable or enable all plugin updates. Disabling this option will also disable automatic updates.', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates_label_on'                    => __('Enable Plugin Updates', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates_label_on_status'             => __('Plugin updates are enabled.', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates_label_off'                   => __('Disable Plugin Updates', 'stops-core-theme-and-plugin-updates'),
+			'plugin_updates_label_off_status'            => __('Plugin updates are disabled.', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates'                              => __('Theme updates', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates_description'                  => __('This allows you to disable or enable all theme updates. Disabling this option will also disable automatic updates.', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates_label_on'                     => __('Enable Theme Updates', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates_label_on_status'              => __('Theme updates are enabled.', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates_label_off'                    => __('Disable Theme Updates', 'stops-core-theme-and-plugin-updates'),
+			'theme_updates_label_off_status'             => __('Theme updates are disabled.', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates'                        => __('Translation Updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates_description'            => __('This allows you to disable or enable all translations. Disabling this option will also disable automatic translation updates.', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates_label_on'               => __('Enable Translation Updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates_label_on_status'        => __('Translation updates are enabled.', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates_label_off'              => __('Disable Translation Updates', 'stops-core-theme-and-plugin-updates'),
+			'translation_updates_label_off_status'       => __('Translation updates are disabled.', 'stops-core-theme-and-plugin-updates'),
+			'general_section_title_updates_settings'     => __('Updates settings', 'stops-core-theme-and-plugin-updates'),
+			'general_section_title_notifications'        => __('Notifications', 'stops-core-theme-and-plugin-updates'),
+			'general_section_title_others'               => __('Others', 'stops-core-theme-and-plugin-updates'),
+		);
+
+		wp_localize_script('mpsum_dashboard_react', 'mpsum', apply_filters('eum_i18n', array(
+			'spinner'             => MPSUM_Updates_Manager::get_plugin_url('/images/spinner.gif'),
+			'tabs'                => _x('Tabs', 'Show or hide admin tabs', 'stops-core-theme-and-plugin-updates'),
+			'dashboard'           => _x('Show Dashboard', 'Show or hide the dashboard', 'stops-core-theme-and-plugin-updates'),
+			'dashboard_showing'   => $dashboard_showing,
+			'enabled'             => __('Enabled', 'stops-core-theme-and-plugin-updates'),
+			'disabled'            => __('Disabled', 'stops-core-theme-and-plugin-updates'),
+			'admin_nonce'         => wp_create_nonce('mpsum_options_save'),
+			'eum_nonce'           => wp_create_nonce('eum_nonce'),
+			'ajax_url'            => admin_url('admin-ajax.php'),
+			'unexpected_response' => __('Unexpected response:', 'stops-core-theme-and-plugin-updates'),
+			'I18N'                => $I18N,
+			'saving'              => __('Saving...', 'stops-core-theme-and-plugin-updates'),
+			'working'             => __('Working...', 'stops-core-theme-and-plugin-updates'),
+			'logo'                => MPSUM_Updates_Manager::get_plugin_url('/images/site_icon.png'),
+			'is_premium'          => MPSUM_Updates_Manager::get_instance()->is_premium() ? 'true' : 'false',
+			'is_debug'            => (defined('WP_DEBUG') && true === WP_DEBUG) ? 'true' : 'false',
+		)));
+		wp_enqueue_style('mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url('/css/style.css'), array(), EASY_UPDATES_MANAGER_VERSION);
+	}
+
 	/**
-	* Adds a sub-menu page for multisite.
-	*
-	* Adds a sub-menu page for multisite.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see init
-	* @internal Uses network_admin_menu action
-	*
-	*/
+	 * Add the "Easy Updates Manager" menu.
+	 *
+	 * @since 8.0.1
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar WordPress Admin bar Instance
+	 */
+	public function add_admin_bar($wp_admin_bar) {
+
+		if (defined('EASY_UPDATES_MANAGER_ADMIN_BAR') && !EASY_UPDATES_MANAGER_ADMIN_BAR) return;
+
+		// Check for valid permissions
+		if (is_multisite() && !current_user_can('manage_network')) {
+			return;
+		}
+		if (!is_multisite() && !current_user_can('update_plugins')) {
+			return;
+		}
+
+		// Get core options
+		$options = MPSUM_Updates_Manager::get_options('core');
+
+		// Check to see if logs are enabled
+		$admin_bar_enabled = true;
+		if (isset($options['enable_admin_bar']) && 'off' === $options['enable_admin_bar']) {
+			$admin_bar_enabled = false;
+		}
+		if ($admin_bar_enabled) :
+			// Add parent menu
+			$wp_admin_bar->add_menu(array(
+				'id'    => 'easy-updates-manager-admin-bar',
+				'title' => __('Updates', 'stops-core-theme-and-plugin-updates'),
+				'href'  => self::get_url(),
+			));
+
+			// Add General Tab
+			$wp_admin_bar->add_menu(array(
+				'id'     => 'easy-updates-manager-admin-bar-general',
+				'title'  => __('General', 'stops-core-theme-and-plugin-updates'),
+				'href'   => add_query_arg(array('tab' => 'general'), self::get_url()),
+				'parent' => 'easy-updates-manager-admin-bar'
+			));
+
+			// Add plugins tab
+			$wp_admin_bar->add_menu(array(
+				'id'     => 'easy-updates-manager-admin-bar-plugins',
+				'title'  => __('Plugins', 'stops-core-theme-and-plugin-updates'),
+				'href'   => add_query_arg(array('tab' => 'plugins'), self::get_url()),
+				'parent' => 'easy-updates-manager-admin-bar'
+			));
+
+			// Add Themes tab
+			$wp_admin_bar->add_menu(array(
+				'id'     => 'easy-updates-manager-admin-bar-themes',
+				'title'  => __('Themes', 'stops-core-theme-and-plugin-updates'),
+				'href'   => add_query_arg(array('tab' => 'themes'), self::get_url()),
+				'parent' => 'easy-updates-manager-admin-bar'
+			));
+
+			// Add logs tab
+			$wp_admin_bar->add_menu(array(
+				'id'     => 'easy-updates-manager-admin-bar-logs',
+				'title'  => __('Logs', 'stops-core-theme-and-plugin-updates'),
+				'href'   => add_query_arg(array('tab' => 'logs'), self::get_url()),
+				'parent' => 'easy-updates-manager-admin-bar'
+			));
+
+			$wp_admin_bar->add_menu(array(
+				'id'     => 'easy-updates-manager-admin-bar-advanced',
+				'title'  => __('Advanced', 'stops-core-theme-and-plugin-updates'),
+				'href'   => add_query_arg(array('tab' => 'advanced'), self::get_url()),
+				'parent' => 'easy-updates-manager-admin-bar'
+			));
+
+			if (!MPSUM_Updates_Manager::get_instance()->is_premium()) {
+				$wp_admin_bar->add_menu(array(
+					'id'     => 'easy-updates-manager-admin-bar-premium',
+					'title'  => __('Premium', 'stops-core-theme-and-plugin-updates'),
+					'href'   => add_query_arg(array('tab' => 'premium'), self::get_url()),
+					'parent' => 'easy-updates-manager-admin-bar'
+				));
+			}
+		endif;
+	}
+
+	/**
+	 * Adds a sub-menu page for multisite.
+	 *
+	 * Adds a sub-menu page for multisite.
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see init
+	 * @internal Uses network_admin_menu action
+	 */
 	public function init_network_admin_menus() {
-		$hook = add_dashboard_page( __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ) , __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ), 'install_plugins', self::get_slug(), array( $this, 'output_admin_interface' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( "load-$hook", array( $this, 'init_help_screen' ) );
-		add_action( "load-$hook", array( $this, 'init_screen_options' ) );
+		$hook = add_dashboard_page(__('Updates Options', 'stops-core-theme-and-plugin-updates'), __('Updates Options', 'stops-core-theme-and-plugin-updates'), 'manage_options', self::get_slug(), array( $this, 'output_admin_interface' ));
+		add_action('admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
+		add_action("load-$hook", array( $this, 'init_help_screen' ));
+		add_action("load-$hook", array( $this, 'init_screen_options' ));
 	}
-	
+
 	/**
-	* Adds a sub-menu page for single-site.
-	*
-	* Adds a sub-menu page for single-site.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see init
-	* @internal Uses admin_menu action
-	*
-	*/
+	 * Adds a sub-menu page for single-site.
+	 *
+	 * Adds a sub-menu page for single-site.
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see init
+	 * @internal Uses admin_menu action
+	 */
 	public function init_single_site_admin_menus() {
-		$hook = add_dashboard_page( __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ) , __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ), 'install_plugins', self::get_slug(), array( $this, 'output_admin_interface' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		add_action( "load-$hook", array( $this, 'init_help_screen' ) );	
-		add_action( "load-$hook", array( $this, 'init_screen_options' ) );
+		$hook = add_dashboard_page(__('Updates Options', 'stops-core-theme-and-plugin-updates'), __('Updates Options', 'stops-core-theme-and-plugin-updates'), 'manage_options', self::get_slug(), array( $this, 'output_admin_interface' ));
+		add_action('admin_enqueue_scripts', array( $this, 'enqueue_scripts' ));
+		add_action("load-$hook", array( $this, 'init_help_screen' ));
+		add_action("load-$hook", array( $this, 'init_screen_options' ));
 	}
-	
+
 	/**
-	* Outputs admin interface for sub-menu.
-	*
-	* Outputs admin interface for sub-menu.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see init_network_admin_menus, init_single_site_admin_menus
-	*
-	*/
+	 * Outputs admin interface for sub-menu.
+	 *
+	 * Outputs admin interface for sub-menu.
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see init_network_admin_menus, init_single_site_admin_menus
+	 */
 	public function output_admin_interface() {
 		?>
 		<div class="wrap">
-			<h1>
-				<?php echo esc_html_e( 'Manage Updates', 'stops-core-theme-and-plugin-updates' ); ?>
+			<h1 id="eum-main-heading">
+			<?php
+			$eum_white_label = __('Easy Updates Manager', 'stops-core-theme-and-plugin-updates');
+			if (MPSUM_Updates_Manager::get_instance()->is_premium()) {
+				$eum_white_label = get_site_option('easy_updates_manager_name', __('Easy Updates Manager Premium', 'stops-core-theme-and-plugin-updates'));
+			}
+			echo esc_html($eum_white_label);
+			?>
 			</h1>
 			<?php
-            $core_options = MPSUM_Updates_Manager::get_options( 'core' );
+			$core_options = MPSUM_Updates_Manager::get_options('core');
 			$tabs = array();
-			
-			if ( 'off' !== get_user_meta( get_current_user_id(), 'mpsum_dashboard', true ) ) {
-				$tabs[] = array(
-	    			'url'    => add_query_arg( array( 'tab' => 'dashboard' ), self::get_url() ), /* URL to the tab */
-	    			'label'  => esc_html__( 'Dashboard', 'stops-core-theme-and-plugin-updates' ),
-	    			'get'    => 'dashboard' /*$_GET variable*/,
-	    			'action' => 'mpsum_admin_tab_dashboard' /* action variable in do_action */
-	            );
-			}
-			
-            $tabs[] = array(
-				'url'    => add_query_arg( array( 'tab' => 'main' ), self::get_url() ), /* URL to the tab */
-				'label'  => esc_html__( 'General', 'stops-core-theme-and-plugin-updates' ),
-				'get'    => 'main' /*$_GET variable*/,
-				'action' => 'mpsum_admin_tab_main' /* action variable in do_action */
-			);
+
 			$tabs[] = array(
-				'url'    => add_query_arg( array( 'tab' => 'plugins' ), self::get_url() ), /* URL to the tab */
-				'label'  => esc_html__( 'Plugins', 'stops-core-theme-and-plugin-updates' ),
-				'get'    => 'plugins' /*$_GET variable*/,
+				'url'    => add_query_arg(array( 'tab' => 'general' ), self::get_url()), /* URL to the tab */
+				'label'  => esc_html__('General', 'stops-core-theme-and-plugin-updates'),
+				'get'    => 'general', /*$_GET variable*/
+				'action' => 'mpsum_admin_tab_dashboard' /* action variable in do_action */
+			);
+
+			$tabs[] = array(
+				'url'    => add_query_arg(array( 'tab' => 'plugins' ), self::get_url()), /* URL to the tab */
+				'label'  => esc_html__('Plugins', 'stops-core-theme-and-plugin-updates'),
+				'get'    => 'plugins', /*$_GET variable*/
 				'action' => 'mpsum_admin_tab_plugins' /* action variable in do_action */
 			);
 			$tabs[] = array(
-				'url'    => add_query_arg( array( 'tab' => 'themes' ), self::get_url() ), /* URL to the tab */
-				'label'  => esc_html__( 'Themes', 'stops-core-theme-and-plugin-updates' ),
-				'get'    => 'themes' /*$_GET variable*/,
+				'url'    => add_query_arg(array( 'tab' => 'themes' ), self::get_url()), /* URL to the tab */
+				'label'  => esc_html__('Themes', 'stops-core-theme-and-plugin-updates'),
+				'get'    => 'themes', /*$_GET variable*/
 				'action' => 'mpsum_admin_tab_themes' /* action variable in do_action */
 			);
-			if ( isset( $core_options[ 'logs' ] ) && 'on' == $core_options[ 'logs' ] ) {
-        		$tabs[] = array(
-					'url'    => add_query_arg( array( 'tab' => 'logs' ), self::get_url() ), /* URL to the tab */
-					'label'  => esc_html__( 'Logs', 'stops-core-theme-and-plugin-updates' ),
-					'get'    => 'logs' /*$_GET variable*/,
-					'action' => 'mpsum_admin_tab_logs' /* action variable in do_action */
-				);
-    		}
-    		$tabs[] = array(
-				'url'    => add_query_arg( array( 'tab' => 'advanced' ), self::get_url() ), /* URL to the tab */
-				'label'  => esc_html__( 'Advanced', 'stops-core-theme-and-plugin-updates' ),
-				'get'    => 'advanced' /*$_GET variable*/,
+			$tabs[] = array(
+				'url'    => add_query_arg(array( 'tab' => 'logs' ), self::get_url()), /* URL to the tab */
+				'label'  => esc_html__('Logs', 'stops-core-theme-and-plugin-updates'),
+				'get'    => 'logs', /*$_GET variable*/
+				'action' => 'mpsum_admin_tab_logs' /* action variable in do_action */
+			);
+			$tabs[] = array(
+				'url'    => add_query_arg(array( 'tab' => 'advanced' ), self::get_url()), /* URL to the tab */
+				'label'  => esc_html__('Advanced', 'stops-core-theme-and-plugin-updates'),
+				'get'    => 'advanced', /*$_GET variable*/
 				'action' => 'mpsum_admin_tab_advanced' /* action variable in do_action */
 			);
-			$tabs_count = count( $tabs );
-			if ( $tabs && !empty( $tabs ) )  {
-				$tab_html =  '<h2 class="nav-tab-wrapper">';
-				$active_tab = isset( $_GET[ 'tab' ] ) ? sanitize_text_field( $_GET[ 'tab' ] ) : 'dashboard';
-				if ( 'off' === get_user_meta( get_current_user_id(), 'mpsum_dashboard', true ) && 'dashboard' == $active_tab ) {
-					$active_tab = 'main';
+			if (!Easy_Updates_Manager()->is_premium()) {
+				$tabs[] = array(
+					'url'    => add_query_arg(array( 'tab' => 'premium' ), self::get_url()), /* URL to the tab */
+					'label'  => esc_html__('Premium', 'stops-core-theme-and-plugin-updates'),
+					'get'    => 'premium', /*$_GET variable*/
+					'action' => 'mpsum_admin_tab_premium' /* action variable in do_action */
+				);
+			}
+			$tabs_count = count($tabs);
+			if ($tabs && !empty($tabs)) {
+				$tab_html = '<h2 class="nav-tab-wrapper">';
+				$active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general';
+				$is_tab_match = false;
+				if ('general' == $active_tab) {
+					$active_tab = 'general';
+				} else {
+					foreach ($tabs as $tab) {
+						$tab_get = isset($tab['get']) ? $tab['get'] : '';
+						if ($active_tab === $tab_get) {
+							$is_tab_match = true;
+						}
+					}
+					if (!$is_tab_match) {
+						$active_tab = 'general';
+					}
 				}
 				$do_action = false;
-				foreach( $tabs as $tab ) {
+				foreach ($tabs as $tab) {
 					$classes = array( 'nav-tab' );
-					$tab_get = isset( $tab[ 'get' ] ) ? $tab[ 'get' ] : '';
-					if ( $active_tab == $tab_get ) {
+					$tab_get = isset($tab['get']) ? $tab['get'] : '';
+					if ($active_tab == $tab_get) {
 						$classes[] = 'nav-tab-active';
-						$do_action = isset( $tab[ 'action' ] ) ? $tab[ 'action' ] : false;
+						$do_action = isset($tab['action']) ? $tab['action'] : false;
+					} elseif (!$is_tab_match && 'general' === $tab_get) {
+						$classes[] = 'nav-tab-active';
+						$do_action = isset($tab['action']) ? $tab['action'] : false;
 					}
-					$tab_url = isset( $tab[ 'url' ] ) ? $tab[ 'url' ] : '';
-					$tab_label = isset( $tab[ 'label' ] ) ? $tab[ 'label' ] : ''; 
-					$tab_html .= sprintf( '<a href="%s" class="%s">%s</a>', esc_url( $tab_url ), esc_attr( implode( ' ', $classes ) ), esc_html( $tab[ 'label' ] ) );
+					$tab_url = isset($tab['url']) ? $tab['url'] : '';
+					$tab_label = isset($tab['label']) ? $tab['label'] : '';
+					$tab_html .= sprintf('<a href="%s" class="%s" id="eum-%s">%s</a>', esc_url($tab_url), esc_attr(implode(' ', $classes)), esc_attr($tab_get), esc_html($tab['label']));
 				}
 				$tab_html .= '</h2>';
-				if ( $tabs_count > 1 ) {
-					echo $tab_html;	
+				if ($tabs_count > 1) {
+					echo $tab_html;
 				}
-				if ( $do_action ) {
-					
+				if ($do_action) {
+
 					/**
-					* Perform a tab action.
-					*
-					* Perform a tab action.
-					*
-					* @since 5.0.0
-					*
-					* @param string $action Can be mpsum_admin_tab_main, mpsum_admin_tab_plugins, mpsum_admin_tab_themes, and mpsum_admin_tab_advanced.
-					*/
-					do_action( $do_action );	
+					 * Perform a tab action.
+					 *
+					 * Perform a tab action.
+					 *
+					 * @since 5.0.0
+					 *
+					 * @param string $action Can be mpsum_admin_tab_main, mpsum_admin_tab_plugins, mpsum_admin_tab_themes, and mpsum_admin_tab_advanced.
+					 */
+					do_action($do_action);
 				}
-			}	
+			}
 			?>
-			
+
 		</div><!-- .wrap -->
 		<?php
 	} //end output_admin_interface
-	
+
 	/**
-	* Outputs admin interface for sub-menu.
-	*
-	* Outputs admin interface for sub-menu.
-	*
-	* @since 5.0.0 
-	* @access public
-	* @see __construct
-	* @internal Uses $prefix . "plugin_action_links_$plugin_file" action
-	* @return array Array of settings
-	*/
+	 * Adds plugin settings page link to plugin links in WordPress Dashboard Plugins Page
+	 *
+	 * @since 5.0.0
+	 * @access public
+	 * @see __construct
+	 * @param array $settings Uses $prefix . "plugin_action_links_$plugin_file" action
+	 * @return array Array of settings
+	 */
 	public function plugin_settings_link( $settings ) {
-		$admin_anchor = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Configure', 'stops-core-theme-and-plugin-updates' ) );
-		
-		if ( ! is_array( $settings ) ) {
-    		return array( $admin_anchor );
+		$admin_anchor = sprintf('<a href="%s">%s</a>', esc_url($this->get_url()), esc_html__('Configure', 'stops-core-theme-and-plugin-updates'));
+
+		if (! is_array($settings)) {
+			return array( $admin_anchor );
 		} else {
-    		return array_merge( array( $admin_anchor ), $settings );
+			return array_merge(array( $admin_anchor ), $settings);
 		}
+	}
+
+	/**
+	 * Adds Easy Updates Manager option to the admin bar
+	 *
+	 * @since 8.0.1
+	 * @access public
+	 * @see init
+	 */
+	public function add_networkadmin_page() {
+		global $wp_admin_bar;
+
+		if (!is_object($wp_admin_bar) || !is_super_admin() || !function_exists('is_admin_bar_showing') || !is_admin_bar_showing()) {
+			return;
+		}
+
+		$wp_admin_bar->add_node(array(
+			'parent' => 'network-admin',
+			'id' => 'eum-admin-settings',
+			'title' => __('Easy Updates Manager', 'stops-core-theme-and-plugin-updates'),
+			'href' => self::get_url()
+		));
+	}
+
+	/**
+	 * Add a ratings nag to the footer.
+	 *
+	 * @since 7.0.0
+	 * @param string $text Text for the rating
+	 * @return string URL to the wordpress.org reviews page
+	 */
+	public function ratings_nag( $text ) {
+
+		if (! isset($_GET['page']) || 'mpsum-update-options' != $_GET['page']) {
+			return $text;
+		}
+
+		$enable_notices = get_site_option('easy_updates_manager_enable_notices', 'on');
+		if ('off' === $enable_notices && MPSUM_Updates_Manager::get_instance()->is_premium()) {
+			return $text;
+		}
+
+		$text = sprintf(__('Thank you for creating with <a href="%s">WordPress</a>.'), __('https://wordpress.org/'));
+
+		$return = '<span id="footer-thankyou">';
+		$return .= $text;
+		$return .= sprintf(' <a href="%s">%s <img src="%s" alt="Five Star Rating" /></a>', esc_url('https://wordpress.org/support/plugin/stops-core-theme-and-plugin-updates/reviews/#new-post'), esc_html__('Please rate Easy Updates Manager!', 'stops-core-theme-and-plugin-updates'), esc_url(MPSUM_Updates_Manager::get_plugin_url('/images/ratings.png')));
+		$return .= '</span>';
+		return $return;
+
 	}
 }
