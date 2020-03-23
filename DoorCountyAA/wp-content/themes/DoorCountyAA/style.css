@@ -366,7 +366,7 @@ a img.aligncenter {
 /*for use in covid-19 banner*/
 .covid19banner {
 	height: 50px;
-	overflow: hidden;
+	overflow: visible;
 	position: relative;
 }
 
