@@ -24,7 +24,9 @@
 
 	</head>
 	<body <?php body_class(); ?>>
-
+        <div class="covid19banner">
+            <h3>Due to Covid-19 Some Meetings now have Remote Options.  See the Bottom of the Meetings Page for the Participating Groups Connection Info.</h3>
+        </div>
 		<!-- wrapper -->
 		<div class="wrapper">
 
