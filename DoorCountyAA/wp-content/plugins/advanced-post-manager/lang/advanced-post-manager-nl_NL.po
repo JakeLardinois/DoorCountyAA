@@ -7,162 +7,163 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/1.0-alpha-1100\n"
+"X-Generator: GlotPress/2.3.1\n"
+"Language: nl\n"
 "Project-Id-Version: Advanced Post Manager\n"
 
 #: views/edit-filters.php:8
 msgid "Filters & Columns"
 msgstr "Filters & Kolommen"
 
-#: demo/demo.php:30
-msgid "It looks like you might not have any demo data. <a href=\"%s\">Download our data</a> and use the <a href=\"%s\">WordPress Importer</a>."
-msgstr "Het ziet er naar uit dat je geen voorbeelddata hebt. <a href=\"%s\">Download onze data</a> en gebruik de <a href=\"%s\">Wordpress Importer</a>"
+#. Author URI of the plugin/theme
+msgid "http://m.tri.be/4n"
+msgstr "http://m.tri.be/4n"
 
-#: lib/tribe-columns.class.php:43
-msgid "Column Name"
-msgstr "Kolomnaam"
+#. Author of the plugin/theme
+msgid "Modern Tribe, Inc."
+msgstr "Modern Tribe, Inc."
 
-#: lib/tribe-columns.class.php:144 lib/tribe-columns.class.php:165
-msgid "Comments"
-msgstr "Reacties"
+#. Description of the plugin/theme
+msgid "Dialing custom post types to 11 with advanced filtering controls."
+msgstr "Gebruik geavanceerde filters om je evenementen weer te geven zoals jij het wilt. "
 
-#: lib/tribe-columns.class.php:158
-msgid "Add a Column"
-msgstr "Voeg een kolom toe"
+#. Plugin Name of the plugin/theme
+msgid "Advanced Post Manager"
+msgstr "Advanced Post Manager"
 
-#: lib/tribe-filters.class.php:52 lib/tribe-filters.class.php:72
-msgid "Is"
-msgstr "Is"
+#: views/edit-filters.php:32
+msgid "Reset to Default"
+msgstr "Zet terug naar standaard instellingen"
 
-#: lib/tribe-filters.class.php:53 lib/tribe-filters.class.php:73
-msgid "Is Not"
-msgstr "Is niet"
+#: views/edit-filters.php:29
+msgid "Cancel"
+msgstr "Annuleren"
 
-#: lib/tribe-filters.class.php:71
-msgid "Search"
-msgstr "Zoeken"
+#: views/edit-filters.php:28
+msgid "Save"
+msgstr "Opslaan"
 
-#: lib/tribe-filters.class.php:82
-msgid "Member Type"
-msgstr "Gebruikertype"
+#: views/edit-filters.php:27
+msgid "Filter Name"
+msgstr "Filternaam"
 
-#: lib/tribe-filters.class.php:86
-msgid "Cafe"
-msgstr "Cafe"
+#: views/edit-filters.php:23
+msgid "Export to CSV"
+msgstr "Export naar CSV"
 
-#: lib/tribe-filters.class.php:87
-msgid "Private Desk"
-msgstr "Privé Desk"
+#: views/edit-filters.php:21
+msgid "Save Filter Set"
+msgstr "Filter set opslaan"
 
-#: lib/tribe-filters.class.php:88
-msgid "Office"
-msgstr "Kantoor"
+#: views/edit-filters.php:20
+msgid "Apply"
+msgstr "Toepassen"
 
-#: lib/tribe-filters.class.php:95
-msgid "what i’m querying. probably a key in the options array in $filters"
-msgstr "what i’m querying. probably a key in the options array in $filters"
+#: views/edit-filters.php:15
+msgid "Drag and drop to order and select which columns are displayed in the entries table."
+msgstr "Verschuif de blokken door ze te slepen om de volgorde van de kolommen in de tabel te bepalen. "
 
-#: lib/tribe-filters.class.php:181
-msgid "Active Filters"
-msgstr "Actieve filters"
+#: views/edit-filters.php:14
+msgid "Active Columns"
+msgstr "Actieve kolommen"
 
-#: lib/tribe-filters.class.php:537
-msgid "Saved Filter Set"
-msgstr "Opgeslagen Filter Set"
+#: views/edit-filters.php:7 views/edit-filters.php:8
+msgid "Click to toggle"
+msgstr "Klik voor andere instellingen"
 
-#: lib/tribe-filters.class.php:539
-msgid "Choose a Saved Filter"
-msgstr "Kies een opgeslagen filter"
+#: lib/tribe-meta-box.php:452
+msgid "Select a color"
+msgstr "Kies een kleur"
 
-#: lib/tribe-filters.class.php:658
-msgid "Add a Filter"
-msgstr "Voeg een filter toe"
+#: lib/tribe-meta-box.php:441
+msgid "Add more images"
+msgstr "Voeg meer afbeeldingen toe"
 
-#: lib/tribe-meta-box-helper.php:45
-msgid "Extended Information"
-msgstr "Uitgebreide informatie"
+#: lib/tribe-meta-box.php:396
+msgid "Add another file"
+msgstr "Voeg nog een bestand toe"
 
-#: lib/tribe-meta-box.php:124 lib/tribe-meta-box.php:434
-msgid "Delete this image"
-msgstr "Verwijder deze afbeelding"
+#: lib/tribe-meta-box.php:393
+msgid "Upload new files"
+msgstr "Nieuwe bestanden uploaden"
+
+#: lib/tribe-meta-box.php:384
+msgid "Uploaded files"
+msgstr "Geüploade bestanden"
 
 #: lib/tribe-meta-box.php:124 lib/tribe-meta-box.php:387
 #: lib/tribe-meta-box.php:434
 msgid "Delete"
 msgstr "Verwijder"
 
-#: lib/tribe-meta-box.php:384
-msgid "Uploaded files"
-msgstr "Geüploade bestanden"
+#: lib/tribe-meta-box.php:124 lib/tribe-meta-box.php:434
+msgid "Delete this image"
+msgstr "Verwijder deze afbeelding"
 
-#: lib/tribe-meta-box.php:393
-msgid "Upload new files"
-msgstr "Nieuwe bestanden uploaden"
+#: lib/tribe-meta-box-helper.php:45
+msgid "Extended Information"
+msgstr "Uitgebreide informatie"
 
-#: lib/tribe-meta-box.php:396
-msgid "Add another file"
-msgstr "Voeg nog een bestand toe"
+#: lib/tribe-filters.class.php:658
+msgid "Add a Filter"
+msgstr "Voeg een filter toe"
 
-#: lib/tribe-meta-box.php:441
-msgid "Add more images"
-msgstr "Voeg meer afbeeldingen toe"
+#: lib/tribe-filters.class.php:539
+msgid "Choose a Saved Filter"
+msgstr "Kies een opgeslagen filter"
 
-#: lib/tribe-meta-box.php:452
-msgid "Select a color"
-msgstr "Kies een kleur"
+#: lib/tribe-filters.class.php:537
+msgid "Saved Filter Set"
+msgstr "Opgeslagen Filter Set"
 
-#: views/edit-filters.php:7 views/edit-filters.php:8
-msgid "Click to toggle"
-msgstr "Klik voor andere instellingen"
+#: lib/tribe-filters.class.php:181
+msgid "Active Filters"
+msgstr "Actieve filters"
 
-#: views/edit-filters.php:14
-msgid "Active Columns"
-msgstr "Actieve kolommen"
+#: lib/tribe-filters.class.php:95
+msgid "what i’m querying. probably a key in the options array in $filters"
+msgstr "what i’m querying. probably a key in the options array in $filters"
 
-#: views/edit-filters.php:15
-msgid "Drag and drop to order and select which columns are displayed in the entries table."
-msgstr "Verschuif de blokken door ze te slepen om de volgorde van de kolommen in de tabel te bepalen. "
+#: lib/tribe-filters.class.php:88
+msgid "Office"
+msgstr "Kantoor"
 
-#: views/edit-filters.php:20
-msgid "Apply"
-msgstr "Toepassen"
+#: lib/tribe-filters.class.php:87
+msgid "Private Desk"
+msgstr "Privé Desk"
 
-#: views/edit-filters.php:21
-msgid "Save Filter Set"
-msgstr "Filter set opslaan"
+#: lib/tribe-filters.class.php:86
+msgid "Cafe"
+msgstr "Cafe"
 
-#: views/edit-filters.php:23
-msgid "Export to CSV"
-msgstr "Export naar CSV"
+#: lib/tribe-filters.class.php:82
+msgid "Member Type"
+msgstr "Gebruikertype"
 
-#: views/edit-filters.php:27
-msgid "Filter Name"
-msgstr "Filternaam"
+#: lib/tribe-filters.class.php:71
+msgid "Search"
+msgstr "Zoeken"
 
-#: views/edit-filters.php:28
-msgid "Save"
-msgstr "Opslaan"
+#: lib/tribe-filters.class.php:53 lib/tribe-filters.class.php:73
+msgid "Is Not"
+msgstr "Is niet"
 
-#: views/edit-filters.php:29
-msgid "Cancel"
-msgstr "Annuleren"
+#: lib/tribe-filters.class.php:52 lib/tribe-filters.class.php:72
+msgid "Is"
+msgstr "Is"
 
-#: views/edit-filters.php:32
-msgid "Reset to Default"
-msgstr "Zet terug naar standaard instellingen"
+#: lib/tribe-columns.class.php:158
+msgid "Add a Column"
+msgstr "Voeg een kolom toe"
 
-#. Plugin Name of the plugin/theme
-msgid "Advanced Post Manager"
-msgstr "Advanced Post Manager"
+#: lib/tribe-columns.class.php:144 lib/tribe-columns.class.php:165
+msgid "Comments"
+msgstr "Reacties"
 
-#. Description of the plugin/theme
-msgid "Dialing custom post types to 11 with advanced filtering controls."
-msgstr "Gebruik geavanceerde filters om je evenementen weer te geven zoals jij het wilt. "
+#: lib/tribe-columns.class.php:43
+msgid "Column Name"
+msgstr "Kolomnaam"
 
-#. Author of the plugin/theme
-msgid "Modern Tribe, Inc."
-msgstr "Modern Tribe, Inc."
-
-#. Author URI of the plugin/theme
-msgid "http://m.tri.be/4n"
-msgstr "http://m.tri.be/4n"
+#: demo/demo.php:30
+msgid "It looks like you might not have any demo data. <a href=\"%s\">Download our data</a> and use the <a href=\"%s\">WordPress Importer</a>."
+msgstr "Het ziet er naar uit dat je geen voorbeelddata hebt. <a href=\"%s\">Download onze data</a> en gebruik de <a href=\"%s\">Wordpress Importer</a>"
