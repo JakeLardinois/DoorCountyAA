@@ -163,7 +163,8 @@ AppPackages/
 !*.[Cc]ache/
 
 # Others
-vendor/*
+vendor/
+!DoorCountyAA/wp-content/plugins/the-events-calendar/common/vendor/
 !DoorCountyAA/wp-content/plugins/the-events-calendar/vendor/
 ClientBin/
 [Ss]tyle[Cc]op.*
