@@ -5,11 +5,15 @@
  *
  * Override this template in your own theme by creating a file at [your-theme]/tribe-events/list/single-event.php
  *
- * @version 4.5.11
+ * @version 4.6.19
  *
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
+}
+
+if ( tec_events_views_v1_should_display_deprecated_notice() ) {
+	_deprecated_file( __FILE__, '5.13.0', null, 'On version 6.0.0 this file will be removed. Please refer to <a href="https://evnt.is/v1-removal">https://evnt.is/v1-removal</a> for template customization assistance.' );
 }
 
 // Setup an array of venue details for use later in the template
@@ -29,11 +33,11 @@ $organizer = tribe_get_organizer();
 
 <!-- Event Title -->
 <?php do_action( 'tribe_events_before_the_event_title' ) ?>
-<h2 class="tribe-events-list-event-title">
+<h3 class="tribe-events-list-event-title">
 	<a class="tribe-event-url" href="<?php echo esc_url( tribe_get_event_link() ); ?>" title="<?php the_title_attribute() ?>" rel="bookmark">
 		<?php the_title() ?>
 	</a>
-</h2>
+</h3>
 <?php do_action( 'tribe_events_after_the_event_title' ) ?>
 
 <!-- Event Meta -->
@@ -55,7 +59,7 @@ $organizer = tribe_get_organizer();
 				// These details are already escaped in various ways earlier in the process.
 				echo implode( $address_delimiter, $venue_details );
 
-				if ( tribe_get_map_link() ) {
+				if ( tribe_show_google_map_link() ) {
 					echo tribe_get_map_link_html();
 				}
 			?>

@@ -3,13 +3,18 @@
  * List View Single Featured Event
  * This file contains one featured event in the list view
  *
- * Override this template in your own theme by creating a file at [your-theme]/tribe-events/list/single-featured.php
+ * Override this template in your own theme by creating a file at:
+ * [your-theme]/tribe-events/list/single-featured.php
  *
- * @version 4.5.6
+ * @version 4.6.19
  *
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
+}
+
+if ( tec_events_views_v1_should_display_deprecated_notice() ) {
+	_deprecated_file( __FILE__, '5.13.0', null, 'On version 6.0.0 this file will be removed. Please refer to <a href="https://evnt.is/v1-removal">https://evnt.is/v1-removal</a> for template customization assistance.' );
 }
 
 // Setup an array of venue details for use later in the template
@@ -27,11 +32,11 @@ echo tribe_event_featured_image( null, 'large' );
 
 <!-- Event Title -->
 <?php do_action( 'tribe_events_before_the_event_title' ) ?>
-<h2 class="tribe-events-list-event-title">
+<h3 class="tribe-events-list-event-title">
 	<a class="tribe-event-url" href="<?php echo esc_url( tribe_get_event_link() ); ?>" title="<?php the_title_attribute() ?>" rel="bookmark">
 		<?php the_title() ?>
 	</a>
-</h2>
+</h3>
 <?php do_action( 'tribe_events_after_the_event_title' ) ?>
 
 <!-- Event Meta -->
@@ -49,7 +54,7 @@ echo tribe_event_featured_image( null, 'large' );
 			<div class="tribe-events-venue-details">
 				<?php echo implode( ', ', $venue_details ); ?>
 				<?php
-				if ( tribe_get_map_link() ) {
+				if ( tribe_show_google_map_link() ) {
 					echo tribe_get_map_link_html();
 				}
 				?>

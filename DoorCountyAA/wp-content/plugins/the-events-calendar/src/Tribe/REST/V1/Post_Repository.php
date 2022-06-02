@@ -8,7 +8,7 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 *
 	 * @var array
 	 */
-	protected $types_get_map = array();
+	protected $types_get_map = [];
 
 	/**
 	 * @var Tribe__REST__Messages_Interface
@@ -60,15 +60,40 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 * @since 4.6 Added $context param
 	 */
 	public function get_event_data( $event_id, $context = '' ) {
+		if ( $event_id instanceof WP_Post ) {
+			$event_id = $event_id->ID;
+		}
+
+		/**
+		 * Action executed before the Event data is pulled before deliver the Event via REST API.
+		 *
+		 * @param $event_id int The ID of the event
+		 *
+		 * @since 4.9.4
+		 */
+		do_action( 'tribe_rest_before_event_data', $event_id );
+
+		/** @var Tribe__Cache $cache */
+		$cache     = tribe( 'cache' );
+		$cache_key = 'rest_get_event_data_' . get_current_user_id() . '_' . $event_id . '_' . $context;
+
+		$data = $cache->get( $cache_key, 'save_post' );
+
+		if ( is_array( $data ) ) {
+			return $data;
+		}
+
 		$event = get_post( $event_id );
 
 		if ( empty( $event ) || ! tribe_is_event( $event ) ) {
 			return new WP_Error( 'event-not-found', $this->messages->get_message( 'event-not-found' ) );
 		}
 
-		$meta = array_map( 'reset', get_post_custom( $event_id ) );
+		$meta = array_map( function ( $item ) {
+			return reset( $item );
+		}, get_post_custom( $event_id ) );
 
-		$venue = $this->get_venue_data( $event_id, $context );
+		$venue     = $this->get_venue_data( $event_id, $context );
 		$organizer = $this->get_organizer_data( $event_id, $context );
 
 		$data = array(
@@ -81,12 +106,12 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			'date_utc'               => $event->post_date_gmt,
 			'modified'               => $event->post_modified,
 			'modified_utc'           => $event->post_modified_gmt,
-			'status'                 => $event->post_status,
 			'url'                    => get_the_permalink( $event_id ),
 			'rest_url'               => tribe_events_rest_url( 'events/' . $event_id ),
-			'title'                  => trim( apply_filters( 'the_title', $event->post_title ) ),
+			'title'                  => trim( apply_filters( 'the_title', $event->post_title, $event_id ) ),
 			'description'            => trim( apply_filters( 'the_content', $event->post_content ) ),
 			'excerpt'                => trim( apply_filters( 'the_excerpt', $event->post_excerpt ) ),
+			'slug'                   => $event->post_name,
 			'image'                  => $this->get_featured_image( $event_id ),
 			'all_day'                => isset( $meta['_EventAllDay'] ) ? tribe_is_truthy( $meta['_EventAllDay'] ) : false,
 			'start_date'             => $meta['_EventStartDate'],
@@ -102,6 +127,7 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			'cost'                   => tribe_get_cost( $event_id, true ),
 			'cost_details'           => array(
 				'currency_symbol'   => isset( $meta['_EventCurrencySymbol'] ) ? $meta['_EventCurrencySymbol'] : '',
+				'currency_code'     => isset( $meta['_EventCurrencyCode'] ) ? $meta['_EventCurrencyCode'] : '',
 				'currency_position' => isset( $meta['_EventCurrencyPosition'] ) ? $meta['_EventCurrencyPosition'] : '',
 				'values'            => $this->get_cost_values( $event_id ),
 			),
@@ -126,6 +152,7 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 		 * @param array $json_ld_contexts An array of contexts.
 		 */
 		$json_ld_contexts = apply_filters( 'tribe_rest_event_json_ld_data_contexts', array( 'single' ) );
+
 		if ( in_array( $context, $json_ld_contexts, true ) ) {
 			$json_ld_data = tribe( 'tec.json-ld.event' )->get_data( $event );
 
@@ -145,6 +172,8 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 		 */
 		$data = apply_filters( 'tribe_rest_event_data', $data, $event );
 
+		$cache->set( $cache_key, $data, Tribe__Cache::NON_PERSISTENT, 'save_post' );
+
 		return $data;
 	}
 
@@ -159,6 +188,20 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 * @since 4.6 Added $context param
 	 */
 	public function get_venue_data( $event_or_venue_id, $context = '' ) {
+		if ( $event_or_venue_id instanceof WP_Post ) {
+			$event_or_venue_id = tribe_get_venue_id( $event_or_venue_id->ID );
+		}
+
+		/** @var Tribe__Cache $cache */
+		$cache     = tribe( 'cache' );
+		$cache_key = 'rest_get_venue_data_' . get_current_user_id() . '_' . $event_or_venue_id . '_' . $context;
+
+		$data = $cache->get( $cache_key, 'save_post' );
+
+		if ( is_array( $data ) ) {
+			return $data;
+		}
+
 		if ( tribe_is_event( $event_or_venue_id ) ) {
 			$venue = get_post( tribe_get_venue_id( $event_or_venue_id ) );
 			if ( empty( $venue ) ) {
@@ -170,7 +213,9 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			return new WP_Error( 'venue-not-found', $this->messages->get_message( 'venue-not-found' ) );
 		}
 
-		$meta = array_map( 'reset', get_post_custom( $venue->ID ) );
+		$meta = array_map( function ( $item ) {
+			return reset( $item );
+		}, get_post_custom( $venue->ID ) );
 
 		$data = array(
 			'id'            => $venue->ID,
@@ -181,9 +226,10 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			'modified'      => $venue->post_modified,
 			'modified_utc'  => $venue->post_modified_gmt,
 			'url'           => get_the_permalink( $venue->ID ),
-			'venue'         => trim( apply_filters( 'the_title', $venue->post_title ) ),
+			'venue'         => trim( apply_filters( 'the_title', $venue->post_title, $venue->ID ) ),
 			'description'   => trim( apply_filters( 'the_content', $venue->post_content ) ),
 			'excerpt'       => trim( apply_filters( 'the_excerpt', $venue->post_excerpt ) ),
+			'slug'          => $venue->post_name,
 			'image'         => $this->get_featured_image( $venue->ID ),
 			'address'       => isset( $meta['_VenueAddress'] ) ? $meta['_VenueAddress'] : '',
 			'city'          => isset( $meta['_VenueCity'] ) ? $meta['_VenueCity'] : '',
@@ -224,27 +270,28 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 
 		$data = array_filter( $data );
 
-		$data['show_map'] = isset( $meta['_VenueShowMap'] ) ? tribe_is_truthy( $meta['_VenueShowMap'] ) : true;
+		$data['show_map']      = isset( $meta['_VenueShowMap'] ) ? tribe_is_truthy( $meta['_VenueShowMap'] ) : true;
 		$data['show_map_link'] = isset( $meta['_VenueShowMapLink'] ) ? tribe_is_truthy( $meta['_VenueShowMapLink'] ) : true;
 
 		// Add the Global ID fields
 		$data = $this->add_global_id_fields( $data, $venue->ID );
 
+		$event = null;
+
+		if ( tribe_is_event( $event_or_venue_id ) ) {
+			$event = get_post( $event_or_venue_id );
+		}
+
 		/**
 		 * Filters the data that will be returned for a single venue.
 		 *
-		 * @param array   $data  The data that will be returned in the response.
-		 * @param WP_Post $event The requested venue.
+		 * @param array        $data  The data that will be returned in the response.
+		 * @param WP_Post      $venue The requested venue.
+		 * @param WP_Post|null $event The requested event, if event ID was used.
 		 */
-		$data = apply_filters( 'tribe_rest_venue_data', $data, $venue );
+		$data = apply_filters( 'tribe_rest_venue_data', $data, $venue, $event );
 
-		/**
-		 * Filters the data that will be returned for an event venue.
-		 *
-		 * @param array   $data  The data that will be returned in the response.
-		 * @param WP_Post $event The requested event.
-		 */
-		$data = apply_filters( 'tribe_rest_venue_data', $data, get_post( $event_or_venue_id ) );
+		$cache->set( $cache_key, $data, Tribe__Cache::NON_PERSISTENT, 'save_post' );
 
 		return $data;
 	}
@@ -346,14 +393,35 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 
 		$data = array();
 
+		/** @var Tribe__Cache $cache */
+		$cache = tribe( 'cache' );
+
 		foreach ( $organizers as $organizer_id ) {
+			if ( is_object( $organizer_id ) ) {
+				$organizer = $organizer_id;
+
+				$organizer_id = $organizer->ID;
+			}
+
+			$cache_key = 'rest_get_organizer_data_' . get_current_user_id() . '_' . $organizer_id . '_' . $context;
+
+			$this_data = $cache->get( $cache_key, 'save_post' );
+
+			if ( is_array( $this_data ) ) {
+				$data[] = $this_data;
+
+				continue;
+			}
+
 			$organizer = get_post( $organizer_id );
 
 			if ( empty( $organizer ) ) {
 				continue;
 			}
 
-			$meta = array_map( 'reset', get_post_custom( $organizer->ID ) );
+			$meta = array_map( function ( $item ) {
+				return reset( $item );
+			}, get_post_custom( $organizer->ID ) );
 
 			$this_data = array(
 				'id'           => $organizer->ID,
@@ -364,9 +432,10 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 				'modified'     => $organizer->post_modified,
 				'modified_utc' => $organizer->post_modified_gmt,
 				'url'          => get_the_permalink( $organizer->ID ),
-				'organizer'    => trim( apply_filters( 'the_title', $organizer->post_title ) ),
+				'organizer'    => trim( apply_filters( 'the_title', $organizer->post_title, $organizer->ID ) ),
 				'description'  => trim( apply_filters( 'the_content', $organizer->post_content ) ),
 				'excerpt'      => trim( apply_filters( 'the_excerpt', $organizer->post_excerpt ) ),
+				'slug'         => $organizer->post_name,
 				'image'        => $this->get_featured_image( $organizer->ID ),
 				'phone'        => isset( $meta['_OrganizerPhone'] ) ? $meta['_OrganizerPhone'] : '',
 				'website'      => isset( $meta['_OrganizerWebsite'] ) ? $meta['_OrganizerWebsite'] : '',
@@ -401,6 +470,8 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			 * @param WP_Post $event The requested organizer.
 			 */
 			$this_data = apply_filters( 'tribe_rest_organizer_data', array_filter( $this_data ), $organizer );
+
+			$cache->set( $cache_key, $this_data, Tribe__Cache::NON_PERSISTENT, 'save_post' );
 
 			$data[] = $this_data;
 		}
@@ -445,13 +516,17 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 * @return array
 	 */
 	protected function get_cost_values( $event_id ) {
-		$cost_couples = tribe( 'tec.cost-utils' )->get_event_costs( $event_id );
+		/** @var Tribe__Cost_Utils $cost_utils */
+		$cost_utils   = tribe( 'tec.cost-utils' );
+		$cost_couples = $cost_utils->get_event_costs( $event_id );
 
-		global $wp_locale;
 		$cost_values = array();
 		foreach ( $cost_couples as $key => $value ) {
-			$value = str_replace( $wp_locale->number_format['decimal_point'], '.', '' . $value );
-			$value = str_replace( $wp_locale->number_format['thousands_sep'], '', $value );
+			list( $decimal_sep, $thousands_sep ) = $cost_utils->parse_separators( $value );
+
+			$value = str_replace( $thousands_sep, '', $value );
+			$value = str_replace( $decimal_sep, '.', '' . $value );
+
 			if ( is_numeric( $value ) ) {
 				$cost_values[] = $value;
 			} else {

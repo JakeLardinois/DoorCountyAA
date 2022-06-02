@@ -12,13 +12,17 @@ var tribe_events_pro_admin = {
 
 			var selectedOption = $( '#saved_venue option:selected' );
 			if ( selectedOption.val() === 0 ) {
-				var form = $( this ).closest( 'form' ), street = form.find( '[name="venue[Address]"]' ).val(),
+				/* eslint-disable es5/no-es6-methods */
+				var form = $( this ).closest( 'form' ),
+					street = form.find( '[name="venue[Address]"]' ).val(),
 					city = form.find( '[name="venue[City]"]' ).val(),
 					country = form.find( '[name="venue[Country]"]' ).val(),
 					state = form.find( '[name="venue[Country]"] option:selected' ).val() === 'US'
-						? form.find( '[name="venue[State]"]' ).val() : form.find( '[name="venue[Province]"]' ).val(),
+						? form.find( '[name="venue[State]"]' ).val()
+						: form.find( '[name="venue[Province]"]' ).val(),
 					zip = form.find( '[name="venue[Zip]"]' ).val(),
 					address = street + ',' + city + ',' + state + ',' + country + ',' + zip;
+				/* eslint-enable es5/no-es6-methods */
 
 				if ( typeof codeAddress === 'function' ) {
 					codeAddress( address );
@@ -34,7 +38,10 @@ var tribe_events_pro_admin = {
 
 		$( '#doaction, #doaction2' ).click( function( e ) {
 			var n = $( this ).attr( 'id' ).substr( 2 );
-			if ( $( 'select[name="' + n + '"]' ).val() === 'edit' && $( '.post_type_page' ).val() === 'tribe_events' ) {
+			if (
+				$( 'select[name="' + n + '"]' ).val() === 'edit' &&
+				$( '.post_type_page' ).val() === 'tribe_events'
+			) {
 				e.preventDefault();
 
 				var ids = [];
@@ -85,7 +92,10 @@ var tribe_events_pro_admin = {
 		/* Fix for deleting multiple events */
 		$( '.wp-admin.events-cal.edit-php #doaction' ).click( function( e ) {
 			if ( $( '[name="action"] option:selected' ).val() === 'trash' ) {
-				if ( $( '.tribe-recurring-event-parent [name="post[]"]:checked').length > 0 && !confirm( TribeEventsProAdmin.recurrence.bulkDeleteConfirmationMessage ) ) {
+				if (
+					$( '.tribe-recurring-event-parent [name="post[]"]:checked' ).length > 0 &&
+					! confirm( TribeEventsProAdmin.recurrence.bulkDeleteConfirmationMessage )
+				) {
 					e.preventDefault();
 				}
 			}
@@ -96,13 +106,15 @@ var tribe_events_pro_admin = {
 		 * realtime updates.
 		 */
 		if ( 'object' === typeof TribeEventsProRecurrenceUpdate ) {
+			/* eslint-disable es5/no-es6-methods */
 			var notice = $( 'div.tribe-events-recurring-update-msg' );
 			var spinner  = notice.find( 'img' );
 			var progress = notice.find( 'div.progress' );
 			var bar      = notice.find( 'div.bar' );
 			var time     = Date.now();
+			/* eslint-enable es5/no-es6-methods */
 
-			function handleResponse( data ) {
+			function handleResponse( data ) { // eslint-disable-line no-inner-declarations
 				var now     = Date.now();
 				var elapsed = now - time;
 
@@ -128,7 +140,7 @@ var tribe_events_pro_admin = {
 				}
 			}
 
-			function sendRequest() {
+			function sendRequest() { // eslint-disable-line no-inner-declarations
 				var payload = {
 					event:  TribeEventsProRecurrenceUpdate.eventID,
 					check:  TribeEventsProRecurrenceUpdate.check,
@@ -137,7 +149,7 @@ var tribe_events_pro_admin = {
 				$.post( ajaxurl, payload, handleResponse, 'json' );
 			}
 
-			function updateProgress( percentage, text ) {
+			function updateProgress( percentage, text ) { // eslint-disable-line no-inner-declarations
 				percentage = parseInt( percentage );
 
 				// The percentage should never be out of bounds, but let's handle such a thing gracefully if it arises
@@ -149,7 +161,7 @@ var tribe_events_pro_admin = {
 				progress.attr( 'title', text );
 			}
 
-			function removeNotice() {
+			function removeNotice() { // eslint-disable-line no-inner-declarations
 				var effect = {
 					opacity: 0,
 					height:  'toggle'
@@ -160,13 +172,40 @@ var tribe_events_pro_admin = {
 				} );
 			}
 
-			function start() {
+			function start() { // eslint-disable-line no-inner-declarations
 				sendRequest();
-				updateProgress( TribeEventsProRecurrenceUpdate.progress, TribeEventsProRecurrenceUpdate.progressText );
+				updateProgress(
+					TribeEventsProRecurrenceUpdate.progress,
+					TribeEventsProRecurrenceUpdate.progressText
+				);
 			}
 
 			setTimeout( start );
 		}
+
+		// show state/province input based on first option in countries list, or based on user input of country
+		$( 'body' ).on( 'change', '#defaultCountry-select', function () {
+			var $state          = $( '#tribe-field-eventsDefaultState' );
+			var $province       = $( '.tribe-settings-form-wrap #tribe-field-eventsDefaultProvince' );
+			var $state_desc     = $( 'p.tribe-saved-state' );
+			var $province_desc  = $( 'p.tribe-saved-province' );
+			var country         = $( this ).val();
+
+			if ( 'US' === country || 'United States' === country ) {
+				$province.hide();
+				$province_desc.hide();
+				$state.show();
+				$state_desc.show();
+			} else {
+
+				$state.hide();
+				$state_desc.hide();
+				$province.show();
+				$province_desc.show();
+			}
+		} )
+		.find( '#defaultCountry-select' ).trigger( 'change' );
+
 	};
 
 	/**

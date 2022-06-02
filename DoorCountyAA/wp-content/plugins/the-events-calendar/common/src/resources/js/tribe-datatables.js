@@ -4,7 +4,6 @@ window.tribe_data_table = null;
 	'use strict';
 
 	$.fn.tribeDataTable = function( options ) {
-		var $document = $( document );
 		var settings = $.extend( {
 			language: {
 				lengthMenu   : tribe_l10n_datatables.length_menu,
@@ -70,12 +69,9 @@ window.tribe_data_table = null;
 				$table.find( '.tribe-datatables-all-pages-checkbox' ).remove();
 
 				var $thead = $table.find( 'thead' );
-				var $tfoot = $table.find( 'tfoot' );
-				var $header_checkbox = $thead.find( '.column-cb input:checkbox' );
-				var $footer_checkbox = $tfoot.find( '.column-cb input:checkbox' );
 
-				var $link = $( '<a>' ).attr( 'href', '#select-all' ).text( tribe_l10n_datatables.select_all_link );
-				var $text = $( '<div>' ).css( 'text-align', 'center' ).text( tribe_l10n_datatables.all_selected_text ).append( $link );
+				var $link = $( '<a>' ).attr( 'href', '#select-all' ).text( tribe_l10n_datatables.select_all_link ); // eslint-disable-line max-len
+				var $text = $( '<div>' ).css( 'text-align', 'center' ).text( tribe_l10n_datatables.all_selected_text ).append( $link ); // eslint-disable-line max-len
 				var $column = $( '<th>' ).attr( 'colspan', table.columns()[0].length ).append( $text );
 				var $row = $( '<tr>' ).addClass( 'tribe-datatables-all-pages-checkbox' ).append( $column );
 
@@ -105,11 +101,45 @@ window.tribe_data_table = null;
 
 				if ( $checkbox.is( ':checked' ) ) {
 					table.row( $row ).select();
+
+					let $tableBody = $checkbox.closest( '.dataTable tbody' );
+					let $checkCells = $tableBody.find( ".check-column" );
+					for ( let checkCell of $checkCells ) { /* eslint-disable-line es5/no-for-of */
+						let checkboxInput = checkCell.querySelector( 'input' );
+						let thisRow = checkCell.closest( 'tr' );
+						if ( checkboxInput.checked ) {
+							table.row( thisRow ).select();
+						}
+					}
+
 					return;
 				}
 
 				table.row( $row ).deselect();
-				$checkbox.closest( '.dataTable' ).find( 'thead .column-cb input:checkbox, tfoot .column-cb input:checkbox' ).prop( 'checked', false );
+				$checkbox
+					.closest( '.dataTable' )
+					.find( 'thead .column-cb input:checkbox, tfoot .column-cb input:checkbox' )
+					.prop( 'checked', false );
+			},
+			/**
+			 * On ctrl/spacebar click to multi-select rows, run through all the rows and run select() on any that are checked.
+			 * This happens on change event as click is too early and will not detect the entire interval of selected events.
+			 *
+			 * @since 4.15.1
+			 *
+			 * @param {jQuery} $checkbox The jQuery object of the checkbox.
+			 * @param {DataTable} table The DataTable object.
+			 */
+			toggleMultipleRowCheckboxes: function( $checkbox, table ) {
+				const $tableBody = $checkbox.closest( '.dataTable tbody' );
+				const $checkCells = $tableBody.find( ".check-column" );
+				for ( let checkCell of $checkCells ) { /* eslint-disable-line es5/no-for-of */
+					const checkboxInput = checkCell.querySelector( 'input' );
+					const thisRow = checkCell.closest( 'tr' );
+					if ( checkboxInput.checked ) {
+						table.row( thisRow ).select();
+					}
+				}
 			}
 		};
 
@@ -131,7 +161,7 @@ window.tribe_data_table = null;
 				table.draw();
 			}
 
-			var resetSelection = function ( event, settings ) {
+			var resetSelection = function ( event, settings ) { // eslint-disable-line no-unused-vars
 				methods.setVisibleCheckboxes( $el, table, false );
 			};
 
@@ -155,6 +185,14 @@ window.tribe_data_table = null;
 				'tbody .check-column input:checkbox',
 				function() {
 					methods.toggleRowCheckbox( $( this ), table );
+				}
+			);
+
+			$el.on(
+				'change',
+				'tbody .check-column input:checkbox',
+				function() {
+					methods.toggleMultipleRowCheckboxes( $( this ), table );
 				}
 			);
 		} );

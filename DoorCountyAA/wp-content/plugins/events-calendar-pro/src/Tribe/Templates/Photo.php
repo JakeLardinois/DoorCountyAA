@@ -1,10 +1,8 @@
 <?php
+use Tribe__Date_Utils as Dates;
+
 /**
- * @for Photo Template
  * This file contains hooks and functions required to set up the photo view.
- *
- * @package TribeEventsCalendarPro
- *
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,16 +15,18 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Photo' ) ) {
 		protected $body_class = 'events-photo';
 		const AJAX_HOOK = 'tribe_photo';
 		public $view_path = 'pro/photo/content';
+		public $photoSlug = 'photo';
 
 		/**
 		 * Array of asset packages needed for this template
 		 *
 		 * @var array
 		 **/
-		protected $asset_packages = array( 'ajax-photoview' );
+		protected $asset_packages = array();
 
 		protected function hooks() {
 			parent::hooks();
+			tribe_asset_enqueue( 'tribe-events-pro-photo' );
 			add_filter( 'tribe_events_header_attributes', array( $this, 'header_attributes' ) );
 		}
 
@@ -37,8 +37,25 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Photo' ) ) {
 		 **/
 		public function header_attributes( $attrs ) {
 			$attrs['data-startofweek'] = get_option( 'start_of_week' );
-			$attrs['data-view'] = 'photo';
-			$attrs['data-baseurl'] = tribe_get_photo_permalink( false );
+			$attrs['data-view']        = 'photo';
+			$attrs['data-baseurl']     = tribe_get_photo_permalink( false );
+
+			$term         = false;
+			$term_name    = get_query_var( Tribe__Events__Main::TAXONOMY );
+
+			if ( ! empty( $term_name ) ) {
+				$term_obj = get_term_by( 'slug', $term_name, Tribe__Events__Main::TAXONOMY );
+
+				if ( ! empty( $term_obj ) ) {
+					$term = 0 < $term_obj->term_id ? $term_obj->term_id : false;
+					if ( $term ) {
+						$term_link = get_term_link( (int) $term, Tribe__Events__Main::TAXONOMY );
+						if ( ! is_wp_error( $term_link ) ) {
+							$attrs['data-baseurl'] = trailingslashit( $term_link . $this->photoSlug );
+						}
+					}
+				}
+			}
 
 			return apply_filters( 'tribe_events_pro_header_attributes', $attrs );
 		}
@@ -75,13 +92,35 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Photo' ) ) {
 				$post_status[] = 'private';
 			}
 
+			// Set the date explicitly if not set.
+			$date = tribe_get_request_var( 'tribe-bar-date', 'now' );
+
 			$args = array(
 				'eventDisplay' => 'list',
 				'post_type'    => Tribe__Events__Main::POSTTYPE,
 				'post_status'  => $post_status,
 				'paged'        => $tribe_paged,
-				'featured'     => tribe( 'tec.featured_events' )->featured_events_requested(),
 			);
+
+			// If the request is false or not set we assume the request is for all events, not just featured ones.
+			if (
+				tribe( 'tec.featured_events' )->featured_events_requested()
+				|| (
+					isset( $this->args['featured'] )
+					&& tribe_is_truthy( $this->args['featured'] )
+				)
+			) {
+				$args['featured'] = true;
+			} else {
+				/**
+				 * Unset due to how queries featured argument is expected to be non-existent.
+				 *
+				 * @see #127272
+				 */
+				if ( isset( $args['featured'] ) ) {
+					unset( $args['featured'] );
+				}
+			}
 
 			$view_state = 'photo';
 
@@ -89,16 +128,39 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Photo' ) ) {
 				$args[ Tribe__Events__Main::TAXONOMY ] = $_POST['tribe_event_category'];
 			}
 
-			/* if past view */
-			if ( ! empty( $_POST['tribe_event_display'] ) && $_POST['tribe_event_display'] == 'past' ){
-				$view_state = 'past';
-				$args['eventDisplay'] = 'past';
-				$args['order'] = 'DESC';
+			if ( (bool) tribe_get_request_var( 'tribeHideRecurrence' ) ) {
+				$args['hide_subsequent_recurrences'] = true;
+			}
+			// Apply display and date.
+			$date = tribe_get_request_var( 'tribe-bar-date', 'now' );
+
+			if ( 'now' === $date ) {
+				/*
+				 * When defaulting to "now" let's round down to the lower half hour.
+				 * This way we avoid invalidating the hash on requests following each other
+				 * in reasonable (30') time.
+				 */
+				$date = Dates::build_date_object( 'now' );
+				$minutes = $date->format( 'm' );
+				$date->setTime(
+					$date->format( 'H' ),
+					$minutes - ( $minutes % 30 )
+				);
+				$date = $date->format( Dates::DBDATETIMEFORMAT );
 			}
 
+			// Handle current or past view distinction.
+			if ( 'past' === tribe_get_request_var( 'tribe_event_display' ) ) {
+				$view_state            = 'past';
+				$args['eventDisplay']  = 'past';
+				$args['order']         = 'DESC';
+				$args['ends_before']   = $date;
+			} else {
+				$args['ends_after'] = $date;
+			}
 
 			$query = Tribe__Events__Query::getEvents( $args, true );
-			$hash  = $query->query_vars;
+			$hash  = $args;
 
 			$hash['paged']      = null;
 			$hash['start_date'] = null;
@@ -119,7 +181,9 @@ if ( ! class_exists( 'Tribe__Events__Pro__Templates__Photo' ) ) {
 				'view'        => $view_state,
 			);
 
-			global $wp_query, $post;
+			global $post;
+			global $wp_query;
+
 			$wp_query = $query;
 			if ( ! empty( $query->posts ) ) {
 				$post = $query->posts[0];

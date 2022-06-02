@@ -1,10 +1,13 @@
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	var $widget_wrapper = $( '.tribe-mini-calendar-wrapper' ).parent();
 
 	function fix_widget_height() {
 		var wrapper = $( '.tribe-mini-calendar-wrapper' );
-		if ( $( '.tribe-mini-calendar-wrapper.layout-wide' ).length && $( '.tribe-mini-calendar-right' ).length ) {
+		if (
+			$( '.tribe-mini-calendar-wrapper.layout-wide' ).length &&
+			$( '.tribe-mini-calendar-right' ).length
+		) {
 			var right_bar = $( '.tribe-mini-calendar-right' );
 			var w_height = wrapper.height();
 			var rb_height = right_bar.outerHeight();
@@ -24,7 +27,9 @@ jQuery( document ).ready( function( $ ) {
 
 	function change_active_day( obj ) {
 		var $calendar = obj.closest( '.tribe-mini-calendar' );
-		$calendar.find( '.tribe-events-thismonth,.tribe-events-othermonth' ).removeClass( 'tribe-mini-calendar-today' );
+		$calendar
+			.find( '.tribe-events-thismonth,.tribe-events-othermonth' )
+			.removeClass( 'tribe-mini-calendar-today' );
 		obj.parents( '.tribe-events-has-events' ).addClass( 'tribe-mini-calendar-today' );
 	}
 
@@ -36,7 +41,7 @@ jQuery( document ).ready( function( $ ) {
 		day = date.getDate().toString(),
 		month = (date.getMonth() + 1).toString(),
 		year = date.getFullYear().toString(),
-		current = year + '-' + (month[1] ? month : '0' + month[0]) + '-' + (day[1] ? day : '0' + day[0]),
+		current = year + '-' + (month[1] ? month : '0' + month[0]) + '-' + (day[1] ? day : '0' + day[0]), // eslint-disable-line max-len
 		current_ym = current.slice( 0, 7 );
 
 	$widget_wrapper
@@ -51,7 +56,7 @@ jQuery( document ).ready( function( $ ) {
 			var month_target = $this.attr( 'data-month' ),
 				target_ym = month_target.slice( 0, 7 );
 
-			if ( current_ym == target_ym ) {
+			if ( current_ym == target_ym ) { // eslint-disable-line eqeqeq
 				month_target = current;
 			}
 
@@ -62,7 +67,11 @@ jQuery( document ).ready( function( $ ) {
 				tax_query: $current_calendar.data( 'tax-query' ),
 				nonce    : $current_calendar.data( 'nonce' )
 			};
-			$current_calendar.find( '.tribe-mini-calendar-nav div > span' ).addClass( 'active' ).siblings( '#ajax-loading-mini' ).show();
+			$current_calendar
+				.find( '.tribe-mini-calendar-nav div > span' )
+				.addClass( 'active' )
+				.siblings( '#ajax-loading-mini' )
+				.show();
 
 			$.post(
 				TribeMiniCalendar.ajaxurl,
@@ -71,7 +80,11 @@ jQuery( document ).ready( function( $ ) {
 					$current_calendar.find( '.tribe-mini-calendar-list-wrapper' ).remove();
 					if ( response.success ) {
 						var $the_content = $.parseHTML( response.html );
-						$current_calendar.find( '.tribe-mini-calendar-nav div > span' ).removeClass( 'active' ).siblings( '#ajax-loading-mini' ).hide();
+						$current_calendar
+							.find( '.tribe-mini-calendar-nav div > span' )
+							.removeClass( 'active' )
+							.siblings( '#ajax-loading-mini' )
+							.hide();
 						$current_calendar_wrapper.replaceWith( $the_content );
 						fix_widget_height();
 					}
@@ -84,9 +97,12 @@ jQuery( document ).ready( function( $ ) {
 			var date = $this.attr( 'data-day' );
 			var day = $this.text();
 			var $current_calendar = $this.closest( '.tribe-mini-calendar' );
-			var $current_calendar_events_list = $current_calendar.parent().siblings( '.tribe-mini-calendar-list-wrapper' );
+			var $current_calendar_events_list = $current_calendar
+				.parent()
+				.siblings( '.tribe-mini-calendar-list-wrapper' );
 
-			$( 'h2.tribe-mini-calendar-title' ).text( $( '#tribe-mini-calendar-month-name' ).val() + ' ' + day + ' Events' );
+			$( 'h2.tribe-mini-calendar-title' )
+				.text( $( '#tribe-mini-calendar-month-name' ).val() + ' ' + day + ' Events' );
 			change_active_day( $this );
 			var params = {
 				action   : 'tribe-mini-cal-day',
@@ -96,20 +112,28 @@ jQuery( document ).ready( function( $ ) {
 				nonce    : $current_calendar.data( 'nonce' )
 			};
 
-			$current_calendar.find( '.tribe-mini-calendar-nav div > span' ).addClass( 'active' ).siblings( '#ajax-loading-mini' ).show();
+			$current_calendar
+				.find( '.tribe-mini-calendar-nav div > span' )
+				.addClass( 'active' )
+				.siblings( '#ajax-loading-mini' )
+				.show();
 			$.post(
 				TribeMiniCalendar.ajaxurl,
 				params,
 				function( response ) {
 					if ( response.success ) {
 						var $the_content = '';
-						if ( $.isFunction( $.fn.parseHTML ) ) {
+						if ( 'function' === typeof $.fn.parseHTML ) {
 							$the_content = $.parseHTML( response.html );
 						}
 						else {
 							$the_content = response.html;
 						}
-						$current_calendar.find( '.tribe-mini-calendar-nav div > span' ).removeClass( 'active' ).siblings( '#ajax-loading-mini' ).hide();
+						$current_calendar
+							.find( '.tribe-mini-calendar-nav div > span' )
+							.removeClass( 'active' )
+							.siblings( '#ajax-loading-mini' )
+							.hide();
 						$current_calendar_events_list.replaceWith( $the_content );
 						fix_widget_height();
 					}

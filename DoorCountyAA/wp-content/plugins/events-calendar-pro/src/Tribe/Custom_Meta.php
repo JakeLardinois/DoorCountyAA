@@ -45,10 +45,15 @@ class Tribe__Events__Pro__Custom_Meta {
 		add_action( 'wp_ajax_remove_option', array( __CLASS__, 'remove_meta_field' ) );
 		add_action( 'tribe_settings_after_content_tab_additional-fields', array( __CLASS__, 'event_meta_options' ) );
 		add_action( 'tribe_events_details_table_bottom', array( __CLASS__, 'single_event_meta' ) );
-		add_action( 'tribe_events_update_meta', array( __CLASS__, 'save_single_event_meta' ), 10, 2 );
+		self::add_save_single_meta_filter();
 		add_filter( 'tribe_settings_validate_tab_additional-fields', array( __CLASS__, 'force_save_meta' ) );
 		add_filter( 'tribe_events_csv_import_event_additional_fields', array( __CLASS__, 'import_additional_fields' ) );
 		add_filter( 'tribe_events_importer_event_column_names', array( __CLASS__, 'importer_column_mapping' ) );
+
+		// During EA imports the custom fields will not be modified so we suspend the class
+		// filters to avoid emptying them.
+		add_action( 'tribe_aggregator_before_insert_posts', array( __CLASS__, 'remove_save_single_meta_filter' ) );
+		add_action( 'tribe_aggregator_after_insert_posts', array( __CLASS__, 'add_save_single_meta_filter' ) );
 	}
 
 	/**
@@ -144,9 +149,6 @@ class Tribe__Events__Pro__Custom_Meta {
 		$add_another  = esc_html( __( 'Add another', 'tribe-events-calendar-pro' ) );
 		$remove_field = esc_html( __( 'Remove', 'tribe-events-calendar-pro' ) );
 
-		// Settings for regular WordPress custom fields
-		$disable_metabox_custom_fields = $pro->displayMetaboxCustomFields() ? 'show' : 'hide';
-
 		include $pro->pluginPath . 'src/admin-views/event-meta-options.php';
 	}
 
@@ -171,7 +173,7 @@ class Tribe__Events__Pro__Custom_Meta {
 	/**
 	 * Saves the custom fields for a single event.
 	 *
-	 * In the case of fields where mutiple values have been assigned (or even if only
+	 * In the case of fields where multiple values have been assigned (or even if only
 	 * a single value was assigned - but the field type itself _supports_ multiple
 	 * values, such as a checkbox field) an additional set of records will be created
 	 * storing each value in a separate row of the postmeta table.
@@ -320,7 +322,7 @@ class Tribe__Events__Pro__Custom_Meta {
 	 * @return array
 	 */
 	public static function save_meta_options( $ecp_options ) {
-		// The custom-fields key may not exist if not fields have been defined
+		// The custom-fields key may not exist if no fields have been defined
 		$ecp_options['custom-fields'] = isset( $ecp_options['custom-fields'] ) ? $ecp_options['custom-fields'] : array();
 
 		// Maintain a record of the highest assigned custom field index
@@ -332,7 +334,7 @@ class Tribe__Events__Pro__Custom_Meta {
 		$ecp_options['custom-fields'] = array();
 
 		// save the view state for custom fields
-		$ecp_options['disable_metabox_custom_fields'] = $_POST['disable_metabox_custom_fields'];
+		$ecp_options['disable_metabox_custom_fields'] = isset( $_POST['disable_metabox_custom_fields'] ) ? $_POST['disable_metabox_custom_fields'] : '';
 
 		foreach ( $_POST['custom-field'] as $index => $field ) {
 			$name   = wp_kses( stripslashes( $_POST['custom-field'][ $index ] ), array() );
@@ -351,7 +353,7 @@ class Tribe__Events__Pro__Custom_Meta {
 			//Remove Vertical Bar for Checkbox Field
 			$values = $type == 'checkbox' ? str_replace( '|', '', $values ) : $values;
 
-			// The indicies of pre-existing custom fields begin with an underscore - so if
+			// The indices of pre-existing custom fields begin with an underscore - so if
 			// the index does not have an underscore we need to assign a new one
 			if ( 0 === strpos( $index, '_' ) ) {
 				$assigned_index = substr( $index, 1 );
@@ -396,5 +398,23 @@ class Tribe__Events__Pro__Custom_Meta {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Adds the filter that will save the event custom meta.
+	 *
+	 * @since 4.4.26
+	 */
+	public static function add_save_single_meta_filter() {
+		add_action( 'tribe_events_update_meta', array( __CLASS__, 'save_single_event_meta' ), 10, 2 );
+	}
+
+	/**
+	 * Removes the filter that will save the event custom meta.
+	 *
+	 * @since 4.4.26
+	 */
+	public static function remove_save_single_meta_filter() {
+		remove_action( 'tribe_events_update_meta', array( __CLASS__, 'save_single_event_meta' ), 10 );
 	}
 }

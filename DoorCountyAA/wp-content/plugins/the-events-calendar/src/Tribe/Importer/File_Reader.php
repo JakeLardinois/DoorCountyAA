@@ -9,17 +9,34 @@ class Tribe__Events__Importer__File_Reader {
 	private $last_line_read = 0;
 	public $lines;
 
+	/**
+	 * Construct for Tribe__Events__Importer__File_Reader.
+	 *
+	 * @since 5.14.2 - Fix for PHP 8.0.15 to 8.0.17 on getting the last line of the csv file.
+	 *
+	 * @param string $file_path The full path to the file.
+	 */
 	public function __construct( $file_path ) {
 		ini_set( 'auto_detect_line_endings', true );
 		$this->path = $file_path;
 		$this->file = new SplFileObject( $this->path );
 		$this->file->setFlags( SplFileObject::SKIP_EMPTY | SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::DROP_NEW_LINE );
 		$this->set_csv_params( $this->get_csv_params() );
-		$this->file->seek( $this->file->getSize() );
-		$this->lines = $this->file->key();
+		$this->file->seek( PHP_INT_MAX );
+		$total_lines = $this->file->key();
+		/*
+		 * In PHP 8.0.15 to 8.0.17 or 8.1.2 to 8.1.4 the use of seek() and then key() returns 0 when using the flag SplFileObject::READ_CSV.
+		 * This bug is fixed in PHP 8.0.18 and 8.1.5.
+		 * @see https://github.com/php/php-src/issues/8236 - outlines the issue with seek()
+		 * @see https://github.com/php/php-src/pull/8138 - PR to fix the issue
+		 */
+		if ( 0 === $total_lines ) {
+			$total_lines = iterator_count( $this->file );
+		}
+		$this->lines = $total_lines;
 		$this->file->rewind();
 
-		add_filter( 'tribe_events_import_row', array( $this, 'sanitize_row' ) );
+		add_filter( 'tribe_events_import_row', [ $this, 'sanitize_row' ] );
 	}
 
 	public function __destruct() {
@@ -28,9 +45,8 @@ class Tribe__Events__Importer__File_Reader {
 
 	public function get_header() {
 		$this->file->rewind();
-		$row = $this->file->current();
 
-		return $row;
+		return $this->file->current();
 	}
 
 	public function set_row( $row_number ) {
@@ -46,7 +62,7 @@ class Tribe__Events__Importer__File_Reader {
 	public function read_next_row() {
 		$this->last_line_read = $this->file->key();
 		if ( ! $this->file->valid() ) {
-			return array();
+			return [];
 		}
 		$row = $this->file->current();
 
@@ -61,7 +77,7 @@ class Tribe__Events__Importer__File_Reader {
 
 		$this->file->next();
 
-		return empty( $row ) ? array() : $row;
+		return empty( $row ) ? [] : $row;
 	}
 
 	public function get_last_line_number_read() {
@@ -91,11 +107,11 @@ class Tribe__Events__Importer__File_Reader {
 	 * @return array The CSV field parameters.
 	 */
 	public function get_csv_params() {
-		$csv_params = array(
+		$csv_params = [
 			'delimter'  => ',',
 			'enclosure' => '"',
 			'escape'    => '\\',
-		);
+		];
 
 		/**
 		 * Set the parameters used for reading and importing CSV files.
@@ -130,18 +146,10 @@ class Tribe__Events__Importer__File_Reader {
 	 * }
 	 */
 	private function set_csv_params( $params ) {
-		// The escape parameter was added in PHP v5.3.
-		if ( version_compare( phpversion(), '5.3', '>' ) ) {
-			$this->file->setCsvControl(
-				$params['delimter'],
-				$params['enclosure'],
-				$params['escape']
-			);
-		} else {
-			$this->file->setCsvControl(
-				$params['delimter'],
-				$params['enclosure']
-			);
-		}
+		$this->file->setCsvControl(
+			$params['delimter'],
+			$params['enclosure'],
+			$params['escape']
+		);
 	}
 }

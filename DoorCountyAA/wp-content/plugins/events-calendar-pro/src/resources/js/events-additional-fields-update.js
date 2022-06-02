@@ -1,12 +1,11 @@
 /**
  * @var object tribe_additional_fields
  */
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 	var $notice = $( "#tribe-additional-field-update" );
 	var $status = $notice.find( "span.update-text" );
 	var $link   = $status.find( "a" );
 	var check   = tribe_additional_fields.update_check;
-
 
 	/**
 	 * Gracefully remove the update notice.

@@ -29,58 +29,6 @@ class Tribe__Events__Pro__This_Week {
 	}
 
 	/**
-	 * This Week Widget - Style and Scripts
-	 *
-	 */
-	public static function styles_and_scripts() {
-
-		wp_enqueue_script( 'tribe-this-week', tribe_events_pro_resource_url( 'widget-this-week.min.js' ), array( 'jquery' ), apply_filters( 'tribe_events_pro_js_version', Tribe__Events__Pro__Main::VERSION ) );
-
-		// Tribe Events CSS filename
-		$event_file        = 'widget-this-week.css';
-		$stylesheet_option = tribe_get_option( 'stylesheetOption', 'tribe' );
-
-		// What Option was selected
-		switch ( $stylesheet_option ) {
-			case 'skeleton':
-				$event_file_option = 'widget-this-week-' . $stylesheet_option . '.css';
-				break;
-			case 'full':
-				$event_file_option = 'widget-this-week-' . $stylesheet_option . '.css';
-				break;
-			default:
-				$event_file_option = 'widget-this-week-theme.css';
-				break;
-		}
-
-		$style_url = tribe_events_pro_resource_url( $event_file_option );
-
-		// get the minified file
-		$style_url = Tribe__Events__Template_Factory::getMinFile( $style_url, true );
-
-		//filter stylesheet
-		$style_url = apply_filters( 'tribe_events_pro_widget_calendar_stylesheet_url', $style_url );
-
-		//Check for Override
-		$style_override_url = Tribe__Events__Templates::locate_stylesheet( 'tribe-events/pro/' . $event_file, $style_url );
-
-		// Load up stylesheet from theme or plugin
-		if ( $style_url && $stylesheet_option == 'tribe' ) {
-			wp_enqueue_style( 'widget-this-week-pro-style', tribe_events_pro_resource_url( 'widget-this-week-full.css' ), array(), apply_filters( 'tribe_events_pro_css_version', Tribe__Events__Pro__Main::VERSION ) );
-			wp_enqueue_style( Tribe__Events__Main::POSTTYPE . '-widget-this-week-pro-style', $style_url, array(), apply_filters( 'tribe_events_pro_css_version', Tribe__Events__Pro__Main::VERSION ) );
-		} else {
-			wp_enqueue_style( Tribe__Events__Main::POSTTYPE . '-widget-this-week-pro-style', $style_url, array(), apply_filters( 'tribe_events_pro_css_version', Tribe__Events__Pro__Main::VERSION ) );
-		}
-
-		if ( $style_override_url && $style_override_url != $style_url ) {
-			wp_enqueue_style( Tribe__Events__Main::POSTTYPE . '--widget-this-week-pro-override-style', $style_override_url, array(), apply_filters( 'tribe_events_pro_css_version', Tribe__Events__Pro__Main::VERSION ) );
-		}
-
-		$widget_data = array( 'ajaxurl' => admin_url( 'admin-ajax.php', ( is_ssl() ? 'https' : 'http' ) ) );
-		wp_localize_script( 'tribe-this-week', 'tribe_this_week', $widget_data );
-	}
-
-	/**
 	 * This Week Widget - Ajax Change Week
 	 *
 	 *
@@ -224,7 +172,7 @@ class Tribe__Events__Pro__This_Week {
 		}
 
 		// enqueue the widget js
-		self::styles_and_scripts();
+		tribe_asset_enqueue( 'tribe-this-week' );
 
 		//Get Events with Hide From Event Listings Checked
 		$hide_upcoming_ids = Tribe__Events__Query::getHideFromUpcomingEvents();
@@ -264,9 +212,15 @@ class Tribe__Events__Pro__This_Week {
 		//Todays Date According to WordPress
 		$timestamp_today = strtotime( current_time( Tribe__Date_Utils::DBDATEFORMAT ) );
 
-		//Date Formats from The Events Calendar
-		$display_date_format  = apply_filters( 'tribe_events_this_week_date_format', 'jS' );
-		$display_day_format  = apply_filters( 'tribe_events_this_week_day_format', 'D ' );
+		/**
+		 * Date Formats from The Events Calendar.
+		 * Filter the date format, by default the ones from the settings ('D jS')
+		 *
+		 * @since 4.4.26
+		 *
+		 * @param string The TEC week day format.
+		 */
+		$display_date_format  = apply_filters( 'tribe_events_this_week_date_format', tribe_get_option( 'weekDayFormat', 'D jS' ) );
 
 		// Array used for calculation of php strtotime relative dates
 		$weekday_array = array(
@@ -324,16 +278,14 @@ class Tribe__Events__Pro__This_Week {
 				$this_week_events = array_merge( $this_week_events_sticky, $this_week_events );
 			}
 
-			$formatted_date  = date_i18n( $display_date_format, strtotime( $date ) );
-			$formatted_day  = date_i18n( $display_day_format, strtotime( $date ) );
-			$timestamp_date  = strtotime( $date );
+			$formatted_date = date_i18n( $display_date_format, strtotime( $date ) );
+			$timestamp_date = strtotime( $date );
 
 			// create the "day" element to do display in the template
 			$week_days[] = array(
 				'date'             => $date,
 				'day_number'       => $day_number,
 				'formatted_date'   => $formatted_date,
-				'formatted_day'    => $formatted_day,
 				'is_today'         => ( $timestamp_date == $timestamp_today ) ? true : false,
 				'is_past'          => ( $timestamp_date < $timestamp_today ) ? true : false,
 				'is_future'        => ( $timestamp_date > $timestamp_today ) ? true : false,

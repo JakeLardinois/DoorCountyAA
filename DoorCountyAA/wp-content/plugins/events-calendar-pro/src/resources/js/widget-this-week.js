@@ -31,7 +31,9 @@ tribe_events_this_week.ajax = {
 
 		//Show Loading Ajax
 		$this_week_widget.find( '.tribe-this-week-widget-weekday-wrapper' ).css( 'opacity', .25 );
-		$this_week_widget.find( '.tribe-events-ajax-loading' ).addClass( 'tribe-events-active-spinner' );
+		$this_week_widget
+			.find( '.tribe-events-ajax-loading' )
+			.addClass( 'tribe-events-active-spinner' );
 
 		//Setup Query Start Date
 		var $week_target = $this_week_widget.data( 'prev-date' );

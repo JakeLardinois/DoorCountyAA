@@ -19,18 +19,16 @@
 	// @ifdef DEBUG
 	if ( dbug ) {
 		if ( !$().isotope ) {
-			debug.warn( 'TEC Debug: vendor isotope was not loaded before its dependent file tribe-photo-view.js' );
+			tec_debug.warn( 'TEC Debug: vendor isotope was not loaded before its dependent file tribe-photo-view.js' ); // eslint-disable-line max-len
 		}
 	}
 	// @endif
 
-	$( document ).ready( function() {
+	$( function() {
 
 		var tribe_is_paged = tf.get_url_param( 'tribe_paged' ),
 			tribe_display = tf.get_url_param( 'tribe_event_display' ),
-			$container = $( '#tribe-events-photo-events' ),
-			container_width = 0,
-			resize_timer;
+			$container = $( '#tribe-events-photo-events' );
 
 		ts.view = 'photo';
 
@@ -38,7 +36,7 @@
 			ts.paged = tribe_is_paged;
 		}
 
-		if ( tribe_display == 'past' ) {
+		if ( tribe_display == 'past' ) { // eslint-disable-line eqeqeq
 			ts.view = 'past';
 		}
 
@@ -57,9 +55,11 @@
 		 * @desc Hide photo view loading mask if set.
 		 */
 
-		function tribe_hide_loader() {
+		function tribe_hide_loader() { // eslint-disable-line no-unused-vars
 			$( '.photo-loader' ).hide();
-			$( '#tribe-events-photo-events' ).removeClass( "photo-hidden" ).animate( {"opacity": "1"}, {duration: 600} );
+			$( '#tribe-events-photo-events' )
+				.removeClass( "photo-hidden" )
+				.animate( {"opacity": "1"}, {duration: 600} );
 		}
 
 		/**
@@ -106,10 +106,15 @@
 				params = params + '&featured=1';
 			}
 
-			history.replaceState( {
-				"tribe_params"    : params,
-				"tribe_url_params": td.params
-			}, '', location.href );
+			var isShortcode = $( document.getElementById( 'tribe-events' ) )
+				.is( '.tribe-events-shortcode' );
+
+			if ( ! isShortcode || false !== config.update_urls.shortcode.photo ) {
+				history.replaceState( {
+					'tribe_params': params,
+					'tribe_url_params': td.params
+				}, '', location.href );
+			}
 
 			$( window ).on( 'popstate', function( event ) {
 
@@ -135,8 +140,8 @@
 			if ( ts.ajax_running ) {
 				return;
 			}
-			if ( ts.view == 'past' ) {
-				if ( ts.paged == '1' ) {
+			if ( ts.view == 'past' ) { // eslint-disable-line eqeqeq
+				if ( ts.paged == '1' ) { // eslint-disable-line eqeqeq
 					ts.view = 'photo';
 				}
 				else {
@@ -155,8 +160,8 @@
 			if ( ts.ajax_running ) {
 				return;
 			}
-			if ( ts.view == 'photo' ) {
-				if ( ts.paged == '1' ) {
+			if ( ts.view == 'photo' ) { // eslint-disable-line eqeqeq
+				if ( ts.paged == '1' ) { // eslint-disable-line eqeqeq
 					ts.view = 'past';
 				}
 				else {
@@ -173,13 +178,15 @@
 			} );
 		} );
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_events_bar_photoajax_actions
 		 * @desc On events bar submit, this function collects the current state of the bar and sends it to the photo view ajax handler.
 		 * @param {event} e The event object.
 		 */
+		/* eslint-enable max-len */
 		function tribe_events_bar_photoajax_actions( e ) {
-			if ( tribe_events_bar_action != 'change_view' ) {
+			if ( tribe_events_bar_action != 'change_view' ) { // eslint-disable-line eqeqeq
 				e.preventDefault();
 				if ( ts.ajax_running ) {
 					return;
@@ -206,17 +213,18 @@
 		} );
 
 		$( '#tribe-bar-form' ).on( 'submit', function( e ) {
-			if ( tribe_events_bar_action != 'change_view' ) {
+			if ( tribe_events_bar_action != 'change_view' ) { // eslint-disable-line eqeqeq
 				tribe_events_bar_photoajax_actions( e )
 			}
 		} );
 
-		tf.snap( '#tribe-events-content-wrapper', '#tribe-events-content-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' );
+		tf.snap( '#tribe-events-content-wrapper', '#tribe-events-content-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' ); // eslint-disable-line max-len
 
 		$( te ).on( 'run-ajax.tribe', function() {
 			tribe_events_photo_ajax_post();
 		} );
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_events_photo_ajax_post
 		 * @desc The ajax handler for photo view.
@@ -224,6 +232,7 @@
 		 * As post begins 'tribe_ev_ajaxStart' and 'tribe_ev_photoView_AjaxStart' are fired, and then 'tribe_ev_ajaxSuccess' and 'tribe_ev_photoView_ajaxSuccess' are fired on success.
 		 * Various functions in the events plugins hook into these events. They are triggered on the tribe_ev.events object.
 		 */
+		/* eslint-enable max-len */
 		function tribe_events_photo_ajax_post() {
 
 			if ( !ts.popping ) {
@@ -249,10 +258,10 @@
 				};
 
 				if ( td.default_permalinks ) {
-					if( !ts.url_params.hasOwnProperty( 'post_type' ) ){
+					if ( ! ts.url_params.hasOwnProperty( 'post_type' ) ) { // eslint-disable-line no-prototype-builtins,max-len
 						ts.url_params['post_type'] = config.events_post_type;
 					}
-					if( !ts.url_params.hasOwnProperty( 'eventDisplay' ) ){
+					if ( ! ts.url_params.hasOwnProperty( 'eventDisplay' ) ) { // eslint-disable-line no-prototype-builtins,max-len
 						ts.url_params['eventDisplay'] = ts.view;
 					}
 				}
@@ -295,11 +304,12 @@
 			if ( tt.pushstate && !ts.filter_cats ) {
 
 				// @ifdef DEBUG
-				dbug && debug.time( 'Photo View Ajax Timer' );
+				dbug && tec_debug.time( 'Photo View Ajax Timer' );
 				// @endif
 
 				/**
-				 * DEPRECATED: tribe_ev_ajaxStart and tribe_ev_photoView_AjaxStart have been deprecated in 4.0. Use ajax-start.tribe and photo-view-ajax-start.tribe instead
+				 * DEPRECATED: tribe_ev_ajaxStart and tribe_ev_photoView_AjaxStart have been deprecated in 4.0.
+				 *             Use ajax-start.tribe and photo-view-ajax-start.tribe instead
 				 */
 				$( te ).trigger( 'tribe_ev_ajaxStart' ).trigger( 'tribe_ev_photoView_AjaxStart' );
 				$( te ).trigger( 'ajax-start.tribe' ).trigger( 'photo-view-ajax-start.tribe' );
@@ -333,21 +343,30 @@
 							$( '.tribe-events-promo' ).next( '.tribe-events-promo' ).remove();
 
 							//If no events are returned, then hide Header
-							if ( response.max_pages == 0 ) {
+							if ( response.max_pages == 0 ) { // eslint-disable-line eqeqeq
 								$( '#tribe-events-header' ).hide();
 							}
 
 							ts.page_title = $( '#tribe-events-header' ).data( 'title' );
-							document.title = ts.page_title;
+							ts.view_title = $( '#tribe-events-header' ).data( 'viewtitle' );
+							if ( ts.page_title ) {
+								document.title = ts.page_title;
+							}
+							$( '.tribe-events-page-title' ).html( ts.view_title );
 
-							if ( ts.do_string ) {
+							var isShortcode = $( document.getElementById( 'tribe-events' ) )
+								.is( '.tribe-events-shortcode' );
+							var shouldUpdateHistory = ! isShortcode ||
+								false !== config.update_urls.shortcode.photo;
+
+							if ( ts.do_string && shouldUpdateHistory ) {
 								history.pushState( {
 									"tribe_params"    : ts.params,
 									"tribe_url_params": ts.url_params
 								}, ts.page_title, td.cur_url + '?' + ts.url_params );
 							}
 
-							if ( ts.pushstate ) {
+							if ( ts.pushstate && shouldUpdateHistory ) {
 								history.pushState( {
 									"tribe_params"    : ts.params,
 									"tribe_url_params": ts.url_params
@@ -357,13 +376,14 @@
 							tribe_setup_isotope( $( '#tribe-events-photo-events' ) );
 
 							/**
-							 * DEPRECATED: tribe_ev_ajaxSuccess and tribe_ev_photoView_AjaxSuccess have been deprecated in 4.0. Use ajax-success.tribe and photo-view-ajax-success.tribe instead
+							 * DEPRECATED: tribe_ev_ajaxSuccess and tribe_ev_photoView_AjaxSuccess have been deprecated in 4.0.
+							 *             Use ajax-success.tribe and photo-view-ajax-success.tribe instead
 							 */
 							$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_photoView_AjaxSuccess' );
 							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'photo-view-ajax-success.tribe' );
 
 							// @ifdef DEBUG
-							dbug && debug.timeEnd( 'Photo View Ajax Timer' );
+							dbug && tec_debug.timeEnd( 'Photo View Ajax Timer' );
 							// @endif
 
 						}
@@ -382,10 +402,10 @@
 		}
 
 		// @ifdef DEBUG
-		dbug && debug.info( 'TEC Debug: tribe-events-photo-view.js successfully loaded' );
-		ts.view && dbug && debug.timeEnd( 'Tribe JS Init Timer' );
+		dbug && tec_debug.info( 'TEC Debug: tribe-events-photo-view.js successfully loaded' );
+		ts.view && dbug && tec_debug.timeEnd( 'Tribe JS Init Timer' );
 		// @endif
 
 	} );
 
-})( window, document, jQuery, tribe_ev.data, tribe_ev.events, tribe_ev.fn, tribe_ev.state, tribe_ev.tests, tribe_js_config, tribe_debug );
+})( window, document, jQuery, tribe_ev.data, tribe_ev.events, tribe_ev.fn, tribe_ev.state, tribe_ev.tests, tribe_js_config, tribe_debug ); // eslint-disable-line max-len

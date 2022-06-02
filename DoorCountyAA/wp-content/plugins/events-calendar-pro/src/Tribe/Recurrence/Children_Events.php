@@ -95,6 +95,7 @@ class Tribe__Events__Pro__Recurrence__Children_Events {
 			'meta_key'       => '_EventStartDate',
 			'orderby'        => 'meta_value',
 			'order'          => 'ASC',
+			'tribe_remove_date_filters' => true,
 		);
 	}
 
@@ -104,9 +105,11 @@ class Tribe__Events__Pro__Recurrence__Children_Events {
 	 */
 	public function untrash_all( $post_id ) {
 		$children = $this->get_ids( $post_id, array( 'post_status' => 'trash' ) );
+		add_filter( 'wp_untrash_post_status', 'wp_untrash_post_set_previous_status', 10, 3 );
 		foreach ( $children as $child_id ) {
 			wp_untrash_post( $child_id );
 		}
+		remove_filter( 'wp_untrash_post_status', 'wp_untrash_post_set_previous_status', 10 );
 	}
 
 	/**
@@ -124,12 +127,19 @@ class Tribe__Events__Pro__Recurrence__Children_Events {
 	/**
 	 * Permanently deletes all the children events of an event post.
 	 *
-	 * @param int $post_id
+	 * @param int  $post_id
+	 * @param bool $immediate Whether the deletion should happen immediately (`true`) or
+	 *                        at `shutdown` (`false`); default `false`
 	 */
-	public function permanently_delete_all( $post_id ) {
+	public function permanently_delete_all( $post_id, $immediate = false ) {
 		$this->to_delete[] = $post_id;
-		add_action( 'shutdown', array( $this, 'delete_on_shutdown' ) );
+
 		add_filter( 'pre_delete_post', array( $this, 'prevent_deletion' ), 10, 2 );
+		if ( ! $immediate ) {
+			add_action( 'shutdown', array( $this, 'delete_on_shutdown' ) );
+		} else {
+			$this->delete_on_shutdown();
+		}
 	}
 
 	/**

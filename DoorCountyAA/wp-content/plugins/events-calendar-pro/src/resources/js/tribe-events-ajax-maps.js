@@ -36,6 +36,10 @@
 		 */
 
 		map_add_marker: function( lat, lng, title, address, link ) {
+			if ( 'undefined' == typeof google ) {
+				return;
+			}
+
 			var myLatlng = new google.maps.LatLng( lat, lng );
 
 			var marker = {
@@ -56,7 +60,9 @@
 
 			var content_title = title;
 			if ( link ) {
-				content_title = $( '<div/>' ).append( $( "<a/>" ).attr( 'href', link ).text( title ) ).html();
+				content_title = $( '<div/>' )
+					.append( $( "<a/>" ).attr( 'href', link ).text( title ) )
+					.html();
 			}
 
 			var content = TribeEventsPro.map_tooltip_event + content_title;
@@ -67,7 +73,7 @@
 
 			infoWindow.setContent( content );
 
-			google.maps.event.addListener( marker, 'click', function( event ) {
+			google.maps.event.addListener( marker, 'click', function( event ) { // eslint-disable-line no-unused-vars,max-len
 				infoWindow.open( tg.map, marker );
 			} );
 
@@ -80,23 +86,26 @@
 		}
 	} );
 
-	tg.geocoder = new google.maps.Geocoder();
-	tg.bounds = new google.maps.LatLngBounds();
+	try {
+		tg.geocoder = new google.maps.Geocoder();
+		tg.bounds = new google.maps.LatLngBounds();
+	} catch( e ) {} // eslint-disable-line no-empty
 
-	$( document ).ready( function() {
+	$( function() {
 
 		/**
 		 * @function tribe_test_location
-		 * @desc tribe_test_location clears the lat and lng values in event bar if needed. Also hides or shows the geofence filter if present.
+		 * @desc tribe_test_location clears the lat and lng values in event bar if needed.
+		 *       Also hides or shows the geofence filter if present.
 		 */
+		var $tribeBar = $( '#tribe-bar-geoloc' );
+		var $fence = $( '#tribe_events_filter_item_geofence' );
+		var $latlng = $( '#tribe-bar-geoloc-lat, #tribe-bar-geoloc-lng' );
 
 		function tribe_test_location() {
 
-			if ( $( '#tribe-bar-geoloc' ).length ) {
-				var val = $( '#tribe-bar-geoloc' ).val(),
-					$fence = $( "#tribe_events_filter_item_geofence" ),
-					$latlng = $( '#tribe-bar-geoloc-lat, #tribe-bar-geoloc-lng' );
-				if ( val.length ) {
+			if ( $tribeBar.length ) {
+				if ( $tribeBar.val() ) {
 					$fence.show();
 				}
 				else {
@@ -108,27 +117,55 @@
 			}
 		}
 
+		/**
+		 * Listen for either a key DOWN or UP to see if we have a value on the location field if the field is not empty
+		 * we display the $fence field which is the field with the distance dropdown so is available as son as there's
+		 * something to be displayed.
+		 *
+		 * @since 4.4.22
+		 */
+		$( '#tribe-bar-geoloc' ).on( 'keydown keyup', function( e ) { // eslint-disable-line no-unused-vars,max-len
+			$fence.toggle( this.value.trim() !== '' );
+		} );
+
+
 		tribe_test_location();
 
-		var $tribe_container = $( '#tribe-events' ),
-			$geo_bar_input = $( '#tribe-bar-geoloc' ),
-			$geo_options = $( "#tribe-geo-options" ),
-			invalid_date = false;
+		var $tribe_container = $( '#tribe-events' );
+		var $geo_bar_input   = $( '#tribe-bar-geoloc' );
+		var $geo_options     = $( '#tribe-geo-options' );
+		var invalid_date     = false;
 
-		var options = {
-			zoom     : 5,
-			center   : new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng ),
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
+		var mapEl = document.getElementById( 'tribe-geo-map' );
 
-		if ( document.getElementById( 'tribe-geo-map' ) ) {
-			tg.map = new google.maps.Map( document.getElementById( 'tribe-geo-map' ), options );
+		if ( mapEl && 'undefined' !== typeof google ) {
+
+			var options = {
+				zoom     : 5,
+				center   : new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng ), // eslint-disable-line max-len
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+
+			tg.map = new google.maps.Map( mapEl, options );
 			tg.bounds = new google.maps.LatLngBounds();
 
-			var minLatlng = new google.maps.LatLng( TribeEventsPro.geocenter.min_lat, TribeEventsPro.geocenter.min_lng );
+			/**
+			 * Trigger a new event when the Map is created in order to allow Users option to customize the map by listening
+			 * to the correct event and having an instance of the Map variable avialable to modify if required.
+			 *
+			 * @param {Object} map An instance of the Google Map.
+			 * @param {Element} el The DOM Element where the map is attached.
+			 * @param {Object} options The initial set of options for the map.
+			 * @param {Object} bounds An instance with the bounds of the Map.
+			 *
+			 * @since 4.4.22
+			 */
+			$( 'body' ).trigger( 'map-created.tribe', [ tg.map, mapEl, options, tg.bounds ] );
+
+			var minLatlng = new google.maps.LatLng( TribeEventsPro.geocenter.min_lat, TribeEventsPro.geocenter.min_lng ); // eslint-disable-line max-len
 			tg.bounds.extend( minLatlng );
 
-			var maxLatlng = new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng );
+			var maxLatlng = new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng ); // eslint-disable-line max-len
 			tg.bounds.extend( maxLatlng );
 		}
 		if ( $().placeholder ) {
@@ -146,7 +183,7 @@
 
 			ts.view = 'map';
 
-			if ( tribe_display == 'past' ) {
+			if ( tribe_display == 'past' ) { // eslint-disable-line eqeqeq
 				ts.view = 'past';
 			}
 
@@ -156,14 +193,10 @@
 		if ( tt.map_view() && td.params ) {
 
 			var tp = td.params;
-			if ( tf.in_params( tp, "tribe_geosearch" ) >= 0 ) {
-			}
-			else {
+			if ( tf.in_params( tp, "tribe_geosearch" ) < 0 ) {
 				tp += '&action=tribe_geosearch';
 			}
-			if ( tf.in_params( tp, "tribe_paged" ) >= 0 ) {
-			}
-			else {
+			if ( tf.in_params( tp, "tribe_paged" ) < 0 ) {
 				tp += '&tribe_paged=1';
 			}
 
@@ -189,10 +222,15 @@
 
 		if ( tt.pushstate && tt.map_view() ) {
 
-			history.replaceState( {
-				"tribe_paged" : ts.paged,
-				"tribe_params": ts.params
-			}, '', location.href );
+			var isShortcode = $( document.getElementById( 'tribe-events' ) )
+				.is( '.tribe-events-shortcode' );
+
+			if ( ! isShortcode || false !== config.update_urls.shortcode.map ) {
+				history.replaceState( {
+					'tribe_paged': ts.paged,
+					'tribe_params': ts.params
+				}, '', location.href );
+			}
 
 			$( window ).on( 'popstate', function( event ) {
 
@@ -225,8 +263,10 @@
 
 				$geo_bar_input.val( $this.text() );
 
-				$( '#tribe-bar-geoloc-lat' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lat() );
-				$( '#tribe-bar-geoloc-lng' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lng() );
+				$( '#tribe-bar-geoloc-lat' )
+					.val( tg.geocodes[$this.data( 'index' )].geometry.location.lat() );
+				$( '#tribe-bar-geoloc-lng' )
+					.val( tg.geocodes[$this.data( 'index' )].geometry.location.lng() );
 
 				ts.do_string = true;
 				ts.pushstate = false;
@@ -254,8 +294,7 @@
 				$geo_options.hide();
 			} );
 
-			tf.snap( '#tribe-events-content-wrapper', '#tribe-events-content-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' );
-
+			tf.snap( '#tribe-events-content-wrapper', '#tribe-events-content-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' ); // eslint-disable-line max-len
 		}
 
 		/**
@@ -277,10 +316,10 @@
 			}
 
 			if ( td.default_permalinks ) {
-				if( !ts.params.hasOwnProperty( 'post_type' ) ){
+				if ( ! ts.params.hasOwnProperty( 'post_type' ) ) { // eslint-disable-line no-prototype-builtins,max-len
 					ts.params['post_type'] = config.events_post_type;
 				}
-				if( !ts.params.hasOwnProperty( 'eventDisplay' ) ){
+				if ( ! ts.params.hasOwnProperty( 'eventDisplay' ) ) { // eslint-disable-line no-prototype-builtins,max-len
 					ts.params['eventDisplay'] = 'map';
 				}
 			}
@@ -340,7 +379,8 @@
 			$.post( GeoLoc.ajaxurl, ts.params, function( response ) {
 
 				/**
-				 * DEPRECATED: tribe_ev_ajaxStart and tribe_ev_mapView_AjaxStart have been deprecated in 4.0. Use ajax-start.tribe and map-view-ajax-start.tribe instead
+				 * DEPRECATED: tribe_ev_ajaxStart and tribe_ev_mapView_AjaxStart have been deprecated in 4.0.
+				 *             Use ajax-start.tribe and map-view-ajax-start.tribe instead
 				 */
 				$( te ).trigger( 'tribe_ev_ajaxStart' ).trigger( 'tribe_ev_mapView_AjaxStart' );
 				$( te ).trigger( 'ajax-start.tribe' ).trigger( 'map-view-ajax-start.tribe' );
@@ -366,7 +406,7 @@
 					$( '#tribe-events-content' ).replaceWith( $the_content );
 
 					//If no events are returned, then hide Header
-					if ( response.total_count == 0 ) {
+					if ( response.total_count == 0 ) { // eslint-disable-line eqeqeq
 						$( '#tribe-events-header' ).hide();
 					}
 
@@ -377,9 +417,19 @@
 					if ( tt.pushstate ) {
 
 						ts.page_title = $( '#tribe-events-header' ).data( 'title' );
-						document.title = ts.page_title;
+						ts.view_title = $( '#tribe-events-header' ).data( 'viewtitle' );
 
-						if ( ts.do_string ) {
+						if ( ts.page_title ) {
+							document.title = ts.page_title;
+						}
+
+						$( '.tribe-events-page-title' ).html( ts.view_title );
+
+						var isShortcode = $( document.getElementById( 'tribe-events' ) )
+							.is( '.tribe-events-shortcode' );
+						var shouldUpdateHistory = ! isShortcode || false !== config.update_urls.shortcode.map;
+
+						if ( ts.do_string && shouldUpdateHistory ) {
 							// strip the baseurl from the push state URL
 							var params = ts.params.replace( /&?baseurl=[^&]*/i, '' );
 
@@ -389,7 +439,7 @@
 							}, ts.page_title, td.cur_url + '?' + params );
 						}
 
-						if ( ts.pushstate ) {
+						if ( ts.pushstate && shouldUpdateHistory ) {
 							history.pushState( {
 								"tribe_paged" : ts.paged,
 								"tribe_params": ts.params
@@ -399,7 +449,8 @@
 					}
 
 					/**
-					 * DEPRECATED: tribe_ev_ajaxSuccess and tribe_ev_mapView_AjaxSuccess have been deprecated in 4.0. Use ajax-success.tribe and map-view-ajax-success.tribe instead
+					 * DEPRECATED: tribe_ev_ajaxSuccess and tribe_ev_mapView_AjaxSuccess have been deprecated in 4.0.
+					 *             Use ajax-success.tribe and map-view-ajax-success.tribe instead
 					 */
 					$( te ).trigger( 'tribe_ev_ajaxSuccess' ).trigger( 'tribe_ev_mapView_AjaxSuccess' );
 					$( te ).trigger( 'ajax-success.tribe' ).trigger( 'map-view-ajax-success.tribe' );
@@ -428,7 +479,7 @@
 					return;
 				}
 				if ( ts.view === 'past' ) {
-					if ( ts.paged == '1' ) {
+					if ( ts.paged == '1' ) { // eslint-disable-line eqeqeq
 						ts.view = 'map';
 					}
 					else {
@@ -459,7 +510,7 @@
 					return;
 				}
 				if ( ts.view === 'map' ) {
-					if ( ts.paged == '1' ) {
+					if ( ts.paged == '1' ) { // eslint-disable-line eqeqeq
 						ts.view = 'past';
 					}
 					else {
@@ -488,14 +539,16 @@
 
 		}
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_events_bar_mapajax_actions
 		 * @desc On events bar submit, this function collects the current state of the bar and sends it to the map view ajax handler.
 		 * @param {event} e The event object.
 		 */
+		/* eslint-enable max-len */
 
 		function tribe_events_bar_mapajax_actions( e ) {
-			if ( tribe_events_bar_action != 'change_view' ) {
+			if ( tribe_events_bar_action != 'change_view' ) { // eslint-disable-line eqeqeq
 				e.preventDefault();
 				if ( ts.ajax_running ) {
 					return;
@@ -521,7 +574,10 @@
 			}
 		}
 
-		if ( (GeoLoc.map_view && $( 'form#tribe-bar-form' ).length && tt.live_ajax() && tt.pushstate) || (GeoLoc.map_view && tt.no_bar()) ) {
+		if (
+			( GeoLoc.map_view && $( 'form#tribe-bar-form' ).length && tt.live_ajax() && tt.pushstate ) ||
+			( GeoLoc.map_view && tt.no_bar() )
+		) {
 			$( '#tribe-events-bar' ).on( 'changeDate', '#tribe-bar-date', function( e ) {
 				tribe_events_bar_mapajax_actions( e );
 			} );
@@ -539,9 +595,9 @@
 		 */
 
 		function deleteMarkers() {
-			if ( tg.markers ) {
-				for ( i in tg.markers ) {
-					tg.markers[i].setMap( null );
+			if ( tg.markers && 'undefined' !== typeof google ) {
+				for ( i in tg.markers ) { // eslint-disable-line no-undef
+					tg.markers[i].setMap( null ); // eslint-disable-line no-undef
 				}
 				tg.markers.length = 0;
 				tg.bounds = new google.maps.LatLngBounds();
@@ -554,7 +610,13 @@
 		 */
 
 		function centerMap() {
+
+			if ( 'undefined' == typeof google ) {
+				return;
+			}
+
 			tg.map.fitBounds( tg.bounds );
+
 			if ( tg.map.getZoom() > 13 ) {
 				tg.map.setZoom( 13 );
 			}
@@ -571,7 +633,7 @@
 		if ( tt.map_view() ) {
 
 			$( 'form#tribe-bar-form' ).on( 'submit', function() {
-				if ( tribe_events_bar_action != 'change_view' ) {
+				if ( tribe_events_bar_action != 'change_view' ) { // eslint-disable-line eqeqeq
 					ts.paged = 1;
 					spin_start();
 
@@ -621,7 +683,8 @@
 								}
 								else {
 									/**
-									 * DEPRECATED: tribe_ev_reloadOldBrowser has been deprecated in 4.0. Use reload-old-browser.tribe instead
+									 * DEPRECATED: tribe_ev_reloadOldBrowser has been deprecated in 4.0.
+									 *             Use reload-old-browser.tribe instead
 									 */
 									$( te ).trigger( 'tribe_ev_reloadOldBrowser' );
 									$( te ).trigger( 'reload-old-browser.tribe' );
@@ -660,14 +723,14 @@
 				}
 			} );
 			// @ifdef DEBUG
-			ts.view && dbug && debug.timeEnd( 'Tribe JS Init Timer' );
+			ts.view && dbug && tec_debug.timeEnd( 'Tribe JS Init Timer' );
 			// @endif
 		}
 
 		// @ifdef DEBUG
-		dbug && debug.info( 'TEC Debug: tribe-events-ajax-maps.js successfully loaded' );
+		dbug && tec_debug.info( 'TEC Debug: tribe-events-ajax-maps.js successfully loaded' );
 		// @endif
 
 	} );
 
-})( window, document, jQuery, tribe_ev.data, tribe_ev.events, tribe_ev.fn, tribe_ev.geoloc, tribe_ev.state, tribe_ev.tests, tribe_js_config, tribe_debug );
+})( window, document, jQuery, tribe_ev.data, tribe_ev.events, tribe_ev.fn, tribe_ev.geoloc, tribe_ev.state, tribe_ev.tests, tribe_js_config, tribe_debug ); // eslint-disable-line max-len

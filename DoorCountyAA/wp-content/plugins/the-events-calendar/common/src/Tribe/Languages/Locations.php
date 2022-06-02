@@ -16,14 +16,38 @@ class Tribe__Languages__Locations {
 	 *
 	 * Adds array to object cache to speed up subsequent retrievals.
 	 *
+	 * @since 4.13.0 add $escape param.
+	 *
+	 * @param bool $escape Weather to escape for translations or not.
+	 *
 	 * @return array {
 	 *      List of countries
 	 *
 	 *      @type string $country_code Country name.
 	 * }
 	 */
-	public function get_countries() {
-		return tribe( 'cache' )->get( 'tribe_country_list', '', array( $this, 'build_country_array' ) );
+	public function get_countries( $escape = false ) {
+		/**
+		 * @var Tribe__Cache $cache
+		 */
+		$cache     = tribe( 'cache' );
+		$cache_key = 'tribe_country_list' . ( $escape ? '-escaped' : '' );
+		$countries = $cache->get( $cache_key , '', null );
+
+		if ( null === $countries ) {
+			$countries = $this->build_country_array();
+
+			if ( $escape ) {
+				$countries = array_map( static function( $country ) {
+					return html_entity_decode( $country, ENT_QUOTES );
+				}, $countries );
+			}
+
+			// Actually set the cache in case it's not in place.
+			$cache->set( $cache_key, $countries );
+		}
+
+		return $countries;
 	}
 
 	/**
@@ -38,7 +62,7 @@ class Tribe__Languages__Locations {
 	 * }
 	 */
 	public function get_us_states() {
-		return tribe( 'cache' )->get( 'tribe_us_states_list', '', array( $this, 'build_us_states_array' ) );
+		return tribe( 'cache' )->get( 'tribe_us_states_list', '', [ $this, 'build_us_states_array' ] );
 	}
 
 	/**
@@ -51,9 +75,10 @@ class Tribe__Languages__Locations {
 	 * }
 	 */
 	public function build_country_array() {
-		$countries = array(
+		$countries = [
 			'US' => esc_html__( 'United States', 'tribe-common' ),
 			'AF' => esc_html__( 'Afghanistan', 'tribe-common' ),
+			'AX' => esc_html__( '&Aring;land Islands', 'tribe-common' ),
 			'AL' => esc_html__( 'Albania', 'tribe-common' ),
 			'DZ' => esc_html__( 'Algeria', 'tribe-common' ),
 			'AS' => esc_html__( 'American Samoa', 'tribe-common' ),
@@ -61,7 +86,7 @@ class Tribe__Languages__Locations {
 			'AO' => esc_html__( 'Angola', 'tribe-common' ),
 			'AI' => esc_html__( 'Anguilla', 'tribe-common' ),
 			'AQ' => esc_html__( 'Antarctica', 'tribe-common' ),
-			'AG' => esc_html__( 'Antigua And Barbuda', 'tribe-common' ),
+			'AG' => esc_html__( 'Antigua and Barbuda', 'tribe-common' ),
 			'AR' => esc_html__( 'Argentina', 'tribe-common' ),
 			'AM' => esc_html__( 'Armenia', 'tribe-common' ),
 			'AW' => esc_html__( 'Aruba', 'tribe-common' ),
@@ -79,7 +104,7 @@ class Tribe__Languages__Locations {
 			'BM' => esc_html__( 'Bermuda', 'tribe-common' ),
 			'BT' => esc_html__( 'Bhutan', 'tribe-common' ),
 			'BO' => esc_html__( 'Bolivia', 'tribe-common' ),
-			'BA' => esc_html__( 'Bosnia And Herzegowina', 'tribe-common' ),
+			'BA' => esc_html__( 'Bosnia and Herzegovina', 'tribe-common' ),
 			'BW' => esc_html__( 'Botswana', 'tribe-common' ),
 			'BV' => esc_html__( 'Bouvet Island', 'tribe-common' ),
 			'BR' => esc_html__( 'Brazil', 'tribe-common' ),
@@ -99,15 +124,17 @@ class Tribe__Languages__Locations {
 			'CN' => esc_html__( 'China', 'tribe-common' ),
 			'CX' => esc_html__( 'Christmas Island', 'tribe-common' ),
 			'CC' => esc_html__( 'Cocos (Keeling) Islands', 'tribe-common' ),
+			'MF' => esc_html__( 'Collectivity of Saint Martin', 'tribe-common' ),
 			'CO' => esc_html__( 'Colombia', 'tribe-common' ),
 			'KM' => esc_html__( 'Comoros', 'tribe-common' ),
 			'CG' => esc_html__( 'Congo', 'tribe-common' ),
-			'CD' => esc_html__( 'Congo, The Democratic Republic Of The', 'tribe-common' ),
+			'CD' => esc_html__( 'Congo, Democratic Republic of the', 'tribe-common' ),
 			'CK' => esc_html__( 'Cook Islands', 'tribe-common' ),
 			'CR' => esc_html__( 'Costa Rica', 'tribe-common' ),
 			'CI' => esc_html__( "C&ocirc;te d'Ivoire", 'tribe-common' ),
 			'HR' => esc_html__( 'Croatia (Local Name: Hrvatska)', 'tribe-common' ),
 			'CU' => esc_html__( 'Cuba', 'tribe-common' ),
+			'CW' => esc_html__( 'Cura&ccedil;ao', 'tribe-common' ),
 			'CY' => esc_html__( 'Cyprus', 'tribe-common' ),
 			'CZ' => esc_html__( 'Czech Republic', 'tribe-common' ),
 			'DK' => esc_html__( 'Denmark', 'tribe-common' ),
@@ -132,7 +159,7 @@ class Tribe__Languages__Locations {
 			'TF' => esc_html__( 'French Southern Territories', 'tribe-common' ),
 			'GA' => esc_html__( 'Gabon', 'tribe-common' ),
 			'GM' => esc_html__( 'Gambia', 'tribe-common' ),
-			'GE' => esc_html__( 'Georgia', 'tribe-common' ),
+			'GE' => esc_html_x( 'Georgia', 'The country', 'tribe-common' ),
 			'DE' => esc_html__( 'Germany', 'tribe-common' ),
 			'GH' => esc_html__( 'Ghana', 'tribe-common' ),
 			'GI' => esc_html__( 'Gibraltar', 'tribe-common' ),
@@ -146,7 +173,7 @@ class Tribe__Languages__Locations {
 			'GW' => esc_html__( 'Guinea-Bissau', 'tribe-common' ),
 			'GY' => esc_html__( 'Guyana', 'tribe-common' ),
 			'HT' => esc_html__( 'Haiti', 'tribe-common' ),
-			'HM' => esc_html__( 'Heard And Mc Donald Islands', 'tribe-common' ),
+			'HM' => esc_html__( 'Heard and McDonald Islands', 'tribe-common' ),
 			'VA' => esc_html__( 'Holy See (Vatican City State)', 'tribe-common' ),
 			'HN' => esc_html__( 'Honduras', 'tribe-common' ),
 			'HK' => esc_html__( 'Hong Kong', 'tribe-common' ),
@@ -154,7 +181,7 @@ class Tribe__Languages__Locations {
 			'IS' => esc_html__( 'Iceland', 'tribe-common' ),
 			'IN' => esc_html__( 'India', 'tribe-common' ),
 			'ID' => esc_html__( 'Indonesia', 'tribe-common' ),
-			'IR' => esc_html__( 'Iran (Islamic Republic Of)', 'tribe-common' ),
+			'IR' => esc_html__( 'Iran, Islamic Republic of', 'tribe-common' ),
 			'IQ' => esc_html__( 'Iraq', 'tribe-common' ),
 			'IE' => esc_html__( 'Ireland', 'tribe-common' ),
 			'IL' => esc_html__( 'Israel', 'tribe-common' ),
@@ -165,8 +192,8 @@ class Tribe__Languages__Locations {
 			'KZ' => esc_html__( 'Kazakhstan', 'tribe-common' ),
 			'KE' => esc_html__( 'Kenya', 'tribe-common' ),
 			'KI' => esc_html__( 'Kiribati', 'tribe-common' ),
-			'KP' => esc_html__( "Korea, Democratic People's Republic Of", 'tribe-common' ),
-			'KR' => esc_html__( 'Korea, Republic Of', 'tribe-common' ),
+			'KP' => esc_html__( "Korea, Democratic People's Republic of", 'tribe-common' ),
+			'KR' => esc_html__( 'Korea, Republic of', 'tribe-common' ),
 			'KW' => esc_html__( 'Kuwait', 'tribe-common' ),
 			'KG' => esc_html__( 'Kyrgyzstan', 'tribe-common' ),
 			'LA' => esc_html__( "Lao People's Democratic Republic", 'tribe-common' ),
@@ -179,7 +206,6 @@ class Tribe__Languages__Locations {
 			'LT' => esc_html__( 'Lithuania', 'tribe-common' ),
 			'LU' => esc_html__( 'Luxembourg', 'tribe-common' ),
 			'MO' => esc_html__( 'Macau', 'tribe-common' ),
-			'MK' => esc_html__( 'Macedonia', 'tribe-common' ),
 			'MG' => esc_html__( 'Madagascar', 'tribe-common' ),
 			'MW' => esc_html__( 'Malawi', 'tribe-common' ),
 			'MY' => esc_html__( 'Malaysia', 'tribe-common' ),
@@ -192,8 +218,8 @@ class Tribe__Languages__Locations {
 			'MU' => esc_html__( 'Mauritius', 'tribe-common' ),
 			'YT' => esc_html__( 'Mayotte', 'tribe-common' ),
 			'MX' => esc_html__( 'Mexico', 'tribe-common' ),
-			'FM' => esc_html__( 'Micronesia, Federated States Of', 'tribe-common' ),
-			'MD' => esc_html__( 'Moldova, Republic Of', 'tribe-common' ),
+			'FM' => esc_html__( 'Micronesia, Federated States of', 'tribe-common' ),
+			'MD' => esc_html__( 'Moldova, Republic of', 'tribe-common' ),
 			'MC' => esc_html__( 'Monaco', 'tribe-common' ),
 			'MN' => esc_html__( 'Mongolia', 'tribe-common' ),
 			'ME' => esc_html__( 'Montenegro', 'tribe-common' ),
@@ -205,7 +231,6 @@ class Tribe__Languages__Locations {
 			'NR' => esc_html__( 'Nauru', 'tribe-common' ),
 			'NP' => esc_html__( 'Nepal', 'tribe-common' ),
 			'NL' => esc_html__( 'Netherlands', 'tribe-common' ),
-			'AN' => esc_html__( 'Netherlands Antilles', 'tribe-common' ),
 			'NC' => esc_html__( 'New Caledonia', 'tribe-common' ),
 			'NZ' => esc_html__( 'New Zealand', 'tribe-common' ),
 			'NI' => esc_html__( 'Nicaragua', 'tribe-common' ),
@@ -213,6 +238,7 @@ class Tribe__Languages__Locations {
 			'NG' => esc_html__( 'Nigeria', 'tribe-common' ),
 			'NU' => esc_html__( 'Niue', 'tribe-common' ),
 			'NF' => esc_html__( 'Norfolk Island', 'tribe-common' ),
+			'MK' => esc_html__( 'North Macedonia', 'tribe-common' ),
 			'MP' => esc_html__( 'Northern Mariana Islands', 'tribe-common' ),
 			'NO' => esc_html__( 'Norway', 'tribe-common' ),
 			'OM' => esc_html__( 'Oman', 'tribe-common' ),
@@ -232,18 +258,22 @@ class Tribe__Languages__Locations {
 			'RO' => esc_html__( 'Romania', 'tribe-common' ),
 			'RU' => esc_html__( 'Russian Federation', 'tribe-common' ),
 			'RW' => esc_html__( 'Rwanda', 'tribe-common' ),
-			'KN' => esc_html__( 'Saint Kitts And Nevis', 'tribe-common' ),
+			'BL' => esc_html__( 'Saint Barth&eacute;lemy', 'tribe-common' ),
+			'SH' => esc_html__( 'Saint Helena', 'tribe-common' ),
+			'KN' => esc_html__( 'Saint Kitts and Nevis', 'tribe-common' ),
 			'LC' => esc_html__( 'Saint Lucia', 'tribe-common' ),
-			'VC' => esc_html__( 'Saint Vincent And The Grenadines', 'tribe-common' ),
+			'PM' => esc_html__( 'Saint Pierre and Miquelon', 'tribe-common' ),
+			'VC' => esc_html__( 'Saint Vincent and The Grenadines', 'tribe-common' ),
 			'WS' => esc_html__( 'Samoa', 'tribe-common' ),
 			'SM' => esc_html__( 'San Marino', 'tribe-common' ),
-			'ST' => esc_html__( 'Sao Tome And Principe', 'tribe-common' ),
+			'ST' => esc_html__( 'S&atilde;o Tom&eacute; and Pr&iacute;ncipe', 'tribe-common' ),
 			'SA' => esc_html__( 'Saudi Arabia', 'tribe-common' ),
 			'SN' => esc_html__( 'Senegal', 'tribe-common' ),
 			'RS' => esc_html__( 'Serbia', 'tribe-common' ),
 			'SC' => esc_html__( 'Seychelles', 'tribe-common' ),
 			'SL' => esc_html__( 'Sierra Leone', 'tribe-common' ),
 			'SG' => esc_html__( 'Singapore', 'tribe-common' ),
+			'SX' => esc_html__( 'Sint Maarten', 'tribe-common' ),
 			'SK' => esc_html__( 'Slovakia (Slovak Republic)', 'tribe-common' ),
 			'SI' => esc_html__( 'Slovenia', 'tribe-common' ),
 			'SB' => esc_html__( 'Solomon Islands', 'tribe-common' ),
@@ -252,27 +282,25 @@ class Tribe__Languages__Locations {
 			'GS' => esc_html__( 'South Georgia, South Sandwich Islands', 'tribe-common' ),
 			'ES' => esc_html__( 'Spain', 'tribe-common' ),
 			'LK' => esc_html__( 'Sri Lanka', 'tribe-common' ),
-			'SH' => esc_html__( 'St. Helena', 'tribe-common' ),
-			'PM' => esc_html__( 'St. Pierre And Miquelon', 'tribe-common' ),
 			'SD' => esc_html__( 'Sudan', 'tribe-common' ),
 			'SR' => esc_html__( 'Suriname', 'tribe-common' ),
-			'SJ' => esc_html__( 'Svalbard And Jan Mayen Islands', 'tribe-common' ),
+			'SJ' => esc_html__( 'Svalbard and Jan Mayen Islands', 'tribe-common' ),
 			'SZ' => esc_html__( 'Swaziland', 'tribe-common' ),
 			'SE' => esc_html__( 'Sweden', 'tribe-common' ),
 			'CH' => esc_html__( 'Switzerland', 'tribe-common' ),
 			'SY' => esc_html__( 'Syrian Arab Republic', 'tribe-common' ),
 			'TW' => esc_html__( 'Taiwan', 'tribe-common' ),
 			'TJ' => esc_html__( 'Tajikistan', 'tribe-common' ),
-			'TZ' => esc_html__( 'Tanzania, United Republic Of', 'tribe-common' ),
+			'TZ' => esc_html__( 'Tanzania, United Republic of', 'tribe-common' ),
 			'TH' => esc_html__( 'Thailand', 'tribe-common' ),
 			'TG' => esc_html__( 'Togo', 'tribe-common' ),
 			'TK' => esc_html__( 'Tokelau', 'tribe-common' ),
 			'TO' => esc_html__( 'Tonga', 'tribe-common' ),
-			'TT' => esc_html__( 'Trinidad And Tobago', 'tribe-common' ),
+			'TT' => esc_html__( 'Trinidad and Tobago', 'tribe-common' ),
 			'TN' => esc_html__( 'Tunisia', 'tribe-common' ),
 			'TR' => esc_html__( 'Turkey', 'tribe-common' ),
 			'TM' => esc_html__( 'Turkmenistan', 'tribe-common' ),
-			'TC' => esc_html__( 'Turks And Caicos Islands', 'tribe-common' ),
+			'TC' => esc_html__( 'Turks and Caicos Islands', 'tribe-common' ),
 			'TV' => esc_html__( 'Tuvalu', 'tribe-common' ),
 			'UG' => esc_html__( 'Uganda', 'tribe-common' ),
 			'UA' => esc_html__( 'Ukraine', 'tribe-common' ),
@@ -286,17 +314,24 @@ class Tribe__Languages__Locations {
 			'VN' => esc_html__( 'Viet Nam', 'tribe-common' ),
 			'VG' => esc_html__( 'Virgin Islands (British)', 'tribe-common' ),
 			'VI' => esc_html__( 'Virgin Islands (U.S.)', 'tribe-common' ),
-			'WF' => esc_html__( 'Wallis And Futuna Islands', 'tribe-common' ),
+			'WF' => esc_html__( 'Wallis and Futuna Islands', 'tribe-common' ),
 			'EH' => esc_html__( 'Western Sahara', 'tribe-common' ),
 			'YE' => esc_html__( 'Yemen', 'tribe-common' ),
 			'ZM' => esc_html__( 'Zambia', 'tribe-common' ),
 			'ZW' => esc_html__( 'Zimbabwe', 'tribe-common' ),
-		);
+		];
 
 		// Perform a natural sort, ensures the countries are in the expected order even once translated.
 		natsort( $countries );
 
-		return $countries;
+		/**
+		 * Filter that allows to change the list and the output of the countries names.
+		 *
+		 * @since 4.7.12
+		 *
+		 * @param array associative array with: Country Code => Country Name
+		 */
+		return (array) apply_filters( 'tribe_countries', $countries );
 	}
 
 	/**
@@ -309,7 +344,7 @@ class Tribe__Languages__Locations {
 	 * }
 	 */
 	public function build_us_states_array() {
-		$states = array(
+		$states = [
 			'AL' => esc_html__( 'Alabama', 'tribe-common' ),
 			'AK' => esc_html__( 'Alaska', 'tribe-common' ),
 			'AZ' => esc_html__( 'Arizona', 'tribe-common' ),
@@ -320,7 +355,7 @@ class Tribe__Languages__Locations {
 			'DE' => esc_html__( 'Delaware', 'tribe-common' ),
 			'DC' => esc_html__( 'District of Columbia', 'tribe-common' ),
 			'FL' => esc_html__( 'Florida', 'tribe-common' ),
-			'GA' => esc_html__( 'Georgia', 'tribe-common' ),
+			'GA' => esc_html_x( 'Georgia', 'The US state Georgia', 'tribe-common' ),
 			'HI' => esc_html__( 'Hawaii', 'tribe-common' ),
 			'ID' => esc_html__( 'Idaho', 'tribe-common' ),
 			'IL' => esc_html__( 'Illinois', 'tribe-common' ),
@@ -361,11 +396,18 @@ class Tribe__Languages__Locations {
 			'WV' => esc_html__( 'West Virginia', 'tribe-common' ),
 			'WI' => esc_html__( 'Wisconsin', 'tribe-common' ),
 			'WY' => esc_html__( 'Wyoming', 'tribe-common' ),
-		);
+		];
 
 		// Perform a natural sort, ensures the states are in the expected order even once translated.
 		natsort( $states );
 
-		return $states;
+		/**
+		 * Filter that allows to change the names of US states before output.
+		 *
+		 * @since 4.7.12
+		 *
+		 * @param array Associative array with the format: State Code => State Name
+		 */
+		return (array) apply_filters( 'tribe_us_states', $states );
 	}
 }

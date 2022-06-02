@@ -45,7 +45,7 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 
 		has_address: function( val, geocodes ) {
 			for ( var i = 0; i < geocodes.length; i++ ) {
-				if ( geocodes[i].formatted_address == val ) {
+				if ( geocodes[i].formatted_address == val ) { // eslint-disable-line eqeqeq
 					return true;
 				}
 			}
@@ -92,7 +92,10 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 					if ( callback && typeof( callback ) === "function" ) {
 						if ( $( "#tribe_events_filter_item_geofence" ).length ) {
 							$( '#tribe_events_filter_item_geofence input' ).prop( 'checked', false );
-							$( "#tribe_events_filter_item_geofence" ).hide().find( 'select' ).prop( 'selectedIndex', 0 );
+							$( "#tribe_events_filter_item_geofence" )
+								.hide()
+								.find( 'select' )
+								.prop( 'selectedIndex', 0 );
 						}
 						callback();
 					}
@@ -106,10 +109,12 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			}
 		},
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_ev.fn.print_geo_options
 		 * @desc tribe_ev.fn.print_geo_options prints out the geolocation options returned by google maps if a geo search term requires refinement.
 		 */
+		/* eslint-enable max-len */
 
 		print_geo_options: function() {
 			$( "#tribe-geo-links" ).empty();
@@ -120,7 +125,12 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 				var address = tg.geocodes[i].formatted_address;
 				if ( !dupe_test[address] ) {
 					dupe_test[address] = true;
-					$( "<a/>" ).text( address ).attr( "href", "#" ).addClass( 'tribe-geo-option-link' ).data( 'index', i ).appendTo( "#tribe-geo-links" );
+					$( "<a/>" )
+						.text( address )
+						.attr( "href", "#" )
+						.addClass( 'tribe-geo-option-link' )
+						.data( 'index', i )
+						.appendTo( "#tribe-geo-links" );
 					if ( tt.map_view() ) {
 						tf.map_add_marker(
 							tg.geocodes[i].geometry.location.lat(),
@@ -133,24 +143,19 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			tg.refine = false;
 		},
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_ev.fn.pro_tooltips
 		 * @desc tribe_ev.fn.pro_tooltips supplies additional tooltip functions for view use on top of the ones defined in core, especially for week view.
 		 */
+		/* eslint-enable max-len */
 
 		pro_tooltips: function() {
 			var $container = $( '#tribe-events' ),
 				$body = $( 'body' ),
-				is_shortcode = $container.hasClass( 'tribe-events-shortcode' ),
-				is_month_view = $container.hasClass( 'view-month' ) || $body.hasClass( 'events-gridview' ),
-				is_week_view = $container.hasClass( 'view-week' ) || $body.hasClass( 'tribe-events-week' ),
-				is_photo_view = $container.hasClass( 'view-photo' ) || $body.hasClass( 'tribe-events-photo' ),
-				is_day_view = $container.hasClass( 'view-day' ) || $body.hasClass( 'tribe-events-day' ),
-				is_list_view = $container.hasClass( 'view-list' ) || $body.hasClass( 'events-list' ),
-				is_map_view = $container.hasClass( 'view-map' ) || $body.hasClass( 'tribe-events-map' ),
-				is_single = $body.hasClass( 'single-tribe_events' );
+				is_week_view = $container.hasClass( 'view-week' ) || $body.hasClass( 'tribe-events-week' );
 
-			$container.on( 'mouseenter', 'div[id*="tribe-events-event-"], div[id*="tribe-events-daynum-"]:has(a), div.event-is-recurring', function() {
+			$container.on( 'mouseenter', 'div[id*="tribe-events-event-"], div[id*="tribe-events-daynum-"]:has(a), div.event-is-recurring', function() { // eslint-disable-line max-len
 
 				var bottomPad = 0;
 				var $this = $( this );
@@ -237,11 +242,11 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 							$tip.css( "top", toffset ).show();
 
 						} else {
-							var $tip = $this.find( '.tribe-events-tooltip' );
+							var $tip = $this.find( '.tribe-events-tooltip' ); // eslint-disable-line no-redeclare
 
 							if ( !$tip.length ) {
-								var data = $this.data( 'tribejson' );
-								var tooltip_template = $this.hasClass( 'tribe-event-featured' )
+								var data = $this.data( 'tribejson' ); // eslint-disable-line no-redeclare
+								var tooltip_template = $this.hasClass( 'tribe-event-featured' ) // eslint-disable-line no-redeclare,max-len
 									? 'tribe_tmpl_tooltip_featured'
 									: 'tribe_tmpl_tooltip';
 
@@ -270,21 +275,21 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			var request = {
 				address: location,
 				bounds : new google.maps.LatLngBounds(
-					new google.maps.LatLng( TribeEventsPro.geocenter.min_lat, TribeEventsPro.geocenter.min_lng ),
-					new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng )
+					new google.maps.LatLng( TribeEventsPro.geocenter.min_lat, TribeEventsPro.geocenter.min_lng ), // eslint-disable-line max-len
+					new google.maps.LatLng( TribeEventsPro.geocenter.max_lat, TribeEventsPro.geocenter.max_lng ) // eslint-disable-line max-len
 				)
 			};
 
 			tg.geocoder.geocode( request, function( results, status ) {
-				if ( status == google.maps.GeocoderStatus.OK ) {
+				if ( status == google.maps.GeocoderStatus.OK ) { // eslint-disable-line eqeqeq
 					callback( results );
 					return results;
 				}
 
 
-				if ( status == google.maps.GeocoderStatus.ZERO_RESULTS ) {
+				if ( status == google.maps.GeocoderStatus.ZERO_RESULTS ) { // eslint-disable-line eqeqeq
 					if ( GeoLoc.map_view ) {
-						spin_end();
+						spin_end(); // eslint-disable-line no-undef
 					}
 					return status;
 				}
@@ -293,11 +298,13 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			} );
 		},
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_ev.fn.set_recurrence
 		 * @desc tribe_ev.fn.set_recurrence uses local storage to store the user front end setting for the hiding of subsequent recurrences of a recurring event.
 		 * @param {Boolean} recurrence_on Bool sent to set appropriate recurrence storage option.
 		 */
+		/* eslint-enable max-len */
 
 		set_recurrence: function( recurrence_on ) {
 			if ( recurrence_on ) {
@@ -317,20 +324,23 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 
 	$.extend( tribe_ev.tests, {
 
+		/* eslint-disable max-len */
 		/**
 		 * @function tribe_ev.tests.hide_recurrence
 		 * @desc tribe_ev.tests.hide_recurrence uses local storage to store the user front end setting for the hiding of subsequent recurrences of a recurring event.
 		 */
+		/* eslint-enable max-len */
 
 		hide_recurrence: function() {
-			return  ($( '#tribeHideRecurrence:checked' ).length) ? true : false;
+			return $( '#tribeHideRecurrence:checked' ).length ? true : false;
 		}
 	} );
 
-	$( document ).ready( function() {
+	$( function() {
 
 		if ( $( '.tribe-bar-geoloc-filter' ).length ) {
-			$( ".tribe-bar-geoloc-filter" ).append( '<div id="tribe-geo-options"><div id="tribe-geo-links"></div></div>' );
+			$( ".tribe-bar-geoloc-filter" )
+				.append( '<div id="tribe-geo-options"><div id="tribe-geo-links"></div></div>' );
 		}
 
 		var $tribe_container = $( '#tribe-events' ),
@@ -355,7 +365,8 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			tf.set_recurrence( recurrence_on );
 
 			/**
-			 * DEPRECATED: tribe_ev_updatingRecurrence and tribe_ev_runAjax have been deprecated in 4.0. Use updating-recurrence.tribe and run-ajax.tribe instead
+			 * DEPRECATED: tribe_ev_updatingRecurrence and tribe_ev_runAjax have been deprecated in 4.0.
+			 *             Use updating-recurrence.tribe and run-ajax.tribe instead
 			 */
 			$( te ).trigger( 'tribe_ev_updatingRecurrence' ).trigger( 'tribe_ev_runAjax' );
 			$( te ).trigger( 'updating-recurrence.tribe' ).trigger( 'run-ajax.tribe' );
@@ -375,13 +386,16 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			}
 
 			if ( tribe_storage ) {
-				if ( tribe_storage.getItem( 'tribeHideRecurrence' ) === '1' && (ts.view_target !== 'month' && ts.view_target !== 'week') ) {
+				if (
+					tribe_storage.getItem( 'tribeHideRecurrence' ) === '1' &&
+					( ts.view_target !== 'month' && ts.view_target !== 'week' )
+				) {
 					ts.url_params['tribeHideRecurrence'] = '1';
 				}
 			}
 		} );
 
-		if ( !tt.map_view() ) {
+		if ( ! tt.map_view() ) {
 
 			if ( $geo_options.length ) {
 
@@ -395,8 +409,8 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 
 					$geo_bar_input.val( $this.text() );
 
-					$( '#tribe-bar-geoloc-lat' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lat() );
-					$( '#tribe-bar-geoloc-lng' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lng() );
+					$( '#tribe-bar-geoloc-lat' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lat() ); // eslint-disable-line max-len
+					$( '#tribe-bar-geoloc-lng' ).val( tg.geocodes[$this.data( 'index' )].geometry.location.lng() ); // eslint-disable-line max-len
 
 					tf.pre_ajax( function() {
 						/**
@@ -409,13 +423,13 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 
 				} );
 
-				$( document ).on( 'click', function( e ) {
+				$( document ).on( 'click', function( e ) { // eslint-disable-line no-unused-vars
 					$geo_options.hide();
 				} );
 
 			}
 
-			tf.snap( '#tribe-geo-wrapper', '#tribe-geo-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' );
+			tf.snap( '#tribe-geo-wrapper', '#tribe-geo-wrapper', '#tribe-events-footer .tribe-events-nav-previous a, #tribe-events-footer .tribe-events-nav-next a' ); // eslint-disable-line max-len
 
 		}
 
@@ -432,10 +446,65 @@ if ( Object.prototype.hasOwnProperty.call( window, 'tribe_ev' ) ) {
 			}
 		} );
 
+		/**
+		 * Transform from a string into an object with key / value pairs. Transforms string from type:
+		 * key=value&ket_2=value2  into an object of type { key: value, key_2: value2 }
+		 *
+		 * @since 4.4.31
+		 *
+		 * @param params
+		 * @returns {object}
+		 */
+		function deserialize( params ) {
+			return params
+				.split( '&' )
+				.map( function ( item ) {
+					return item.split( '=' );
+				} )
+				.filter( function ( item ) {
+					return item.length === 2;
+				} ).reduce( function ( obj, current ) {
+					// If the object key already exists
+					if ( obj[ current[ 0 ] ] ) {
+						// Add multi value fields to an array
+						if( ! obj[ current[ 0 ] ].push ) {
+							obj[ current[ 0 ] ] = [ obj[ current[ 0 ] ] ];
+						}
+						obj[ current[ 0 ] ].push( current[ 1 ] );
+					} else {
+						// Else, assign obj.key = value
+						obj[ current[ 0 ] ] = current[ 1 ];
+					}
+					return obj;
+				}, {} );
+		}
+
+		/**
+		 * Add a new parameter before the data is serialized and the request to be fired.
+		 *
+		 * @since 4.2.26
+		 */
+		var isRecurrence = $tribe_container.data( 'recurrence-list' ) === 1;
+
+		// only deserialize on /all/ page to prevent conflicts with shortcode navigation
+		if ( isRecurrence ) {
+			$( te ).on( 'tribe_ev_ajaxStart', function () {
+				if ( typeof ts.params === 'string' ) {
+					ts.params = deserialize( decodeURIComponent( ts.params.replace( /\+/g, '%20' ) ) );
+				}
+				ts.params.is_recurrence_list = isRecurrence;
+				var value = $tribe_container.data( 'tribe_post_parent' );
+				if ( value ) {
+					ts.params.tribe_post_parent = value;
+				}
+				ts.params = $.param( ts.params );
+
+			} );
+		}
 		// @ifdef DEBUG
-		dbug && debug.info( 'TEC Debug: tribe-events-pro.js successfully loaded' );
+		dbug && tec_debug.info( 'TEC Debug: tribe-events-pro.js successfully loaded' );
 		// @endif
 
 	} );
 
-})( window, document, jQuery, tribe_ev.events, tribe_ev.fn, tribe_ev.geoloc, tribe_ev.state, tribe_ev.tests, tribe_debug );
+})( window, document, jQuery, tribe_ev.events, tribe_ev.fn, tribe_ev.geoloc, tribe_ev.state, tribe_ev.tests, tribe_debug ); // eslint-disable-line max-len

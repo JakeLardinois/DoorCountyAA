@@ -196,4 +196,19 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 
 		return $post_type_link;
 	}
+
+	/**
+	 * Attach language information to recurring event permalinks.
+	 *
+	 * @since 4.4.23
+	 *
+	 * @see https://wpml.org/wpml-hook/wpml_permalink/ Documentation of wpml_permalink
+	 *
+	 * @param string $post_link
+	 * @param boolean $has_structure
+	 * @return string
+	 */
+	public function filter_recurring_event_permalinks( $post_link, $has_structure ) {
+		return apply_filters( 'wpml_permalink', $post_link );
+	}
 }

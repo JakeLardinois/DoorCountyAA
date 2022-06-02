@@ -3,7 +3,7 @@
 /**
  * Class Tribe__Events__Linked_Posts__Chooser_Meta_Box
  *
- * Handles the Organizer section inside the Events meta box
+ * Handles the Venue and Organizer sections inside the Events meta box
  */
 class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	/**
@@ -39,11 +39,11 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 		$this->singular_name_lowercase = $this->linked_posts->linked_post_types[ $this->post_type ]['singular_name_lowercase'];
 		$this->get_event( $event );
 
-		add_action( 'wp', array( $this, 'sticky_form_data' ), 50 ); // Later than events-admin.js itself is enqueued
+		add_action( 'wp', [ $this, 'sticky_form_data' ], 50 ); // Later than events-admin.js itself is enqueued
 	}
 
 	/**
-	 * Work with the specifed event object or else use a placeholder if in the middle of creating a new event.
+	 * Work with the specified event object or else use a placeholder if in the middle of creating a new event.
 	 *
 	 * @param mixed $event
 	 */
@@ -61,14 +61,14 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 		}
 
 		if ( ! $event instanceof WP_Post ) {
-			$event = new WP_Post( (object) array( 'ID' => 0 ) );
+			$event = new WP_Post( (object) [ 'ID' => 0 ] );
 		}
 
 		$this->event = $event;
 	}
 
 	/**
-	 * Render the organizer chooser section for the events meta box
+	 * Render the chooser section for the events meta box
 	 */
 	public function render() {
 		$this->render_dropdowns();
@@ -92,12 +92,15 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 		$post_id                      = $this->event->ID;
 		$current_linked_post_meta_key = $this->linked_posts->get_meta_key( $this->post_type );
 		$current_linked_posts         = get_post_meta( $post_id, $current_linked_post_meta_key, false );
+		if ( $this->post_type === Tribe__Events__Organizer::POSTTYPE ) {
+		    $current_linked_posts = tribe_get_organizer_ids( $post_id );
+		}
 
 		/**
 		 * Allows for filtering the array of values retrieved for a specific linked post meta field.
 		 *
 		 * Name of filter is assembled as tribe_events_linked_post_meta_values_{$current_linked_post_meta_key}, where
-		 * $current_linked_post_meta_key is just literally the name of the curren meta key. So when the _EventOrganizerID
+		 * $current_linked_post_meta_key is just literally the name of the current meta key. So when the _EventOrganizerID
 		 * is being filtered, for example, the filter name would be tribe_events_linked_post_meta_values__EventOrganizerID
 		 *
 		 * @since 4.5.11
@@ -114,7 +117,7 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 			 * @param array $default Default post array
 			 * @param string $post_type Linked post post type
 			 */
-			$current_linked_posts = apply_filters( 'tribe_events_linked_post_default', array(), $this->post_type );
+			$current_linked_posts = apply_filters( 'tribe_events_linked_post_default', [], $this->post_type );
 		}
 
 		/**
@@ -125,9 +128,8 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 		 */
 		$current_linked_posts = (array) apply_filters( 'tribe_display_event_linked_post_dropdown_id', $current_linked_posts, $this->post_type );
 
-		/* if the user can't create organizers, then remove any empty values
-		   from the $current_organizers array. This prevents the automatic
-		   selection of an organizer every time the event is edited. */
+		/* if the user can't create posts of the linked type, then remove any empty values from the $current_linked_posts
+		   array. This prevents the automatic selection of a post every time the event is edited. */
 		$linked_post_pto = get_post_type_object( $this->post_type );
 
 		if ( ! current_user_can( $linked_post_pto->cap->create_posts ) ) {
@@ -159,10 +161,9 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 */
 	protected function single_post_dropdown( $linked_post_id ) {
 		$linked_post_type_container = $this->linked_posts->get_post_type_container( $this->post_type );
-		$linked_post_type_id_field  = $this->linked_posts->get_post_type_id_field_index( $this->post_type );
 		?>
 		<tr class="saved-linked-post">
-			<td class="saved-organizer-table-cell">
+			<td class="saved-<?php echo esc_attr( $linked_post_type_container ); ?>-table-cell">
 				<?php $this->move_handle(); ?>
 				<label
 					data-l10n-create-<?php echo esc_attr( $this->post_type ); ?>="<?php printf( esc_attr__( 'Create New %s', 'the-events-calendar' ), $this->singular_name ); ?>">
@@ -191,24 +192,23 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 */
 	protected function edit_post_link( $linked_post_id ) {
 		$linked_post_pto = get_post_type_object( $this->post_type );
-		if (
+		$cannot_edit_others_posts = (
 			empty( $linked_post_pto->cap->edit_others_posts )
 			|| ! current_user_can( $linked_post_pto->cap->edit_others_posts )
-		) {
+		);
+
+		if ( is_admin() && $cannot_edit_others_posts ) {
 			return;
 		}
-		?>
-		<div class="edit-linked-post-link">
-			<a
-				style="<?php echo esc_attr( empty( $linked_post_id ) ? 'display: none;' : 'display: inline-block;' ); ?>"
-				data-admin-url="<?php echo esc_url( admin_url( 'post.php?action=edit&post=' ) ); ?>"
-				href="<?php echo esc_url( admin_url( sprintf( 'post.php?action=edit&post=%s', $linked_post_id ) ) ); ?>"
-				target="_blank"
-			>
-				<?php printf( esc_html__( 'Edit %s', 'the-events-calendar' ), esc_html( $this->singular_name ) ); ?>
-			</a>
-		</div>
-		<?php
+
+		$edit_link = get_edit_post_link( $linked_post_id );
+
+		printf(
+			'<div class="edit-linked-post-link"><a style="%1$s"  href="%2$s" target="_blank">%3$s</a></div>',
+			esc_attr( empty( $linked_post_id ) ? 'display: none;' : 'display: inline-block;' ),
+			esc_url( $edit_link ),
+			sprintf( esc_html__( 'Edit %s', 'the-events-calendar' ), esc_html( $this->singular_name ) )
+		);
 	}
 
 	/**
@@ -219,16 +219,18 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 */
 	protected function use_default_post( $current_posts ) {
 		if ( ! empty( $current_posts ) ) {
-			return false; // the event already has organizers
+			return false; // the event already has linked post(s)
 		}
+
 		if ( ! empty( $this->event->ID ) && get_post_status( $this->event->ID ) != 'auto-draft' ) {
 			return false; // the event has already been saved
 		}
+
 		if ( is_admin() ) {
 			return Tribe__Admin__Helpers::instance()->is_action( 'add' );
-		} else {
-			return true; // a front-end submission form (e.g., community)
 		}
+
+		return true; // a front-end submission form (e.g., community)
 	}
 
 	/**
@@ -239,9 +241,8 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 			return;
 		}
 
-		$classes = array(
-			'tribe-add-post',
-		);
+		$classes = [ 'tribe-add-post' ];
+
 		if ( is_admin() ) {
 			$classes[] = 'button';
 		} else {
@@ -286,7 +287,7 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 * them with sticky qualities. This *must* run later than the action:priority used to enqueue events-admin.js.
 	 */
 	public function sticky_form_data() {
-		$submitted_data = array();
+		$submitted_data = [];
 
 		$linked_posts = Tribe__Events__Linked_Posts::instance();
 		$container    = $linked_posts->get_post_type_container( $this->post_type );
@@ -302,7 +303,7 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 
 			foreach ( $set_of_values as $index => $value ) {
 				if ( ! isset( $submitted_data[ $index ] ) ) {
-					$submitted_data[ $index ] = array();
+					$submitted_data[ $index ] = [];
 				}
 
 				$submitted_data[ $index ][ $field ] = esc_attr( $value );
@@ -318,7 +319,7 @@ class Tribe__Events__Linked_Posts__Chooser_Meta_Box {
 	 * @param $current_linked_posts
 	 * @return mixed
 	 */
-	private function maybe_parse_candidate_linked_posts( array $current_linked_posts = array() ) {
+	private function maybe_parse_candidate_linked_posts( array $current_linked_posts = [] ) {
 		$linked_post_type_container = $this->linked_posts->get_post_type_container( $this->post_type );
 
 		// filter out any non-truthy values

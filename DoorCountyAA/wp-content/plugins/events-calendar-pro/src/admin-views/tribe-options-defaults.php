@@ -1,27 +1,34 @@
 <?php
 
-$organizers        = Tribe__Events__Main::instance()->get_organizer_info();
-$organizer_options = array();
-if ( is_array( $organizers ) && ! empty( $organizers ) ) {
-	$organizer_options[0] = __( 'No Default', 'tribe-events-calendar-pro' );
-	foreach ( $organizers as $organizer ) {
-		$organizer_options[ $organizer->ID ] = $organizer->post_title;
+$organizers        = [];
+$venues            = [];
+$state_options     = [];
+$country_options   = [];
+$organizer_options = [];
+$venue_options     = [];
+
+if ( 'defaults' === tribe_get_request_var( 'tab' ) ) {
+	$organizers        = Tribe__Events__Main::instance()->get_organizer_info();
+	if ( is_array( $organizers ) && ! empty( $organizers ) ) {
+		$organizer_options[0] = __( 'No Default', 'tribe-events-calendar-pro' );
+		foreach ( $organizers as $organizer ) {
+			$organizer_options[ $organizer->ID ] = $organizer->post_title;
+		}
 	}
-}
 
-$venues        = Tribe__Events__Main::instance()->get_venue_info();
-$venue_options = array();
-if ( is_array( $venues ) && ! empty( $venues ) ) {
-	$venue_options[0] = __( 'No Default', 'tribe-events-calendar-pro' );
-	foreach ( $venues as $venue ) {
-		$venue_options[ $venue->ID ] = $venue->post_title;
+	$venues        = Tribe__Events__Main::instance()->get_venue_info();
+	if ( is_array( $venues ) && ! empty( $venues ) ) {
+		$venue_options[0] = __( 'No Default', 'tribe-events-calendar-pro' );
+		foreach ( $venues as $venue ) {
+			$venue_options[ $venue->ID ] = $venue->post_title;
+		}
 	}
+
+	$state_options = Tribe__View_Helpers::loadStates();
+	$state_options = array_merge( array( '' => __( 'Select a State', 'tribe-events-calendar-pro' ) ), $state_options );
+
+	$country_options = Tribe__View_Helpers::constructCountries();
 }
-
-$state_options = Tribe__View_Helpers::loadStates();
-$state_options = array_merge( array( '' => __( 'Select a State', 'tribe-events-calendar-pro' ) ), $state_options );
-
-$country_options = Tribe__View_Helpers::constructCountries();
 
 $defaultsTab = array(
 	'priority' => 30,
@@ -114,9 +121,22 @@ $defaultsTab = array(
 			'class'            => 'venue-default-info',
 			'display_callback' => 'tribe_display_saved_city',
 		),
+		'defaultCountry'                    => array(
+			'type'            => 'dropdown',
+			'label'           => __( 'Default country', 'tribe-events-calendar-pro' ),
+			'default'         => false,
+			'class'           => 'venue-default-info',
+			'validation_type' => 'options_with_label',
+			'options'         => $country_options,
+			'can_be_empty'    => true,
+		),
+		'current-default-country'           => array(
+			'type'             => 'html',
+			'display_callback' => 'tribe_display_saved_country',
+		),
 		'eventsDefaultState'                => array(
 			'type'            => 'dropdown',
-			'label'           => __( 'Default state', 'tribe-events-calendar-pro' ),
+			'label'           => __( 'Default state/province', 'tribe-events-calendar-pro' ),
 			'default'         => false,
 			'class'           => 'venue-default-info',
 			'validation_type' => 'options',
@@ -129,7 +149,7 @@ $defaultsTab = array(
 		),
 		'eventsDefaultProvince'             => array(
 			'type'            => 'text',
-			'label'           => __( 'Default province', 'tribe-events-calendar-pro' ),
+			'label'           => __( 'Default state/province', 'tribe-events-calendar-pro' ),
 			'default'         => false,
 			'class'           => 'venue-default-info',
 			'validation_type' => 'city_or_province',
@@ -152,19 +172,6 @@ $defaultsTab = array(
 			'type'             => 'html',
 			'class'            => 'venue-default-info',
 			'display_callback' => 'tribe_display_saved_zip',
-		),
-		'defaultCountry'                    => array(
-			'type'            => 'dropdown',
-			'label'           => __( 'Default country', 'tribe-events-calendar-pro' ),
-			'default'         => false,
-			'class'           => 'venue-default-info',
-			'validation_type' => 'options_with_label',
-			'options'         => $country_options,
-			'can_be_empty'    => true,
-		),
-		'current-default-country'           => array(
-			'type'             => 'html',
-			'display_callback' => 'tribe_display_saved_country',
 		),
 		'eventsDefaultPhone'                => array(
 			'type'            => 'text',

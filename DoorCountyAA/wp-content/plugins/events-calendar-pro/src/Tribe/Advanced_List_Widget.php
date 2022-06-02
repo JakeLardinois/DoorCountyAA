@@ -28,17 +28,9 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 		add_filter( 'tribe_events_list_widget_query_args', array( $this, 'taxonomy_filters' ) );
 
 		// Do not enqueue if the widget is inactive
-		if ( is_active_widget( false, false, $this->id_base, true ) ) {
-			add_action( 'init', array( $this, 'enqueue_stylesheet' ), 100 );
+		if ( is_active_widget( false, false, $this->id_base, true ) || is_customize_preview() ) {
+			add_action( 'tribe_events_pro_widget_render', array( 'Tribe__Events__Pro__Widgets', 'enqueue_calendar_widget_styles' ), 100 );
 		}
-	}
-
-	/**
-	 * If the widget is active then enqueue our stylesheet.
-	 */
-	public function enqueue_stylesheet() {
-		// Load the calendar widget CSS (the list widget inherits much of the same)
-		Tribe__Events__Pro__Widgets::enqueue_calendar_widget_styles();
 	}
 
 	public function taxonomy_filters( $query ) {
@@ -62,7 +54,21 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 		$ecp            = Tribe__Events__Pro__Main::instance();
 		$tooltip_status = $ecp->recurring_info_tooltip_status();
 		$ecp->disable_recurring_info_tooltip();
+
 		$this->instance_defaults( $instance );
+
+		/**
+		 * Do things pre-render like: optionally enqueue assets if we're not in a sidebar
+		 * This has to be done in widget() because we have to be able to access
+		 * the queried object for some plugins
+		 *
+		 * @since 4.4.29
+		 *
+		 * @param string __CLASS__ the widget class
+		 * @param array  $args     the widget args
+		 * @param array  $instance the widget instance
+		 */
+		do_action( 'tribe_events_pro_widget_render', __CLASS__, $args, $instance );
 
 		// @todo remove after 3.7 (continuity helper for upgrading users)
 		if ( isset( $this->instance['category'] ) ) {
@@ -80,8 +86,10 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 		$instance = parent::update( $new_instance, $old_instance );
 		$new_instance = $this->default_instance_args( $new_instance, true );
 
-		$instance['venue']                = $new_instance['venue'];
-		$instance['country']              = $new_instance['country'];
+		$instance['venue']   = $new_instance['venue'];
+		$instance['country'] = $new_instance['country'];
+		$instance['street']  = $new_instance['street'];
+		//@todo remove $instance['address'] after 4.6 (continuity helper for upgrading users)
 		$instance['address']              = $new_instance['address'];
 		$instance['city']                 = $new_instance['city'];
 		$instance['region']               = $new_instance['region'];
@@ -91,15 +99,32 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 		$instance['organizer']            = $new_instance['organizer'];
 		$instance['tribe_is_list_widget'] = $new_instance['tribe_is_list_widget'];
 		$instance['operand']              = strip_tags( $new_instance['operand'] );
-		$instance['filters']              = maybe_unserialize( $new_instance['filters'] );
-
-		// @todo remove after 3.7 (added for continuity when users transition from 3.5.x or earlier to this release)
-		if ( isset( $old_instance['category'] ) ) {
-			$this->include_cat_id( $instance['filters'], $old_instance['category'] );
-			unset( $instance['category'] );
-		}
+		$instance['filters']              = maybe_unserialize( $this->clear_filters( $new_instance['filters'] ) );
+		$instance['jsonld_enable']        = ( ! empty( $new_instance['jsonld_enable'] ) ? 1 : 0 );
 
 		return $instance;
+	}
+
+	/**
+	 * Function that removes all filters that contains empty strings as before was creating data structures such as:
+	 * {"tribe_events_cat":[]}, instead of just empty string.
+	 *
+	 * @since 4.4.21
+	 *
+	 * @param mixed $filters The filter taxonomies to be analyzed.
+	 *
+	 * @return string A string representation of the filters or empty string if all are empty.
+	 */
+	public function clear_filters( $filters ) {
+		$filters = maybe_unserialize( $filters );
+
+		if ( is_string( $filters ) ) {
+			$filters = json_decode( $filters, true );
+		}
+
+		$filters = array_filter( (array) $filters );
+
+		return empty( $filters ) ? '' : (string) wp_json_encode( $filters );
 	}
 
 	public function form( $instance ) {
@@ -134,6 +159,8 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 			'featured_events_only' => false,
 			'venue'                => false,
 			'country'              => true,
+			'street'               => false,
+			//@todo remove 'address' after 4.6 (continuity helper for upgrading users)
 			'address'              => false,
 			'city'                 => true,
 			'region'               => true,
@@ -144,12 +171,15 @@ class Tribe__Events__Pro__Advanced_List_Widget extends Tribe__Events__List_Widge
 			'tribe_is_list_widget' => true,
 			'operand'              => 'OR',
 			'filters'              => '',
+			'jsonld_enable'        => true,
 			'instance'             => &$this->instance,
 		);
 
 		if ( $empty_values ) {
 			$defaults = array_map( '__return_empty_string', $defaults );
 		}
+
+
 
 		return wp_parse_args( (array) $instance, $defaults );
 	}

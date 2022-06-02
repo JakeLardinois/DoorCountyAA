@@ -20,16 +20,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<select data-no-search='1' class="widefat js-tribe-condition" data-tribe-conditional-field="type" id="<?php echo esc_attr( $this->get_field_id( 'type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'type' ) ); ?>">
 				<option <?php selected( $instance['type'], 'single-event' ); ?> value="single-event"><?php esc_html_e( 'Single Event', 'tribe-events-calendar-pro' ); ?></option>
 				<option <?php selected( $instance['type'], 'next-event' ); ?> value="next-event"><?php esc_html_e( 'Next Event', 'tribe-events-calendar-pro' ); ?></option>
+				<option <?php selected( $instance['type'], 'future-event' ); ?> value="future-event"><?php esc_html_e( 'Future Event', 'tribe-events-calendar-pro' ); ?></option>
 			</select>
 		</label>
+	</p>
+
+	<p>
+		<small class="js-tribe-conditional" data-tribe-conditional-field="type" data-tribe-conditional-value="future-event"><?php esc_html_e( 'On &#8220;Future Event&#8221; type of countdown, it will go to the next event after the current event starts.', 'tribe-events-calendar-pro' ); ?></small>
 	</p>
 
 	<p class="js-tribe-conditional" data-tribe-conditional-field="type" data-tribe-conditional-value="single-event">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'event_ID' ) ); ?>"><?php esc_html_e( 'Event:', 'tribe-events-calendar-pro' ); ?>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'event_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'event' ) ); ?>">
-				<?php foreach ( $events as $event ): ?>
-					<option value="<?php echo esc_attr( $event->ID ); ?>" <?php selected( $event->ID, $instance['event'] ) ?>><?php echo esc_attr( strip_tags( $event->post_title ) ); ?> - <?php echo esc_html( date_format( new DateTime( $event->EventStartDate ), 'm/d/Y' ) ); ?></option>
-				<?php endforeach ?>
+				<?php foreach ( $events as $event ) : ?>
+					<option
+						value="<?php echo esc_attr( $event->ID ); ?>"
+						<?php selected( $event->ID, $instance['event'] ) ?>
+					>
+						<?php echo esc_attr( strip_tags( $event->post_title ) ); ?>
+						- <?php echo esc_html( tribe_format_date( $event->event_date, false, 'm/d/Y' ) ); ?>
+					</option>
+				<?php endforeach; ?>
 			</select>
 		</label>
 	</p>
@@ -45,9 +56,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<label for="<?php echo esc_attr( $this->get_field_id( 'show_seconds' ) ); ?>"><?php esc_html_e( 'Show seconds?', 'tribe-events-calendar-pro' ); ?></label>
 	</p>
 	<p>
-		<?php $jsonld_enable = ( isset( $instance['jsonld_enable'] ) && $instance['jsonld_enable'] ) || false === $this->updated; ?>
-		<input class="checkbox" type="checkbox" value="1" <?php checked( $jsonld_enable, '1' ); ?>
+		<input class="checkbox" type="checkbox" value="1" <?php checked( $instance['jsonld_enable'], true ); ?>
 		       id="<?php echo esc_attr( $this->get_field_id( 'jsonld_enabled' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'jsonld_enable' ) ); ?>"/>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'jsonld_enabled' ) ); ?>"><?php esc_html_e( 'Generate JSON-LD data', 'the-events-calendar-pro' ); ?></label>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'jsonld_enabled' ) ); ?>"><?php esc_html_e( 'Generate JSON-LD data', 'tribe-events-calendar-pro' ); ?></label>
 	</p>
 </div>

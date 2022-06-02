@@ -110,13 +110,14 @@ class Tribe__Events__Pro__Integrations__WPML__WPML extends Tribe__Events__Integr
 	protected function hook_filters() {
 		$filters = Tribe__Events__Pro__Integrations__WPML__Filters::instance();
 
-		// Modern Tribe filters
+		// The Events Calendar filters
 		add_filter( 'tribe_events_pre_get_posts', array( $filters, 'filter_tribe_events_pre_get_posts' ), 10, 1 );
 		add_filter( 'tribe_events_pro_geocode_rewrite_slugs', array( $filters, 'filter_tribe_events_pro_geocode_rewrite_slugs' ) );
 		add_filter( 'tribe_events_rewrite_i18n_domains', array( $filters, 'filter_tribe_events_rewrite_i18n_domains' ) );
 		add_filter( 'tribe_events_pro_all_link_frag', array( $filters, 'filter_tribe_events_pro_all_link_frag' ), 10, 2 );
 		add_filter( 'tribe_events_pro_get_all_link', array( $filters, 'filter_tribe_events_pro_get_all_link' ), 20, 2 );
 		add_filter( 'post_type_link', array( $filters, 'move_wpml_slug_translation_filter' ), - 1 );
+		add_filter( 'tribe_events_pro_recurring_event_permalinks', array( $filters, 'filter_recurring_event_permalinks' ), 10, 2 );
 
 		// WPML filters
 		add_filter( 'wpml_is_redirected', array( $filters, 'filter_wpml_is_redirected_event' ), 10, 3 );

@@ -1,108 +1,3 @@
-var tribe_timepickers = tribe_timepickers || {};
-
-( function ( $, obj ) {
-	'use strict';
-
-	obj.selector = {
-		container  : '.tribe-datetime-block',
-		timepicker : '.tribe-timepicker',
-		all_day    : '#allDayCheckbox',
-		timezone   : '.tribe-field-timezone',
-		input      : 'select, input'
-	};
-
-	obj.timepicker = {
-		opts: {
-			forceRoundTime: false,
-			step: 30,
-		}
-	};
-
-	obj.timezone = {
-		link: _.template( '<a href="#" class="tribe-change-timezone"><%= label %> <%= timezone %></a>' )
-	}
-
-	obj.$ = {};
-
-	obj.container = function( k, container ) {
-		var $container  = $( container );
-		var $all_day    = $container.find( obj.selector.all_day );
-		var $timepicker = $container.find( obj.selector.timepicker );
-		var $timezone   = $container.find( obj.selector.timezone ).not( obj.selector.input );
-		var $input      = $container.find( obj.selector.timezone ).filter( obj.selector.input );
-
-		// Create the Link
-		var $timezone_link = $( obj.timezone.link( { label: $input.data( 'timezoneLabel' ), timezone: $input.data( 'timezoneValue' ) } ) );
-
-		// Toggle Timepickers on All Day change
-		$all_day.on( 'change', function() {
-			if ( true === $all_day.prop( 'checked' ) ) {
-				$timepicker.hide();
-			} else {
-				$timepicker.show();
-			}
-		} ).trigger( 'change' );
-
-		obj.setup_timepickers( $timepicker );
-
-		// Attach a Click action the Timezone Link
-		$timezone_link.on( 'click', function( e ) {
-			$timezone = $container.find( obj.selector.timezone ).filter( '.select2-container' );
-			e.preventDefault();
-
-			$timezone_link.hide();
-			$timezone.show();
-		} );
-
-		// Append the Link to the Timezone
-		$timezone.after( $timezone_link );
-	};
-
-	obj.init = function() {
-		obj.$.containers = $( obj.selector.container );
-		obj.$.containers.each( obj.container );
-	};
-
-	/**
-	 * Initializes timepickers
-	 */
-	obj.setup_timepickers = function( $timepickers ) {
-		// Setup all Timepickers
-		$timepickers.each( function() {
-			var $item = $( this );
-			var opts  = $.extend( {}, obj.timepicker.opts );
-
-			if ( $item.data( 'format' ) ) {
-				opts.timeFormat = $item.data( 'format' );
-			}
-
-			// By default the step is 15
-			if ( $item.data( 'step' ) ) {
-				opts.step = $item.data( 'step' );
-			}
-
-			// Passing anything but 0 or 'false' will make it round to the nearest step
-			var round = $item.data( 'round' );
-			if (
-				round &&
-				0 != round &&
-				'false' !== round
-			) {
-				opts.forceRoundTime = true;
-			}
-
-			if ( 'undefined' !== typeof $.fn.tribeTimepicker ) {
-				$item.tribeTimepicker( opts ).trigger( 'change' );
-			} else {
-				// @deprecated 4.6.1
-				$item.timepicker( opts ).trigger( 'change' );
-			}
-		} );
-	};
-
-	$( document ).ready( obj.init );
-} ( jQuery, tribe_timepickers ) );
-
 /*
  * Date Format 1.2.3
  * (c) 2007-2009 Steven Levithan <stevenlevithan.com>
@@ -249,7 +144,7 @@ Date.prototype.format = function( mask, utc ) {
 
 var tribe_datepicker_opts = {};
 
-jQuery( document ).ready( function( $ ) {
+jQuery( function( $ ) {
 
 	$( '.bumpdown-trigger' ).bumpdown();
 
@@ -356,7 +251,7 @@ jQuery( document ).ready( function( $ ) {
 				section.find( '.move-linked-post-group' ).hide();
 			}
 
-			fields.find( '.tribe-dropdown' ).tribe_dropdowns().trigger( 'change' );
+			fields.find( '.tribe-dropdown' ).tribe_dropdowns();
 		});
 
 		section.on( 'change', '.linked-post-dropdown', toggle_linked_post_fields );
@@ -369,7 +264,7 @@ jQuery( document ).ready( function( $ ) {
 		 */
 		function add_sticky_linked_post_data( post_type, container, fields ) {
 			// Bail if expected global sticky data array is not set
-			if ( 'undefined' === typeof window['tribe_sticky_' + post_type + '_fields'] || ! $.isArray( window['tribe_sticky_' + post_type + '_fields'] ) ) {
+			if ( 'undefined' === typeof window['tribe_sticky_' + post_type + '_fields'] || ! Array.isArray( window['tribe_sticky_' + post_type + '_fields'] ) ) {
 				return;
 			}
 
@@ -440,14 +335,17 @@ jQuery( document ).ready( function( $ ) {
 				add_sticky_linked_post_data( post_type, tribe_events_linked_posts.post_types[ post_type ], fields );
 			}
 
-			fields.find( '.tribe-dropdown' ).tribe_dropdowns().trigger( 'change' );
+			fields.find( '.tribe-dropdown' ).tribe_dropdowns();
 			group.append( fields );
 		} );
 
 		section.on( 'click', '.tribe-delete-this', function(e) {
 			e.preventDefault();
-			var group = $( this ).closest( 'tbody' );
-			group.fadeOut( 500, function() {
+			var $group = $( this ).closest( 'tbody' );
+
+			$group.parents( '.tribe-section' ).removeClass( 'tribe-is-creating-linked-post' );
+
+			$group.fadeOut( 500, function() {
 				$( this ).remove();
 			} );
 		});
@@ -474,34 +372,50 @@ jQuery( document ).ready( function( $ ) {
 	};
 
 	var toggle_linked_post_fields = function( event ) {
-		var $select   = $( this ),
-			$group    = $select.closest( 'tbody' ),
-			$edit     = $group.find( '.edit-linked-post-link a' ),
-			edit_link = $edit.attr( 'data-admin-url' ),
-			choice    = 'undefined' === typeof event.added ? {} : event.added;
 
-		// Maybe Hide Edit link
-		if ( _.isEmpty( choice ) ) {
-			$edit.hide();
+		const $select = $( this );
+		const $group = $select.closest( 'tbody' );
+		const $edit = $group.find( '.edit-linked-post-link a' );
+		const value = $select.val();
+		const $selected = $select.find( ':selected' );
+		const selectedVal = $selected.val();
+		let editLink = '';
+		let existingPost = false;
+
+		if ( selectedVal === value ) {
+			editLink = $selected.data( 'editLink' );
+			existingPost = !! $selected.data( 'existingPost' );
 		}
 
-		if ( 'undefined' !== typeof choice.new && choice.new ) {
-			// Apply the New Given Title to the Correct Field
-			$group.find( '.linked-post-name' ).val( choice.id ).parents( '.linked-post' ).eq( 0 ).attr( 'data-hidden', true );
+		// Always hide the edit link unless we have an edit link to show (handled below).
+		$edit.hide();
 
-			$select.val( '' );
+		if (
+			! existingPost &&
+			'-1' !== value &&
+			$selected.length
+		) {
+			// Apply the New Given Title to the Correct Field
+			$group.find( '.linked-post-name' ).val( value ).parents( '.linked-post' ).eq( 0 ).attr( 'data-hidden', true );
+
+			$select.val( '-1' );
 
 			// Display the Fields
 			$group
 				.find( '.linked-post' ).not( '[data-hidden]' ).show()
-				.find( '.tribe-dropdown' ).trigger( 'change' );
+				.find( '.tribe-dropdown' );
+
+			$group.parents( '.tribe-section' ).addClass( 'tribe-is-creating-linked-post' );
+
 		} else {
 			// Hide all fields and remove their values
-			$group.find( '.linked-post' ).hide().find( 'input' ).val( '' );
+			$group.find( '.linked-post' ).hide().find( 'input, select' ).val( '' );
+
+			$group.parents( '.tribe-section' ).removeClass( 'tribe-is-creating-linked-post' );
 
 			// Modify and Show edit link
-			if ( ! _.isEmpty( choice ) ) {
-				$edit.attr( 'href', edit_link + choice.id ).show();
+			if ( ! _.isEmpty( editLink ) ) {
+				$edit.attr( 'href', editLink ).show();
 			}
 		}
 	};
@@ -516,7 +430,7 @@ jQuery( document ).ready( function( $ ) {
 
 		if ( $date_format.length && $date_format.attr( 'data-datepicker_format' ).length >= 1 ) {
 			datepicker_format = $date_format.attr( 'data-datepicker_format' );
-			date_format = datepicker_formats.main[ datepicker_format ];
+			date_format       = datepicker_formats.main[ datepicker_format ];
 		}
 
 		function date_diff_in_days( a, b ) {
@@ -533,8 +447,9 @@ jQuery( document ).ready( function( $ ) {
 			startofweek = $event_pickers.data( 'startofweek' );
 		}
 
-		var $start_date = $( document.getElementById( 'EventStartDate' ) );
-		var $end_date   = $( document.getElementById( 'EventEndDate' ) );
+		var $start_date       = $( document.getElementById( 'EventStartDate' ) );
+		var $end_date         = $( document.getElementById( 'EventEndDate' ) );
+		var $event_details    = $( document.getElementById( 'tribe_events_event_details' ) );
 
 		tribe_datepicker_opts = {
 			dateFormat      : date_format,
@@ -542,34 +457,73 @@ jQuery( document ).ready( function( $ ) {
 			changeMonth     : true,
 			changeYear      : true,
 			numberOfMonths  : get_datepicker_num_months(),
-			firstDay        : startofweek,
 			showButtonPanel : false,
 			beforeShow      : function( element, object ) {
 				object.input.datepicker( 'option', 'numberOfMonths', get_datepicker_num_months() );
-				object.input.data( 'prevDate', object.input.datepicker( "getDate" ) );
+				object.input.data( 'prevDate', object.input.datepicker( 'getDate' ) );
+
+				// allow single datepicker fields to specify a min or max date
+				// using the `data-datapicker-(min|max)Date` attribute
+				if ( undefined !== object.input.data( 'datepicker-min-date' ) ) {
+					object.input.datepicker( 'option', 'minDate', object.input.data( 'datepicker-min-date' ) );
+				}
+
+				if ( undefined !== object.input.data( 'datepicker-max-date' ) ) {
+					object.input.datepicker( 'option', 'maxDate', object.input.data( 'datepicker-max-date' ) );
+				}
+
+				// Capture the datepicker div here; it's dynamically generated so best to grab here instead
+				// of elsewhere.
+				$dpDiv = $( object.dpDiv );
+
+				// "Namespace" our CSS a bit so that our custom jquery-ui-datepicker styles don't interfere
+				// with other plugins'/themes'.
+				$dpDiv.addClass( 'tribe-ui-datepicker' );
+
+				$event_details.trigger( 'tribe.ui-datepicker-div-beforeshow', [ object ] );
+
+				$dpDiv.attrchange( {
+					trackValues: true,
+					callback: function( attr ) {
+						// This is a non-ideal, but very reliable way to look for the closing of the ui-datepicker box,
+						// since onClose method is often occluded by other plugins, including Events Calender PRO.
+						if (
+							'string' === typeof attr.newValue &&
+							(
+								attr.newValue.indexOf( 'display: none' ) >= 0 ||
+								attr.newValue.indexOf( 'display:none' ) >= 0
+							)
+						) {
+							$dpDiv.removeClass( 'tribe-ui-datepicker' );
+							$event_details.trigger( 'tribe.ui-datepicker-div-closed', [ object ] );
+						}
+					},
+				} );
 			},
-			onSelect: function( selected_date ) {
-				var instance = $( this ).data( "datepicker" );
-				var date = $.datepicker.parseDate( instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selected_date, instance.settings );
+			onSelect: function( selected_date, object ) {
+
+				var instance = $( this ).data( 'datepicker' );
+				var date     = $.datepicker.parseDate(
+					instance.settings.dateFormat || $.datepicker._defaults.dateFormat,
+					selected_date,
+					instance.settings
+				);
 
 				// If the start date was adjusted, then let's modify the minimum acceptable end date
 				if ( this.id === 'EventStartDate' ) {
 					var start_date = $( document.getElementById( 'EventStartDate' ) ).data( 'prevDate' );
-					var date_diff = null == start_date ? 0 : date_diff_in_days( start_date, $end_date.datepicker( 'getDate' ) );
-					var end_date = new Date( date.setDate( date.getDate() + date_diff ) );
+					var date_diff  = null == start_date ? 0 : date_diff_in_days( start_date, $end_date.datepicker( 'getDate' ) );
+					var end_date   = new Date( date.setDate( date.getDate() + date_diff ) );
 
 					$end_date
-						.datepicker( 'option', 'minDate', end_date )
-						.datepicker( 'setDate', end_date );
-				}
-				// If the end date was adjusted, then let's modify the maximum acceptable start date
-				else if ( this.id === 'EventEndDate' ) {
-					$start_date.datepicker( 'option', 'maxDate', date );
+						.datepicker( 'option', 'minDate', $start_date.datepicker( 'getDate' ) )
+						.datepicker( 'setDate', end_date )
+						.datepicker_format;
 				}
 
 				// fire the change and blur handlers on the field
-				$( this ).change();
-				$( this ).blur();
+				$( this ).trigger( 'change' );
+				$( this ).trigger( 'blur' );
 			}
 		};
 
@@ -588,9 +542,9 @@ jQuery( document ).ready( function( $ ) {
 			};
 
 			$.each( $els, function( i, el ) {
-				var $el = $(el);
+				var $el = $( el );
 				( '' !== $el.val() ) && $el.val( tribeDateFormat( $el.val(), datepicker_format ) );
-			})
+			} )
 		}
 
 		var tribeDaysPerMonth = [29, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -602,7 +556,7 @@ jQuery( document ).ready( function( $ ) {
 			$( document.getElementById( '30StartDays' ) ),
 			$( document.getElementById( '31StartDays' ) )
 		];
-		
+
 		var tribeEndDays = [
 			$( document.getElementById( '28EndDays' ) ),
 			$( document.getElementById( '29EndDays' ) ),
@@ -610,7 +564,7 @@ jQuery( document ).ready( function( $ ) {
 			$( document.getElementById( '31EndDays' ) )
 		];
 
-		$start_end_month.change( function() {
+		$start_end_month.on( 'change', function() {
 			var t = $( this );
 			var startEnd = t.attr( 'name' );
 			// get changed select field
@@ -646,14 +600,14 @@ jQuery( document ).ready( function( $ ) {
 			}
 		} );
 
-		$start_end_month.change();
+		$start_end_month.trigger( 'change' );
 
-		$( 'select[name="EventStartYear"]' ).change( function() {
-			$start_month.change();
+		$( 'select[name="EventStartYear"]' ).on( 'change', function() {
+			$start_month.trigger( 'change' );
 		} );
 
-		$( 'select[name="EventEndYear"]' ).change( function() {
-			$end_month.change();
+		$( 'select[name="EventEndYear"]' ).on( 'change', function() {
+			$end_month.trigger( 'change' );
 		} );
 
 		for ( var i in tribe_events_linked_posts.post_types ) {
@@ -668,11 +622,11 @@ jQuery( document ).ready( function( $ ) {
 	//show state/province input based on first option in countries list, or based on user input of country
 	$( 'body' ).on( 'change', '#EventCountry', function () {
 		var $country        = $( this );
-			$container      = $country.parents( 'div.eventForm' ).eq( 0 ),
-			$state_dropdown = $container.find( '#s2id_StateProvinceSelect' ),
-			$state_select   = $container.find( '#StateProvinceSelect' ),
-			$state_text     = $container.find( '#StateProvinceText' ),
-			country         = $( this ).val();
+		var $container      = $country.parents( 'div.eventForm' ).eq( 0 );
+		var $state_select   = $container.find( '#StateProvinceSelect' );
+		var $state_dropdown = $state_select.next( '.select2-container' );
+		var $state_text     = $container.find( '#StateProvinceText' );
+		var country         = $( this ).val();
 
 		if ( country == 'US' || country == 'United States' ) {
 			$state_text.hide();
@@ -703,15 +657,18 @@ jQuery( document ).ready( function( $ ) {
 	} );
 	overwriteCoordinates.$toggle.trigger( 'change' );
 
-	$( '#EventInfo input, #EventInfo select' ).change( function() {
+	$( '#EventInfo input, #EventInfo select' ).on( 'change', function() {
 		$( '.rec-error' ).hide();
 	} );
 
 	var eventSubmitButton = $( '.wp-admin.events-cal #post #publishing-action input[type="submit"]' );
 
-	eventSubmitButton.click( function() {
-		$( this ).data( 'clicked', true );
-	} );
+	eventSubmitButton.on(
+		'click',
+		function() {
+			$( this ).data( 'clicked', true );
+		}
+	);
 
 	// Workaround for venue & organizer post types when editing or adding
 	// so events parent menu stays open and active
@@ -735,15 +692,15 @@ jQuery( document ).ready( function( $ ) {
 	// Default Layout Settings
 	// shows / hides proper views that are to be used on front-end
 
-	var $tribe_views = $( '#tribe-field-tribeEnableViews' );
+	var $tribe_views = $( document.getElementById( 'tribe-field-tribeEnableViews' ) );
 
 	if ( $tribe_views.length ) {
 
-		var $default_view_select = $( 'select[name="viewOption"]' );
+		var $default_view_select        = $( 'select[name="viewOption"]' );
 		var $default_mobile_view_select = $( 'select[name="mobile_default_view"]' );
-		var $view_inputs = $tribe_views.find( 'input:checkbox' );
-		var $view_desc = $( '#tribe-field-tribeEnableViews .tribe-field-wrap p.description' );
-		var view_options = {};
+		var $view_inputs                = $tribe_views.find( 'input:checkbox' );
+		var $view_desc                  = $( '#tribe-field-tribeEnableViews .tribe-field-wrap p.description' );
+		var view_options                = {};
 
 		function create_view_array() {
 
@@ -789,10 +746,11 @@ jQuery( document ).ready( function( $ ) {
 
 					if ( $this.is( ':checked' ) ) {
 						var value = $this.val();
+						var label = value.substr( 0, 1 ).toUpperCase() + value.substr( 1 );
 						$default_view_select
-							.append( '<option value="' + value + '">' + view_options[value] + '</option>' );
+							.append( '<option value="' + value + '">' + label + '</option>' );
 						$default_mobile_view_select
-							.append( '<option value="' + value + '">' + view_options[value] + '</option>' );
+							.append( '<option value="' + value + '">' + label + '</option>' );
 					}
 				} );
 
@@ -867,5 +825,4 @@ jQuery( document ).ready( function( $ ) {
 			$el.val( tribeDateFormat( $el.datepicker( 'getDate' ), 'tribeQuery' ) );
 		} );
 	} );
-
-});
+} );

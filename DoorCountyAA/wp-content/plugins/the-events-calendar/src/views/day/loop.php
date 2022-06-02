@@ -5,10 +5,14 @@
  *
  * Override this template in your own theme by creating a file at [your-theme]/tribe-events/loop.php
  *
- * @version 4.4
+ * @version 4.6.19
  * @package TribeEventsCalendar
  *
  */
+
+if ( tec_events_views_v1_should_display_deprecated_notice() ) {
+	_deprecated_file( __FILE__, '5.13.0', null, 'On version 6.0.0 this file will be removed. Please refer to <a href="https://evnt.is/v1-removal">https://evnt.is/v1-removal</a> for template customization assistance.' );
+}
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
@@ -34,7 +38,7 @@ $current_timeslot = null;
 	<!-- .tribe-events-day-time-slot -->
 
 	<div class="tribe-events-day-time-slot">
-		<h5><?php echo $current_timeslot; ?></h5>
+		<h2 class="tribe-events-day-time-slot-heading"><?php echo $current_timeslot; ?></h2>
 		<?php endif; ?>
 
 		<!-- Event  -->

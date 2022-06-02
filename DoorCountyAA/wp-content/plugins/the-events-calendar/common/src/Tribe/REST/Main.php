@@ -4,21 +4,21 @@
 /**
  * Class Tribe__REST__Main
  *
- * The main entry point for a Modern Tribe REST API implementation.
+ * The main entry point for a The Events Calendar REST API implementation.
  *
  * This class should not contain business logic and merely set up and start the REST API support.
  */
 abstract class Tribe__REST__Main {
 
 	/**
-	 * Modern Tribe REST APIs URL namespace.
+	 * The Events Calendar REST APIs URL namespace.
 	 *
 	 * @var string
 	 */
 	protected $namespace = 'tribe';
 
 	/**
-	 * Returns the namespace of Modern Tribe REST APIs.
+	 * Returns the namespace of The Events Calendar REST APIs.
 	 *
 	 * @return string
 	 */
@@ -79,9 +79,9 @@ abstract class Tribe__REST__Main {
 				global $wp_rewrite;
 
 				if ( $wp_rewrite->using_index_permalinks() ) {
-					$url = get_home_url( $blog_id, $wp_rewrite->index . '/' . self::get_url_prefix(), $scheme );
+					$url = get_home_url( $blog_id, $wp_rewrite->index . '/' . $this->get_url_prefix(), $scheme );
 				} else {
-					$url = get_home_url( $blog_id, self::get_url_prefix(), $scheme );
+					$url = get_home_url( $blog_id, $this->get_url_prefix(), $scheme );
 				}
 
 				$url .= '/' . ltrim( $path, '/' );

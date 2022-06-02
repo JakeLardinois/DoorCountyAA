@@ -28,7 +28,7 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 	public function __construct( $event_id, $updated, Tribe__Events__Pro__Recurrence__Exclusions $exclusions = null ) {
 		$this->event_id        = $event_id;
 		$this->updated         = $updated;
-		$event_timezone_string = $this->get_event_timezone_string( $event_id );
+		$event_timezone_string = Tribe__Events__Timezones::get_event_timezone_string( $event_id );
 		$this->exclusions = $exclusions ?
 			$exclusions :
 			Tribe__Events__Pro__Recurrence__Exclusions::instance( $event_timezone_string );
@@ -37,9 +37,14 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 	/**
 	 * Do the actual work of saving a recurring series of events
 	 *
+	 * @since ?.?.?
+	 * @since 5.5.0 Included a conditional for the processing right away.
+	 *
+	 * @param bool $process If we will process a small batch of events right away or way for the async to kick in.
+	 *
 	 * @return bool
 	 */
-	public function save_events() {
+	public function save_events( $process = true ) {
 		$existing_instances = Tribe__Events__Pro__Recurrence__Children_Events::instance()->get_ids( $this->event_id );
 
 		$recurrences = Tribe__Events__Pro__Recurrence__Meta::get_recurrence_for_event( $this->event_id );
@@ -51,6 +56,7 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 		$possible_next_pending = array();
 		$earliest_date         = strtotime( Tribe__Events__Pro__Recurrence__Meta::$scheduler->get_earliest_date() );
 		$latest_date           = strtotime( Tribe__Events__Pro__Recurrence__Meta::$scheduler->get_latest_date() );
+		$rule_count            = 0;
 
 		foreach ( $recurrences['rules'] as &$recurrence ) {
 			if ( ! $recurrence ) {
@@ -58,11 +64,12 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 			}
 			$recurrence->setMinDate( $earliest_date );
 			$recurrence->setMaxDate( $latest_date );
-			$to_create = array_merge( $to_create, $recurrence->getDates() );
+			$to_create = array_merge( $to_create, $recurrence->getDates( $rule_count ) );
 
 			if ( $recurrence->constrainedByMaxDate() !== false ) {
 				$possible_next_pending[] = $recurrence->constrainedByMaxDate();
 			}
+			$rule_count++;
 		}
 
 		$to_create = tribe_array_unique( $to_create );
@@ -116,34 +123,11 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 		$queue = new Tribe__Events__Pro__Recurrence__Queue( $this->event_id );
 		$queue->update( $to_create, $to_update, $to_delete, $exclusions );
 
-		// ...but don't wait around, process a small initial batch right away
-		Tribe__Events__Pro__Main::instance()->queue_processor->process_batch( $this->event_id );
+		if ( $process ) {
+			// ...but don't wait around, process a small initial batch right away
+			Tribe__Events__Pro__Main::instance()->queue_processor->process_batch( $this->event_id );
+		}
 
 		return true;
 	}
-
-	/**
-	 * Gets the timezone string associated with an event.
-	 *
-	 * Will fall back to WP timezone string and to system timezone string in this order.
-	 *
-	 * @param $event_id
-	 *
-	 * @return mixed|string|void
-	 */
-	protected function get_event_timezone_string( $event_id ) {
-		$event_timezone_string = get_post_meta( $event_id, '_EventTimezone', true );
-		if ( empty( $event_timezone_string ) ) {
-			$event_timezone_string = get_option( 'timezone_string', false );
-			if ( empty( $event_timezone_string ) ) {
-				$event_timezone_string = date_default_timezone_get();
-
-				return $event_timezone_string;
-			}
-
-			return $event_timezone_string;
-		}
-
-		return $event_timezone_string;
-	}//end saveEvents
 }

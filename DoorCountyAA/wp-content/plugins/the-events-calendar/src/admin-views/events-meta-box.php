@@ -8,10 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-$events_label_singular = tribe_get_event_label_singular();
-$events_label_plural = tribe_get_event_label_plural();
+$events_label_singular           = tribe_get_event_label_singular();
+$events_label_plural             = tribe_get_event_label_plural();
 $events_label_singular_lowercase = tribe_get_event_label_singular_lowercase();
-$events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
+$events_label_plural_lowercase   = tribe_get_event_label_plural_lowercase();
+
+
 ?>
 <div id="eventIntro">
 	<div id="tribe-events-post-error" class="tribe-events-error error"></div>
@@ -25,7 +27,7 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 	do_action( 'tribe_events_post_errors', $event->ID, true );
 	?>
 </div>
-<div id='eventDetails' class="inside eventForm" data-datepicker_format="<?php echo esc_attr( tribe_get_option( 'datepickerFormat' ) ); ?>">
+<div id='eventDetails' class="inside eventForm" data-datepicker_format="<?php echo esc_attr( \Tribe__Date_Utils::get_datepicker_format_index() ); ?>">
 	<?php
 	/**
 	 * Fires inside the opening #eventDetails div of The Events Calendar meta box
@@ -48,10 +50,11 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 	<table cellspacing="0" cellpadding="0" id="EventInfo">
 		<tr>
 			<td colspan="2" class="tribe_sectionheader">
-				<div class="tribe_sectionheader" style="">
+				<div class="tribe_sectionheader">
 					<h4><?php esc_html_e( 'Time &amp; Date', 'the-events-calendar' ); ?></h4></div>
 			</td>
 		</tr>
+
 		<tr>
 			<td colspan="2">
 				<table class="eventtable">
@@ -68,6 +71,7 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 					<tr id="recurrence-changed-row">
 						<td colspan='2'><?php printf( esc_html__( 'You have changed the recurrence rules of this %1$s.  Saving the %1$s will update all future %2$s.  If you did not mean to change all %2$s, then please refresh the page.', 'the-events-calendar' ), $events_label_singular_lowercase, $events_label_plural_lowercase ); ?></td>
 					</tr>
+
 					<tr>
 						<td class="tribe-datetime-label"><?php esc_html_e( 'Start/End:', 'the-events-calendar' ); ?></td>
 						<td class="tribe-datetime-block">
@@ -126,10 +130,11 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 								name="EventTimezone"
 								id="event-timezone"
 								class="tribe-field-timezone tribe-dropdown hide-if-js"
-								data-timezone-label="<?php esc_attr_e( 'Timezone:', 'the-events-calendar' ) ?>"
+								data-timezone-label="<?php esc_attr_e( 'Time Zone:', 'the-events-calendar' ) ?>"
 								data-timezone-value="<?php echo esc_attr( Tribe__Events__Timezones::get_event_timezone_string() ) ?>"
+								data-prevent-clear
 							>
-								<?php echo wp_timezone_choice( Tribe__Events__Timezones::get_event_timezone_string() ); ?>
+								<?php echo tribe_events_timezone_choice( Tribe__Events__Timezones::get_event_timezone_string() ); ?>
 							</select>
 
 							<p class="tribe-allday">
@@ -145,6 +150,7 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 							</p>
 						</td>
 					</tr>
+
 					<tr class="event-dynamic-helper">
 						<td class="label">
 						</td>
@@ -167,108 +173,122 @@ $events_label_plural_lowercase = tribe_get_event_label_plural_lowercase();
 		</tr>
 	</table>
 
-	<?php Tribe__Events__Linked_Posts::instance()->render_meta_box_sections( $event ); ?>
+		<?php Tribe__Events__Linked_Posts::instance()->render_meta_box_sections( $event ); ?>
 
-	<table id="event_url" class="eventtable">
-		<tr>
-			<td colspan="2" class="tribe_sectionheader">
-				<h4><?php printf( esc_html__( '%s Website', 'the-events-calendar' ), $events_label_singular ); ?></h4></td>
-		</tr>
-		<tr>
-			<td style="width:172px;"><?php esc_html_e( 'URL:', 'the-events-calendar' ); ?></td>
-			<td>
-				<input tabindex="<?php tribe_events_tab_index(); ?>" type='text' id='EventURL' name='EventURL' size='25' value='<?php echo ( isset( $_EventURL ) ) ? esc_attr( $_EventURL ) : ''; ?>' placeholder='example.com' />
-			</td>
-		</tr>
-		<?php
-		/**
-		 * Fires just after the "URL" field that appears below the Event Website header in The Events Calendar meta box
-		 * HTML outputted here should be wrapped in a table row (<tr>) that contains 2 cells (<td>s)
-		 *
-		 * @param int $event->ID the event currently being edited, will be 0 if creating a new event
-		 * @param boolean
-		 */
-		do_action( 'tribe_events_url_table', $event->ID, true );
-		?>
-	</table>
-
-	<?php
-	/**
-	 * Fires just after closing table tag after Event Website in The Events Calendar meta box
-	 *
-	 * @param int $event->ID the event currently being edited, will be 0 if creating a new event
-	 * @param boolean
-	 */
-	do_action( 'tribe_events_details_table_bottom', $event->ID, true );
-	?>
-
-	<table id="event_cost" class="eventtable">
-		<?php if ( tribe_events_admin_show_cost_field() ) : ?>
+		<table id="event_url" class="eventtable">
 			<tr>
 				<td colspan="2" class="tribe_sectionheader">
-					<h4><?php printf( esc_html__( '%s Cost', 'the-events-calendar' ), $events_label_singular ); ?></h4></td>
+					<h4><?php printf( esc_html__( '%s Website', 'the-events-calendar' ), $events_label_singular ); ?></h4></td>
 			</tr>
 			<tr>
-				<td><?php esc_html_e( 'Currency Symbol:', 'the-events-calendar' ); ?></td>
+				<td style="width:172px;"><?php esc_html_e( 'URL:', 'the-events-calendar' ); ?></td>
 				<td>
-					<input
-						tabindex="<?php tribe_events_tab_index(); ?>"
-						type='text'
-						id='EventCurrencySymbol'
-						name='EventCurrencySymbol'
-						size='2'
-						value='<?php echo isset( $_EventCurrencySymbol ) ? esc_attr( $_EventCurrencySymbol ) : tribe_get_option( 'defaultCurrencySymbol', '$' ); ?>'
-						class='alignleft'
-					/>
-					<select
-						tabindex="<?php tribe_events_tab_index(); ?>"
-						id="EventCurrencyPosition"
-						name="EventCurrencyPosition"
-						class="tribe-dropdown"
-					>
-						<?php
-						if ( isset( $_EventCurrencyPosition ) && 'suffix' === $_EventCurrencyPosition ) {
-							$suffix = true;
-						} elseif ( isset( $_EventCurrencyPosition ) && 'prefix' === $_EventCurrencyPosition ) {
-							$suffix = false;
-						} elseif ( true === tribe_get_option( 'reverseCurrencyPosition', false ) ) {
-							$suffix = true;
-						} else {
-							$suffix = false;
-						}
-						?>
-						<option value="prefix"> <?php _ex( 'Before cost', 'Currency symbol position', 'the-events-calendar' ) ?> </option>
-						<option value="suffix"<?php if ( $suffix ) {
-							echo ' selected="selected"';
-						} ?>><?php _ex( 'After cost', 'Currency symbol position', 'the-events-calendar' ) ?></option>
-					</select>
+					<input tabindex="<?php tribe_events_tab_index(); ?>" type='text' id='EventURL' name='EventURL' size='25' value='<?php echo ( isset( $_EventURL ) ) ? esc_attr( $_EventURL ) : ''; ?>' placeholder='example.com' />
 				</td>
 			</tr>
-			<tr>
-				<td><?php esc_html_e( 'Cost:', 'the-events-calendar' ); ?></td>
-				<td>
-					<input tabindex="<?php tribe_events_tab_index(); ?>" type='text' id='EventCost' name='EventCost' size='6' value='<?php echo ( isset( $_EventCost ) ) ? esc_attr( $_EventCost ) : ''; ?>' />
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<small><?php printf( esc_html__( 'Enter a 0 for %s that are free or leave blank to hide the field.', 'the-events-calendar' ), $events_label_plural_lowercase ); ?></small>
-				</td>
-			</tr>
-		<?php endif; ?>
+			<?php
+			/**
+			 * Fires just after the "URL" field that appears below the Event Website header in The Events Calendar meta box
+			 * HTML outputted here should be wrapped in a table row (<tr>) that contains 2 cells (<td>s)
+			 *
+			 * @param int $event->ID the event currently being edited, will be 0 if creating a new event
+			 * @param boolean
+			 */
+			do_action( 'tribe_events_url_table', $event->ID, true );
+			?>
+		</table>
+
 		<?php
 		/**
-		 * Fires just after the "Cost" field that appears below the Event Cost header in The Events Calendar meta box
-		 * HTML outputted here should be wrapped in a table row (<tr>) that contains 2 cells (<td>s)
+		 * Fires just after closing table tag after Event Website in The Events Calendar meta box
 		 *
 		 * @param int $event->ID the event currently being edited, will be 0 if creating a new event
 		 * @param boolean
 		 */
-		do_action( 'tribe_events_cost_table', $event->ID, true );
+		do_action( 'tribe_events_details_table_bottom', $event->ID, true );
 		?>
-	</table>
 
+		<table id="event_cost" class="eventtable">
+			<?php if ( tribe_events_admin_show_cost_field() ) : ?>
+				<tr>
+					<td colspan="2" class="tribe_sectionheader">
+						<h4><?php printf( esc_html__( '%s Cost', 'the-events-calendar' ), $events_label_singular ); ?></h4></td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Currency Symbol:', 'the-events-calendar' ); ?></td>
+					<td>
+						<input
+							tabindex="<?php tribe_events_tab_index(); ?>"
+							type='text'
+							id='EventCurrencySymbol'
+							name='EventCurrencySymbol'
+							size='2'
+							value='<?php echo isset( $_EventCurrencySymbol ) ? esc_attr( $_EventCurrencySymbol ) : tribe_get_option( 'defaultCurrencySymbol', '$' ); ?>'
+							class='alignleft'
+						/>
+						<select
+							tabindex="<?php tribe_events_tab_index(); ?>"
+							id="EventCurrencyPosition"
+							name="EventCurrencyPosition"
+							class="tribe-dropdown"
+							data-prevent-clear
+						>
+							<?php
+							if ( isset( $_EventCurrencyPosition ) && 'suffix' === $_EventCurrencyPosition ) {
+								$suffix = true;
+							} elseif ( isset( $_EventCurrencyPosition ) && 'prefix' === $_EventCurrencyPosition ) {
+								$suffix = false;
+							} elseif ( true === tribe_get_option( 'reverseCurrencyPosition', false ) ) {
+								$suffix = true;
+							} else {
+								$suffix = false;
+							}
+							?>
+							<option value="prefix"> <?php _ex( 'Before cost', 'Currency symbol position', 'the-events-calendar' ) ?> </option>
+							<option value="suffix"<?php if ( $suffix ) {
+								echo ' selected="selected"';
+							} ?>><?php _ex( 'After cost', 'Currency symbol position', 'the-events-calendar' ) ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'ISO Currency Code:', 'the-events-calendar' ); ?></td>
+					<td>
+						<input
+							tabindex="<?php tribe_events_tab_index(); ?>"
+							type='text'
+							id='EventCurrencyCode'
+							name='EventCurrencyCode'
+							size='3'
+							value='<?php echo isset( $_EventCurrencyCode ) ? esc_attr( $_EventCurrencyCode ) : tribe_get_option( 'defaultCurrencyCode', 'USD' ); ?>'
+							class='alignleft'
+						/>
+					</td>
+				</tr>
+				<tr>
+					<td><?php esc_html_e( 'Cost:', 'the-events-calendar' ); ?></td>
+					<td>
+						<input tabindex="<?php tribe_events_tab_index(); ?>" type='text' id='EventCost' name='EventCost' size='6' value='<?php echo ( isset( $_EventCost ) ) ? esc_attr( $_EventCost ) : ''; ?>' />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<small><?php printf( esc_html__( 'Enter a 0 for %s that are free or leave blank to hide the field.', 'the-events-calendar' ), $events_label_plural_lowercase ); ?></small>
+					</td>
+				</tr>
+			<?php endif; ?>
+			<?php
+			/**
+			 * Fires just after the "Cost" field that appears below the Event Cost header in The Events Calendar meta box
+			 * HTML outputted here should be wrapped in a table row (<tr>) that contains 2 cells (<td>s)
+			 *
+			 * @param int $event->ID the event currently being edited, will be 0 if creating a new event
+			 * @param boolean
+			 */
+			do_action( 'tribe_events_cost_table', $event->ID, true );
+			?>
+		</table>
 </div>
 <?php
 /**

@@ -78,6 +78,7 @@ class Tribe__Events__Pro__Shortcodes__This_Week extends Tribe__Events__Pro__Shor
 		$this->default_args['widget_id']     = self::$counter;
 		$this->default_args['before_widget'] = '<div id="tribe-this-week-events-widget-100' . self::$counter . '" class="tribe-this-week-events-widget" >';
 		$this->default_args['after_widget']  = '</div>';
+		Tribe__Events__Pro__Widgets::enqueue_calendar_widget_styles();
 
 		$this->arguments = shortcode_atts( $this->default_args, $attributes );
 		$this->taxonomy_filters();
@@ -85,6 +86,7 @@ class Tribe__Events__Pro__Shortcodes__This_Week extends Tribe__Events__Pro__Shor
 		ob_start();
 		// We use $this->arguments for both the args and the instance vars here
 		the_widget( 'Tribe__Events__Pro__This_Week_Widget', $this->arguments, $this->arguments );
+
 		$this->output = ob_get_clean();
 	}
 

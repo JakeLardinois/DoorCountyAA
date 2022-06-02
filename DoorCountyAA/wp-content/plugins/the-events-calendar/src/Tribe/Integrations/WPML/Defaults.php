@@ -63,7 +63,7 @@ class Tribe__Events__Integrations__WPML__Defaults {
 	 */
 	public function setup_config_file() {
 		// run just once in this request...
-		remove_action( current_action(), array( $this, 'on_parse_config_file' ) );
+		remove_action( current_action(), [ $this, 'on_parse_config_file' ] );
 		// ...and never again
 		Tribe__Settings_Manager::set_option( $this->defaults_option_name, true );
 
@@ -79,7 +79,7 @@ class Tribe__Events__Integrations__WPML__Defaults {
 		if ( ! $written ) {
 			$message = $this->get_config_file_fail_message();
 			$html = sprintf( '<p class="error">%s</p>', esc_html( $message ) );
-			tribe_notice( 'tec-wpml-config-file-not-written', $html, array( 'type' => 'error' ) );
+			tribe_notice( 'tec-wpml-config-file-not-written', $html, [ 'type' => 'error' ] );
 
 			return false;
 		}
@@ -93,7 +93,7 @@ class Tribe__Events__Integrations__WPML__Defaults {
 	 * @return string
 	 */
 	protected function get_config_file_path() {
-		return Tribe__Events__Main::instance()->pluginPath . DIRECTORY_SEPARATOR . 'wpml-config.xml';
+		return Tribe__Events__Main::instance()->pluginPath . 'wpml-config.xml';
 	}
 
 	/**

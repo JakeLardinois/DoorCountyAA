@@ -14,14 +14,32 @@ class Tribe__Events__Pro__This_Week_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 		// Widget settings.
+		$description = sprintf( '%1s %2s %3s',
+			__( 'Display', 'tribe-events-calendar-pro' ),
+			tribe_get_event_label_plural_lowercase(),
+			__( 'by day for the week.', 'tribe-events-calendar-pro' )
+		);
+
 		$widget_ops = array(
 			'classname'   => 'tribe-this-week-events-widget',
-			'description' => __( 'Displays events by day for the week.', 'tribe-events-calendar-pro' ),
+			'description' => esc_attr( $description ),
 		);
+
+		$control_ops = array( 'id_base' => 'tribe-this-week-events-widget' );
+		$widget_name = sprintf( '%1s %2s',
+			__( 'This Week', 'tribe-events-calendar-pro' ),
+			tribe_get_event_label_plural()
+		);
+
 		// Create the widget.
-		parent::__construct( 'tribe-this-week-events-widget', __( 'This Week Events', 'tribe-events-calendar-pro' ), $widget_ops );
+		parent::__construct( 'tribe-this-week-events-widget', esc_attr( $widget_name ), $widget_ops, $control_ops );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
+
+		// Do not enqueue if the widget is inactive
+		if ( is_active_widget( false, false, $this->id_base, true ) || is_customize_preview() ) {
+			add_action( 'tribe_events_pro_widget_render', array( 'Tribe__Events__Pro__Widgets', 'enqueue_calendar_widget_styles' ), 100 );
+		}
 
 	}
 
@@ -47,10 +65,24 @@ class Tribe__Events__Pro__This_Week_Widget extends WP_Widget {
 	 * @param $instance
 	 */
 	public function widget( $args, $instance ) {
+
 		// Initialize defaults. When the widget is added via the Customizer, the widget is rendered
 		// prior to being saved and the instance is empty. This ensures that $instance holds the
 		// defaults so the behavior is expected and doesn't throw notices.
 		$instance = $this->instance_defaults( $instance );
+
+		/**
+		 * Do things pre-render like: optionally enqueue assets if we're not in a sidebar
+		 * This has to be done in widget() because we have to be able to access
+		 * the queried object for some plugins
+		 *
+		 * @since 4.4.29
+		 *
+		 * @param string __CLASS__ the widget class
+		 * @param array  $args     the widget args
+		 * @param array  $instance the widget instance
+		 */
+		do_action( 'tribe_events_pro_widget_render', __CLASS__, $args, $instance );
 
 		//Disable Tooltips
 		$ecp = Tribe__Events__Pro__Main::instance();
@@ -74,11 +106,11 @@ class Tribe__Events__Pro__This_Week_Widget extends WP_Widget {
 		$week_offset = isset( $instance['week_offset'] ) ? $instance['week_offset'] : null;
 
 		//Array of Variables to use for Data Attributes and
-		$this_week_query_vars['start_date'] = tribe_get_this_week_first_week_day( $start_date, $week_offset );
-		$this_week_query_vars['end_date'] = tribe_get_this_week_last_week_day( $this_week_query_vars['start_date'] );
-		$this_week_query_vars['count'] = $instance['count'];
-		$this_week_query_vars['layout'] = $instance['layout'];
-		$this_week_query_vars['tax_query'] = $tax_query;
+		$this_week_query_vars['start_date']    = tribe_get_this_week_first_week_day( $start_date, $week_offset );
+		$this_week_query_vars['end_date']      = tribe_get_this_week_last_week_day( $this_week_query_vars['start_date'] );
+		$this_week_query_vars['count']         = $instance['count'];
+		$this_week_query_vars['layout']        = $instance['layout'];
+		$this_week_query_vars['tax_query']     = $tax_query;
 		$this_week_query_vars['hide_weekends'] = isset( $instance['hide_weekends'] ) ? $instance['hide_weekends'] : false;
 
 		//Setup Variables for Template
@@ -151,17 +183,18 @@ class Tribe__Events__Pro__This_Week_Widget extends WP_Widget {
 	 */
 	protected function instance_defaults( $instance ) {
 		$this->instance = wp_parse_args( (array) $instance, array(
-			'title'             => '',
-			'layout'            => 'vertical',
-			'highlight_color'   => '',
-			'count'             => 3,
-			'widget_id'         => 3,
-			'filters'           => '',
-			'operand'           => 'OR',
-			'start_date'        => '',
-			'week_offset'       => '',
-			'hide_weekends'     => false,
-			'instance'           => &$this->instance,
+			'title'           => '',
+			'layout'          => 'vertical',
+			'highlight_color' => '',
+			'count'           => 3,
+			'widget_id'       => 3,
+			'filters'         => '',
+			'operand'         => 'OR',
+			'start_date'      => '',
+			'week_offset'     => '',
+			'hide_weekends'   => false,
+			'jsonld_enable'   => true,
+			'instance'        => &$this->instance,
 		) );
 
 		return $this->instance;
@@ -177,18 +210,13 @@ class Tribe__Events__Pro__This_Week_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 
-		$instance['title']               = sanitize_text_field( $new_instance['title'] );
-		$instance['layout']              = sanitize_text_field( $new_instance['layout'] );
-		$instance['highlight_color']     = sanitize_text_field( $new_instance['highlight_color'] );
-		$instance['count']               = absint( $new_instance['count'] );
-		$instance['filters']             = maybe_unserialize( sanitize_text_field( $new_instance['filters'] ) );
-		$instance['operand']             = sanitize_text_field( $new_instance['operand'] );
-
-		if ( isset( $new_instance['jsonld_enable'] ) && $new_instance['jsonld_enable'] == true ) {
-			$instance['jsonld_enable'] = 1;
-		} else {
-			$instance['jsonld_enable'] = 0;
-		}
+		$instance['title']           = sanitize_text_field( $new_instance['title'] );
+		$instance['layout']          = sanitize_text_field( $new_instance['layout'] );
+		$instance['highlight_color'] = sanitize_text_field( $new_instance['highlight_color'] );
+		$instance['count']           = absint( $new_instance['count'] );
+		$instance['filters']         = maybe_unserialize( sanitize_text_field( $new_instance['filters'] ) );
+		$instance['operand']         = sanitize_text_field( $new_instance['operand'] );
+		$instance['jsonld_enable']   = ( ! empty( $new_instance['jsonld_enable'] ) ? 1 : 0 );
 
 		return $instance;
 	}

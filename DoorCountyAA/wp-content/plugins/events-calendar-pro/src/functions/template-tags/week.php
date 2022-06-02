@@ -132,7 +132,7 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 */
 	function tribe_events_week_column_classes() {
 		echo apply_filters( 'tribe_events_week_column_classes', Tribe__Events__Pro__Templates__Week::column_classes() );
-				}
+	}
 
 	/**
 	 * Retrieve the current date in Y-m-d format.
@@ -187,17 +187,21 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	function tribe_events_week_previous_link( $text = '' ) {
 		try {
 			$date = tribe_get_first_week_day();
+
 			if ( $date <= tribe_events_earliest_date( Tribe__Date_Utils::DBDATEFORMAT ) ) {
 				return '';
 			}
 
 			$url = tribe_get_last_week_permalink();
+
 			if ( empty( $text ) ) {
 				$text = __( '<span>&laquo;</span> Previous Week', 'tribe-events-calendar-pro' );
 			}
 
-			global $wp_query;
-			$current_week = tribe_get_first_week_day( $wp_query->get( 'start_date' ) );
+			$wp_query = tribe_get_global_query_object();
+
+			$start_date = is_null( $wp_query ) ? null : $wp_query->get( 'start_date' );
+			$current_week = tribe_get_first_week_day( $start_date );
 			$attributes   = sprintf( ' data-week="%s" ', date( 'Y-m-d', strtotime( $current_week . ' -7 days' ) ) );
 			if ( ! empty( $url ) ) {
 				return sprintf( '<a %s href="%s" rel="prev">%s</a>', $attributes, esc_url( $url ), $text );
@@ -228,14 +232,15 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 				$text = __( 'Next Week <span>&raquo;</span>', 'tribe-events-calendar-pro' );
 			}
 
-			global $wp_query;
-			$current_week = tribe_get_first_week_day( $wp_query->get( 'start_date' ) );
+			$wp_query = tribe_get_global_query_object();
+			$start_date = is_null( $wp_query ) ? null :$wp_query->get( 'start_date' );
+			$current_week = tribe_get_first_week_day( $start_date );
 			$attributes   = sprintf( ' data-week="%s" ', date( 'Y-m-d', strtotime( $current_week . ' +7 days' ) ) );
 
-
 			return sprintf( '<a %s href="%s" rel="next">%s</a>', $attributes, esc_url( $url ), $text );
+
 		} catch ( OverflowException $e ) {
 			return '';
 		}
 	}
-		}
+}

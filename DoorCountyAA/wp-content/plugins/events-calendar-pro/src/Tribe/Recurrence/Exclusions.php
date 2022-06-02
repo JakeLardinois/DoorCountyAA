@@ -1,5 +1,7 @@
 <?php
 
+use Tribe__Date_Utils as Dates;
+use Tribe__Timezones as Timezones;
 
 class Tribe__Events__Pro__Recurrence__Exclusions {
 
@@ -46,51 +48,36 @@ class Tribe__Events__Pro__Recurrence__Exclusions {
 	 * In the case of exclusions, duration will always be zero as custom exclusions do
 	 * not currently support custom durations, so that element is ignored during comparison.
 	 *
-	 * @param array $date_durations
-	 * @param array $exclusion_dates
+	 * @param array $date_durations The array of date and durations to intersect with the exclusions.
+	 * @param array $exclusion_dates The exclusion dates to intersect the dates with.
 	 *
-	 * @return array
+	 * @return array An array of dates and durations, the result of the intersection between the original dates and
+	 *               durations and the exclusions.
 	 */
 	public function remove_exclusions( array $date_durations, array $exclusion_dates ) {
-		$date_default_timezone = date_default_timezone_get();
+		$timezone = Timezones::build_timezone_object( $this->get_timezone() );
 
-		$timezone_identifier = $this->timezone_string;
+		$exclusion_timestamps = [];
 
-		$matches = array();
-		preg_match( '/^UTC(\\+|-)+(\\d+)+(\\.(\\d+)*)*/', $this->timezone_string, $matches );
-		if ( $matches ) {
-			$signum             = $matches[1];
-			$hrs_in_seconds     = intval( $matches[2] ) * 3600;
-			$minutes_in_seconds = floatval( empty( $matches[3] ) ? 0 : $matches[3] ) * 60;
-
-			$seconds = $hrs_in_seconds + $minutes_in_seconds;
-			$seconds = $signum == '+' ? $seconds : - $seconds;
-			// Get timezone name from seconds
-			$timezone_identifier = timezone_name_from_abbr( '', $seconds, 1 );
-			// Workaround for bug #44780
-			if ( $timezone_identifier === false ) {
-				$timezone_identifier = timezone_name_from_abbr( '', $seconds, 0 );
-			}
-		}
-
-		date_default_timezone_set( $timezone_identifier );
-
-		$exclusion_timestamps = array();
-
-		// 24hrs in seconds -1 second
-		$almost_one_day = 86399;
+		$almost_one_day = DAY_IN_SECONDS - 1;
 
 		foreach ( $exclusion_dates as $exclusion ) {
-			$start                  = strtotime( 'midnight', $exclusion['timestamp'] );
-			$exclusion_timestamps[] = array(
-				'start' => $start,
-				'end'   => $start + $almost_one_day,
-			);
+			$start = Dates::build_date_object( $exclusion['timestamp'], $timezone );
+
+			// Reset to midnight
+			$start->setTime( 0, 0 );
+
+			$exclusion_timestamps[] = [
+				'start' => $start->getTimestamp(),
+				'end'   => $start->getTimestamp() + $almost_one_day,
+			];
 		}
 
 		foreach ( $date_durations as $key => $date_duration ) {
 			foreach ( $exclusion_timestamps as $exclusion_timestamp ) {
-				if ( $exclusion_timestamp['start'] <= $date_duration['timestamp'] && $date_duration['timestamp'] <= $exclusion_timestamp['end'] ) {
+				$exclusion_contains_event = ( $exclusion_timestamp['start'] <= $date_duration['timestamp'] )
+				                            && ( $date_duration['timestamp'] <= $exclusion_timestamp['end'] );
+				if ( $exclusion_contains_event ) {
 					unset( $date_durations[ $key ] );
 				}
 			}
@@ -98,8 +85,19 @@ class Tribe__Events__Pro__Recurrence__Exclusions {
 
 		$date_durations = array_values( $date_durations );
 
-		date_default_timezone_set( $date_default_timezone );
-
 		return $date_durations;
+	}
+
+	/**
+	 * Return the name of the Timezone being modified
+	 *
+	 * @since 4.4.26
+	 *
+	 * @return string
+	 */
+	public function get_timezone() {
+		return class_exists( 'Tribe__Timezones' )
+			? Tribe__Timezones::generate_timezone_string_from_utc_offset( $this->timezone_string )
+			: 'UTC';
 	}
 }

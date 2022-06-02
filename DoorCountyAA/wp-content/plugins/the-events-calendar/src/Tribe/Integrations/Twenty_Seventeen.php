@@ -11,7 +11,7 @@ class Tribe__Events__Integrations__Twenty_Seventeen {
 	 * @since 4.5.10
 	 */
 	public function hook() {
-		add_filter( 'body_class', array( $this, 'body_classes' ) );
+		add_filter( 'body_class', [ $this, 'body_classes' ] );
 	}
 
 	/**
@@ -70,6 +70,11 @@ class Tribe__Events__Integrations__Twenty_Seventeen {
 
 		if ( $convert_to_one_column && $index = array_search( 'page-two-column', $classes ) ) {
 			$classes[ $index ] = 'page-one-column';
+		}
+
+		// Use standard full height header when main events page is used as the front page
+		if ( ! is_singular() && ! is_archive() && tribe_get_option( 'front_page_event_archive', true ) ) {
+			$classes[] = 'twentyseventeen-front-page';
 		}
 
 		return $classes;

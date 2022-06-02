@@ -1,4 +1,7 @@
 <?php
+
+use Tribe__Utils__Array as Arr;
+
 /**
  * Represents individual [tribe_events] shortcodes.
  *
@@ -48,7 +51,6 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 */
 	protected $truthy_values = array();
 
-
 	/**
 	 * Generates output for the [tribe_events] shortcode.
 	 *
@@ -66,14 +68,15 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 * @param $atts
 	 */
 	protected function setup( $atts ) {
-		$defaults = array(
-			'date'      => '',
-			'tribe-bar' => 'true',
-			'view'      => '',
-			'category'  => '',
-			'cat'       => '',
-			'featured'  => 'false',
-		);
+		$defaults = [
+			'date'          => '',
+			'tribe-bar'     => 'true',
+			'view'          => '',
+			'category'      => '',
+			'cat'           => '',
+			'featured'      => 'false',
+			'main-calendar' => 'false',
+		];
 
 		$this->atts = shortcode_atts( $defaults, $atts, 'tribe_events' );
 
@@ -102,13 +105,14 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 *
 	 *     1) The value of "eventDisplay" in the URL query, if set and if valid
 	 *     2) The value of the "view" attribute provided to the shortcode, if set and if valid
-	 *     3) The first view that is available
-	 *     4) Month view
+	 *     3) The value of the "Default Value" option, if valid.
+	 *     4) The first view that is available
+	 *     5) Month view
 	 */
 	protected function set_view_attribute() {
 		$valid_views = wp_list_pluck( tribe_events_get_views(), 'displaying' );
 		$url_view    = $this->get_url_param( 'tribe_event_display' );
-		$view_attr   = $this->get_attribute( 'view', 'month' );
+		$view_attr   = $this->get_attribute( 'view' );
 
 		// If tribe_event_display is "past", we need to grab the view from the action parameter
 		if ( 'past' === $url_view ) {
@@ -130,6 +134,13 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 		// Else fallback on the view attribute supplied to the shortcode
 		if ( in_array( $view_attr, $valid_views ) ) {
 			$this->atts['view'] = $view_attr;
+			return;
+		}
+
+		// Else fallback on the default value from the settings
+		$view_option = tribe_get_option( 'viewOption', 'month' );
+		if ( in_array( $view_option, $valid_views ) ) {
+			$this->atts['view'] = $view_option;
 			return;
 		}
 
@@ -213,8 +224,6 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 			return;
 		}
 
-		tribe_get_template_part( 'pro/map/gmap-container' );
-
 		$this->view_handler = new Tribe__Events__Pro__Shortcodes__Tribe_Events__Map( $this );
 	}
 
@@ -257,21 +266,47 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 * Sets up the basic properties for an event view query.
 	 */
 	public function prepare_query() {
-		$this->update_query( array(
+
+		$eventDate_param = $this->get_attribute( 'date', $this->get_url_param( 'date' ) );
+
+		// If the Tribe Bar is active, then we can (and should) use the date from that.
+		if ( $this->is_attribute_truthy( 'tribe-bar' ) ) {
+			$eventDate_param = $this->get_attribute( 'date', $this->get_url_param( 'tribe-bar-date' ) );
+		}
+
+		$arguments = [
 			'post_type'         => Tribe__Events__Main::POSTTYPE,
-			'eventDate'         => $this->get_attribute( 'date', $this->get_url_param( 'date' ) ),
+			'eventDate'         => $eventDate_param,
 			'eventDisplay'      => $this->get_attribute( 'view' ),
-			'tribe_events_cat'  => $this->atts[ 'category' ],
-			'featured'          => $this->is_attribute_truthy( 'featured' ),
-		) );
+		];
+
+		$category_input = Arr::get_first_set( array_filter( $this->atts ), [ 'category', 'cat' ], false );
+
+		if ( false !== $category_input ) {
+			$terms = Arr::list_to_array( $category_input );
+
+			if ( count( $terms ) > 1 ) {
+				$arguments['tax_query'] = [
+					Tribe__Events__Main::TAXONOMY => [
+						'taxonomy' => Tribe__Events__Main::TAXONOMY,
+						'field'    => 'slug',
+						'terms'    => Arr::list_to_array( $category_input ),
+					]
+				];
+			} else {
+				$arguments[ Tribe__Events__Main::TAXONOMY ] = reset( $terms );
+			}
+		}
+
+		$arguments['featured'] = $this->is_attribute_truthy( 'featured' ) ? true : null;
+
+		$this->update_query( $arguments );
 	}
 
 	/**
-	 * Take care of common setup needs including enqueing various assets required by the default views.
+	 * Take care of common setup needs including enqueuing various assets required by the default views.
 	 */
 	public function prepare_default() {
-		global $wp_query;
-
 		/**
 		 * We overwrite the global $wp_query object to facilitate embedding the requested view (the
 		 * original will be restored during tribe_events_pro_tribe_events_shortcode_post_render):
@@ -281,15 +316,15 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 		 * @see $this->reset_query()
 		 * @todo revise in a future release
 		 */
+		global $wp_query;
+
 		$wp_query = new WP_Query( $this->query_args );
 
 		// Assets required by all our supported views
-		wp_enqueue_script( 'jquery' );
-		Tribe__Events__Template_Factory::asset_package( 'bootstrap-datepicker' );
-		Tribe__Events__Template_Factory::asset_package( 'calendar-script' );
-		Tribe__Events__Template_Factory::asset_package( 'jquery-resize' );
-		Tribe__Events__Template_Factory::asset_package( 'events-css' );
-		Tribe__Events__Pro__Template_Factory::asset_package( 'events-pro-css' );
+		tribe_asset_enqueue_group( 'events-styles' );
+		tribe_asset_enqueue( 'tribe-events-calendar-script' );
+
+		tribe_asset_enqueue_group( 'events-pro-styles' );
 
 		// Tribe Events Bar support
 		if ( $this->is_attribute_truthy( 'tribe-bar', true ) ) {
@@ -300,15 +335,11 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 
 			add_filter( 'tribe-events-bar-should-show', array( $this, 'enable_tribe_bar' ) );
 
-			remove_action( 'tribe_events_bar_before_template', array( Tribe__Events__Bar::instance(), 'disabled_bar_before' ) );
-			remove_action( 'tribe_events_bar_after_template', array( Tribe__Events__Bar::instance(), 'disabled_bar_after' ) );
+			remove_action( 'tribe_events_bar_before_template', tribe_callback( 'tec.bar', 'disabled_bar_before' ) );
+			remove_action( 'tribe_events_bar_after_template', tribe_callback( 'tec.bar', 'disabled_bar_after' ) );
 
-			Tribe__Events__Template_Factory::asset_package( 'jquery-placeholder' );
-			Tribe__Events__Pro__Template_Factory::asset_package( 'ajax-maps' );
-			Tribe__Events__Template_Factory::asset_package( 'jquery-resize' );
-
-			add_action( 'tribe_events_bar_before_template', array( Tribe__Events__Bar::instance(), 'disabled_bar_before' ) );
-			add_action( 'tribe_events_bar_after_template', array( Tribe__Events__Bar::instance(), 'disabled_bar_after' ) );
+			add_action( 'tribe_events_bar_before_template', tribe_callback( 'tec.bar', 'disabled_bar_before' ) );
+			add_action( 'tribe_events_bar_after_template', tribe_callback( 'tec.bar', 'disabled_bar_after' ) );
 
 			remove_filter( 'tribe_get_option', array( $this, 'filter_tribe_disable_bar' ) );
 		}
@@ -344,6 +375,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 */
 	public function enable_tribe_bar() {
 		remove_filter( 'tribe-events-bar-should-show', array( $this, 'enable_tribe_bar' ) );
+		remove_filter( 'tribe_get_template_part_path_modules/bar.php', '__return_false' );
 		return true;
 	}
 
@@ -425,7 +457,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 		if ( 'past' === $display ) {
 			$this->update_query( array(
 				'eventDisplay' => 'past',
-				'order' => 'DESC',
+				'order'        => 'DESC',
 			) );
 		}
 	}
@@ -495,7 +527,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 */
 	public function set_template_object( $template_object ) {
 		if ( ! is_object( $template_object ) ) {
-			_doing_it_wrong( __METHOD__, __( '$template_object is expected to be an actual object', 'the-events-calendar' ), '4.3' );
+			_doing_it_wrong( __METHOD__, __( '$template_object is expected to be an actual object', 'tribe-events-calendar-pro' ), '4.3' );
 			return;
 		}
 
@@ -531,6 +563,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 	 */
 	public function render_view() {
 		$attributes = array();
+		$events_label_plural = tribe_get_event_label_plural();
 
 		/**
 		 * Fires before the embedded view is rendered.
@@ -541,25 +574,84 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 
 		ob_start();
 
+		/**
+		 * Fires before the render of the markup starts
+		 *
+		 * @since 4.4.26
+		 *
+		 * @param Tribe__Events__Pro__Shortcodes__Tribe_Events $shortcode
+		 */
+		do_action( 'tribe_events_pro_tribe_events_shortcode_before_render', $this );
+
 		$this->get_template_object()->add_input_hash();
 		$attributes[] = 'id="tribe-events"';
 		$attributes[] = 'class="' . $this->get_wrapper_classes() . '"';
+		$live_update  = 'automatic' === tribe_get_option( 'liveFiltersUpdate', 'automatic' ) ? 1 : 0;
+		$attributes[] = 'data-live_ajax="' . absint( $live_update ) . '"';
+		$attributes[] = 'data-datepicker_format="' . tribe_get_option( 'datepickerFormat' ) . '"';
+
+		if ( isset( $this->atts['featured'] ) && tribe_is_truthy( $this->atts['featured'] ) ) {
+			$attributes[] = 'data-featured="1"';
+		}
 
 		if ( ! empty( $this->query_args['tribe_events_cat'] ) ) {
 			$attributes[] = 'data-category="' . esc_attr( $this->query_args['tribe_events_cat'] ) . '"';
 		}
 
+		?>
+		<span class="tribe-events-ajax-loading">
+			<img class="tribe-events-spinner-medium" src="<?php echo esc_url( tribe_events_resource_url( 'images/tribe-loading.gif' ) ); ?>" alt="<?php printf( esc_attr__( 'Loading %s', 'tribe-events-calendar-pro' ), $events_label_plural ); ?>" />
+		</span>
+		<?php
+
 		// Creates id='tribe-events' container
 		echo '<div ' . implode( ' ', $attributes ) . '>';
 
+		/**
+		 * Conditionally add the before HTML to shortcode-generated calendars
+		 *
+		 * @since 4.4.27
+		 */
+		if ( tribe_get_option( 'tribeEventsShortcodeBeforeHTML', false ) ) {
+			echo wp_kses_post( tribe_events_before_html() );
+		}
+
+		/**
+		 * Hook to add Title Bar to Shortcode Display
+		 *
+		 * @since 4.4.31
+		 *
+		 * @param Tribe__Events__Pro__Shortcodes__Tribe_Events $shortcode
+		 */
+		do_action( 'tribe_events_pro_tribe_events_shortcode_title_bar', $this );
+
 		// Include the tribe bar HTML if required
 		if ( $this->is_attribute_truthy( 'tribe-bar', true ) ) {
-			Tribe__Events__Bar::instance()->load_script();
+			tribe( 'tec.bar' )->load_script();
 			tribe_get_template_part( 'modules/bar' );
 		}
 
 		tribe_get_view( $this->get_template_object()->view_path );
+
+		/**
+		 * Conditionally add the after HTML to shortcode-generated calendars
+		 *
+		 * @since 4.4.27
+		 */
+		if ( tribe_get_option( 'tribeEventsShortcodeAfterHTML', false ) ) {
+			echo wp_kses_post( tribe_events_after_html() );
+		}
+
 		echo '</div>';
+
+		/**
+		 * Fires just before the markup is completed
+		 *
+		 * @since 4.4.26
+		 *
+		 * @param Tribe__Events__Pro__Shortcodes__Tribe_Events $shortcode
+		 */
+		do_action( 'tribe_events_pro_tribe_events_shortcode_after_render', $this );
 
 		$html = ob_get_clean();
 
@@ -601,7 +693,7 @@ class Tribe__Events__Pro__Shortcodes__Tribe_Events {
 			$view = 'view-' . esc_attr( $this->atts[ 'view' ] );
 		}
 
-		if ( isset( $this->atts[ 'category' ] ) ) {
+		if ( ! empty( $this->atts['category'] ) ) {
 			$category = 'category-' . $this->atts[ 'category' ];
 		}
 		$classes = array(

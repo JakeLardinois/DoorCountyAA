@@ -22,10 +22,14 @@ $label = __( 'Event Series:', 'tribe-events-calendar-pro' );
  */
 do_action( 'tribe_events_pro_recurrence_before_metabox' );
 ?>
-<div id="tribe-row-delete-dialog">
-	<p class="question rule-question"><?php esc_html_e( 'Are you sure you want to delete these events?', 'tribe-events-calendar-pro' ) ?></p>
-	<p class="question exclusion-question"><?php esc_html_e( 'Are you sure you want to delete this exclusion?', 'tribe-events-calendar-pro' ) ?></p>
-</div>
+<tr>
+	<td>
+		<div id="tribe-row-delete-dialog">
+			<p class="question rule-question"><?php esc_html_e( 'Are you sure you want to delete these events?', 'tribe-events-calendar-pro' ) ?></p>
+			<p class="question exclusion-question"><?php esc_html_e( 'Are you sure you want to delete this exclusion?', 'tribe-events-calendar-pro' ) ?></p>
+		</div>
+	</td>
+</tr>
 
 <tr class="recurrence-row tribe-datetime-block">
 	<td class="recurrence-rules-header">
@@ -79,18 +83,23 @@ do_action( 'tribe_events_pro_recurrence_before_metabox' );
 
 					<span class="tribe-dependent tribe-recurrence-type" data-depends="#recurrence_rule_--_type" data-condition-not="Date">
 						<span class="tribe-field-inline-text"><?php esc_html_e( 'Every', 'tribe-events-calendar-pro' ); ?></span>
-						<input
-							type="text"
+						<select
 							id="recurrence_rule_--_interval"
 							name="recurrence[rules][][custom][interval]"
-							class="tribe-dropdown tribe-recurrence-rule-interval"
+							class="tribe-dropdown tribe-recurrence-rule-interval tribe-dependency"
 							data-options="<?php echo esc_attr( json_encode( $interval_options ) ); ?>"
 							data-freeform
 							data-int
+							data-tags="true"
 							data-field="custom-interval"
-							value="{{#if custom.interval}}{{custom.interval}}{{else}}1{{/if}}"
 							style="display:inline-block;"
-						/>
+						>
+							{{#if custom.interval}}
+								<option value="{{custom.interval}}">{{custom.interval}}</option>
+							{{else}}
+								<option value="1">1</option>
+							{{/if}}
+						</select>
 						<span class="tribe-field-inline-text tribe-dependent" data-depends="#recurrence_rule_--_type" data-condition="Daily">
 							<span class="tribe-dependent" data-depends="#recurrence_rule_--_interval" data-condition="1">
 								<?php esc_html_e( 'day', 'tribe-events-calendar-pro' ); ?>
@@ -158,7 +167,7 @@ do_action( 'tribe_events_pro_recurrence_before_metabox' );
 						<select
 							name="recurrence[rules][][custom][same-time]"
 							id="recurrence_rule_--_same_time"
-							class="tribe-dropdown tribe-same-time-select"
+							class="tribe-dropdown tribe-same-time-select tribe-dependency"
 							data-hide-search
 							data-field="same-time"
 						>
@@ -267,11 +276,23 @@ do_action( 'tribe_events_pro_recurrence_before_metabox' );
 
 		<?php
 		// check input if recurring, new recurring events will check box with jQuery
-		$is_recurring = tribe_is_recurring_event( get_the_ID() );
+		$event_id     = get_the_ID();
+		$is_recurring = '';
+
+		if ( ! empty( $event_id ) ) {
+			$is_recurring = tribe_is_recurring_event( $event_id );
+		}
+
 		?>
+
+		<?php
+		// This should only show in the admin, not on the front-end (e.g. the Community Events submission form).
+		if ( ! tribe_is_frontend() ) : ?>
 		<label for="tribe-recurrence-active" class="tribe-recurrence-active-label">
 			<?php esc_html_e( 'Recurring Events Active', 'tribe-events-calendar-pro' ); ?>
 		</label>
+		<?php endif; ?>
+
 		<input
 			id="tribe-recurrence-active"
 			type="checkbox"
@@ -332,7 +353,7 @@ $rule_prefix = 'exclusion';
 					</span>
 					<span class="tribe-dependent tribe-recurrence-type" data-depends="#exclusion_rule_--_type" data-condition-not="Date">
 						<span class="tribe-field-inline-text"><?php esc_html_e( 'Every', 'tribe-events-calendar-pro' ); ?></span>
-						<input
+						<select
 							type="text"
 							id="exclusion_rule_--_interval"
 							name="recurrence[exclusions][][custom][interval]"
@@ -341,8 +362,20 @@ $rule_prefix = 'exclusion';
 							data-freeform
 							data-int
 							data-field="custom-interval"
-							value="{{#if custom.interval}}{{custom.interval}}{{else}}1{{/if}}"
-						/>
+						>
+							{{#tribe_recurrence_select custom.interval}}
+								<option value="1"><?php esc_html_e( '1', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="2"><?php esc_html_e( '2', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="3"><?php esc_html_e( '3', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="4"><?php esc_html_e( '4', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="5"><?php esc_html_e( '5', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="6"><?php esc_html_e( '6', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="7"><?php esc_html_e( '7', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="8"><?php esc_html_e( '8', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="9"><?php esc_html_e( '9', 'tribe-events-calendar-pro' ); ?></option>
+								<option value="10"><?php esc_html_e( '10', 'tribe-events-calendar-pro' ); ?></option>
+							{{/tribe_recurrence_select}}
+						</select>
 						<span class="tribe-field-inline-text tribe-dependent" data-depends="#exclusion_rule_--_type" data-condition="Daily">
 							<span class="tribe-dependent" data-depends="#exclusion_rule_--_interval" data-condition="1">
 								<?php esc_html_e( 'day', 'tribe-events-calendar-pro' ); ?>
