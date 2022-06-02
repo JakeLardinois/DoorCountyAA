@@ -25,6 +25,9 @@ foreach ($all_plugins as $key => $value) {
 	}
 }
 
+$freeActive = false;
+$premiumActive = false;
+
 foreach ($all_plugins as $plugin) {
 	if ('Easy Updates Manager Premium' == $plugin['Name']) $premiumActive = true;
 	if ('Easy Updates Manager' == $plugin['Name']) $freeActive = true;
@@ -62,6 +65,7 @@ if (($isPremium && !$freeActive) || ($isFree && !$premiumActive)) {
 	delete_site_option('easy_updates_manager_name');
 	delete_site_option('easy_updates_manager_author');
 	delete_site_option('easy_updates_manager_url');
+	delete_site_option('eum_unproven_updates_post_install');
 
 	// For logs removal
 	global $wpdb;
@@ -87,6 +91,15 @@ if (($isPremium && !$freeActive) || ($isFree && !$premiumActive)) {
 	} else {
 		$safe_mode_sql = "delete from {$wpdb->options} where option_name like '%eum_plugin_safe_mode_%'";
 		$wpdb->query($safe_mode_sql);
+	}
+
+	// Remove Unmaintained Plugin Transients from the database
+	if (is_multisite()) {
+		$unmaintained_plugin_sql = "delete from {$wpdb->sitemeta} where meta_key like '%eum_plugin_unmaintained_%'";
+		$wpdb->query($unmaintained_plugin_sql);
+	} else {
+		$unmaintained_plugin_sql = "delete from {$wpdb->options} where option_name like '%eum_plugin_unmaintained_%'";
+		$wpdb->query($unmaintained_plugin_sql);
 	}
 
 	// Remove transients when someone disables plugin, theme, or core updates

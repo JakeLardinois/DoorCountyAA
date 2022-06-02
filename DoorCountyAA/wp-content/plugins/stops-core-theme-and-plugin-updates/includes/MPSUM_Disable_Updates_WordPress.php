@@ -110,7 +110,7 @@ class MPSUM_Disable_Updates_WordPress {
 		include ABSPATH . WPINC . '/version.php';
 		$current = new stdClass;
 		$current->updates = array();
-		$current->version_checked = $wp_version;
+		$current->version_checked = $wp_version;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $wp_version is being populated via the version.php include
 		$current->last_checked = time();
 		if (isset($option->translations)) {
 			$current->translations = $option->translations;

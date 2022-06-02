@@ -91,7 +91,6 @@ class MPSUM_Check_Plugin_Install_Status {
 	 * @since 8.0.1
 	 */
 	public function get_all_sites_active_plugins() {
-		global $wpdb;
 		if (!empty($this->all_sites_active_plugins)) {
 			return $this->all_sites_active_plugins;
 		}

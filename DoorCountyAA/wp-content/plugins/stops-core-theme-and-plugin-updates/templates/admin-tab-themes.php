@@ -1,5 +1,5 @@
 <?php if (!defined('ABSPATH')) die('No direct access.'); ?>
-<h3><?php esc_html_e('Theme Update Options', 'stops-core-theme-and-plugin-updates'); ?></h3>
+<h3><?php esc_html_e('Theme update options', 'stops-core-theme-and-plugin-updates'); ?></h3>
 <?php
 	if (false === MPSUM_Admin_Themes::can_update_themes()) {
 		printf('<div class="error"><p><strong>%s</strong></p></div>', esc_html__('All theme updates have been disabled.', 'stops-core-theme-and-plugin-updates'));

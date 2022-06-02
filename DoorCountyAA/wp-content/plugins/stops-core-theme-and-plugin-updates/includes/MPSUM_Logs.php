@@ -31,6 +31,13 @@ class MPSUM_Logs {
 	 * @var bool Determines whether auto update or manual
 	 */
 	protected $auto_update = false;
+	
+	// Format: key=<version>, value=array of method names to call
+	private static $db_updates = array(
+		'1.1.6' => array(
+			'build_table',
+		)
+	);
 
 	/**
 	 * Holds version number of the table
@@ -39,7 +46,7 @@ class MPSUM_Logs {
 	 * @access private
 	 * @var string $slug
 	 */
-	private $version = '1.1.4';
+	private static $version = '1.1.6';
 
 	/**
 	 * Holds a variable for checkin the logs table
@@ -74,11 +81,8 @@ class MPSUM_Logs {
 	 * @access private
 	 */
 	protected function __construct() {
-		$table_version = get_site_option('mpsum_log_table_version', '0');
-		if (version_compare($table_version, $this->version) < 0) {
-			$this->build_table();
-			MPSUM_Updates_Manager::update_option('mpsum_log_table_version', $this->version);
-		}
+		
+		$this->check_updates();
 
 		// Clear transient on updates screen
 		global $pagenow;
@@ -99,15 +103,55 @@ class MPSUM_Logs {
 		add_filter('eum_i18n', array($this, 'logs_i18n'));
 
 	} //end constructor
+	
+	/**
+	 * See if any database schema updates are needed, and perform them if so.
+	 *
+	 * @return void
+	 */
+	public static function check_updates() {
+		$our_version = self::$version;
+		$db_version = get_site_option('mpsum_log_table_version', '0');
+		if (version_compare($our_version, $db_version, '>')) {
+			foreach (self::$db_updates as $version => $updates) {
+				if (version_compare($version, $db_version, '>')) {
+					foreach ($updates as $update) {
+						call_user_func(array(__CLASS__, $update));
+					}
+				}
+			}
+			MPSUM_Updates_Manager::update_option('mpsum_log_table_version', $our_version);
+		}
+	}
 
 	/**
 	 * Run translations when automatic updates are finished.
 	 *
-	 * @param array $update_results Update results.
 	 * @return void
 	 */
-	public function update_translations($update_results) {
-		Language_Pack_Upgrader::async_upgrade();
+	public function update_translations() {
+		$language_updates = wp_get_translation_updates();
+		if (! $language_updates) {
+			return;
+		}
+		ob_start(); // ob_start is necessary to prevent notices from showing up when UpdraftPlus is running a backup when force updates is run. Since 9.0.1.
+		$language_pack = new Language_Pack_Upgrader();
+		$language_pack->bulk_upgrade($language_updates);
+		ob_end_clean();
+
+		// Log translated updates.
+		if (is_array($language_updates) && ! empty($language_updates)) {
+			foreach ($language_updates as $language_update) {
+				$status = 1;
+				$version = $language_update->version;
+				$version_from = $version;
+				$slug = $language_update->slug;
+				$name = $this->get_name_for_update($language_update->type, $slug);
+				$name = $name . ' (' . $language_update->language . ')';
+				$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+				$this->insert_log($name, 'translation', $version_from, $version, 'automatic', $status, 0, '', $stacktrace);
+			}
+		}
 	}
 
 	/**
@@ -141,7 +185,11 @@ class MPSUM_Logs {
 			return $this->log_messages;
 		}
 
-		// Force transient refresh and get updates
+		// Get the wp Version
+		include ABSPATH.WPINC.'/version.php';
+
+		// Force transient refresh and get updates.
+		require_once ABSPATH . 'wp-admin/includes/update.php';
 		wp_version_check(array(), true);
 		wp_update_plugins();
 		wp_update_themes();
@@ -149,8 +197,9 @@ class MPSUM_Logs {
 		$upgrade_themes = get_theme_updates();
 		$upgrade_wp = get_core_updates();
 		$update_translations = wp_get_translation_updates();
-		if (false !== $upgrade_wp) {
+		$this->log_messages['user_id'] = get_current_user_id();
 
+		if (false !== $upgrade_wp) {
 			foreach ($upgrade_wp as $item) {
 				if (!empty($item->partial_version)) {
 					$this->log_messages['core']['version'] = $item->partial_version;
@@ -159,10 +208,8 @@ class MPSUM_Logs {
 					$this->log_messages['core']['reinstall'] = true;
 				}
 				$this->log_messages['core']['new_version'] = $item->version;
-				if ($item->version === $item->current) {
-					include ABSPATH.WPINC.'/version.php';
-					$this->log_messages['core']['version'] = $wp_version;
-				}
+				$this->log_messages['core']['from_version'] = $wp_version;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- From WP version.php
+				$this->log_messages['core']['current'] = $item->current;
 			}
 		}
 		foreach ($upgrade_plugins as $plugin => $plugin_data) {
@@ -263,16 +310,27 @@ class MPSUM_Logs {
 	public function automatic_updates($update_results) {
 		if (empty($update_results)) return;
 		$this->log_messages = $this->get_cached_version_information();
+		delete_site_option('eum_auto_backups'); // Remove option that is needed to prevent duplicate backups. Since 9.0.1.
 		foreach ($update_results as $type => $results) {
 			switch ($type) {
 				case 'core':
 					$core = $results[0];
-					$name = $core->name;
-					$status = 0;
-					$version_from = $this->log_messages['core']['version'];
-					$version = $this->log_messages['core']['new_version'];
+					$version_from = $this->log_messages['core']['from_version'];
+					$version = $this->log_messages['core']['version'];
+					$user_id = $this->log_messages['user_id'];
+					$name = 'WordPress ' . $version;
+
+					// Checking on the re-install status
+					if (!empty($this->log_messages['core']['reinstall'])) {
+						$status = 1;
+					} else {
+						$status = $version_from !== $version ? 1 : 0;
+					}
+
 					list($version, $status) = $this->set_status_and_version($core->result, $version_from, $version, $status);
-					$this->insert_log($name, $type, $version_from, $version, 'automatic', $status);
+					$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+
+					$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, $user_id, '', $stacktrace);
 					break;
 				case 'plugin':
 					foreach ($results as $plugin) {
@@ -283,12 +341,13 @@ class MPSUM_Logs {
 						$version_from = $this->log_messages[$type][$plugin->item->plugin]['version'];
 						list($version, $status) = $this->set_status_and_version($plugin->result, $version_from, $version, $status);
 						$notes = '';
-						if (isset($plugin->messages ) && is_array($plugin->messages)) {
+						if (isset($plugin->messages) && is_array($plugin->messages)) {
 							foreach ($plugin->messages as $message) {
 								$notes .= $message . "\n\r\n\r";
 							}
 						}
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes );
+						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes, $stacktrace);
 					}
 					break;
 				case 'theme':
@@ -300,12 +359,13 @@ class MPSUM_Logs {
 						$version_from = $this->log_messages[$type][$theme->item->theme]['version'];
 						list($version, $status) = $this->set_status_and_version($theme->result, $version_from, $version, $status);
 						$notes = '';
-						if (isset($theme->messages ) && is_array($theme->messages)) {
+						if (isset($theme->messages) && is_array($theme->messages)) {
 							foreach ($theme->messages as $message) {
 								$notes .= $message . "\n\r";
 							}
 						}
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes);
+						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes, $stacktrace);
 					}
 					break;
 				case 'translation':
@@ -315,7 +375,8 @@ class MPSUM_Logs {
 						$version = (1 == $status) ? $translation->item->version : '';
 						$name = $this->get_name_for_update($translation->item->type, $translation->item->slug);
 						$name = $name . ' (' . $translation->item->language . ')';
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status);
+						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, '', $stacktrace);
 					}
 					break;
 			}
@@ -355,7 +416,7 @@ class MPSUM_Logs {
 	 * @param int    $status       Status of upgrade
 	 * @param int    $user_id      User responsible for the upgrade
 	 */
-	public function insert_log($name, $type, $version_from, $version, $action, $status, $user_id = 0, $notes = '' ) {
+	public function insert_log($name, $type, $version_from, $version, $action, $status, $user_id = 0, $notes = '', $stacktrace = '' ) {
 		global $wpdb;
 		$table_name = $wpdb->base_prefix . 'eum_logs';
 		if ('' == $version_from) $version_from = '0.00';
@@ -376,9 +437,11 @@ class MPSUM_Logs {
 				'status'       => $status,
 				'date'         => current_time('mysql'),
 				'notes'        => $notes,
+				'stacktrace'   => $stacktrace,
 			),
 			array(
 				'%d',
+				'%s',
 				'%s',
 				'%s',
 				'%s',
@@ -434,7 +497,7 @@ class MPSUM_Logs {
 	public function manual_updates($upgrader_object, $options) {
 		if (!isset($options['action']) || 'update' !== $options['action']) return;
 		$this->log_messages = $this->get_cached_version_information();
-		$user_id = get_current_user_id();
+		$user_id = $this->log_messages['user_id'];
 		if (0 == $user_id) return; // If there is no user, this is not a manual update
 		if (true === $this->auto_update) return;
 
@@ -447,19 +510,24 @@ class MPSUM_Logs {
 					$slug = $translation['slug'];
 					$name = $this->get_name_for_update($translation['type'], $slug);
 					$name = $name . ' (' . $translation['language'] . ')';
-					$this->insert_log($name, 'translation', $version_from, $version, 'manual', $status, $user_id);
+					$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+					$this->insert_log($name, 'translation', $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
 				}
 				break;
 			case 'core':
-				$version_from = $this->log_messages['core']['version'];
-				$version = $this->log_messages['core']['new_version'];
+				// Checking on the re-install status
 				if (!empty($this->log_messages['core']['reinstall'])) {
 					$status = 1;
 				} else {
 					$status = $version_from !== $version ? 1 : 0;
 				}
+				
+				$version_from = $this->log_messages['core']['from_version']; // Version curently installed
+				$version = $this->log_messages['core']['version']; // Latestr WP Version
 				$name = 'WordPress ' . $version;
-				$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id);
+				$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+
+				$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
 				break;
 			case 'plugin':
 				if (! empty($this->log_messages['plugin']) && isset($options['plugins']) && !empty($options['plugins'])) {
@@ -469,7 +537,8 @@ class MPSUM_Logs {
 							$version = $this->log_messages['plugin'][$plugin]['new_version'];
 							$status = ($version_from == $version) ? 0 : 1;
 							$name = $this->log_messages['plugin'][$plugin]['name'];
-							$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id);
+							$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+							$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
 						}
 					}
 				}
@@ -484,7 +553,8 @@ class MPSUM_Logs {
 								$version = $theme_data->get('Version');
 								$status = ($version_from == $version) ? 0 : 1;
 								$name = $theme_data->get('Name');
-								$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id);
+								$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+								$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
 							}
 						}
 					}
@@ -501,7 +571,7 @@ class MPSUM_Logs {
 	 * @since 6.0.0
 	 * @access public
 	 */
-	public function build_table() {
+	public static function build_table() {
 		global $wpdb;
 		$tablename = $wpdb->base_prefix . 'eum_logs';
 
@@ -522,6 +592,7 @@ class MPSUM_Logs {
 						action VARCHAR(255) NOT NULL,
 						status VARCHAR(255) NOT NULL,
 						notes TEXT NOT NULL,
+						stacktrace TEXT DEFAULT NULL,
 						date DATETIME NOT NULL,
 						PRIMARY KEY  (log_id)
 						) {$charset_collate};";

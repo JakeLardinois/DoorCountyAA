@@ -41,7 +41,6 @@ class MPSUM_Admin_Themes {
 
 		// Admin Tab Actions
 		add_action('mpsum_admin_tab_themes', array( $this, 'tab_output' ));
-		add_filter('mpsum_theme_action_links', array( $this, 'theme_action_links' ), 11, 2);
 	}
 
 	/**
@@ -84,23 +83,4 @@ class MPSUM_Admin_Themes {
 		);
 		Easy_Updates_Manager()->include_template('admin-tab-themes.php', false, $params);
 	} //end tab_output_plugins
-
-	/**
-	 * Outputs the theme action links beneath each theme row.
-	 *
-	 * Outputs the theme action links beneath each theme row.
-	 *
-	 * @since 5.0.0
-	 * @access public
-	 * @see __construct
-	 * @internal uses mpsum_theme_action_links filter
-	 *
-	 * @param array    $settings Array of settings to output.
-	 * @param WP_Theme $theme    The theme object to take action on.
-	 *
-	 * @return array Array of settings to output
-	 */
-	public function theme_action_links( $settings, $theme ) {
-		return $settings;
-	}
 }

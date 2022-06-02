@@ -70,7 +70,7 @@ class MPSUM_Admin_Screen_Options {
 	 */
 	private function set_screen_options() {
 		$args = array(
-			'label' => __('Items Per Page', 'stops-core-theme-and-plugin-updates'),
+			'label' => __('Items per page', 'stops-core-theme-and-plugin-updates'),
 			'default' => 100,
 			'option' => 'mpsum_items_per_page'
 		);

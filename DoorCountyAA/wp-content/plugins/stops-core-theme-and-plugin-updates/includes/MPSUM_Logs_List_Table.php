@@ -159,7 +159,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			// If no user, search the name field
 			if (!$maybe_user) {
 				$wild = '%';
-				$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes from $tablename WHERE 1=1 AND name LIKE %s";
+				$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes, stacktrace from $tablename WHERE 1=1 AND name LIKE %s";
 				$term = $wild . $this->search_term . $wild;
 				$orderby = " order by log_id DESC";
 				$limit = " limit %d,%d";
@@ -176,7 +176,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 				$this->items = $wpdb->get_results($query);
 			} else {
 				$user_id = $maybe_user->ID;
-				$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes from $tablename WHERE 1=1 AND user_id = %d";
+				$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes, stacktrace from $tablename WHERE 1=1 AND user_id = %d";
 
 				$orderby = " order by log_id DESC";
 				$limit = " limit %d,%d";
@@ -194,9 +194,9 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 		} else {
 			$where = '';
 			if (isset($this->month) && strlen($this->month) > 4) {
-				$where .= " AND YEAR($tablename.date)=" . substr($this->month, 0, 4);
+				$where .= $wpdb->prepare(" AND YEAR($tablename.date)=%d", substr($this->month, 0, 4));
 				if (strlen($this->month) > 5) {
-					$where .= " AND MONTH($tablename.date)=" . esc_sql(substr($this->month, 4, 2));
+					$where .= $wpdb->prepare(" AND MONTH($tablename.date)=%d", substr($this->month, 4, 2));
 				}
 			}
 
@@ -217,7 +217,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			}
 
 
-			$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes from $tablename WHERE 1=1 ";
+			$select = "select log_id, user_id, name, type, version_from, version, action, status, date, notes, stacktrace from $tablename WHERE 1=1 ";
 			$orderby = ' order by ' . sanitize_sql_orderby("log_id {$this->order}");
 			$limit = " limit %d,%d";
 
@@ -291,9 +291,8 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 * @since 6.0.0
 	 * @access protected
 	 * @global wpdb      $wpdb
-	 * @param string $post_type Post type
 	 */
-	protected function months_dropdown($post_type) {
+	protected function months_dropdown($post_type) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Declaration of MPSUM_Logs_List_Table::months_dropdown should be compatible with MPSUM_List_Table::months_dropdown so we can leave $post_type as its needed
 		global $wpdb, $wp_locale;
 		$tablename = $wpdb->base_prefix . 'eum_logs';
 		$query = "SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month FROM $tablename ORDER BY date DESC";
@@ -350,12 +349,12 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 */
 	private function type_dropdown() {
 		?>
-		<label for="filter-by-type" class="screen-reader-text"><?php _e('Filter by Upgrade Type', 'stops-core-theme-and-plugin-updates'); ?></label>
+		<label for="filter-by-type" class="screen-reader-text"><?php _e('Filter by upgrade type', 'stops-core-theme-and-plugin-updates'); ?></label>
 		<select name="type" id="filter-by-type">
-			<option<?php selected($this->type, 'all'); ?> value="all"><?php echo _x('All Types', 'Upgrade types: translation, core, plugin, theme', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->type, 'all'); ?> value="all"><?php echo _x('All types', 'Upgrade types: translation, core, plugin, theme', 'stops-core-theme-and-plugin-updates'); ?></option>
 			<option<?php selected($this->type, 'core'); ?> value="core"><?php echo _x('Core', 'Show WordPress core updates', 'stops-core-theme-and-plugin-updates'); ?></option>
-			<option<?php selected($this->type, 'plugin'); ?> value="plugin"><?php echo _x('Plugins', 'Show WordPress Plugin updates', 'stops-core-theme-and-plugin-updates'); ?></option>
-			<option<?php selected($this->type, 'theme'); ?> value="theme"><?php echo _x('Themes', 'Show WordPress Theme updates', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->type, 'plugin'); ?> value="plugin"><?php echo _x('Plugins', 'Show WordPress plugin updates', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->type, 'theme'); ?> value="theme"><?php echo _x('Themes', 'Show WordPress theme updates', 'stops-core-theme-and-plugin-updates'); ?></option>
 			<option<?php selected($this->type, 'translation'); ?> value="translation"><?php echo _x('Translations', 'Show WordPress translation updates', 'stops-core-theme-and-plugin-updates'); ?></option>
 		</select>
 		<?php
@@ -368,12 +367,12 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 */
 	private function status_dropdown() {
 		?>
-		<label for="filter-by-success" class="screen-reader-text"><?php _e('Filter by Status', 'stops-core-theme-and-plugin-updates'); ?></label>
+		<label for="filter-by-success" class="screen-reader-text"><?php _e('Filter by status', 'stops-core-theme-and-plugin-updates'); ?></label>
 		<select name="status" id="filter-by-success">
-			<option<?php selected($this->status, 'all'); ?> value="all"><?php _e('All Statuses', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->status, 'all'); ?> value="all"><?php _e('All statuses', 'stops-core-theme-and-plugin-updates'); ?></option>
 			<option<?php selected($this->status, 1); ?> value="1"><?php echo _x('Success', 'Show status updates that are successful', 'stops-core-theme-and-plugin-updates'); ?></option>
 			<option<?php selected($this->status, 0); ?> value="0"><?php echo _x('Failures', 'Show status updates that are not successful', 'stops-core-theme-and-plugin-updates'); ?></option>
-			<option<?php selected($this->status, 2); ?> value="2"><?php echo _x('Update Not Compatible', 'Show status updates that do not meet safe mode requirements', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->status, 2); ?> value="2"><?php echo _x('Update not compatible', 'Show status updates that do not meet safe mode requirements', 'stops-core-theme-and-plugin-updates'); ?></option>
 		</select>
 		<?php
 	}
@@ -385,11 +384,11 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 */
 	private function action_dropdown() {
 		?>
-		<label for="filter-by-action" class="screen-reader-text"><?php _e('Filter by Action', 'stops-core-theme-and-plugin-updates'); ?></label>
+		<label for="filter-by-action" class="screen-reader-text"><?php _e('Filter by action', 'stops-core-theme-and-plugin-updates'); ?></label>
 		<select name="action_type" id="filter-by-action">
-			<option<?php selected($this->action_type, 'all'); ?> value="all"><?php _e('All Actions', 'stops-core-theme-and-plugin-updates'); ?></option>
-			<option<?php selected($this->action_type, 'automatic'); ?> value="automatic"><?php echo _x('Automatic Updates', 'Show log items that are automatic updates only', 'stops-core-theme-and-plugin-updates'); ?></option>
-			<option<?php selected($this->action_type, 'manual'); ?> value="manual"><?php echo _x('Manual Updates', 'Show log items that are manual updates only', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->action_type, 'all'); ?> value="all"><?php _e('All actions', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->action_type, 'automatic'); ?> value="automatic"><?php echo _x('Automatic updates', 'Show log items that are automatic updates only', 'stops-core-theme-and-plugin-updates'); ?></option>
+			<option<?php selected($this->action_type, 'manual'); ?> value="manual"><?php echo _x('Manual updates', 'Show log items that are manual updates only', 'stops-core-theme-and-plugin-updates'); ?></option>
 		</select>
 		<?php
 	}
@@ -409,7 +408,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	<?php
 		if ('top' === $which && !is_singular()) {
 
-			$this->months_dropdown($this->screen->post_type);
+			$this->months_dropdown(isset($this->screen->post_type) ? $this->screen->post_type : '');
 			$this->status_dropdown();
 			$this->action_dropdown();
 			$this->type_dropdown();
@@ -427,7 +426,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			<div class="alignleft">
 			<?php submit_button(__('Export', 'stops-core-theme-and-plugin-updates'), array('primary', 'large'), 'export_action', false, array('id' => 'log-export')); ?>
 				<div class="export-date-range" style="display: none">
-					<h3><?php esc_html_e('Begin Export', 'stops-core-theme-and-plugin-updates'); ?></h3>
+					<h3><?php esc_html_e('Begin export', 'stops-core-theme-and-plugin-updates'); ?></h3>
 					<div class="eum-export-date">
 						<input type="text" id="export_date_start" name="export_date_start" />
 						<strong><label for="export_date_start" style="display:block;"><?php esc_html_e('Start', 'stops-core-theme-and-plugin-updates');?></label></strong>
@@ -439,7 +438,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 					<div class="mpsum-notice mpsum-regular mpsum-clear"><?php esc_html_e('The date range is optional. If left blank, the last 1000 log entries will be exported.', 'stops-core-theme-and-plugin-updates'); ?></div>
 					<div class="export-button">
 						<input type="hidden" id="export-ajax-url" value="<?php echo esc_url(add_query_arg(array('action' => 'eum_export_logs', 'nonce' => wp_create_nonce('eum_export_logs'), 'action_type' => 'all'), admin_url('admin-ajax.php')));?>" />
-						<a href="#" id="eum-export-go" class="button-primary thickbox open-plugin-details-modal" name="<?php esc_html_e('Export Logs', 'stops-core-theme-and-plugin-updates');?>"><?php esc_html_e('Go', 'stops-core-theme-and-plugin-updates'); ?></a>&nbsp;<a href="#" class="button-secondary export-cancel"><?php esc_html_e('Cancel', 'stops-core-theme-and-plugin-updates'); ?></a>
+						<a href="#" id="eum-export-go" class="button-primary thickbox open-plugin-details-modal" name="<?php esc_html_e('Export logs', 'stops-core-theme-and-plugin-updates');?>"><?php esc_html_e('Go', 'stops-core-theme-and-plugin-updates'); ?></a>&nbsp;<a href="#" class="button-secondary export-cancel"><?php esc_html_e('Cancel', 'stops-core-theme-and-plugin-updates'); ?></a>
 					</div>
 				</div><!-- .export-date-range -->
 			</div><!-- .alignleft -->
@@ -495,19 +494,15 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			'status'  => _x('Status', 'Column header for logs', 'stops-core-theme-and-plugin-updates'),
 			'date'    => _x('Date', 'Column header for logs', 'stops-core-theme-and-plugin-updates'),
 			'notes'    => _x('Notes', 'Column header for notes', 'stops-core-theme-and-plugin-updates'),
+			'stacktrace'    => _x('Stack Trace', 'Column header for stacktrace', 'stops-core-theme-and-plugin-updates'),
 		);
 		return $columns;
 	}
 
 	/**
 	 * Display rows
-	 *
-	 * @global WP_Query $wp_query
-	 * @global int $per_page
-	 * @param array $posts posts to be displayed
-	 * @param int   $level Row level
 	 */
-	public function display_rows($posts = array(), $level = 0) {
+	public function display_rows() {
 		foreach ($this->items as $record) {
 			$this->single_row($record);
 		}
@@ -515,11 +510,8 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 
 	/**
 	 * Display CSV data
-	 *
-	 * @param array $posts posts to be displayed
-	 * @param int   $level Row level
 	 */
-	public function display_csv($posts = array(), $level = 0) {
+	public function display_csv() {
 		$fp = fopen('php://temp', 'w+');
 		foreach ($this->items as $record) {
 			$row_columns = array();
@@ -571,7 +563,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 						if (1 == $record_data) {
 							$row_columns[] = __('Success', 'stops-core-theme-and-plugin-updates');
 						} elseif (2 == $record_data) {
-							$row_columns[] = _x('Update Requirements Not Met', 'Show status updates that are in safe mode', 'stops-core-theme-and-plugin-updates');
+							$row_columns[] = _x('Update requirements not met', 'Show status updates that are in safe mode', 'stops-core-theme-and-plugin-updates');
 						} else {
 							$row_columns[] = __('Failure', 'stops-core-theme-and-plugin-updates');
 						}
@@ -582,6 +574,10 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 					case 'notes':
 						$row_columns[] = $record_data;
 						break;
+					case 'stacktrace':
+						$row_columns[] = $this->get_stacktrace_column($record_data);
+						break;
+						
 					default:
 						break;
 				}
@@ -598,9 +594,8 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 * Display JSON data
 	 *
 	 * @param array $posts posts to be displayed
-	 * @param int   $level Row level
 	 */
-	public function display_json($posts = array(), $level = 0) {
+	public function display_json() {
 		$json_array = array();
 		foreach ($this->items as $record) {
 			$log_id = 0;
@@ -617,6 +612,41 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			$json_array[$log_id] = $row_data;
 		}
 		echo json_encode($json_array);
+	}
+	
+	/**
+	 * Get stacktrace column
+	 *
+	 * @param array $stacktrace raw stacktrace data
+	 * @return array
+	 */
+	public function get_stacktrace_column($stacktrace) {
+		$trace = array_reverse(json_decode($stacktrace, true));
+		$stackrarr = array();
+		$i = 1;
+		$truncate_paths = array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH));
+		foreach ($trace as $node) {
+			$stack = '';
+			if (isset($node['file']) && ($node['line'])) {
+				$filename = $node['file'];
+				$stack = "#$i " . str_replace($truncate_paths, '', wp_normalize_path($filename)) . " (" . $node['line'] . "): ";
+			}
+			if (isset($node['class'])) {
+				$stack .= $node['class'].$node['type'].$node['function'];
+			} else {
+				if (in_array($node['function'], array('do_action', 'apply_filters', 'do_action_ref_array', 'apply_filters_ref_array'), true)) {
+					$stack .= $node['function'] . "('".$node['args'][0]."')";
+				} elseif (in_array($node['function'], array('include', 'include_once', 'require', 'require_once'), true)) {
+					$filename = isset($node['args'][0]) ? $node['args'][0] : '';
+					$stack .= $node['function'] . "('" . str_replace($truncate_paths, '', wp_normalize_path($filename)) . "')";
+				} else {
+					$stack .= $node['function'];
+				}
+			}
+			$stackrarr[] = $stack."\r\n";
+			$i++;
+		}
+		return implode(" ", $stackrarr);
 	}
 
 	/**
@@ -679,7 +709,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 						if (1 == $record_data) {
 							echo esc_html__('Success', 'stops-core-theme-and-plugin-updates');
 						} elseif (2 == $record_data) {
-							echo _x('Update Requirements Not Met', 'Show status updates that are in safe mode', 'stops-core-theme-and-plugin-updates');
+							echo _x('Update requirements not met', 'Show status updates that are in safe mode', 'stops-core-theme-and-plugin-updates');
 						} else {
 							echo esc_html__('Failure', 'stops-core-theme-and-plugin-updates');
 						}
@@ -689,8 +719,15 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 						break;
 					case 'notes':
 						if (!empty($record_data)) {
-							printf('<a href="#" class="eum-note-expand">%s</a>', esc_html__('Show Notes', 'stops-core-theme-and-plugin-updates'));
+							printf('<a href="#" class="eum-note-expand">%s</a>', esc_html__('Show notes', 'stops-core-theme-and-plugin-updates'));
 							printf('<div style="display: none">%s</div>', wp_kses_post(wpautop($record_data)));
+						}
+						break;
+					case 'stacktrace':
+						if (!empty($record_data)) {
+							$stacktrace = trim($this->get_stacktrace_column($record_data));
+							printf('<a href="#TB_inline?&width=600&height=290&inlineId=trace-%s" title="%s" class="thickbox">%s</a>', $record->log_id, esc_html__('Trace', 'stops-core-theme-and-plugin-updates'), esc_html__('Show Trace', 'stops-core-theme-and-plugin-updates'));
+							printf('<div id="trace-%s" style="display: none">%s</div>', $record->log_id,  wp_kses_post(wpautop($stacktrace)));
 						}
 						break;
 					default:
@@ -737,12 +774,14 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 		ob_start();
 		$this->pagination('bottom');
 		$pagination_bottom = ob_get_clean();
-
+		$response = array();
 		$response['views'] = array($views);
 		$response['rows'] = array($rows);
 		$response['pagination']['top'] = $pagination_top;
 		$response['pagination']['bottom'] = $pagination_bottom;
 		$response['headers'] = $headers;
+
+		// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- Both $total_items and $total_pages can be ignored as they are extracted as part of $this->_pagination_args on line 714
 
 		if (isset($total_items)) {
 			$response['total_items_i18n'] = sprintf(_n('%s log', '%s logs', $total_items), number_format_i18n($total_items));
@@ -752,6 +791,8 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			$response['total_pages'] = $total_pages;
 			$response['total_pages_i18n'] = number_format_i18n($total_pages);
 		}
+
+		// phpcs:enable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
 
 		wp_send_json($response);
 	}

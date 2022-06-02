@@ -35,7 +35,6 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 	 * @return Array returns an array of notices
 	 */
 	protected function populate_notices_content() {
-		global $easy_updates_manager;
 		$parent_notice_content = parent::populate_notices_content();
 		$child_notice_content = array(
 			'updraftplus' => array(
@@ -51,8 +50,8 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 			),
 			'updraftcentral' => array(
 				'prefix' => '',
-				'title' => __('Save Time and Money. Manage multiple WordPress sites from one location.', 'stops-core-theme-and-plugin-updates'),
-				'text' => __('UpdraftCentral is a highly efficient way to take backup, update and manage multiple WP sites from one location.', 'stops-core-theme-and-plugin-updates'),
+				'title' => __('Save time and money. Manage multiple WordPress sites from one location.', 'stops-core-theme-and-plugin-updates'),
+				'text' => __('UpdraftCentral is a highly efficient way to take backups, update and manage multiple WP sites from one location.', 'stops-core-theme-and-plugin-updates'),
 				'image' => 'notices/updraft_logo.png',
 				'button_link' => 'https://updraftcentral.com/',
 				'button_meta' => 'updraftcentral',
@@ -60,10 +59,20 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'supported_positions' => $this->anywhere,
 				'validity_function' => 'is_updraftcentral_installed',
 			),
+			'subscriben' => array(
+				'prefix' => '',
+				'title' => 'Subscriben ' .__('by', 'stops-core-theme-and-plugin-updates'). ' UpdraftPlus',
+				'text' => __("The WordPress subscription extension for WooCommerce store owners.", "stops-core-theme-and-plugin-updates"),
+				'image' => 'notices/subscriben.png',
+				'button_link' => 'https://subscribenplugin.com',
+				'button_meta' => 'read_more',
+				'dismiss_time' => 'dismiss_page_notice_until',
+				'supported_positions' => $this->anywhere,
+			),
 			'wp-optimize' => array(
 				'prefix' => '',
 				'title' => 'WP-Optimize',
-				'text' => __("After you've backed up your database, we recommend you install our WP-Optimize plugin to streamline it for better website performance.", 'stops-core-theme-and-plugin-updates'),
+				'text' => __("Make your site fast and efficient with our cutting-edge speed plugin.", 'stops-core-theme-and-plugin-updates'),
 				'image' => 'notices/wp_optimize_logo.png',
 				'button_link' => 'https://getwpo.com',
 				'button_meta' => 'wp-optimize',
@@ -71,32 +80,10 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'supported_positions' => $this->anywhere,
 				'validity_function' => 'is_wpo_installed',
 			),
-			'keyy' => array(
-				'prefix' => '',
-				'title' => 'Keyy: Instant and secure logon with a wave of your phone',
-				'text' => __("Find out more about our revolutionary new WordPress plugin.", "stops-core-theme-and-plugin-updates"),
-				'button_link' => 'https://getkeyy.com/',
-				'button_meta' => 'keyy',
-				'image' => 'notices/keyy_logo.png',
-				'dismiss_time' => 'dismiss_page_notice_until',
-				'supported_positions' => $this->anywhere,
-				'validity_function' => 'is_keyy_installed',
-			),
-			'meta-slider' => array(
-				'prefix' => '',
-				'title' => __("MetaSlider: the world's #1 slider plugin from the makers of Easy Updates Manager", "stops-core-theme-and-plugin-updates"),
-				'text' => __("With MetaSlider, you can easily add style and flare with beautifully-designed sliders.", "stops-core-theme-and-plugin-updates"),
-				'button_link' => 'https://www.metaslider.com',
-				'button_meta' => 'metaslider',
-				'image' => 'notices/metaslider_logo.png',
-				'dismiss_time' => 'dismiss_page_notice_until',
-				'supported_positions' => $this->anywhere,
-				'validity_function' => 'is_metaslider_installed',
-			),
 			'survey' => array(
 				'prefix' => '',
 				'title' => __('Help us improve Easy Updates Manager', 'stops-core-theme-and-plugin-updates'),
-				'text' => __('Answer 3 simple questions to help us prioritise the new features you need.', 'stops-core-theme-and-plugin-updates'),
+				'text' => __('Answer 3 simple questions to help us prioritize the new features you need.', 'stops-core-theme-and-plugin-updates'),
 				'image' => 'notices/eum_logo.png',
 				'button_link' => 'https://easyupdatesmanager.com/survey/?utm_source=eum-plugin-page&utm_medium=banner',
 				'button_meta' => 'eum_survey',
@@ -123,23 +110,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'blackfridaysale2019',
-				'valid_from' => '2019-11-20 00:00:00',
-				'valid_to' => '2019-11-30 23:59:59',
-				'supported_positions' => $this->dashboard_top_or_report,
-				'validity_function' => 'is_premium_installed',
-			),
-			'christmas' => array(
-				'prefix' => '',
-				'title' => __('Christmas sale - 20% off Easy Updates Manager Premium until December 25th', 'stops-core-theme-and-plugin-updates'),
-				'text' => __('To benefit, use this discount code:', 'stops-core-theme-and-plugin-updates') . ' ',
-				'image' => 'notices/christmas.png',
-				'button_link' => 'https://easyupdatesmanager.com/',
-				'button_meta' => 'eum_premium',
-				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'christmassale2019',
-				'valid_from' => '2019-12-01 00:00:00',
-				'valid_to' => '2019-12-25 23:59:59',
+				'discount_code' => 'blackfridaysale2021',
+				'valid_from' => '2021-11-20 00:00:00',
+				'valid_to' => '2021-11-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -151,23 +124,23 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'newyearsale2020',
-				'valid_from' => '2019-12-26 00:00:00',
-				'valid_to' => '2020-01-14 23:59:59',
+				'discount_code' => 'newyearsale2022',
+				'valid_from' => '2021-12-26 00:00:00',
+				'valid_to' => '2022-01-14 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
 			'spring' => array(
 				'prefix' => '',
-				'title' => __('Spring sale - 20% off Easy Updates Manager Premium until April 30th', 'stops-core-theme-and-plugin-updates'),
+				'title' => __('Spring sale - 20% off Easy Updates Manager Premium until May 31st', 'stops-core-theme-and-plugin-updates'),
 				'text' => __('To benefit, use this discount code:', 'stops-core-theme-and-plugin-updates') . ' ',
 				'image' => 'notices/spring.png',
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'springsale2019',
-				'valid_from' => '2019-04-01 00:00:00',
-				'valid_to' => '2019-04-30 23:59:59',
+				'discount_code' => 'springsale2021',
+				'valid_from' => '2021-05-01 00:00:00',
+				'valid_to' => '2021-05-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -179,11 +152,25 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'summersale2019',
-				'valid_from' => '2019-07-01 00:00:00',
-				'valid_to' => '2019-07-31 23:59:59',
+				'discount_code' => 'summersale2021',
+				'valid_from' => '2021-07-01 00:00:00',
+				'valid_to' => '2021-07-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
+			),
+			'collection' => array(
+				'prefix' => '',
+				'title' => __('The Updraft plugin collection sale', 'stops-core-theme-and-plugin-updates'),
+				'text' => __('Get 20% off any of our plugins. But hurry - offer ends 30th September, use this discount code:', 'stops-core-theme-and-plugin-updates').' ',
+				'image' => 'notices/eum_logo.png',
+				'button_link' => 'https://teamupdraft.com',
+				'campaign' => 'collection',
+				'button_meta' => 'collection',
+				'dismiss_time' => 'dismiss_season',
+				'discount_code' => 'EUM2021',
+				'valid_from' => '2021-09-01 00:00:00',
+				'valid_to' => '2021-09-30 23:59:59',
+				'supported_positions' => $this->dashboard_top_or_report,
 			)
 		);
 
@@ -225,17 +212,6 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 	}
 
 	/**
-	 * This method will call the parent is_plugin_installed and pass in the product keyy to check if that plugin is installed if it is then we shouldn't display the notice
-	 *
-	 * @param  string  $product             the plugin slug
-	 * @param  boolean $also_require_active a bool to indicate if the plugin should also be active
-	 * @return boolean                      a bool to indicate if the notice should be displayed or not
-	 */
-	protected function is_keyy_installed($product = 'keyy', $also_require_active = false) {
-		return parent::is_plugin_installed($product, $also_require_active);
-	}
-
-	/**
 	 * This method will call the is premium function in the Easy_Updates_Manager_Notices object to check if this install is premium and if it is we won't display the notice
 	 *
 	 * @param  string  $product             the plugin slug
@@ -243,17 +219,6 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 	 * @return boolean a bool to indicate if we should display the notice or not
 	 */
 	protected function is_wpo_installed($product = 'wp-optimize', $also_require_active = false) {
-		return parent::is_plugin_installed($product, $also_require_active);
-	}
-
-	/**
-	 * This method will check to see if Meta Slider plugin is installed.
-	 *
-	 * @param  String  $product			    the plugin slug
-	 * @param  boolean $also_require_active a bool to indicate if the plugin should be active or not
-	 * @return boolean					    a bool to indicate if the notice should be displayed or not
-	 */
-	protected function is_metaslider_installed($product = 'ml-slider', $also_require_active = false) {
 		return parent::is_plugin_installed($product, $also_require_active);
 	}
 
@@ -274,7 +239,7 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 	 * @param  String $product_name    the name of the plugin
 	 * @return Boolean                 returns true if the user is using a non english language and could translate otherwise false
 	 */
-	protected function translation_needed($plugin_base_dir = null, $product_name = null) {
+	protected function translation_needed($plugin_base_dir, $product_name) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Easy_Updates_Manager_Notices::translation_needed should be compatible with Updraft_Notices_1_0::translation_needed so these variables are needed
 		return parent::translation_needed(EASY_UPDATES_MANAGER_MAIN_PATH, 'stops-core-theme-and-plugin-updates');
 	}
 	

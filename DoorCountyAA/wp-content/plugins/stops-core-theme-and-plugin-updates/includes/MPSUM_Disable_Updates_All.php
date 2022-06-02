@@ -143,14 +143,13 @@ class MPSUM_Disable_Updates_All {
 	/**
 	 * Last checked for updates
 	 *
-	 * @param array $transient Transient options
 	 * @return object
 	 */
-	public function last_checked_now( $transient ) {
+	public function last_checked_now() {
 		include ABSPATH . WPINC . '/version.php';
 		$current = new stdClass;
 		$current->updates = array();
-		$current->version_checked = $wp_version;
+		$current->version_checked = $wp_version;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $wp_version is being populated via the version.php include
 		$current->last_checked = time();
 		
 		return $current;

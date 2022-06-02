@@ -15,7 +15,7 @@
 
 	<h3><?php _e("Thank you for installing Easy Updates Manager!", 'stops-core-theme-and-plugin-updates'); ?></h3>
 	<div id="easy-updates-manager-dashnotice-wrapper">
-		<a href="<?php echo apply_filters('easy_updates_manager_com_link', 'https://easyupdatesmanager.com/'); ?>"><img style="border: 0px; float: right; height: 150px; width: 150px; margin: 20px 15px 15px 35px;" alt="<?php _e('Easy Updates Manager', 'stops-core-theme-and-plugin-updates'); ?>" src="<?php echo EASY_UPDATES_MANAGER_URL.'images/notices/eum-notice-logo-150.png'; ?>"></a>
+		<a href="<?php echo apply_filters('easy_updates_manager_com_link', 'https://easyupdatesmanager.com/'); ?>"><img style="border: 0px; float: right; height: 130px; padding-bottom: 25px;" alt="<?php _e('Easy Updates Manager', 'stops-core-theme-and-plugin-updates'); ?>" src="<?php echo EASY_UPDATES_MANAGER_URL.'images/notices/eum-notice-logo-150.png'; ?>"></a>
 		<p>
 			<?php echo htmlspecialchars(__('Super-charge and secure your WordPress site with our other top plugins:', 'stops-core-theme-and-plugin-updates')); ?>
 		</p>
@@ -28,15 +28,7 @@
 		</p>
 
 		<p>
-			<?php printf(__('%s is effective tool for automatically cleaning your WordPress database so that it runs at maximum efficiency.', 'stops-core-theme-and-plugin-updates'), '<strong>'.$easy_updates_manager->easy_updates_manager_url('https://getwpo.com/', __('WP-Optimize', 'stops-core-theme-and-plugin-updates'), '', '', true).'</strong>'); ?>
-		</p>
-
-		<p>
-			<strong><?php $easy_updates_manager->easy_updates_manager_url('https://getkeyy.com/', __('Keyy:', 'stops-core-theme-and-plugin-updates')); ?></strong> <?php echo htmlspecialchars(__('Simple & secure login with a wave of your phone', 'stops-core-theme-and-plugin-updates')); ?>
-		</p>
-
-		<p>
-			<strong><?php $easy_updates_manager->easy_updates_manager_url('https://metaslider.com', 'MetaSlider');?>: </strong> <?php echo __('Add style and flare easily with beautifully-designed sliders with the #1 WP slider plugin', 'stops-core-theme-and-plugin-updates'); ?>
+			<?php printf(__('%s makes your site fast and efficient.  It cleans the database, compresses images and caches pages for ultimate speed.', 'stops-core-theme-and-plugin-updates'), '<strong>'.$easy_updates_manager->easy_updates_manager_url('https://getwpo.com/', __('WP-Optimize', 'stops-core-theme-and-plugin-updates'), '', '', true).'</strong>'); ?>
 		</p>
 
 		<p>

@@ -96,7 +96,6 @@ class MPSUM_List_Table {
 		'get_column_info',
 		'get_table_classes',
 		'display_tablenav',
-		'extra_tablenav',
 		'single_row_columns',
 	);
 
@@ -1143,23 +1142,12 @@ class MPSUM_List_Table {
 			<?php $this->bulk_actions($which); ?>
 		</div>
 <?php
-		$this->extra_tablenav($which);
 		$this->pagination($which);
 ?>
 
 		<br class="clear" />
 	</div>
 <?php
-	}
-
-	/**
-	 * Extra controls to be displayed between bulk actions and pagination
-	 *
-	 * @since 3.1.0
-	 * @access protected
-	 * @param string $which Which extra table nav to use
-	 */
-	protected function extra_tablenav($which) {
 	}
 
 	/**
@@ -1204,23 +1192,6 @@ class MPSUM_List_Table {
 	}
 
 	/**
-	 * Column default
-	 *
-	 * @param object $item        The current item
-	 * @param string $column_name Column name
-	 */
-	protected function column_default($item, $column_name) {
-	}
-
-	/**
-	 * Column CB
-	 *
-	 * @param object $item The current item
-	 */
-	protected function column_cb($item) {
-	}
-
-	/**
 	 * Generates the columns for a single row of the table
 	 *
 	 * @since 3.1.0
@@ -1229,7 +1200,7 @@ class MPSUM_List_Table {
 	 * @param object $item The current item
 	 */
 	protected function single_row_columns($item) {
-		list($columns, $hidden, $sortable, $primary) = $this->get_column_info();
+		list($columns, $hidden, $sortable, $primary) = $this->get_column_info();// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable  -- THis can be ignored as it is a list and are used below
 
 		foreach ($columns as $column_name => $column_display_name) {
 			$classes = "$column_name column-$column_name";
@@ -1249,7 +1220,6 @@ class MPSUM_List_Table {
 
 			if ('cb' == $column_name) {
 				echo '<th scope="row" class="check-column">';
-				echo $this->column_cb($item);
 				echo '</th>';
 			} elseif (method_exists($this, '_column_' . $column_name)) {
 				echo call_user_func(
@@ -1266,7 +1236,6 @@ class MPSUM_List_Table {
 				echo "</td>";
 			} else {
 				echo "<td $attributes>";
-				echo $this->column_default($item, $column_name);
 				echo $this->handle_row_actions($item, $column_name, $primary);
 				echo "</td>";
 			}
@@ -1284,7 +1253,7 @@ class MPSUM_List_Table {
 	 * @param string $primary     Primary column name.
 	 * @return string The row actions output. In this case, an empty string.
 	 */
-	protected function handle_row_actions($item, $column_name, $primary) {
+	protected function handle_row_actions($item, $column_name, $primary) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		return '';
 	}
 

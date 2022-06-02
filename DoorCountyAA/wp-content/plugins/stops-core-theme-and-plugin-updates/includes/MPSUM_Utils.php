@@ -40,6 +40,34 @@ class MPSUM_Utils {
 	}
 
 	/**
+	 * Validates email addresses and returns an error if not valid
+	 *
+	 * @since 9.0.0
+	 *
+	 * @param string $email_addresses (can be comma separated)
+	 *
+	 * @return array Return an 'errors' key (boolean) and an 'original_emails' key (string) with original passed email addresses. 'emails' key (array) contains validated email addresses.
+	 */
+	public static function validate_emails($email_addresses) {
+		$emails       = explode(',', $email_addresses);
+		$email_errors = false;
+		foreach ($emails as &$email) {
+			$email = trim($email);
+			if (!is_email($email)) {
+
+				// Email error. Get out.
+				$email_errors = true;
+				break;
+			}
+		}
+		return array(
+			'errors'          => $email_errors,
+			'original_emails' => $email_addresses,
+			'emails'          => $emails,
+		);
+	}
+
+	/**
 	 * This function checks whether a specific plugin is installed, and returns information about it
 	 *
 	 * @since 8.0.1
@@ -57,7 +85,7 @@ class MPSUM_Utils {
 		$get_plugins = get_plugins();
 
 		$active_plugins = $this->get_active_plugins();
-
+		$plugin_info = array();
 		$plugin_info['installed'] = false;
 		$plugin_info['active']    = false;
 
@@ -198,10 +226,10 @@ class MPSUM_Utils {
 	public function maybe_deactivate_free_version() {
 		if (!function_exists('get_plugins')) include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 		$get_plugins = get_plugins();
-		$free_available = $free_plugin_active = $premium_available = $premium_plugin_active = $free_slug = $premium_slug = false;
+		$free_available = $free_plugin_active = $premium_available = $premium_plugin_active = $free_slug = $premium_slug = false;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Both $free_available and $premium_available are used and being set but Ci has flagged this as unused.  Its fine to ignore.
 		foreach ($get_plugins as $key => $value) {
 			if ('Easy Updates Manager' === $value['Name']) {
-				$free_available = true;
+				$free_available = true;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- $free_available Filter use
 				$free_slug = $key;
 				if (is_multisite()) {
 					if (is_plugin_active_for_network($free_slug)) {
@@ -232,5 +260,22 @@ class MPSUM_Utils {
 			add_action('admin_notices', array(MPSUM_Updates_Manager::get_instance(), 'show_admin_notice_premium'));
 			add_action('network_admin_notices', array(MPSUM_Updates_Manager::get_instance(), 'show_admin_notice_premium'));
 		}
+	}
+
+	/**
+	 * Checks to see if ai plugin is alive in the file system.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @param string $plugin_file Plugin relative to the plugin's directory.
+	 *
+	 * @return true if plugin exists, false if not
+	 */
+	public function plugin_exists( $plugin_file ) {
+		$plugin_dir = WP_PLUGIN_DIR;
+		if (file_exists($plugin_dir . '/' . $plugin_file)) {
+			return true;
+		}
+		return false;
 	}
 }

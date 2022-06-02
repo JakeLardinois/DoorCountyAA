@@ -53,6 +53,7 @@ class MPSUM_Admin_Logs {
 	 * @internal Uses the mpsum_admin_tab_logs action
 	 */
 	public function tab_output_logs() {
+		// phpcs:disable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- his are ignored as they are passed to the template
 		$paged = isset($data['data']['paged']) ? $data['data']['paged'] : '1';
 		$view = isset($data['data']['view']) ? $data['data']['view'] : 'all';
 		$m = isset($data['data']['m']) ? $data['data']['m'] : 'all';
@@ -62,6 +63,7 @@ class MPSUM_Admin_Logs {
 		$is_search = isset($data['data']['is_search']) ? $data['data']['is_search'] : false;
 		$search_term = isset($data['data']['search_term']) ? $data['data']['search_term'] : '';
 		$order = isset($data['data']['order']) ? $data['data']['order'] : 'DESC';
+		// phpcs:enable VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
 
 		$args = array('paged' => $paged, 'view' => $view, 'status' => $status, 'action_type' => $action_type, 'type' => $type, 'm' => $m, 'is_search' => $is_search, 'search_term' => $search_term, 'order' => $order );
 		Easy_Updates_Manager()->include_template('admin-tab-logs.php', false, $args);

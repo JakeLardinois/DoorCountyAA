@@ -69,17 +69,10 @@ class MPSUM_Admin_Core {
 			'theme_updates'                   => 'on',
 			'translation_updates'             => 'on',
 			'automatic_development_updates'   => 'off',
-			'automatic_major_updates'         => 'off',
-			'automatic_minor_updates'         => 'on',
-			'automatic_plugin_updates'        => 'default',
-			'automatic_theme_updates'         => 'default',
-			'automatic_translation_updates'   => 'on',
 			'notification_core_update_emails' => 'on',
-			'misc_browser_nag'                => 'on',
-			'misc_wp_footer'                  => 'on',
 			'logs'                            => 'on',
 			'email_addresses'                 => array(),
-			'automatic_updates'               => 'unset',
+			'ratings_nag'                     => 'on',
 		));
 	}
 
@@ -172,7 +165,7 @@ class MPSUM_Admin_Core {
 			<?php
 			if (isset($_GET['bad_email'])) {
 				?>
-				<div class="error"><p><strong><?php echo esc_html__('The email address is not valid', 'stops-core-theme-and-plugin-updates'); ?></strong></p></div>
+				<div class="error"><p><strong><?php echo esc_html__('The e-mail address is not valid', 'stops-core-theme-and-plugin-updates'); ?></strong></p></div>
 				<?php
 			}
 		}
@@ -184,10 +177,10 @@ class MPSUM_Admin_Core {
 		$logs = 'on';
 		?>
 		<input type="hidden" name="options[logs]" value="<?php echo esc_attr($logs); ?>" />
-		<h3><?php esc_html_e('Global Settings', 'stops-core-theme-and-plugin-updates'); ?></h3>
+		<h3><?php esc_html_e('Global settings', 'stops-core-theme-and-plugin-updates'); ?></h3>
 		<table class="form-table">
 			<tr>
-				<th scope="row"><?php esc_html_e('All Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('All updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[all_updates]" value="on" id="all_updates_on" <?php checked('on', $options['all_updates']); ?> />&nbsp;<label for="all_updates_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[all_updates]" value="off" id="all_updates_off" <?php checked('off', $options['all_updates']); ?> />&nbsp;<label for="all_updates_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -195,7 +188,7 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('WordPress Core Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('WordPress core updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[core_updates]" value="on" id="core_updates_on" <?php checked('on', $options['core_updates']); ?> />&nbsp;<label for="core_updates_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[core_updates]" value="off" id="core_updates_off" <?php checked('off', $options['core_updates']); ?> />&nbsp;<label for="core_updates_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -203,32 +196,32 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('All Plugin Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('All plugin updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[plugin_updates]" value="on" id="plugin_updates_on" <?php checked('on', $options['plugin_updates']); ?> />&nbsp;<label for="plugin_updates_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label><br />
 					<p><input type="radio" name="options[plugin_updates]" value="off" id="plugin_updates_off" <?php checked('off', $options['plugin_updates']); ?> />&nbsp;<label for="plugin_updates_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('All Theme Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('All theme updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[theme_updates]" value="on" id="theme_updates_on" <?php checked('on', $options['theme_updates']); ?> />&nbsp;<label for="theme_updates_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[theme_updates]" value="off" id="theme_updates_off" <?php checked('off', $options['theme_updates']); ?> />&nbsp;<label for="theme_updates_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('All Translation Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('All translation updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[translation_updates]" value="on" id="translation_updates_on" <?php checked('on', $options['translation_updates']); ?> />&nbsp;<label for="translation_updates_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[translation_updates]" value="off" id="translation_updates_off" <?php checked('off', $options['translation_updates']); ?> />&nbsp;<label for="translation_updates_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 				</td>
 			</tr>
 		</table>
-		<h3><?php esc_html_e('Automatic Updates', 'stops-core-theme-and-plugin-updates'); ?></h3>
+		<h3><?php esc_html_e('Automatic updates', 'stops-core-theme-and-plugin-updates'); ?></h3>
 		<p><?php esc_html_e('These options will enable or disable automatic updates (background updates) of certain parts of WordPress.', 'stops-core-theme-and-plugin-updates'); ?></p>
 		<table class="form-table">
 			<tr>
-				<th scope="row"><?php esc_html_e('Major Releases', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Major releases', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_major_updates]" value="on" id="automatic_major_on" <?php checked('on', $options['automatic_major_updates']); ?> />&nbsp;<label for="automatic_major_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_major_updates]" value="off" id="automatic_major_off" <?php checked('off', $options['automatic_major_updates']); ?> />&nbsp;<label for="automatic_major_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -236,7 +229,7 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Minor Releases', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Minor releases', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_minor_updates]" value="on" id="automatic_minor_on" <?php checked('on', $options['automatic_minor_updates']); ?> />&nbsp;<label for="automatic_minor_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label><br />
 					<p><input type="radio" name="options[automatic_minor_updates]" value="off" id="automatic_minor_off" <?php checked('off', $options['automatic_minor_updates']); ?> />&nbsp;<label for="automatic_minor_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label>
@@ -244,35 +237,35 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Development Updates (Core)', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Development updates (Core)', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_development_updates]" value="on" id="automatic_dev_on" <?php checked('on', $options['automatic_development_updates']); ?> />&nbsp;<label for="automatic_dev_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_development_updates]" value="off" id="automatic_dev_off" <?php checked('off', $options['automatic_development_updates']); ?> />&nbsp;<label for="automatic_dev_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
-					<p class="description"><?php esc_html_e('Update automatically to Bleeding Edge releases.', 'stops-core-theme-and-plugin-updates'); ?></p>
+					<p class="description"><?php esc_html_e('Update automatically to bleeding edge releases.', 'stops-core-theme-and-plugin-updates'); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Automatic Plugin Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Automatic plugin updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_plugin_updates]" value="on" id="automatic_plugin_on" <?php checked('on', $options['automatic_plugin_updates']); ?> />&nbsp;<label for="automatic_plugin_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_plugin_updates]" value="off" id="automatic_plugin_off" <?php checked('off', $options['automatic_plugin_updates']); ?> />&nbsp;<label for="automatic_plugin_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_plugin_updates]" value="default" id="automatic_plugin_default" <?php checked('default', $options['automatic_plugin_updates']); ?> />&nbsp;<label for="automatic_plugin_default"><?php esc_html_e('Default', 'stops-core-theme-and-plugin-updates'); ?></label></p>
-					<p><input type="radio" name="options[automatic_plugin_updates]" value="individual" id="automatic_plugin_individual" <?php checked('individual', $options['automatic_plugin_updates']); ?> />&nbsp;<label for="automatic_plugin_individual"><?php esc_html_e('Select Individually', 'stops-core-theme-and-plugin-updates'); ?></label></p>
-					<p class="description"><?php esc_html_e('Automatically update your plugins.  Select always on, always off, the WordPress default, or select plugins individually.', 'stops-core-theme-and-plugin-updates'); ?></p>
+					<p><input type="radio" name="options[automatic_plugin_updates]" value="individual" id="automatic_plugin_individual" <?php checked('individual', $options['automatic_plugin_updates']); ?> />&nbsp;<label for="automatic_plugin_individual"><?php esc_html_e('Select individually', 'stops-core-theme-and-plugin-updates'); ?></label></p>
+					<p class="description"><?php esc_html_e('Automatically update your plugins. Select always on, always off, the WordPress default, or select plugins individually.', 'stops-core-theme-and-plugin-updates'); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Automatic Theme Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Automatic theme updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_theme_updates]" value="on" id="automatic_theme_on" <?php checked('on', $options['automatic_theme_updates']); ?> />&nbsp;<label for="automatic_theme_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_theme_updates]" value="off" id="automatic_theme_off" <?php checked('off', $options['automatic_theme_updates']); ?> />&nbsp;<label for="automatic_theme_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_theme_updates]" value="default" id="automatic_theme_default" <?php checked('default', $options['automatic_theme_updates']); ?> />&nbsp;<label for="automatic_theme_default"><?php esc_html_e('Default', 'stops-core-theme-and-plugin-updates'); ?></label></p>
-					<p><input type="radio" name="options[automatic_theme_updates]" value="individual" id="automatic_theme_individual" <?php checked('individual', $options['automatic_theme_updates']); ?> />&nbsp;<label for="automatic_theme_individual"><?php esc_html_e('Select Individually', 'stops-core-theme-and-plugin-updates'); ?></label></p>
+					<p><input type="radio" name="options[automatic_theme_updates]" value="individual" id="automatic_theme_individual" <?php checked('individual', $options['automatic_theme_updates']); ?> />&nbsp;<label for="automatic_theme_individual"><?php esc_html_e('Select individually', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p class="description"><?php esc_html_e('Automatically update your themes. Select always on, always off, the WordPress default, or select themes individually.', 'stops-core-theme-and-plugin-updates'); ?></p>
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Translation Updates', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Translation updates', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[automatic_translation_updates]" value="on" id="automatic_translation_on" <?php checked('on', $options['automatic_translation_updates']); ?> />&nbsp;<label for="automatic_translation_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[automatic_translation_updates]" value="off" id="automatic_translation_off" <?php checked('off', $options['automatic_translation_updates']); ?> />&nbsp;<label for="automatic_translation_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -283,10 +276,10 @@ class MPSUM_Admin_Core {
 		<h3><?php esc_html_e('Notifications', 'stops-core-theme-and-plugin-updates'); ?></h3>
 		<table class="form-table">
 			<tr>
-				<th scope="row"><?php esc_html_e('Core E-mails', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Core e-mails', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<input type="hidden" name="options[notification_core_update_emails]" value="off" />
-					<p><input type="checkbox" name="options[notification_core_update_emails]" value="on" id="notification_core_update_emails_on" <?php checked('on', $options['notification_core_update_emails']); ?> />&nbsp;<label for="notification_core_update_emails_on"><?php esc_html_e('Core Update Emails', 'stops-core-theme-and-plugin-updates'); ?></label></p>
+					<p><input type="checkbox" name="options[notification_core_update_emails]" value="on" id="notification_core_update_emails_on" <?php checked('on', $options['notification_core_update_emails']); ?> />&nbsp;<label for="notification_core_update_emails_on"><?php esc_html_e('Core update e-mails', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<?php /* Hidden checkboxes until changes make into core. Shooting for WordPress 4.5 */ ?>
 					<input type="hidden" name="options[notification_core_update_emails_plugins]" value="on" />
 					<input type="hidden" name="options[notification_core_update_emails_themes]" value="on" />
@@ -294,7 +287,7 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('Notification E-mail', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Notification e-mail', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<?php
 					$email_addresses = array();
@@ -315,14 +308,14 @@ class MPSUM_Admin_Core {
 					}
 					?>
 					<input type="text" name="options[email_addresses]" value="<?php echo esc_attr($email_addresses); ?>" style="width: 50%" /><br />
-					<p class="description"><?php echo esc_html_e('Emails can be comma separated', 'stops-core-theme-and-plugin-updates'); ?></p>
+					<p class="description"><?php echo esc_html_e('e-mails can be comma separated', 'stops-core-theme-and-plugin-updates'); ?></p>
 				</td>
 			</tr>
 		</table>
 		<h3><?php esc_html_e('Miscellaneous', 'stops-core-theme-and-plugin-updates'); ?></h3>
 		<table class="form-table">
 			<tr>
-				<th scope="row"><?php esc_html_e('Browser Nag', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('Browser nag', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[misc_browser_nag]" value="on" id="misc_browser_nag_on" <?php checked('on', $options['misc_browser_nag']); ?> />&nbsp;<label for="misc_browser_nag_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[misc_browser_nag]" value="off" id="misc_browser_nag_off" <?php checked('off', $options['misc_browser_nag']); ?> />&nbsp;<label for="misc_browser_nag_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -330,7 +323,7 @@ class MPSUM_Admin_Core {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e('WordPress Version in Footer', 'stops-core-theme-and-plugin-updates'); ?></th>
+				<th scope="row"><?php esc_html_e('WordPress version in footer', 'stops-core-theme-and-plugin-updates'); ?></th>
 				<td>
 					<p><input type="radio" name="options[misc_wp_footer]" value="on" id="misc_wp_footer_on" <?php checked('on', $options['misc_wp_footer']); ?> />&nbsp;<label for="misc_wp_footer_on"><?php esc_html_e('Enabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
 					<p><input type="radio" name="options[misc_wp_footer]" value="off" id="misc_wp_footer_off" <?php checked('off', $options['misc_wp_footer']); ?> />&nbsp;<label for="misc_wp_footer_off"><?php esc_html_e('Disabled', 'stops-core-theme-and-plugin-updates'); ?></label></p>
@@ -342,9 +335,9 @@ class MPSUM_Admin_Core {
 		<?php
 		wp_nonce_field('mpsum_main_update', '_mpsum');
 		echo '<p class="submit">';
-		submit_button(__('Save Changes', 'stops-core-theme-and-plugin-updates'), 'primary', 'submit', false);
+		submit_button(__('Save changes', 'stops-core-theme-and-plugin-updates'), 'primary', 'submit', false);
 		echo '&nbsp;&nbsp;';
-		submit_button(__('Reset to Defaults', 'stops-core-theme-and-plugin-updates'), 'secondary', 'reset', false);
+		submit_button(__('Reset to defaults', 'stops-core-theme-and-plugin-updates'), 'secondary', 'reset', false);
 		echo '</p>';
 		?>
 		</form>

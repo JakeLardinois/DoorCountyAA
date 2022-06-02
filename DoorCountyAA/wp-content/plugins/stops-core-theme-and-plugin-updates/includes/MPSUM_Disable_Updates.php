@@ -43,15 +43,18 @@ class MPSUM_Disable_Updates {
 		$core_options = MPSUM_Updates_Manager::get_options('core');
 
 		// Disable Footer Nag
-		if (isset($core_options['misc_wp_footer']) && 'off' === $core_options['misc_wp_footer']) {
+		if (defined('EUM_ENABLE_WORDPRESS_FOOTER_VERSION') && !EUM_ENABLE_WORDPRESS_FOOTER_VERSION) {
 			add_filter('update_footer', '__return_empty_string', 11);
 		}
 
 		// Disable Browser Nag
-		if (isset($core_options['misc_browser_nag']) && 'off' === $core_options['misc_browser_nag']) {
+		if (defined('EUM_ENABLE_BROWSER_NAG') && !EUM_ENABLE_BROWSER_NAG) {
 			add_action('wp_dashboard_setup', array( $this, 'disable_browser_nag' ), 9);
 			add_action('wp_network_dashboard_setup', array( $this, 'disable_browser_nag' ), 9);
 		}
+
+		// Recommended patch from Flywheel to turn on plugin and theme auto-updates.
+		add_action('wp_update_plugins', array($this, 'maybe_auto_update'), 20);
 
 		// Disable All Updates
 		if (isset($core_options['all_updates']) && 'off' == $core_options['all_updates']) {
@@ -66,9 +69,21 @@ class MPSUM_Disable_Updates {
 			}
 		}
 
-		// Disable WordPress Updates
 		if (isset($core_options['core_updates']) && 'off' == $core_options['core_updates']) {
+			// Completely disable WordPress Updates
 			new MPSUM_Disable_Updates_WordPress();
+		} else {
+			// Core Development Updates
+			add_filter('allow_dev_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) && isset($core_options['automatic_development_updates']) && 'on' == $core_options['automatic_development_updates'] ? 'true' : 'false'), PHP_INT_MAX - 10);
+
+			// Core Major Updates
+			add_filter('allow_major_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && 'automatic' === $core_options['core_updates'] ? 'true' : 'false'), PHP_INT_MAX - 10);
+
+			// Core Minor Updates
+			add_filter('allow_minor_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) ? 'true' : 'false'), PHP_INT_MAX - 10);
+
+			// Manually update / Disables Core Automatic Updates
+			// When the __return_false function is hooked to the three filters above, that means core automatic updates is disabled or it's a manually update
 		}
 
 		// Disable Plugin Updates
@@ -86,31 +101,13 @@ class MPSUM_Disable_Updates {
 			new MPSUM_Disable_Updates_Translations();
 		}
 
-		// Enable Development Updates
-		if (isset($core_options['automatic_development_updates']) && 'on' == $core_options['automatic_development_updates']) {
-			add_filter('allow_dev_auto_core_updates', '__return_true', PHP_INT_MAX - 10);
-		} elseif (isset($core_options['automatic_development_updates']) && 'off' == $core_options['automatic_development_updates']) {
-			add_filter('allow_dev_auto_core_updates', '__return_false', PHP_INT_MAX - 10);
-		}
-
-		// Enable Core Major Updates
-		if (isset($core_options['automatic_major_updates']) && 'on' == $core_options['automatic_major_updates']) {
-			add_filter('allow_major_auto_core_updates', '__return_true', PHP_INT_MAX - 10);
-		} elseif (isset($core_options['automatic_major_updates']) && 'off' == $core_options['automatic_major_updates']) {
-			add_filter('allow_major_auto_core_updates', '__return_false', PHP_INT_MAX - 10);
-		}
-
-		// Enable Core Minor Updates
-		if (isset($core_options['automatic_minor_updates']) && 'on' == $core_options['automatic_minor_updates']) {
-			add_filter('allow_minor_auto_core_updates', '__return_true', PHP_INT_MAX - 10);
-		} elseif (isset($core_options['automatic_minor_updates']) && 'off' == $core_options['automatic_minor_updates']) {
-			add_filter('allow_minor_auto_core_updates', '__return_false', PHP_INT_MAX - 10);
-		}
-
 		// Enable Translation Updates
-		if (isset($core_options['automatic_translation_updates']) && 'on' == $core_options['automatic_translation_updates']) {
+		if (isset($core_options['translation_updates']) && 'automatic' == $core_options['translation_updates']) {
 			add_filter('auto_update_translation', '__return_true', PHP_INT_MAX - 10);
-		} elseif (isset($core_options['automatic_translation_updates']) && 'off' == $core_options['automatic_translation_updates']) {
+		}
+		
+		// Disable Translation Updates
+		if (isset($core_options['translation_updates']) && 'automatic_off' == $core_options['translation_updates']) {
 			add_filter('auto_update_translation', '__return_false', PHP_INT_MAX - 10);
 		}
 
@@ -135,30 +132,46 @@ class MPSUM_Disable_Updates {
 		}
 
 		// Enable Plugin Auto-updates
-		if (isset($core_options['plugin_updates']) && 'on' == $core_options['plugin_updates']) {
-			if (isset($core_options['automatic_plugin_updates']) && 'on' == $core_options['automatic_plugin_updates']) {
+		if (isset($core_options['plugin_updates'])) {
+			if ('automatic' === $core_options['plugin_updates']) {
 				add_filter('auto_update_plugin',  '__return_true', PHP_INT_MAX - 10, 2);
-			} elseif (isset($core_options['automatic_plugin_updates']) && 'off' == $core_options['automatic_plugin_updates']) {
-				add_filter('auto_update_plugin',  '__return_false', PHP_INT_MAX - 10, 2);
-			} elseif (isset($core_options['automatic_plugin_updates']) && 'individual' == $core_options['automatic_plugin_updates']) {
+			} elseif ('individual' == $core_options['plugin_updates']) {
 				add_filter('auto_update_plugin',  array( $this, 'automatic_updates_plugins' ), PHP_INT_MAX - 10, 2);
+			} elseif ('automatic_off' == $core_options['plugin_updates']) {
+				add_filter('auto_update_plugin',  '__return_false', PHP_INT_MAX - 10, 2);
+			} elseif ('on' === $core_options['plugin_updates']) { // if manually update option (on) is selected then the auto_update_plugin filter should return boolean false
+				add_filter('auto_update_plugin',  '__return_false', 1, 2); // should be one that corresponds with earlier execution (as early as it could)
 			}
+		} else {
+			// if none of the plugin updates setting is selected (it can happen on a fresh EUM install) also return boolean false for the auto_update_plugin filter
+			add_filter('auto_update_plugin',  '__return_false', 1, 2); // should be one that corresponds with earlier execution (as early as it could)
 		}
 
 		// Enable Theme Auto-updates
-		if (isset($core_options['theme_updates']) && 'on' == $core_options['theme_updates']) {
-			if (isset($core_options['automatic_theme_updates']) && 'on' == $core_options['automatic_theme_updates']) {
+		if (isset($core_options['theme_updates'])) {
+			if ('automatic' === $core_options['theme_updates']) {
 				add_filter('auto_update_theme',  '__return_true', PHP_INT_MAX - 10, 2);
-			} elseif (isset($core_options['automatic_theme_updates']) && 'off' == $core_options['automatic_theme_updates']) {
-				add_filter('auto_update_theme',  '__return_false', PHP_INT_MAX - 10, 2);
-			} elseif (isset($core_options['automatic_theme_updates']) && 'individual' == $core_options['automatic_theme_updates']) {
+			} elseif ('individual' == $core_options['theme_updates']) {
 				add_filter('auto_update_theme',  array( $this, 'automatic_updates_theme' ), PHP_INT_MAX - 10, 2);
+			} elseif ('automatic_off' == $core_options['theme_updates']) {
+				add_filter('auto_update_theme',  '__return_false', PHP_INT_MAX - 10, 2);
+			} elseif ('on' === $core_options['theme_updates']) { // if manually update option (on) is selected then the auto_update_theme filter should return boolean false
+				add_filter('auto_update_theme',  '__return_false', 1, 2); // should be one that corresponds with earlier execution (as early as it could)
 			}
+		} else {
+			add_filter('auto_update_theme',  '__return_false', 1, 2); // should be one that corresponds with earlier execution (as early as it could)
 		}
 
 		// Automatic Updates E-mail Address
 		add_filter('automatic_updates_debug_email', array( $this, 'maybe_change_automatic_update_email' ), PHP_INT_MAX - 10);
 		add_filter('auto_core_update_email', array( $this, 'maybe_change_automatic_update_email' ), PHP_INT_MAX - 10);
+		
+		// Disable Plugin Auto-updates E-mail Notifications
+		if (isset($core_options['plugin_auto_updates_notification_emails'])) {
+			if ('off' === $core_options['plugin_auto_updates_notification_emails']) {
+				add_filter('auto_plugin_update_send_email',  '__return_false', PHP_INT_MAX - 10, 2);
+			}
+		}
 
 
 		// Prevent updates on themes/plugins
@@ -173,6 +186,18 @@ class MPSUM_Disable_Updates {
 		}
 
 	} //end constructor
+
+	/**
+	 * Maybe auto update based on if plugin cron has run
+	 * Recommended patch from Flywheel to enable plugin/theme upgrades.
+	 *
+	 * @since 9.0.3
+	 */
+	public function maybe_auto_update() {
+		if (wp_doing_cron() && ! doing_action('wp_maybe_auto_update')) {
+			do_action('wp_maybe_auto_update');
+		}
+	}
 
 	/**
 	 * Maybe change automatic update email
@@ -230,12 +255,11 @@ class MPSUM_Disable_Updates {
 	 * @since 5.2.0
 	 * @access public
 	 * @see __construct
-	 * @param boolean $bool   Whether to disable or not
-	 * @param string  $type   ( theme, plugin , translation )
-	 * @param object  $object wp update object
+	 * @param boolean $bool Whether to disable or not
+	 * @param string  $type ( theme, plugin , translation )
 	 * @return boolean
 	 */
-	public function maybe_disable_emails($bool, $type, $object) {
+	public function maybe_disable_emails($bool, $type) {
 		$core_options = MPSUM_Updates_Manager::get_options('core');
 		if (isset($core_options['notification_core_update_emails_plugins']) && 'off' == $core_options['notification_core_update_emails_plugins'] && 'plugin' == $type) {
 			 return false;
@@ -376,15 +400,21 @@ class MPSUM_Disable_Updates {
 
 		if (isset($r['body']['plugins'])) {
 			$r_plugins = json_decode($r['body']['plugins'], true);
-			$plugin_options = MPSUM_Updates_Manager::get_options('plugins');
-			foreach ($plugin_options as $plugin) {
-				unset($r_plugins[$plugin]);
-				if (false !== $key = array_search($plugin, $r_plugins['active'])) {
-					unset($r_plugins['active'][$key]);
-					$r_plugins['active'] = array_values($r_plugins['active']);
+			if (!empty($r_plugins['active'])) {
+				if (is_array($r_plugins['active'])) {
+					$plugin_options = MPSUM_Updates_Manager::get_options('plugins');
+					foreach ($plugin_options as $plugin) {
+						unset($r_plugins[$plugin]);
+						if (false !== $key = array_search($plugin, $r_plugins['active'])) {
+							unset($r_plugins['active'][$key]);
+							$r_plugins['active'] = array_values($r_plugins['active']);
+						}
+					}
+				} else {
+					error_log("EUM: http_request_args_remove_plugins_themes(): the 'plugins' parameter was non-empty, but not an array; please report this in a support channel: ".serialize($r_plugins['active']));
 				}
+				$r['body']['plugins'] = json_encode($r_plugins);
 			}
-			$r['body']['plugins'] = json_encode($r_plugins);
 		}
 		if (isset($r['body']['themes'])) {
 			$r_themes = json_decode($r['body']['themes'], true);

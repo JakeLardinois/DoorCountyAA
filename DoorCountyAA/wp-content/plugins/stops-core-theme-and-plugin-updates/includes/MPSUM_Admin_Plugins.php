@@ -40,8 +40,7 @@ class MPSUM_Admin_Plugins {
 		$this->slug = $slug;
 
 		// Admin Tab Actions
-		add_action('mpsum_admin_tab_plugins', array( $this, 'tab_output' ));
-		add_filter('mpsum_plugin_action_links', array( $this, 'plugin_action_links' ), 11, 2);
+		add_action('mpsum_admin_tab_plugins', array($this, 'tab_output'));
 	}
 
 	/**
@@ -62,25 +61,6 @@ class MPSUM_Admin_Plugins {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Outputs the plugin action links beneath each plugin row.
-	 *
-	 * Outputs the plugin action links beneath each plugin row.
-	 *
-	 * @since 5.0.0
-	 * @access public
-	 * @see __construct
-	 * @internal uses mpsum_plugin_action_links filter
-	 *
-	 * @param array  $settings Array of settings to output.
-	 * @param string $plugin   The relative plugin path.
-	 *
-	 * @return array Array of settings to output.
-	 */
-	public function plugin_action_links( $settings, $plugin ) {
-		return $settings;
 	}
 
 	/**

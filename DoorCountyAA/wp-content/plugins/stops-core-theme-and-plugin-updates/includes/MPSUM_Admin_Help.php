@@ -22,10 +22,10 @@ class MPSUM_Admin_Help {
 		$screen  = get_current_screen();
 		$content1 = '<p>';
 		$content1_strings = array(
-			'website' => esc_html__('Our Website', 'stops-core-theme-and-plugin-updates'),
+			'website' => esc_html__('Our website', 'stops-core-theme-and-plugin-updates'),
 			'donate' => esc_html__('Donate', 'stops-core-theme-and-plugin-updates'),
 			'support' => esc_html__('Support on WordPress', 'stops-core-theme-and-plugin-updates'),
-			'premium_support' => esc_html__('Premium Support', 'stops-core-theme-and-plugin-updates'),
+			'premium_support' => esc_html__('Premium support', 'stops-core-theme-and-plugin-updates'),
 			'official' => esc_html__('Documentation', 'stops-core-theme-and-plugin-updates'),
 		);
 		$content1 = <<<CONTENT1
@@ -38,9 +38,9 @@ class MPSUM_Admin_Help {
 CONTENT1;
 		$content1 .= esc_html__('This is the Easy Updates Manager settings help tab. Here you will find helpful information on what Easy Updates Manager does and how to use it.', 'stops-core-theme-and-plugin-updates');
 		$content1 .= '</p>';
-		$content1 .= sprintf('<div><p><strong>%s - </strong>%s</p></div>', esc_html__('Please Note!', 'stops-core-theme-and-plugin-updates'), esc_html__('If either your WordPress core, theme, or plugins get too out of date, you may run into compatibility problems. Check the capability tab for more information.', 'stops-core-theme-and-plugin-updates'));
+		$content1 .= sprintf('<div><p><strong>%s - </strong>%s</p></div>', esc_html__('Please note!', 'stops-core-theme-and-plugin-updates'), esc_html__('If either your WordPress core, theme, or plugins get too out of date, you may run into compatibility problems. Check the capability tab for more information.', 'stops-core-theme-and-plugin-updates'));
 
-		$content2 = sprintf('<div><p><a href="https://easyupdatesmanager.com/documentation/">%s</a></p></div>', esc_html__('Check out our Documentation for updated documentation and videos.', 'stops-core-theme-and-plugin-updates'));
+		$content2 = sprintf('<div><p><a href="https://easyupdatesmanager.com/documentation/">%s</a></p></div>', esc_html__('Check out our documentation for updated documentation and videos.', 'stops-core-theme-and-plugin-updates'));
 
 		$content4_strings = array(
 			'intro' => esc_html__('You will see multiple tabs where you can configure the update options.', 'stops-core-theme-and-plugin-updates'),

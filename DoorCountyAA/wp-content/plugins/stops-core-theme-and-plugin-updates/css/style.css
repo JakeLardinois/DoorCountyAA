@@ -1,4 +1,5 @@
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);.material-icons {
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);@charset "UTF-8";
+.material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
@@ -37,10 +38,72 @@
   position: relative;
   display: inline-block;
   margin-right: 10px; }
+  .toggle-wrapper a {
+    text-decoration: none; }
   @media only screen and (max-width: 600px) {
     .toggle-wrapper {
       display: block;
       margin-right: 0; } }
+
+.quick-actions-wrapper {
+  position: relative; }
+  .quick-actions-wrapper .eum-quick-action-button {
+    position: relative;
+    overflow: visible; }
+  .quick-actions-wrapper button,
+  .quick-actions-wrapper a {
+    padding: 5px 10px;
+    display: inline-block;
+    background: #0085ba;
+    border-color: #0073aa #006799 #006799;
+    box-shadow: 0 1px 0 #006799;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+    font-size: 13px;
+    line-height: 26px;
+    height: 28px;
+    margin: 0;
+    padding: 0 10px 1px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    margin-right: 5px; }
+    .quick-actions-wrapper button:hover,
+    .quick-actions-wrapper a:hover {
+      background: #008ec2;
+      border-color: #006799;
+      color: #fff; }
+    .quick-actions-wrapper button > span,
+    .quick-actions-wrapper a > span {
+      text-shadow: none;
+      white-space: normal; }
+    @media only screen and (max-width: 600px) {
+      .quick-actions-wrapper button,
+      .quick-actions-wrapper a {
+        width: 100%;
+        display: block;
+        margin-right: 0;
+        font-size: 13px !important;
+        padding: 12px 15px;
+        height: inherit;
+        line-height: 1.1;
+        text-align: left; } }
+  .quick-actions-wrapper button {
+    position: relative;
+    padding-right: 20px; }
+    .quick-actions-wrapper button span.dashicons {
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      width: 10px;
+      height: 10px;
+      font-size: 15px;
+      line-height: 0.8; }
 
 /* Let's give some toggle switches some love */
 /* From https://codepen.io/koenigsegg1/pen/QjZNVP */
@@ -62,7 +125,8 @@ input[type=checkbox].eum-hidden {
   font-weight: 700; }
 
 .eum-toggle-button {
-  font-size: 13px !important; }
+  font-size: 13px !important;
+  position: relative; }
 
 .eum-input-label {
   font-weight: 700; }
@@ -348,9 +412,9 @@ input[type=email].eum-input-email {
     appearance: inherit; }
     .toggle-wrapper button.eum-active.eum-disabled,
     .toggle-wrapper a.eum-active.eum-disabled {
-      background: #dc3332;
-      border-color: #ab2d2d;
-      box-shadow: 0 1px 0 #ab2d2d; }
+      background: #dc3332 !important;
+      border-color: #ab2d2d !important;
+      box-shadow: 0 1px 0 #ab2d2d !important; }
   @media only screen and (max-width: 600px) {
     .eum-section .toggle-wrapper button, .eum-section
     .toggle-wrapper a {
@@ -374,6 +438,19 @@ input[type=email].eum-input-email {
       .eum-section .toggle-wrapper button:last-child, .eum-section
       .toggle-wrapper a:last-child {
         border-radius: 0 0 5px 5px; } }
+
+.toggle-wrapper button {
+  position: relative;
+  overflow: visible;
+  padding-right: 20px; }
+  .toggle-wrapper button span.dashicons {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    font-size: 15px;
+    line-height: 0.8; }
 
 @media only screen and (max-width: 600px) {
   .toggle-wrapper[class*="toggle-wrapper-"] button, .toggle-wrapper[class*="toggle-wrapper-"] a {
@@ -692,3 +769,130 @@ input#eum-webhook-url {
 
 .eum_saving_popup img {
   animation: eum_rotate 2s linear infinite; }
+
+/* Toggle button styles */
+.toggle-wrapper button, .toggle-wrapper a {
+  -webkit-transition: background-color 300ms linear;
+  -ms-transition: background-color 300ms linear;
+  transition: background-color 300ms linear; }
+  .toggle-wrapper button:hover, .toggle-wrapper button:focus, .toggle-wrapper a:hover, .toggle-wrapper a:focus {
+    background-color: #DDDDDD;
+    color: #000;
+    box-shadow: 0 1px 0 #AAAAAA; }
+  .toggle-wrapper button.eum-active:hover, .toggle-wrapper button.eum-active:focus, .toggle-wrapper a.eum-active:hover, .toggle-wrapper a.eum-active:focus {
+    color: #FFF;
+    background: #25af3c;
+    border-color: #1e892f;
+    box-shadow: 0 1px 0 #249637; }
+
+/* Tooltips for General Tab */
+​
+[data-tooltip],
+.tooltip {
+  cursor: pointer; }
+
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none; }
+
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after {
+  visibility: visible;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1; }
+
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: ""; }
+
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 1000;
+  padding: 8px;
+  width: 160px;
+  background-color: #000;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2; }
+
+/* Directions */
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after,
+.tooltip-top:before,
+.tooltip-top:after {
+  bottom: 100%;
+  left: 50%; }
+
+@media only screen and (max-width: 600px) {
+  [data-tooltip]:before,
+  [data-tooltip]:after,
+  .tooltip:before,
+  .tooltip:after,
+  .tooltip-top:before,
+  .tooltip-top:after {
+    bottom: 100%;
+    left: 50%; } }
+
+[data-tooltip]:before,
+.tooltip:before,
+.tooltip-top:before {
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #000;
+  border-top-color: rgba(51, 51, 51, 0.9); }
+
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.tooltip:after,
+.tooltip-top:after {
+  margin-left: -80px; }
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.tooltip-top:hover:before,
+.tooltip-top:hover:after,
+.tooltip-top:focus:before,
+.tooltip-top:focus:after {
+  -webkit-transform: translateY(-12px);
+  -moz-transform: translateY(-12px);
+  transform: translateY(-12px);
+  text-align: center; }

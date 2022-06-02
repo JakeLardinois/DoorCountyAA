@@ -11,7 +11,8 @@ class MPSUM_UpdraftCentral {
 	 * MPSUM_UpdraftCentral constructor. Registers required action hooks
 	 */
 	public function __construct() {
-		add_action('updraftplus_remotecontrol_command_classes', array($this, 'updraftplus_remotecontrol_command_classes'));
+		add_filter('updraftplus_remotecontrol_command_classes', array($this, 'updraftcentral_remotecontrol_command_classes'));
+		add_filter('updraftcentral_remotecontrol_command_classes', array($this, 'updraftcentral_remotecontrol_command_classes'));
 		add_action('updraftcentral_command_class_wanted', array($this, 'updraftcentral_command_class_wanted'));
 	}
 	
@@ -21,7 +22,7 @@ class MPSUM_UpdraftCentral {
 	 * @param string $command_classes Passing over an arrya of command classes.
 	 * @return array An array of command classes
 	 */
-	public function updraftplus_remotecontrol_command_classes($command_classes) {
+	public function updraftcentral_remotecontrol_command_classes($command_classes) {
 		if (is_array($command_classes)) $command_classes['eum'] = 'UpdraftCentral_EUM_Commands';
 		return $command_classes;
 	}

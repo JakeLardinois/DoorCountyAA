@@ -91,7 +91,6 @@ class MPSUM_Check_Theme_Install_Status {
 	 * @since 8.0.1
 	 */
 	public function get_all_sites_active_themes() {
-		global $wpdb;
 		$exists = get_site_transient('eum_all_sites_active_themes');
 		if ($exists) {
 			$this->all_sites_active_themes = $exists;

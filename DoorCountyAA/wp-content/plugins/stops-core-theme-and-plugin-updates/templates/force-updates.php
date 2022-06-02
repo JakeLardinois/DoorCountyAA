@@ -15,12 +15,12 @@ $options = MPSUM_Updates_Manager::get_options('core');
 
 // Show a notice if all updates are disabled
 if (isset($options['all_updates']) && 'off' == $options['all_updates']) {
-	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('All updates are disabled. Please re-enable all updates for Force Updates to work.'));
+	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('All updates are disabled. Please re-enable all updates for force updates to work.'));
 }
 
 // Show a notice if automatic updates are off
 if (!MPSUM_Utils::get_instance()->is_automatic_updates_enabled()) {
-	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('Automatic updates are off, so Force Updates will not work.'));
+	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('Automatic updates are off, so Force updates will not work.'));
 }
 
 // Show a warning if delay updates is above zero
@@ -30,7 +30,7 @@ if (isset($options['delay_updates']) && $options['delay_updates'] > 0) {
 
 // Begin output
 printf('<h3>%s</h3>', esc_html__('Force automatic updates', 'stops-core-theme-and-plugin-updates'));
-printf('<div class="mpsum-notice mpsum-regular">%s</div>', esc_html__('Force Updates will request automatic updates of your plugins, core, themes, and translations immediately. This is useful for debugging and checking that automatic updates are working as intended. By default, WordPress checks for updates every 12 hours. Running Force Updates will, if successful, cause updates to happen immediately.', 'stops-core-theme-and-plugin-updates'));
+printf('<div class="mpsum-notice mpsum-regular">%s</div>', esc_html__('Force updates will request automatic updates of your plugins, core, themes, and translations immediately. This is useful for debugging and checking that automatic updates are working as intended. By default, WordPress checks for updates every 12 hours. Running force updates will, if successful, cause updates to happen immediately.', 'stops-core-theme-and-plugin-updates'));
 $utils = MPSUM_Utils::get_instance();
 $updraftplus = $utils->is_installed('updraftplus');
 if (true === $updraftplus['installed'] && true === $updraftplus['active']) {
@@ -51,7 +51,7 @@ if (true === $updraftplus['installed'] && true === $updraftplus['active']) {
 			$url_text = __('Follow this link to activate it.', 'stops-core-theme-and-plugin-updates');
 			$anchor = "<a href=\"{$url}\">{$url_text}</a>";
 		}
-		$required_plugin = __('Take a backup UpdraftPlus before updating.', 'stops-core-theme-and-plugin-updates');
+		$required_plugin = __('Take a backup with UpdraftPlus before updating.', 'stops-core-theme-and-plugin-updates');
 		printf('<p id="eum-auto-backup-description">%s %s</p>', $required_plugin, $anchor);
 	} else {
 		if (current_user_can('install_plugins')) {
@@ -66,5 +66,5 @@ if (true === $updraftplus['installed'] && true === $updraftplus['active']) {
 		}
 	}
 }
-printf('<p class="submit"><input type="submit" name="submit" id="force-updates" class="button button-primary" value="%s"></p>', esc_attr__('Force Updates', 'stops-core-theme-and-plugin-updates'));
+printf('<p class="submit"><input type="submit" name="submit" id="force-updates" class="button button-primary" value="%s"></p>', esc_attr__('Force updates', 'stops-core-theme-and-plugin-updates'));
 echo '</div>';

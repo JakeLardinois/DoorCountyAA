@@ -213,50 +213,28 @@ class MPSUM_Admin_Ajax {
 		$email_errors = false;
 		switch ($id) {
 			case 'automatic-updates-default':
-				$options['automatic_development_updates'] = 'off';
-				$options['automatic_major_updates'] = 'off';
-				$options['automatic_minor_updates'] = 'on';
-				$options['automatic_plugin_updates'] = 'default';
-				$options['automatic_theme_updates'] = 'default';
-				$options['automatic_translation_updates'] = 'on';
-				$options['automatic_updates'] = 'default';
+				$options['theme_updates'] = 'on';
+				$options['plugin_updates'] = 'on';
+				$options['translation_updates'] = 'on';
+				$options['core_updates'] = 'on';
 				break;
 			case 'automatic-updates-on':
+				$options['theme_updates'] = 'automatic';
+				$options['plugin_updates'] = 'automatic';
+				$options['translation_updates'] = 'automatic';
+				$options['core_updates'] = 'automatic';
 				$options['automatic_development_updates'] = 'off';
-				$options['automatic_major_updates'] = 'on';
-				$options['automatic_minor_updates'] = 'on';
-				$options['automatic_plugin_updates'] = 'on';
-				$options['automatic_theme_updates'] = 'on';
-				$options['automatic_translation_updates'] = 'on';
-				$options['automatic_updates'] = 'on';
 				break;
 			case 'automatic-updates-off':
+				$options['theme_updates'] = 'automatic_off';
+				$options['plugin_updates'] = 'automatic_off';
+				$options['translation_updates'] = 'automatic_off';
+				$options['core_updates'] = 'on'; // 'on' is for 'Manually update', it's different with 'automatic', since 'automatic_off' and 'on' is basically the same, so we use 'on' instead and remove the 'automatic_off', also the UI.
 				$options['automatic_development_updates'] = 'off';
-				$options['automatic_major_updates'] = 'off';
-				$options['automatic_minor_updates'] = 'off';
-				$options['automatic_plugin_updates'] = 'off';
-				$options['automatic_theme_updates'] = 'off';
-				$options['automatic_translation_updates'] = 'off';
-				$options['automatic_updates'] = 'off';
 				break;
 			case 'automatic-updates-custom':
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-major-updates':
-				if ('on' == $value) {
-					$options['automatic_major_updates'] = 'on';
-				} else {
-					$options['automatic_major_updates'] = 'off';
-				}
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-minor-updates':
-				if ('on' == $value) {
-					$options['automatic_minor_updates'] = 'on';
-				} else {
-					$options['automatic_minor_updates'] = 'off';
-				}
-				$options['automatic_updates'] = 'custom';
+				$options['theme_updates'] = 'individual';
+				$options['plugin_updates'] = 'individual';
 				break;
 			case 'automatic-development-updates':
 				if ('on' == $value) {
@@ -264,46 +242,6 @@ class MPSUM_Admin_Ajax {
 				} else {
 					$options['automatic_development_updates'] = 'off';
 				}
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-translation-updates':
-				if ('on' == $value) {
-					$options['automatic_translation_updates'] = 'on';
-				} else {
-					$options['automatic_translation_updates'] = 'off';
-				}
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-plugin-updates-default':
-				$options['automatic_plugin_updates'] = 'default';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-plugin-updates-on':
-				$options['automatic_plugin_updates'] = 'on';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-plugin-updates-off':
-				$options['automatic_plugin_updates'] = 'off';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-plugin-updates-individual':
-				$options['automatic_plugin_updates'] = 'individual';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-theme-updates-default':
-				$options['automatic_theme_updates'] = 'default';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-theme-updates-on':
-				$options['automatic_theme_updates'] = 'on';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-theme-updates-off':
-				$options['automatic_theme_updates'] = 'off';
-				$options['automatic_updates'] = 'custom';
-				break;
-			case 'automatic-theme-updates-individual':
-				$options['automatic_theme_updates'] = 'individual';
 				$options['automatic_updates'] = 'custom';
 				break;
 			case 'disable-updates':
@@ -314,46 +252,55 @@ class MPSUM_Admin_Ajax {
 				}
 				break;
 			case 'core-updates':
-				if ('on' == $value) {
+				if ('on' == $value || 'automatic_off' == $value) {
 					$options['core_updates'] = 'on';
-				} else {
+				} elseif ('off' == $value) {
 					$options['core_updates'] = 'off';
+				} elseif ('automatic' == $value) {
+					$options['core_updates'] = 'automatic';
+				} elseif ('automatic_minor' == $value) {
+					$options['core_updates'] = 'automatic_minor';
 				}
 				break;
 			case 'plugin-updates':
 				if ('on' == $value) {
 					$options['plugin_updates'] = 'on';
-				} else {
+				} elseif ('off' == $value) {
 					$options['plugin_updates'] = 'off';
+				} elseif ('automatic' == $value) {
+					$options['plugin_updates'] = 'automatic';
+				} elseif ('automatic_off' == $value) {
+					$options['plugin_updates'] = 'automatic_off';
+				} elseif ('individual' == $value) {
+					$options['plugin_updates'] = 'individual';
 				}
 				break;
 			case 'theme-updates':
 				if ('on' == $value) {
 					$options['theme_updates'] = 'on';
-				} else {
+				} elseif ('off' == $value) {
 					$options['theme_updates'] = 'off';
+				} elseif ('automatic' == $value) {
+					$options['theme_updates'] = 'automatic';
+				} elseif ('automatic_off' == $value) {
+					$options['theme_updates'] = 'automatic_off';
+				} elseif ('individual' == $value) {
+					$options['theme_updates'] = 'individual';
 				}
 				break;
 			case 'translation-updates':
 				if ('on' == $value) {
 					$options['translation_updates'] = 'on';
-				} else {
+				} elseif ('off' == $value) {
 					$options['translation_updates'] = 'off';
+				} elseif ('automatic_off' == $value) {
+					$options['translation_updates'] = 'automatic_off';
+				} elseif ('automatic' == $value) {
+					$options['translation_updates'] = 'automatic';
 				}
 				break;
-			case 'browser-nag':
-				if ('on' == $value) {
-					$options['misc_browser_nag'] = 'on';
-				} else {
-					$options['misc_browser_nag'] = 'off';
-				}
-				break;
-			case 'version-footer':
-				if ('on' == $value) {
-					$options['misc_wp_footer'] = 'on';
-				} else {
-					$options['misc_wp_footer'] = 'off';
-				}
+			case 'ratings-nag':
+				$options['ratings_nag'] = 'off';
 				break;
 			case 'email-notifications':
 				if ('on' == $value) {
@@ -367,19 +314,15 @@ class MPSUM_Admin_Ajax {
 					$options['email_addresses'] = array();
 					break;
 				}
-				$emails = explode(',', $value);
-				foreach ($emails as $index => &$email) {
-					$email = trim($email);
-					if (!is_email($email)) {
+				// Check for valid emails.
+				$email_validation = MPSUM_Utils::validate_emails($value); // $value holds a string of email addresses. May be comma separated.
 
-						// Email error. Get out.
-						$email_errors = true;
-						break;
-					}
-				}
-
-				if (! $email_errors) {
-					$options['email_addresses'] = $emails;
+				$email_errors = false;
+				if (! $email_validation['errors']) {
+					$options['email_addresses'] = $email_validation['emails'];
+				} else {
+					$email_errors = true;
+					$options['email_addresses'] = '';
 				}
 				break;
 			case 'update-notification-emails':
@@ -401,10 +344,25 @@ class MPSUM_Admin_Ajax {
 					wp_clear_scheduled_hook('eum_notification_updates_monthly');
 				}
 				break;
+			case 'plugin-auto-updates-notification-emails':
+				if ('on' === $value) {
+					$options['plugin_auto_updates_notification_emails'] = 'on';
+				} else {
+					$options['plugin_auto_updates_notification_emails'] = 'off';
+				}
+				break;
+			case 'rollback-updates-notification-emails':
+				if ('off' === $value) {
+					$options['rollback_updates_notification_emails'] = 'off';
+				} else {
+					$options['rollback_updates_notification_emails'] = 'on';
+				}
+				break;
 			case 'notification-emails-send_now':
 				MPSUM_Update_Notifications::get_instance()->maybe_send_update_notification_email();
 				break;
 		}
+		$options = apply_filters('eum_save_core_options', $options, $id, $value);
 		// Save options
 		MPSUM_Updates_Manager::update_options($options, 'core');
 
@@ -429,6 +387,11 @@ class MPSUM_Admin_Ajax {
 		if (!isset($options['update_notification_updates'])) {
 			$options['update_notification_updates'] = 'off';
 		}
+		
+		// Check if plugin auto updates notification emails is set
+		if (!isset($options['plugin_auto_updates_notification_emails'])) {
+			$options['plugin_auto_updates_notification_emails'] = 'on';
+		}
 
 		// Add error to options for returning
 		if ($email_errors) {
@@ -446,10 +409,9 @@ class MPSUM_Admin_Ajax {
 	/**
 	 * Get all core options
 	 *
-	 * @param array $data Data for get options
 	 * @return array - An array of core options
 	 */
-	public function get_core_options($data) {
+	public function get_core_options() {
 		if (!current_user_can('manage_options')) return array();
 		// Get options
 		$options = MPSUM_Updates_Manager::get_options('core', true);
@@ -464,11 +426,11 @@ class MPSUM_Admin_Ajax {
 
 			// Check to see if automatic updates are on
 			// Prepare for mad conditionals
-			if ('off' == $options['automatic_development_updates'] && 'on' == $options['automatic_major_updates'] && 'on' == $options['automatic_minor_updates'] && 'on' == $options['automatic_plugin_updates'] && 'on' == $options['automatic_theme_updates'] && 'on' == $options['automatic_translation_updates']) {
+			if ('off' == $options['automatic_development_updates'] && 'automatic' == $options['core_updates'] && 'automatic' == $options['plugin_updates'] && 'automatic' == $options['theme_updates'] && 'automatic' == $options['translation_updates']) {
 				$options['automatic_updates'] = 'on';
-			} elseif ('off' == $options['automatic_development_updates'] && 'off' == $options['automatic_major_updates'] && 'off' == $options['automatic_minor_updates'] && 'off' == $options['automatic_plugin_updates'] && 'off' == $options['automatic_theme_updates'] && 'off' == $options['automatic_translation_updates']) {
+			} elseif ('off' == $options['automatic_development_updates'] && 'off' == $options['core_updates'] && 'off' == $options['plugin_updates'] && 'off' == $options['theme_updates'] && 'off' == $options['translation_updates']) {
 				$options['automatic_updates'] = 'off';
-			} elseif ('off' == $options['automatic_development_updates'] && 'off' == $options['automatic_major_updates'] && 'on' == $options['automatic_minor_updates'] && 'default' == $options['automatic_plugin_updates'] && 'default' == $options['automatic_theme_updates'] && 'on' == $options['automatic_translation_updates']) {
+			} elseif ('off' == $options['automatic_development_updates'] && 'off' == $options['core_updates'] && 'on' == $options['plugin_updates'] && 'on' == $options['theme_updates'] && 'on' == $options['translation_updates']) {
 				$options['automatic_updates'] = 'default';
 			} else {
 				$options['automatic_updates'] = 'custom';
@@ -479,6 +441,12 @@ class MPSUM_Admin_Ajax {
 		if (!isset($options['update_notification_updates'])) {
 			$options['update_notification_updates'] = 'off';
 		}
+		
+		// Check if plugin auto updates notification emails is set
+		if (!isset($options['plugin_auto_updates_notification_emails'])) {
+			$options['plugin_auto_updates_notification_emails'] = 'on';
+		}
+		
 
 		if (isset($options['email_addresses']) && ! is_array($options['email_addresses'])) {
 			$options['email_addresses'] = array();
@@ -539,7 +507,7 @@ class MPSUM_Admin_Ajax {
 			}
 		}
 
-		$this->plugins_update_all_options($plugin_options, $plugin_automatic_options);
+		if (current_user_can('update_plugins')) $this->update_all_options(apply_filters('eum_plugins_update_options', array('plugins' => $plugin_options, 'plugins_automatic' => $plugin_automatic_options), $updated_options));
 	}
 
 	/**
@@ -606,29 +574,11 @@ class MPSUM_Admin_Ajax {
 				}
 				break;
 			default:
-				return;
+				if (!has_filter('eum_plugins_update_options')) return;
+				break;
 		}
 
-		$this->plugins_update_all_options($plugin_options, $plugin_automatic_options);
-	}
-
-	/**
-	 * Updates all plugin update options
-	 *
-	 * @param array $plugin_options           An array of plugin update options
-	 * @param array $plugin_automatic_options An array of plugin automatic update options
-	 *
-	 * @return array
-	 */
-	private function plugins_update_all_options($plugin_options, $plugin_automatic_options) {
-		if (!current_user_can('update_plugins')) return array();
-		$plugin_options = array_values(array_unique($plugin_options));
-		$plugin_automatic_options = array_values(array_unique($plugin_automatic_options));
-		$options = MPSUM_Updates_Manager::get_options();
-		$options['plugins'] = $plugin_options;
-		$options['plugins_automatic'] = $plugin_automatic_options;
-		MPSUM_Updates_Manager::update_options($options);
-		return $options;
+		$this->update_all_options(apply_filters('eum_plugins_update_options', array('plugins' => $plugin_options, 'plugins_automatic' => $plugin_automatic_options), $updated_options, $action));
 	}
 
 	/**
@@ -680,7 +630,7 @@ class MPSUM_Admin_Ajax {
 			}
 		}
 
-		$this->themes_update_all_options($theme_options, $theme_automatic_options);
+		$this->update_all_options(apply_filters('eum_themes_update_options', array('themes' => $theme_options, 'themes_automatic' => $theme_automatic_options), $updated_options));
 	}
 
 	/**
@@ -748,26 +698,25 @@ class MPSUM_Admin_Ajax {
 				}
 				break;
 			default:
-				return;
+				if (!has_filter('eum_themes_update_options')) return;
+				break;
 		}
-		$this->themes_update_all_options($theme_options, $theme_automatic_options);
+		
+		$this->update_all_options(apply_filters('eum_themes_update_options', array('themes' => $theme_options, 'themes_automatic' => $theme_automatic_options), $updated_options, $action));
 	}
 
 	/**
-	 * Updates all theme update options
+	 * Updates all plugin or theme update options
 	 *
-	 * @param array $theme_options           An array of theme update options
-	 * @param array $theme_automatic_options An array of theme automatic update options
+	 * @param array $all_options An array of associative arrays containing free/basic (e.g. allowed plugin options, automatic update options) and additional feature settings/options (e.g. semantic versioning options(patch releases))
 	 *
 	 * @return array
 	 */
-	private function themes_update_all_options($theme_options, $theme_automatic_options) {
-		if (!current_user_can('update_themes')) return array();
-		$theme_options = array_values(array_unique($theme_options));
-		$theme_automatic_options = array_values(array_unique($theme_automatic_options));
+	private function update_all_options($all_options) {
 		$options = MPSUM_Updates_Manager::get_options();
-		$options['themes'] = $theme_options;
-		$options['themes_automatic'] = $theme_automatic_options;
+		foreach ((array) $all_options as $key => $feature_options) {
+			$options[$key] = array_values(array_unique($feature_options));
+		}
 		MPSUM_Updates_Manager::update_options($options);
 		return $options;
 	}
@@ -786,7 +735,7 @@ class MPSUM_Admin_Ajax {
 		$advanced_options = MPSUM_Updates_Manager::get_options('advanced');
 		if (!is_array($users) || empty($users)) return;
 		$users_to_save = array();
-		foreach ($users as $index => $user_id) {
+		foreach ($users as $user_id) {
 			$user_id = absint($user_id);
 			if (0 === $user_id) continue;
 			$users_to_save[] = $user_id;
@@ -819,9 +768,6 @@ class MPSUM_Admin_Ajax {
 
 		// Get sites
 		$sites = $instance->get_sites();
-
-		// Get all Plugins
-		$plugins = get_plugins();
 
 		// Get blank html
 		$html = '';
@@ -893,7 +839,6 @@ class MPSUM_Admin_Ajax {
 		foreach ($transient as $site_id => $theme_installed) {
 			$site_name = '';
 			$site_url = '';
-			$themes_stored = array();
 			foreach ($sites as $site) {
 				if ($site_id == $site->blog_id) {
 					$site_id = $site->blog_id;
@@ -906,7 +851,6 @@ class MPSUM_Admin_Ajax {
 			if (!empty($themes)) {
 				if (array_key_exists($stylesheet, $themes)) {
 					// Determine of theme is active on the site
-					global $wpdb;
 					switch_to_blog($site_id);
 					$option = get_option('stylesheet');
 					if ($stylesheet == $option) {
@@ -950,7 +894,7 @@ class MPSUM_Admin_Ajax {
 		$options = MPSUM_Updates_Manager::get_options('core', true);
 		$options['enable_admin_bar'] = 'on';
 		MPSUM_Updates_Manager::update_options($options, 'core');
-		wp_send_json(array('message' => __('The admin bar has been enabled. Please refresh to see the admn bar menu.', 'stops-core-theme-and-plugin-updates')));
+		wp_send_json(array('message' => __('The admin bar has been enabled. Please refresh to see the admin bar menu.', 'stops-core-theme-and-plugin-updates')));
 	}
 
 	/**
@@ -963,9 +907,6 @@ class MPSUM_Admin_Ajax {
 		global $wpdb;
 		// Reset options
 		MPSUM_Updates_Manager::update_options(array());
-
-		// Remove table version
-		delete_site_option('mpsum_log_table_version');
 
 		// Remove Webhook
 		delete_site_option('easy_updates_manager_webhook');
@@ -1012,14 +953,12 @@ class MPSUM_Admin_Ajax {
 			$wpdb->query($safe_mode_sql);
 		}
 
-		// Remove active plugins option
-		delete_site_option('eum_active_pre_restore_plugins');
-		delete_site_option('eum_active_pre_restore_plugins_multisite');
-
 		// Remove transients when someone disables plugin, theme, or core updates
 		delete_site_transient('eum_core_checked');
 		delete_site_transient('eum_themes_checked');
 		delete_site_transient('eum_plugins_checked');
+
+		delete_site_option('eum_unproven_updates_post_install');
 
 		$message = __('The plugin settings have now been reset.', 'stops-core-theme-and-plugin-updates');
 		return $message;
@@ -1036,6 +975,14 @@ class MPSUM_Admin_Ajax {
 		delete_site_transient('MPSUM_PLUGINS');
 		delete_site_transient('MPSUM_THEMES');
 		if (function_exists('wp_maybe_auto_update')) {
+			// Constant to show that a Force Update is in effect. Since 9.0.1.
+			if (!defined('EUM_DOING_FORCE_UPDATES')) {
+				define('EUM_DOING_FORCE_UPDATES', true);
+			}
+
+			// Disable auto-backups from occuring with UpdraftPlus Premium as it causes a fatal error when running Force Updates. Since 9.0.1.
+			add_filter('updraftplus_boot_backup', '__return_false', 10, 1);
+
 			/**
 			 * Whether to delete the auto update lock file
 			 *
@@ -1050,7 +997,20 @@ class MPSUM_Admin_Ajax {
 			if (true === $disable_lock) {
 				delete_option('auto_updater.lock');
 			}
+
+			/*
+			 * Tricking WordPress into thinking it's running a cron process
+			 * prevents the disabling of plugins and themes during the
+			 * upgrade process. It's hacky, but is the best solution to
+			 * prevent items from being deactivated during a Force Updates check.
+			 *
+			 * @since 9.0.0
+			 *
+			 * @author Ronald Huereca <rhuereca@updraftplus.com>
+			 */
+			add_filter('wp_doing_cron', '__return_true');
 			wp_maybe_auto_update();
+			remove_filter('wp_doing_cron', '__return_true');
 			$ran_immediately = true;
 		} else {
 			$overdue = $this->howmany_overdue_crons();
@@ -1098,16 +1058,16 @@ class MPSUM_Admin_Ajax {
 	private function get_admin_bar_title($update_data) {
 		$title = array();
 		if ($update_data['counts']['wordpress'] > 0) {
-			$title[] = sprintf(_n('%s WordPress Update', '%s WordPress Updates', $update_data['counts']['wordpress'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['wordpress']));
+			$title[] = sprintf(_n('%s WordPress update', '%s WordPress updates', $update_data['counts']['wordpress'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['wordpress']));
 		}
 		if ($update_data['counts']['plugins'] > 0) {
-			$title[] = sprintf(_n('%s Plugin Update', '%s Plugin Updates', $update_data['counts']['plugins'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['plugins']));
+			$title[] = sprintf(_n('%s plugin update', '%s plugin updates', $update_data['counts']['plugins'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['plugins']));
 		}
 		if ($update_data['counts']['themes'] > 0) {
-			$title[] = sprintf(_n('%s Theme Update', '%s Theme Updates', $update_data['counts']['themes'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['themes']));
+			$title[] = sprintf(_n('%s theme update', '%s theme updates', $update_data['counts']['themes'], 'stops-core-theme-and-plugin-updates'), number_format_i18n($update_data['counts']['themes']));
 		}
 		if ($update_data['counts']['translations'] > 0) {
-			$title[] = __('Translation Updates', 'stops-core-theme-and-plugin-updates');
+			$title[] = __('Translation update', 'stops-core-theme-and-plugin-updates');
 		}
 		return implode(',', $title);
 	}
