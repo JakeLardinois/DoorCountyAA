@@ -36,8 +36,8 @@
                         <img src="<?php echo get_template_directory_uri(); ?>/img/aalogo_1.png" alt="Logo" class="logo-img">
                     </a>
                     <div class="alignright">
-                        <h1>Door County AA</h1>
-                        <h2>District 22 Door & Kewaunee Counties</h2>
+                        <h1>Alcoholics Anonymous District 22</h1>
+                        <h2>Serving Door and Kewaunee Counties</h2>
                     </div>
                 </div>
                 <!-- /logo -->
