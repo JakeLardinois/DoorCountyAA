@@ -81,29 +81,338 @@ class MPSUM_Logs {
 	 * @access private
 	 */
 	protected function __construct() {
+		register_shutdown_function(array($this, 'perform_shutdown_task'));
 		
 		$this->check_updates();
 
-		// Clear transient on updates screen
-		global $pagenow;
-		if ('update-core.php' == $pagenow) {
-			delete_site_transient('mpsum_version_numbers');
-		}
-
-		// Clear transient when doing Ajax
-		if (defined('DOING_AJAX') && true == DOING_AJAX && isset($_REQUEST['subaction']) && 'force_updates' == $_REQUEST['subaction']) {
-			delete_site_transient('mpsum_version_numbers');
-		}
-
-		add_action('admin_init', array($this, 'cache_version_numbers'));
 		add_action('pre_auto_update', array($this, 'pre_auto_update'));
-		add_action('automatic_updates_complete', array($this, 'automatic_updates'));
-		add_action('automatic_updates_complete', array($this, 'update_translations'));
-		add_action('upgrader_process_complete', array($this, 'manual_updates'), 10, 2);
 		add_filter('eum_i18n', array($this, 'logs_i18n'));
+		add_filter('upgrader_package_options', array($this, 'initialize_log_messages'), 10, 1);
+		add_action('automatic_updates_complete', array($this, 'log_automatic_updates'));
+		add_action('upgrader_process_complete', array($this, 'log_updates'), 1, 2);
+		add_filter('upgrader_pre_download', array($this, 'initialize_core_log_messages'), 10, 3);
 
 	} //end constructor
-	
+
+	/**
+	 * Make sure PHP fatal errors are caught during an update and/or write remaining update information in the $log_messages variable into the database (if any)
+	 */
+	public function perform_shutdown_task() {
+		if (!is_array($this->log_messages) || empty($this->log_messages)) return;
+		try {
+			$stacktrace = maybe_serialize(apply_filters('eum_normalized_call_stack_args', $this->normalise_call_stack_args(debug_backtrace(false)))); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		} catch (Exception $e) {
+			$stacktrace = serialize(array()); // if an exception still happens even after the call stack is already normalised then we won't provide stacktrace for a log entry
+		// @codingStandardsIgnoreLine
+		} catch (Error $e) {
+			$stacktrace = serialize(array());
+		}
+		foreach ($this->log_messages as $type => $entities) {
+			if (!is_array($entities) || empty($entities)) continue;
+			foreach ($entities as $data) {
+				$this->insert_log($data['name'], $type, $data['from'], $data['to'], $this->auto_update ? 'automatic' : 'manual', doing_action('upgrader_process_complete') || doing_action('automatic_updates_complete') ? 1 : 0, get_current_user_id(), '', $stacktrace);
+			}
+		}
+	}
+
+	/**
+	 * Initialize information of an update for each plugin/theme/translation before running the update operation. The information will be stored in the $log_messages variable keyed by the name of what entity is being updated
+	 *
+	 * @param array $options Package options used by the upgrader
+	 * @return array An array of associative arrays keyed by some strings
+	 */
+	public function initialize_log_messages($options) {
+		if (isset($options['hook_extra'], $options['hook_extra']['action']) && 'update' !== $options['hook_extra']['action']) return $options;
+		if (isset($options['hook_extra'], $options['hook_extra']['plugin'])) {
+			$current = get_site_transient('update_plugins');
+			if (isset($current->response[$options['hook_extra']['plugin']])) {
+				$plugins = get_plugins(); // It's not expensive calling this API as WordPress has already cached the result in a WP Cache object
+				if (!isset($this->log_messages['plugin'])) $this->log_messages['plugin'] = array();
+				$this->log_messages['plugin'][$options['hook_extra']['plugin']] = array(
+					'name' => isset($plugins[$options['hook_extra']['plugin']]) && isset($plugins[$options['hook_extra']['plugin']]['Name']) ? $plugins[$options['hook_extra']['plugin']]['Name'] : 'Unknown',
+					'from' => isset($plugins[$options['hook_extra']['plugin']]) && isset($plugins[$options['hook_extra']['plugin']]['Version']) ? $plugins[$options['hook_extra']['plugin']]['Version'] : 0,
+					'to' => isset($current->response[$options['hook_extra']['plugin']]) && is_object($current->response[$options['hook_extra']['plugin']]) && isset($current->response[$options['hook_extra']['plugin']]->new_version) ? $current->response[$options['hook_extra']['plugin']]->new_version : 0,
+					'status' => 0
+				);
+			}
+		} elseif (isset($options['hook_extra'], $options['hook_extra']['theme'])) {
+			$current = get_site_transient('update_themes');
+			if (isset($current->response[$options['hook_extra']['theme']])) {
+				$themes = wp_get_themes(); // It's not expensive calling this API as WordPress has already cached the result as a static variable inside the function
+				if (!isset($this->log_messages['theme'])) $this->log_messages['theme'] = array();
+				$this->log_messages['theme'][$options['hook_extra']['theme']] = array(
+					'name' => isset($themes[$options['hook_extra']['theme']]) && is_a($themes[$options['hook_extra']['theme']], 'WP_Theme') ? $themes[$options['hook_extra']['theme']]->get('Name') : 'Unknown',
+					'from' => isset($themes[$options['hook_extra']['theme']]) && is_a($themes[$options['hook_extra']['theme']], 'WP_Theme') ? $themes[$options['hook_extra']['theme']]->get('Version') : 0,
+					'to' => isset($current->response[$options['hook_extra']['theme']]) && isset($current->response[$options['hook_extra']['theme']]['new_version']) ? $current->response[$options['hook_extra']['theme']]['new_version'] : 0,
+					'status' => 0
+				);
+			}
+		} elseif (isset($options['hook_extra']) && isset($options['hook_extra']['language_update_type']) && isset($options['hook_extra']['language_update'])) { // translation
+			if (!isset($this->log_messages['translation'])) $this->log_messages['translation'] = array();
+			switch ($options['hook_extra']['language_update_type']) {
+				case 'plugin':
+					$current = get_site_transient('update_plugins');
+					if (empty($current->translations)) break;
+					$plugins = get_plugins();
+					$plugins_by_slug = wp_parse_args(wp_list_pluck($current->no_update, 'plugin', 'slug'), wp_list_pluck($current->response, 'plugin', 'slug'));
+					foreach ($current->translations as $translation) {
+						if (isset($options['hook_extra']['language_update']->slug) && $translation['slug'] !== $options['hook_extra']['language_update']->slug) continue;
+						if (isset($plugins[$plugins_by_slug[$translation['slug']]])) {
+							$this->log_messages['translation'][$translation['slug']] = array(
+								'name' => isset($plugins[$plugins_by_slug[$translation['slug']]]['Name']) ? $plugins[$plugins_by_slug[$translation['slug']]]['Name']. ' ('.$translation['language'].')' : 'Unknown ('.$translation['language'].')',
+								'from' => isset($options['hook_extra']['language_update']->version) ? $options['hook_extra']['language_update']->version : 0,
+								'to' => isset($translation['version']) ? $translation['version'] : 0,
+								'status' => 0
+							);
+							break;
+						}
+					}
+					break;
+				case 'theme':
+					$current = get_site_transient('update_themes');
+					if (empty($current->translations)) break;
+					$themes = wp_get_themes();
+					foreach ($current->translations as $translation) {
+						if (isset($options['hook_extra']['language_update']->slug) && $translation['slug'] !== $options['hook_extra']['language_update']->slug) continue;
+						if (isset($themes[$translation['slug']])) {
+							$this->log_messages['translation'][$translation['slug']] = array(
+								'name' => is_a($themes[$translation['slug']], 'WP_Theme') ? $themes[$translation['slug']]->get('Name'). ' ('.$translation['language'].')' : 'Unknown ('.$translation['language'].')',
+								'from' => isset($options['hook_extra']['language_update']->version) ? $options['hook_extra']['language_update']->version : 0,
+								'to' => isset($translation['version']) ? $translation['version'] : 0,
+								'status' => 0
+							);
+							break;
+						}
+					}
+					break;
+				default:
+					// core
+					$current = get_site_transient('update_core');
+					if (empty($current->translations)) break;
+					foreach ($current->translations as $translation) {
+						$this->log_messages['translation']['wordpress_default_'.$translation['language']] = array(
+							'name' => 'WordPress ('.$translation['language'].')',
+							'from' => isset($options['hook_extra']['language_update']->version) ? $options['hook_extra']['language_update']->version : 0,
+							'to' => isset($translation['version']) ? $translation['version'] : 0,
+							'status' => 0
+						);
+					}
+					break;
+			}
+		}
+		return $options;
+	}
+
+	/**
+	 * Initialize information of a core update before downloading its package. The information will be stored in the $log_messages variable keyed by 'core' string
+	 *
+	 * @param bool        $reply    Whether to bail without returning the package. Default false
+	 * @param string      $package  The package file name
+	 * @param WP_Upgrader $upgrader The WP_Upgrader instance
+	 */
+	public function initialize_core_log_messages($reply, $package, $upgrader) {
+		add_filter('upgrader_post_install', array($this, 'set_update_status_by_result'), 10, 3);
+		if (is_a($upgrader, 'Core_Upgrader')) {
+			global $wp_version;
+			$current = get_site_transient('update_core');
+			if (!isset($this->log_messages['core']) || !is_array($this->log_messages['core'])) $this->log_messages['core'] = array();
+			$item = array(
+				'name' => 'WordPress',
+				'from' => $wp_version,
+				'to' => 0,
+				'status' => 0,
+				'notes' => ''
+			);
+			add_action('_core_updated_successfully', array($this, 'set_core_update_success_status'));
+			add_filter('update_feedback', array($this, 'set_core_update_notes'), 1, 1);
+			if (!$current || empty($current->updates)) return $reply;
+			foreach ($current->updates as $update) {
+				if (($this->auto_update && 'autoupdate' !== $update->response) || (!$this->auto_update && 'autoupdate' === $update->response)) continue;
+				if (empty($update->packages)) continue;
+				foreach ($update->packages as $download_url) {
+					if ($download_url === $package) {
+						$item['to'] = $update->current;
+						$item['name'] .= " ({$update->locale})";
+						break;
+					}
+				}
+			}
+			if (version_compare($wp_version, $item['to'], '==') && empty($this->log_messages['core'])) {
+				$item['name'] .= ' (Reinstall)';
+				$this->log_messages['core']['reinstall'] = $item;
+			} elseif (version_compare($wp_version, $item['to'], '<') && empty($this->log_messages['core'])) {
+				$this->log_messages['core']['new'] = $item;
+			} elseif (!empty($this->log_messages['core'])) {
+				$item['name'] .= ' (Rollback)';
+				$item['from'] = isset($this->log_messages['core']['new']) ? $this->log_messages['core']['new']['to'] : $item['from'];
+				$item['to'] = isset($this->log_messages['core']['new']) ? $this->log_messages['core']['new']['from'] : $item['to'];
+				$this->log_messages['core']['rollback'] = $item;
+			}
+		}
+		return $reply;
+	}
+
+	/**
+	 * Log the information of updates to the log table, it fires when the upgrader process is complete during either manual or automatic operation and it logs only if the $log_messages variable class is not empty
+	 *
+	 * @param WP_Upgrader $wp_upgrader WP_Upgrader instance. In other contexts, $this, might be a Theme_Upgrader, Plugin_Upgrader, Core_Upgrade, or Language_Pack_Upgrader instance
+	 * @param array       $hook_extra  Extra arguments passed to hooked filters
+	 */
+	public function log_updates($wp_upgrader, $hook_extra) {
+		if (isset($hook_extra['action']) && 'update' !== $hook_extra['action']) return;
+		try {
+			$stacktrace = maybe_serialize(apply_filters('eum_normalized_call_stack_args', $this->normalise_call_stack_args(debug_backtrace(false)))); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		} catch (Exception $e) {
+			$stacktrace = serialize(array()); // if an exception still happens even after the call stack is already normalised then we won't provide stacktrace for a log entry
+		// @codingStandardsIgnoreLine
+		} catch (Error $e) {
+			$stacktrace = serialize(array());
+		}
+		$notes = '';
+		if (is_a($wp_upgrader->skin, 'Automatic_Upgrader_Skin')) {
+			foreach ($wp_upgrader->skin->get_upgrade_messages() as $message) {
+				$notes .= $message . "\n\r\n\r";
+			}
+		}
+		switch ($hook_extra['type']) {
+			case 'translation':
+				foreach ($hook_extra['translations'] as $translation) {
+					$key = 'core' !== $translation['type'] && isset($this->log_messages['translation'][$translation['slug']]) ? $translation['slug'] : ('core' === $translation['type'] && isset($this->log_messages['translation']['wordpress_default_'.$translation['language']]) ? 'wordpress_default_'.$translation['language'] : '');
+					if ('' === $key) continue;
+					if (!isset($this->log_messages['translation'][$key])) continue;
+					$this->insert_log($this->log_messages['translation'][$key]['name'], 'translation', $this->log_messages['translation'][$key]['from'], $this->log_messages['translation'][$key]['to'], $this->auto_update ? 'automatic' : 'manual', $this->log_messages['translation'][$key]['status'], get_current_user_id(), $notes, $stacktrace);
+					unset($this->log_messages['translation'][$key]);
+				}
+				if (empty($this->log_messages['translation'])) unset($this->log_messages['translation']);
+				break;
+			case 'core':
+				foreach ($this->log_messages['core'] as $core_type => $data) {
+					$this->insert_log($data['name'], $hook_extra['type'], $data['from'], $data['to'], $this->auto_update ? 'automatic' : 'manual', $data['status'], get_current_user_id(), $notes ? $notes : $data['notes'], $stacktrace);
+					unset($this->log_messages['core'][$core_type]);
+				}
+				if (empty($this->log_messages['core'])) unset($this->log_messages['core']);
+				break;
+			case 'plugin':
+				$plugins = isset($hook_extra['plugins']) && is_array($hook_extra['plugins']) ? $hook_extra['plugins'] : (isset($hook_extra['plugin']) ? $hook_extra['plugin'] : array());
+				foreach ((array) $plugins as $plugin) {
+					if (!isset($this->log_messages['plugin'][$plugin])) continue;
+					$this->insert_log($this->log_messages['plugin'][$plugin]['name'], $hook_extra['type'], $this->log_messages['plugin'][$plugin]['from'], $this->log_messages['plugin'][$plugin]['to'], $this->auto_update ? 'automatic' : 'manual', $this->log_messages['plugin'][$plugin]['status'], get_current_user_id(), $notes, $stacktrace);
+					unset($this->log_messages['plugin'][$plugin]);
+				}
+				if (empty($this->log_messages['plugin'])) unset($this->log_messages['plugin']);
+				break;
+			case 'theme':
+				$themes = isset($hook_extra['themes']) && is_array($hook_extra['themes']) ? $hook_extra['themes'] : (isset($hook_extra['theme']) ? $hook_extra['theme'] : array());
+				foreach ((array) $themes as $theme) {
+					if (!isset($this->log_messages['theme'][$theme])) continue;
+					$this->insert_log($this->log_messages['theme'][$theme]['name'], $hook_extra['type'], $this->log_messages['theme'][$theme]['from'], $this->log_messages['theme'][$theme]['to'], $this->auto_update ? 'automatic' : 'manual', $this->log_messages['theme'][$theme]['status'], get_current_user_id(), $notes, $stacktrace);
+					unset($this->log_messages['theme'][$theme]);
+				}
+				if (empty($this->log_messages['theme'])) unset($this->log_messages['theme']);
+				break;
+		}
+	}
+
+	/**
+	 * Set notes to the $log_messages variable class during update of the WP core
+	 *
+	 * @param string $note The core update feedback messages
+	 */
+	public function set_core_update_notes($note) {
+		if (!is_array($this->log_messages['core']) || empty($this->log_messages['core']) || !is_string($note)) return $note; // yes, the docblock states that $note is in string type, but that's not always true as somehow it can be WP_Error object
+		end($this->log_messages['core']);
+		if (!isset($this->log_messages['core'][key($this->log_messages['core'])]['notes']) || !is_string($this->log_messages['core'][key($this->log_messages['core'])]['notes'])) $this->log_messages['core'][key($this->log_messages['core'])]['notes'] = '';
+		$this->log_messages['core'][key($this->log_messages['core'])]['notes'] .= $note . "\n\r\n\r";
+		reset($this->log_messages['core']);
+		return $note;
+	}
+
+	/**
+	 * Set success to the core update status after WordPress core has been successfully updated
+	 *
+	 * Hooked to the {@see '_core_updated_successfully'} action, added when initializing core log info
+	 */
+	public function set_core_update_success_status() {
+		remove_filter('update_feedback', array($this, 'set_core_update_notes'), 1, 1);
+		if (!is_array($this->log_messages['core']) || empty($this->log_messages['core'])) return;
+		end($this->log_messages['core']);
+		$this->log_messages['core'][key($this->log_messages['core'])]['status'] = 1;
+		reset($this->log_messages['core']);
+	}
+
+	/**
+	 * Use result data to set update status of plugin/theme/translation after an installation has finished
+	 *
+	 * @param bool  $response   Installation response
+	 * @param array $hook_extra Extra arguments passed to hooked filters
+	 * @param array $result     Installation result data
+	 * @return bool Installation response
+	 */
+	public function set_update_status_by_result($response, $hook_extra, $result) {
+		if (isset($hook_extra['action']) && 'update' !== $hook_extra['action']) return $response;
+		if (isset($hook_extra['plugin']) && isset($this->log_messages['plugin'][$hook_extra['plugin']])) {
+			$this->log_messages['plugin'][$hook_extra['plugin']]['status'] = $result && !is_wp_error($result) ? 1 : 0;
+		} elseif (isset($hook_extra['theme']) && isset($this->log_messages['theme'][$hook_extra['theme']])) {
+			$this->log_messages['theme'][$hook_extra['theme']]['status'] = $result && !is_wp_error($result) ? 1 : 0;
+		} elseif (isset($hook_extra['language_update_type']) && isset($hook_extra['language_update'])) {
+			switch ($hook_extra['language_update_type']) {
+				case 'core':
+					$this->log_messages['translation']['wordpress_default_'.$hook_extra['language_update']->language]['status'] = $result && !is_wp_error($result) ? 1 : 0;
+					break;
+				default:
+					// plugins and themes
+					$this->log_messages['translation'][$hook_extra['language_update']->slug]['status'] = $result && !is_wp_error($result) ? 1 : 0;
+					break;
+			}
+		}
+		return $response;
+	}
+
+	/**
+	 * Log update information to the log table when automatic updates is complete, and if the $log_messages variable class is not empty. This is final attempt to log updates to the database but this could also mean that nothing has to be done as in the previous action (upgrader_process_complete) the information has already been logged and has been removed from the $log_messages variable
+	 * The reason why this method is hooked to the `automatic_updates_complete` and why we still need it is that in some cases when an error occurs during automatic updates the `upgrader_process_complete` action won't get executed, but this action `automatic_updates_complete`/method will. Actually, without having this method we can still log the info on shutdown, but it lacks of notes
+	 *
+	 * @param array $update_results The results of all attempted updates
+	 */
+	public function log_automatic_updates($update_results) {
+		if (empty($update_results)) return;
+		try {
+			$stacktrace = maybe_serialize(apply_filters('eum_normalized_call_stack_args', $this->normalise_call_stack_args(debug_backtrace(false)))); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		} catch (Exception $e) {
+			$stacktrace = serialize(array()); // if an exception still happens even after the call stack is already normalised then we won't provide stacktrace for a log entry
+		// @codingStandardsIgnoreLine
+		} catch (Error $e) {
+			$stacktrace = serialize(array());
+		}
+		foreach ($update_results as $type => $results) {
+			foreach ($results as $result) {
+				$notes = '';
+				if (!isset($result->messages)) $result->messages = array();
+				foreach ($result->messages as $message) {
+					$notes .= $message . "\n\r\n\r";
+				}
+				if ('core' === $type) {
+					if (!isset($this->log_messages[$type])) continue;
+					foreach ($this->log_messages[$type] as $core_type => $data) {
+						$this->insert_log($data['name'], $type, $data['from'], $data['to'], 'automatic', $data['status'], get_current_user_id(), $notes ? $notes : $data['notes'], $stacktrace);
+						unset($this->log_messages[$type][$core_type]);
+					}
+					if (empty($this->log_messages[$type])) unset($this->log_messages[$type]);
+				} elseif ('translation' === $type) {
+					if (!isset($this->log_messages[$type], $this->log_messages[$type][$result->item->slug])) continue;
+					$this->insert_log($this->log_messages[$type][$result->item->slug]['name'], $type, $this->log_messages[$type][$result->item->slug]['from'], $this->log_messages[$type][$result->item->slug]['to'], 'automatic', isset($result->result) && $result->result && !is_wp_error($result->result) ? 1 : 0, get_current_user_id(), $notes, $stacktrace);
+					unset($this->log_messages[$type][$result->item->slug]);
+					if (empty($this->log_messages[$type])) unset($this->log_messages[$type]);
+				} else {
+					if (!isset($this->log_messages[$type], $this->log_messages[$type][$result->item->$type])) continue;
+					$this->insert_log($this->log_messages[$type][$result->item->$type]['name'], $type, $this->log_messages[$type][$result->item->$type]['from'], $this->log_messages[$type][$result->item->$type]['to'], 'automatic', isset($result->result) && $result->result && !is_wp_error($result->result) ? 1 : 0, get_current_user_id(), $notes, $stacktrace);
+					unset($this->log_messages[$type][$result->item->$type]);
+					if (empty($this->log_messages[$type])) unset($this->log_messages[$type]);
+				}
+			}
+		}
+	}
+
 	/**
 	 * See if any database schema updates are needed, and perform them if so.
 	 *
@@ -125,36 +434,6 @@ class MPSUM_Logs {
 	}
 
 	/**
-	 * Run translations when automatic updates are finished.
-	 *
-	 * @return void
-	 */
-	public function update_translations() {
-		$language_updates = wp_get_translation_updates();
-		if (! $language_updates) {
-			return;
-		}
-		ob_start(); // ob_start is necessary to prevent notices from showing up when UpdraftPlus is running a backup when force updates is run. Since 9.0.1.
-		$language_pack = new Language_Pack_Upgrader();
-		$language_pack->bulk_upgrade($language_updates);
-		ob_end_clean();
-
-		// Log translated updates.
-		if (is_array($language_updates) && ! empty($language_updates)) {
-			foreach ($language_updates as $language_update) {
-				$status = 1;
-				$version = $language_update->version;
-				$version_from = $version;
-				$slug = $language_update->slug;
-				$name = $this->get_name_for_update($language_update->type, $slug);
-				$name = $name . ' (' . $language_update->language . ')';
-				$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-				$this->insert_log($name, 'translation', $version_from, $version, 'automatic', $status, 0, '', $stacktrace);
-			}
-		}
-	}
-
-	/**
 	 * Add webhook i18n
 	 *
 	 * @param array $i18n Array of internationalized strings
@@ -163,97 +442,6 @@ class MPSUM_Logs {
 	public function logs_i18n($i18n) {
 		$i18n['logs_no_items'] = __('No items found.', 'stops-core-theme-and-plugin-updates');
 		return $i18n;
-	}
-
-	/**
-	 * Cache core, plugins and themes versions to use in log messages.
-	 *
-	 * @return array Cached version information
-	 */
-	public function cache_version_numbers() {
-
-		// Transient expires in 360 minutes - If false or not array, cache continues
-		$continue_cache = false;
-		$this->log_messages = get_site_transient('mpsum_version_numbers');
-		if (empty($this->log_messages) || !is_array($this->log_messages)) {
-			$this->log_messages = array();
-			$continue_cache = true;
-		}
-
-		// Return non-empty log messages if EASY_UPDATES_MANAGER_DEBUG is false and transient was populated
-		if ((!defined('EASY_UPDATES_MANAGER_DEBUG') || !EASY_UPDATES_MANAGER_DEBUG) && !$continue_cache) {
-			return $this->log_messages;
-		}
-
-		// Get the wp Version
-		include ABSPATH.WPINC.'/version.php';
-
-		// Force transient refresh and get updates.
-		require_once ABSPATH . 'wp-admin/includes/update.php';
-		wp_version_check(array(), true);
-		wp_update_plugins();
-		wp_update_themes();
-		$upgrade_plugins = get_plugin_updates();
-		$upgrade_themes = get_theme_updates();
-		$upgrade_wp = get_core_updates();
-		$update_translations = wp_get_translation_updates();
-		$this->log_messages['user_id'] = get_current_user_id();
-
-		if (false !== $upgrade_wp) {
-			foreach ($upgrade_wp as $item) {
-				if (!empty($item->partial_version)) {
-					$this->log_messages['core']['version'] = $item->partial_version;
-				} else {
-					$this->log_messages['core']['version'] = $item->current;
-					$this->log_messages['core']['reinstall'] = true;
-				}
-				$this->log_messages['core']['new_version'] = $item->version;
-				$this->log_messages['core']['from_version'] = $wp_version;// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- From WP version.php
-				$this->log_messages['core']['current'] = $item->current;
-			}
-		}
-		foreach ($upgrade_plugins as $plugin => $plugin_data) {
-			if (empty($this->log_messages['plugin'][$plugin])) {
-				$this->log_messages['plugin'][$plugin]['name']        = $plugin_data->Name;
-				$this->log_messages['plugin'][$plugin]['version']     = $plugin_data->Version;
-				$this->log_messages['plugin'][$plugin]['new_version'] = $plugin_data->update->new_version;
-			}
-		}
-		foreach ($upgrade_themes as $stylesheet => $theme) {
-			if (empty($this->log_messages['theme'][$stylesheet])) {
-				$this->log_messages['theme'][$stylesheet]['name']        = $theme->display('Name');
-				$this->log_messages['theme'][$stylesheet]['version']     = $theme->display('Version');
-				$this->log_messages['theme'][$stylesheet]['new_version'] = $theme->update['new_version'];
-			}
-		}
-		foreach ($update_translations as $translation) {
-			$this->log_messages['translations'][] = $this->get_update_name($translation);
-		}
-		if (!empty($this->log_messages['translations'])) {
-			$this->log_messages['translations'] = array_unique($this->log_messages['translations'], SORT_REGULAR);
-		}
-		set_site_transient('mpsum_version_numbers', $this->log_messages, 6 * 60 * 60);
-		return $this->log_messages;
-	}
-
-	/**
-	 * Get cached version informmation for updates
-	 *
-	 * @return array Cached version information
-	 */
-	public function get_cached_version_information() {
-
-		// Make sure log_messages is set. If it is, return itself.
-		if (!empty($this->log_messages) && is_array($this->log_messages)) {
-			return $this->log_messages;
-		}
-
-		// Log messages is empty, attempt to get transient
-		$cached_updates = get_site_transient('mpsum_version_numbers');
-		if (empty($cached_updates) || !is_array($cached_updates)) {
-			$cached_updates = $this->cache_version_numbers();
-		}
-		return $cached_updates;
 	}
 
 	/**
@@ -297,112 +485,6 @@ class MPSUM_Logs {
 		}
 		$result[$type]['version'] = $translation->version;
 		return $result;
-	}
-
-	/**
-	 * Log automatic updates
-	 *
-	 * @since 6.0.0
-	 * @access public
-	 * @param array $update_results Update results
-	 * @return void
-	 */
-	public function automatic_updates($update_results) {
-		if (empty($update_results)) return;
-		$this->log_messages = $this->get_cached_version_information();
-		delete_site_option('eum_auto_backups'); // Remove option that is needed to prevent duplicate backups. Since 9.0.1.
-		foreach ($update_results as $type => $results) {
-			switch ($type) {
-				case 'core':
-					$core = $results[0];
-					$version_from = $this->log_messages['core']['from_version'];
-					$version = $this->log_messages['core']['version'];
-					$user_id = $this->log_messages['user_id'];
-					$name = 'WordPress ' . $version;
-
-					// Checking on the re-install status
-					if (!empty($this->log_messages['core']['reinstall'])) {
-						$status = 1;
-					} else {
-						$status = $version_from !== $version ? 1 : 0;
-					}
-
-					list($version, $status) = $this->set_status_and_version($core->result, $version_from, $version, $status);
-					$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-
-					$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, $user_id, '', $stacktrace);
-					break;
-				case 'plugin':
-					foreach ($results as $plugin) {
-						if (!isset($plugin->item->plugin)) continue;
-						$name = (isset($plugin->name) && ! empty($plugin->name)) ? $plugin->name : $plugin->item->slug;
-						$status  = 0;
-						$version = isset($plugin->item->new_version) ? $plugin->item->new_version : '0.00';
-						$version_from = $this->log_messages[$type][$plugin->item->plugin]['version'];
-						list($version, $status) = $this->set_status_and_version($plugin->result, $version_from, $version, $status);
-						$notes = '';
-						if (isset($plugin->messages) && is_array($plugin->messages)) {
-							foreach ($plugin->messages as $message) {
-								$notes .= $message . "\n\r\n\r";
-							}
-						}
-						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes, $stacktrace);
-					}
-					break;
-				case 'theme':
-					foreach ($results as $theme) {
-						if (!isset($theme->item->theme)) continue;
-						$name = $theme->name;
-						$status = 0;
-						$version = $theme->item->new_version;
-						$version_from = $this->log_messages[$type][$theme->item->theme]['version'];
-						list($version, $status) = $this->set_status_and_version($theme->result, $version_from, $version, $status);
-						$notes = '';
-						if (isset($theme->messages) && is_array($theme->messages)) {
-							foreach ($theme->messages as $message) {
-								$notes .= $message . "\n\r";
-							}
-						}
-						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, $notes, $stacktrace);
-					}
-					break;
-				case 'translation':
-					foreach ($results as $translation) {
-						$status = is_wp_error($translation->result) ? 0 : 1;
-						$version_from = $translation->item->version;
-						$version = (1 == $status) ? $translation->item->version : '';
-						$name = $this->get_name_for_update($translation->item->type, $translation->item->slug);
-						$name = $name . ' (' . $translation->item->language . ')';
-						$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-						$this->insert_log($name, $type, $version_from, $version, 'automatic', $status, 0, '', $stacktrace);
-					}
-					break;
-			}
-		}
-	}
-
-	/**
-	 * Sets version number and upgrade status
-	 *
-	 * @param object  $result       Result of update object
-	 * @param string  $version_from Version to upgrade from
-	 * @param string  $version      Version to upgrade to
-	 * @param integer $status       Status of upgrade process
-	 *
-	 * @return array An array of version number and upgrade status
-	 */
-	protected function set_status_and_version($result, $version_from, $version, $status) {
-		if (!is_wp_error($result)) {
-			if ($version_from == $version || null === $result) {
-				$version = $version_from;
-				$status = 0;
-			} else {
-				$status = 1;
-			}
-		}
-		return array($version, $status);
 	}
 
 	/**
@@ -486,83 +568,6 @@ class MPSUM_Logs {
 		return '';
 	}
 
-
-	/**
-	 * Manual updates
-	 *
-	 * @param array $upgrader_object Upgrade Object(s)
-	 * @param array $options 		 Update options
-	 * @return void
-	 */
-	public function manual_updates($upgrader_object, $options) {
-		if (!isset($options['action']) || 'update' !== $options['action']) return;
-		$this->log_messages = $this->get_cached_version_information();
-		$user_id = $this->log_messages['user_id'];
-		if (0 == $user_id) return; // If there is no user, this is not a manual update
-		if (true === $this->auto_update) return;
-
-		switch ($options['type']) {
-			case 'translation':
-				foreach ($options['translations'] as $translation) {
-					$status = 1;
-					$version = $translation['version'];
-					$version_from = $version;
-					$slug = $translation['slug'];
-					$name = $this->get_name_for_update($translation['type'], $slug);
-					$name = $name . ' (' . $translation['language'] . ')';
-					$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-					$this->insert_log($name, 'translation', $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
-				}
-				break;
-			case 'core':
-				// Checking on the re-install status
-				if (!empty($this->log_messages['core']['reinstall'])) {
-					$status = 1;
-				} else {
-					$status = $version_from !== $version ? 1 : 0;
-				}
-				
-				$version_from = $this->log_messages['core']['from_version']; // Version curently installed
-				$version = $this->log_messages['core']['version']; // Latestr WP Version
-				$name = 'WordPress ' . $version;
-				$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-
-				$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
-				break;
-			case 'plugin':
-				if (! empty($this->log_messages['plugin']) && isset($options['plugins']) && !empty($options['plugins'])) {
-					foreach ($options['plugins'] as $plugin) {
-						if (isset($this->log_messages['plugin'][$plugin])) {
-							$version_from = $this->log_messages['plugin'][$plugin]['version'];
-							$version = $this->log_messages['plugin'][$plugin]['new_version'];
-							$status = ($version_from == $version) ? 0 : 1;
-							$name = $this->log_messages['plugin'][$plugin]['name'];
-							$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-							$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
-						}
-					}
-				}
-				break;
-			case 'theme':
-				if (isset($options['themes']) && !empty($options['themes'])) {
-					foreach ($options['themes'] as $theme) {
-						$theme_data = wp_get_theme($theme);
-						if ($theme_data->exists()) {
-							if (!empty($this->log_messages['theme'][$theme])) {
-								$version_from = $this->log_messages['theme'][$theme]['version'];
-								$version = $theme_data->get('Version');
-								$status = ($version_from == $version) ? 0 : 1;
-								$name = $theme_data->get('Name');
-								$stacktrace = json_encode(debug_backtrace(false)); // phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
-								$this->insert_log($name, $options['type'], $version_from, $version, 'manual', $status, $user_id, '', $stacktrace);
-							}
-						}
-					}
-				}
-				break;
-		}
-	}
-
 	/**
 	 * Creates the log table
 	 *
@@ -644,5 +649,27 @@ class MPSUM_Logs {
 		$sql = "drop table if exists $tablename";
 		$wpdb->query($sql);
 		delete_site_option('mpsum_log_table_version');
+	}
+
+	/**
+	 * Normalise call stacks by clearing out unnecessary objects from their arguments list, leaving the arguments as a string if they're not in an array/object type. The call stacks should be one that is generated by debug_backtrace() function.
+	 *
+	 * @param array $backtrace The output of the debug_backtrace() function
+	 * @return array An array of associative arrays after being normalised
+	 */
+	public function normalise_call_stack_args($backtrace) {
+		foreach ((array) $backtrace as $index => $element) {
+			if (!isset($element['args']) || !is_array($element['args'])) $backtrace[$index]['args'] = array();
+			foreach ($backtrace[$index]['args'] as $arg_index => $arg) {
+				if (is_object($arg)) {
+					$backtrace[$index]['args'][$arg_index] = "Object(".get_class($backtrace[$index]['args'][$arg_index]).")";
+				} elseif (is_array($arg)) {
+					$backtrace[$index]['args'][$arg_index] = "Array(".count($backtrace[$index]['args'][$arg_index]).")";
+				} elseif (!is_string($backtrace[$index]['args'][$arg_index])) {
+					$backtrace[$index]['args'][$arg_index] = '';
+				}
+			}
+		}
+		return $backtrace;
 	}
 }

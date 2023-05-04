@@ -58,7 +58,7 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
-		add_action( 'elementor/widgets/widgets_registered', [ $this, 'action_register_widgets_manager_registration' ] );
+		add_action( 'elementor/widgets/register', [ $this, 'action_register_widgets_manager_registration' ] );
 		add_action( 'elementor/elements/categories_registered', [ $this, 'action_register_elementor_category' ] );
 		add_action( 'elementor/controls/controls_registered', [ $this, 'action_register_elementor_controls' ] );
 		add_action( 'elementor/preview/enqueue_styles', [ $this, 'action_enqueue_resources' ] );
@@ -133,6 +133,8 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 	 * @since 5.4.0
 	 */
 	public function action_enqueue_resources() {
+		tribe_asset_enqueue( 'tribe-events-v2-single-skeleton' );
+		tribe_asset_enqueue( 'tribe-events-v2-single-skeleton-full' );
 		$this->container[ Widgets\Widget_Countdown::class ]->enqueue_editor_assets();
 		$this->container[ Widgets\Widget_Event_List::class ]->enqueue_editor_assets();
 		$this->container[ Widgets\Widget_Event_Single_Legacy::class ]->enqueue_editor_assets();

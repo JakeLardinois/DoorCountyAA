@@ -17,8 +17,22 @@
  * @see tribe_get_event() For the format of the event object.
  */
 
+use Tribe\Events\Views\V2\View_Interface;
+
 // Bail if there are no more events to show.
-if ( empty( $more_events ) || empty( $more_url ) || empty( $view->get_context()->get( 'is-widget', false ) ) ) {
+if ( empty( $more_events ) ) {
+	return;
+}
+
+if ( empty( $more_url ) ) {
+	return;
+}
+
+if ( ! $this->get( 'view' ) instanceof View_Interface ) {
+	return;
+}
+
+if ( ! $view->get_context()->get( 'is-widget', false ) ) {
 	return;
 }
 ?>
@@ -32,7 +46,7 @@ if ( empty( $more_events ) || empty( $more_url ) || empty( $view->get_context()-
 		<?php
 		echo esc_html(
 			sprintf(
-				_n( '+ %d More', '+ %d More', $more_events, 'the-events-calendar' ),
+				_n( '+ %d More', '+ %d More', $more_events, 'tribe-events-calendar-pro' ),
 				$more_events
 			)
 		)

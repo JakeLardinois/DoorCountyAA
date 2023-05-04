@@ -2,6 +2,7 @@
 
 namespace Tribe\Events\Pro\Admin\Manager;
 
+use Tribe__Events__Editor__Compatibility as Compatibility;
 use Tribe__Main;
 
 /**
@@ -23,8 +24,10 @@ class Settings {
 	 * @return array Modified fields.
 	 */
 	public function filter_include_settings( array $fields = [] ) {
-		$fields = Tribe__Main::array_insert_after_key(
-			'tribeEventsMiscellaneousTitle',
+		// When it exists, make sure this comes before the blocks editor setting.
+		$insert = ! empty( $fields[ Compatibility::$blocks_editor_key ] ) ? Compatibility::$blocks_editor_key : 'disable_metabox_custom_fields';
+		$fields = Tribe__Main::array_insert_before_key(
+			$insert,
 			$fields,
 			$this->get_activate_settings()
 		);

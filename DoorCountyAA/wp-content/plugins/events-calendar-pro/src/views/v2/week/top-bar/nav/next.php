@@ -22,6 +22,7 @@
 		aria-label="<?php esc_attr_e( 'Next week', 'tribe-events-calendar-pro' ); ?>"
 		title="<?php esc_attr_e( 'Next week', 'tribe-events-calendar-pro' ); ?>"
 		data-js="tribe-events-view-link"
+		rel=<?php echo esc_attr( $next_rel); ?>
 	>
 		<?php $this->template( 'components/icons/caret-right', [ 'classes' => [ 'tribe-common-c-btn-icon__icon-svg', 'tribe-events-c-top-bar__nav-link-icon-svg' ] ] ); ?>
 	</a>

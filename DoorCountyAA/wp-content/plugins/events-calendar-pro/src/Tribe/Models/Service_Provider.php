@@ -49,7 +49,7 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 		$is_recurring = tribe_is_recurring_event( $post->ID );
 
 		$post->recurring     = $is_recurring;
-		$post->permalink_all = $is_recurring ? tribe_all_occurences_link( $post->ID, false ) : null;
+		$post->permalink_all = $is_recurring ? tribe_all_occurrences_link( $post->ID, false ) : null;
 
 		return $post;
 	}

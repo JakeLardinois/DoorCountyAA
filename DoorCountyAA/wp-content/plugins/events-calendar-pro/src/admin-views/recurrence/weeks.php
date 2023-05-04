@@ -82,4 +82,15 @@
 		/>
 		<?php echo esc_html( tribe_wp_locale_weekday( 'Saturday', 'initial' ) ); ?>
 	</a>
+	<?php
+	/**
+	 * Filters the recurrence week days after template for the recurrence UI.
+	 *
+	 * @param $template The recurrence week days after template.
+	 */
+	$template = apply_filters( 'tribe_events_pro_recurrence_template_recurrence_week_days_after', '' );
+	if ( ! empty( $template ) ) {
+		echo $template;
+	}
+	?>
 </div>

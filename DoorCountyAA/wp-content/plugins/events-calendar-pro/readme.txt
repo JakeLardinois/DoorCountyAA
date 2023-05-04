@@ -1,12 +1,12 @@
-=== The Events Calendar PRO ===
+=== The Events Calendar Pro ===
 
 Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp, GeoffBel, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, venue, organizer, dates, date, google maps, conference, workshop, concert, meeting, seminar, summit, class, the events calendar, widget, pro
 Donate link: https://evnt.is/29
-Requires at least: 5.6
-Stable tag: 5.14.1.1
-Tested up to: 6.0
-Requires PHP: 7.1
+Requires at least: 5.8.6
+Stable tag: 6.0.11
+Tested up to: 6.2
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,15 +14,15 @@ A premium add-on to The Events Calendar plugin (required), enabling recurrence, 
 
 == Description ==
 
-<a href="https://evnt.is/3r">Events Calendar PRO</a> is a awesomely dynamic add-on for The Events Calendar that adds more features and functionality to an already robust plugin.
+<a href="https://evnt.is/3r">Events Calendar Pro</a> is a awesomely dynamic add-on for The Events Calendar that adds more features and functionality to an already robust plugin.
 
-The Events Calendar allows you to create and manage events with ease from right within your WordPress dash; no shortcode is needed (nor is one available).  With Events Calendar PRO, you can go even further with recurring events, more calendar views (including Day and Week), Location Search, more widget options, and much more.
+The Events Calendar allows you to create and manage events with ease from right within your WordPress dash; no shortcode is needed (nor is one available).  With Events Calendar Pro, you can go even further with recurring events, more calendar views (including Day and Week), Location Search, more widget options, and much more.
 
-Plus, Events Calendar PRO users get access to our premium support forums. Need help or have a question? Post there and we'll get back to you within 24 hours (during the week). We're proud of our great support team and want to help you crush it with Events Calendar PRO.
+Plus, Events Calendar Pro users get access to our premium support forums. Need help or have a question? Post there and we'll get back to you within 24 hours (during the week). We're proud of our great support team and want to help you crush it with Events Calendar Pro.
 
 = Features =
 
-The following lists the PRO-only features. For a list of The Events Calendar features, check out that plugin's readme.txt or check out <a href="https://evnt.is/3s">the Product page</a>.
+The following lists the Pro-only features. For a list of The Events Calendar features, check out that plugin's readme.txt or check out <a href="https://evnt.is/3s">the Product page</a>.
 
 Just getting started? You'll want to watch and read through the <a href="https://evnt.is/3t">New User Primer</a>.
 
@@ -39,7 +39,7 @@ Just getting started? You'll want to watch and read through the <a href="https:/
 
 == Installation ==
 
-Remember, to use Events Calendar PRO you need to also be running The Events Calendar. You'll need to follow these steps for both plugins, starting with The Events Calendar.
+Remember, to use Events Calendar Pro you need to also be running The Events Calendar. You'll need to follow these steps for both plugins, starting with The Events Calendar.
 
 1. From the dashboard of your site, navigate to Plugins --> Add New.
 2. Select the Upload option and hit "Choose File."
@@ -59,7 +59,7 @@ That's it! Just configure your settings as you see fit, and you're on your way t
 
 = Where to Begin =
 
-If this is your first time using The Events Calendar and Events Calendar PRO, you're in for a treat! Here are some basics we've found helpful for users jumping into it for the first time:
+If this is your first time using The Events Calendar and Events Calendar Pro, you're in for a treat! Here are some basics we've found helpful for users jumping into it for the first time:
 
 * Our <a href="https://evnt.is/3t">New User Primer</a> was designed for folks in your exact position. Featuring both step-by-step videos and written walkthroughs that feature accompanying screenshots, the primer aims to take you from zero to hero in no time.
 * <a href="https://evnt.is/3v">Installation/Setup FAQs</a> from our Support page can help give an overview of what the plugin can and cannot do. This section of the FAQs may be helpful as it aims to address any basic install questions not addressed by the new user primer.
@@ -71,13 +71,13 @@ Otherwise, if you're feeling adventurous, you can get started by heading to the 
 
 == Frequently Asked Questions ==
 
-= Is there a shortcode available for Events Calendar PRO? +
+= Is there a shortcode available for Events Calendar Pro? +
 
 No, this plugin does not use a shortcode nor is one available at the time being.
 
 = Are there any troubleshooting steps you'd suggest I try that might resolve my issue before I post a new thread? =
 
-First, make sure that you're running the latest version of The Events Calendar (4.0 as of this release). If you're running Events Calendar PRO it needs to match the version number of The Events Calendar. And if you've got any other add-ons, make sure those are current / running the latest code as well.
+First, make sure that you're running the latest version of The Events Calendar (4.0 as of this release). If you're running Events Calendar Pro it needs to match the version number of The Events Calendar. And if you've got any other add-ons, make sure those are current / running the latest code as well.
 
 The most common issues we see are either plugin or theme conflicts. You
 can test if a plugin or theme is conflicting by manually deactivating other plugins until just The Events Calendar 4.0 is running on your site. If the issue persists from there, revert to the default Twenty Twelve theme. If the issue is resolved after deactivating a specific plugin or your theme, you'll know that is the source of the conflict.
@@ -86,13 +86,13 @@ Note that we aren't going to say "tough luck" if you identify a plugin/theme con
 
 = I'm still stuck. Where do I go to file a bug or ask a question? =
 
-If you're already a PRO user, you're entitled access to our more actively-monitored <a href="https://evnt.is/3x">PRO forums</a> at the theeventscalendar.com website. We can provide a deeper level of support here and hit these forums on a daily basis during the work week. No post should go more than 24-hours during that time without a response.
+If you're already a Pro user, you're entitled access to our more actively-monitored <a href="https://evnt.is/3x">Pro forums</a> at the theeventscalendar.com website. We can provide a deeper level of support here and hit these forums on a daily basis during the work week. No post should go more than 24-hours during that time without a response.
 
-= What add-ons are available for The Events Calendar and Events Calendar PRO, and where can I read more about them? =
+= What add-ons are available for The Events Calendar and Events Calendar Pro, and where can I read more about them? =
 
-Currently, the following add-ons are available for The Events Calendar/Events Calendar PRO:
+Currently, the following add-ons are available for The Events Calendar/Events Calendar Pro:
 
-* <a href="https://evnt.is/18wi">Events Calendar PRO</a>, for adding premium calendar features like recurring events, advanced views, cool widgets, shortcodes, additional fields, and more!
+* <a href="https://evnt.is/18wi">Events Calendar Pro</a>, for adding premium calendar features like recurring events, advanced views, cool widgets, shortcodes, additional fields, and more!
 * <a href="https://evnt.is/18wj">Event Tickets</a> (free), which allows you to collect RSVPs to events. It can run alongside The Events Calendar or as a standalone plugin that adds RSVP functionality to WordPress posts and pages.
 * <a href="https://evnt.is/18wk">Event Tickets Plus</a>, which allows you to sell tickets for your events using your favorite e-commerce platform.
 * <a href="https://evnt.is/2g">Community Events</a>, for allowing frontend event submission from your readers.
@@ -131,20 +131,20 @@ The plugin is produced by <a href="https://evnt.is/45">The Events Calendar</a>.
 = Current Contributors =
 
 <a href="https://profiles.wordpress.org/brianjessee">Brian Jessee</a>
-<a href="https://profiles.wordpress.org/mitogh">Crisoforo Gaspar</a>
 <a href="https://profiles.wordpress.org/geoffgraham">Geoff Graham</a>
 <a href="https://profiles.wordpress.org/bordoni">Gustavo Bordoni</a>
 <a href="https://profiles.wordpress.org/leahkoerper">Leah Koerper</a>
 <a href="https://profiles.wordpress.org/lucatume">Luca Tumedei</a>
 <a href="https://profiles.wordpress.org/borkweb">Matthew Batchelder</a>
 <a href="https://profiles.wordpress.org/neillmcshea">Neill McShea</a>
-<a href="https://profiles.wordpress.org/paulskim">Paul Kim</a>
 <a href="https://profiles.wordpress.org/camwynsp">Stephen Page</a>
 <a href="https://profiles.wordpress.org/vicskf">Victor Zarranz</a>
 <a href="https://profiles.wordpress.org/zbtirrell">Zachary Tirrell</a>
 
 = Past Contributors =
 
+<a href="https://profiles.wordpress.org/mitogh">Crisoforo Gaspar</a>
+<a href="https://profiles.wordpress.org/paulskim">Paul Kim</a>
 <a href="https://profiles.wordpress.org/peterchester">Peter Chester</a>
 <a href="https://profiles.wordpress.org/roblagatta">Rob La Gatta</a>
 <a href="https://profiles.wordpress.org/reid.peifer">Reid Peifer</a>
@@ -206,7 +206,245 @@ Our Premium Plugins:
 * <a href="https://evnt.is/18h9" target="_blank">The Events Calendar: iCal Importer</a>
 * <a href="https://evnt.is/fa" target="_blank">The Events Calendar: Filter Bar</a>
 
+= [6.0] =
+
+Please see the changelog for the complete list of changes in this release.
+Previous versions of Events Calendar Pro are not cross-compatible with 6.X add-ons.
+Remember to always make a backup of your database and files before updating!
+
 == Changelog ==
+
+= [6.0.11] 2023-04-10 =
+
+* Enhancement - Add the option to display the Event Website on the Events List widget, [tribe_events_list] shortcode and Events List Elementor widget. [ECP-751]
+* Fix - Display the map on the single venue page based on the latitude and longitude values if said values are provided. [ECP-1470]
+* Fix - Fix type fatal error when using `wp_unique_post_slug` with unexpected data types. [ECP-1485]
+* Tweak - Changed views: `v2/venue/meta/map`, `v2/widgets/widget-events-list/event/website`
+* Language - 1 new strings added, 53 updated, 0 fuzzied, and 0 obsoleted
+
+= [6.0.10] 2023-03-20 =
+
+* Feature - Add Additional Fields with a filter to the Event Automator event details. [EVA-61]
+* Feature - Add Recurrence with a filter to the Event Automator event details. [EVA-33]
+* Fix - Advanced Post Manager integration issues. [TEC-4541, TEC-4542, TEC-4594]
+* Fix - Compatibility with ACF Post Object field. [TEC-4621]
+* Fix - During an update that splits a recurring event, in cases where there is a "Never Ends" limit it will now carry over to the right side of the split instead of setting an explicit "After X" limit. [ECP-1285]
+* Fix - Ensure full support for the translation of Series in WPML context. [ECP-1429]
+* Fix - Ensure post list displays correctly after quick edit of Events. [ECP-1261]
+* Fix - Fixes an issue after certain types of event updates, gutenberg would display "Changes you made may not be saved" alert. This was do to the post state being considered dirty when ID's changed in the response. [ECP-1452]
+* Fix - In the admin sometimes link strings will be null in the `get_edit_post_link` hook callback. This will fix a fatal that was happening when string type was expected. [BTRIA-1689]
+* Fix - Language switcher link for Recurring Event Occurrences when using WPML. [ECP-1471]
+* Fix - Reload the Blocks Editor when breaking out an Event to avoid incoherent state. [ECP-1386]
+* Fix - This fixes scenarios where the redirect URL would point to the recurring event (not an RDATE) instead of remaining on an existing original occurrence. [ECP-1424]
+* Fix - Update auto-generated Series status when the Event status is updated with quick edit. [ECP-1224]
+* Fix - When a recurring event has multiple occurrences on the same day, the permalinks were identical. This adds permalinks in these edge cases that are unique to the occurrence. [ECP-1380]
+* Tweak - Add empty alt tag to featured images across all views when a user doesn't explicitly define one to improve SEO. [ECP-1454]
+* Tweak - Ensure the individual Series' titles on the Events list table link to their respective Admin pages.  [ECP-1216]
+* Tweak - Added filters: `tec_pro_automator_map_event_recurrence_details`, `tec_pro_automator_map_event_additional_fields_details`, `tec_pro_eva_zapier_integration_recurring_fields_enabled`, `tec_pro_eva_zapier_integration_additional_fields_enabled`, `wpml_post_language_details`, `wpml_element_type`, `wpml_element_trid`, `wpml_get_element_translations`, `wpml_object_id`, `tec_events_pro_recurring_event_permalink_sequence_number`
+* Tweak - Added actions: `wpml_set_element_language_details`
+* Tweak - Changed views: `v2/photo/event/featured-image`, `v2/week/grid-body/events-day/event/tooltip/featured-image`, `v2/week/mobile-events/day/event/featured-image`
+* Language - 0 new strings added, 70 updated, 3 fuzzied, and 0 obsoleted
+
+= [6.0.9.2] 2023-03-06 =
+
+* Fix - Restructure how Recurring blocks are bundled with WebPack to resolve inconsistencies with loading that caused the Series creation to not work. [ECP-1472]
+
+= [6.0.9.1] 2023-02-28 =
+
+* Fix - Prevent blocks editor loading order of Assets from breaking Recurring events and Related blocks. [ECP-1467]
+
+= [6.0.9] 2023-02-22 =
+
+* Version - Events Calendar PRO 6.0.9 is only compatible with The Events Calendar 6.0.10 and higher.
+* Tweak - PHP version compatibility bumped to PHP 7.4
+* Tweak - Version Composer updated to 2
+* Tweak - Version Node updated to 18.13.0
+* Tweak - Version NPM update to 8.19.3
+* Tweak - Reduce JavaScript bundle sizes for Blocks editor
+* Deprecation - `TEC\Events_Pro\Custom_Tables\V1\Editors\Block\Provider::enqueue_block_editor_duplicate_assets()`.
+
+= [6.0.8] 2023-02-09 =
+
+* Fix - Weekly recurrence message fatal on PHP 8.0+ resolved, also resolves translations that were not applying. [ECP-1451]
+* Fix - On classic editor, when editing a single occurrence that has a recurring rule, the start time for the single occurrence is displayed in the description of the recurring rule. [ECP-1295]
+* Fix - Fix issue where splitting the first occurrence in a recurring event that has a limit by a count, will generate an additional occurrence at the end of the range. [ECP-1344]
+* Fix - Ensure the zoom level set under `Events → Settings → Display → Google Maps default zoom level` is applied to the venue meta page. [TEC-4634]
+* Fix - Change the type of the date-related custom tables date fields to VARCHAR to avoid warnings on stricter SQL modes. [TEC-4536]
+* Fix - Ensure the code will work correctly when the Events' category taxonomy is unregistered. [TEC-4664]
+* Fix - Ensure the `Navigation Style` setting in the `Elementor Event Widget` doesn't appear to be blank when the corresponding `Navigation Option` is disabled in the `Content tab`. [ECP-1204]
+* Tweak - Update the Event Series tooltip label on hover. [ECP-1428]
+* Tweak - Ensure all Google Map iframes have a title attribute to improve accessibility. [TEC-4243]
+* Tweak - Replace the `elementor/widgets/widgets_registered` hook with `elementor/widgets/register` since it was deprecated since Elementor version 3.5.0. [ECP-1449]
+* Tweak - Replace the `Elementor\Widgets_Manager::register_widget_type` method with `Elementor\Widgets_Manager::register` since it was deprecated since Elementor version 3.5.0. [ECP-1449]
+* Tweak - Display the `Recurring Event` label in the classic editor when an event has a ticket. [ECP-1234]
+* Tweak - Fix the template path in the src/views/v2/photo/event/date-tag.php docblock [ECP-1448]
+* Tweak - Added actions: `tribe_log`
+* Tweak - Changed views: `v2/map/map/google-maps/default`, `v2/photo/event/date-tag`, `v2/venue/meta/map`
+* Language - 3 new strings added, 79 updated, 55 fuzzied, and 0 obsoleted
+
+= [6.0.7] 2023-01-26 =
+
+* Fix - Modifications to custom tables registration to ensure all sites get the new 6.0 table schema, preventing 404 and other related issues. [TEC-4631]
+* Language - 0 new strings added, 217 updated, 1 fuzzied, and 0 obsoleted
+
+= [6.0.6] 2023-01-18 =
+
+* Version - Events Calendar PRO 6.0.6 is only compatible with The Events Calendar 6.0.7 and higher
+* Fix - When trashing a single, or "RDATE", occurrence from a recurring event, retain the recurring occurrences and don't apply any exclusions. [ECP-1332]
+* Fix - Avoid user locale overriding the site locale during rewrite rules generation. [TEC-3733]
+* Fix - Numerous issues related to the translation of Views rewrite slugs. [TEC-3733]
+* Fix - Handle the case where rewrite rules map to arrays avoiding fatal errors. [TEC-4567]
+* Fix - Correct logic for tribe_is_view functions to account for default view. [TEC-4586]
+* Fix - Handle problems related to Time Format not using 24h breaking the Date update on Classic Editor [ECP-1441]
+* Fix - Resolve the issue of the Map view URL not being translatable. [ECP-1406]
+* Tweak - Change conditional in Assets that handles Elementor.
+* Tweak - Prevent loading the more-events template when the view is not defined. [TEC-4586]
+* Tweak - Ensure Featured Venue Widget uses the same slug as the View class so it does not load the default view. [TEC-4586]
+* Tweak - Convert all uses of (view)->get_slug() to (view)::get_view_slug(). [TEC-4586]
+* Tweak - Reorganize Event settings a bit. [TEC-4627]
+* Tweak - Added filters: `tribe_all_occurrences_link`, `tec_is_venue_view`, `tec_is_organizer_view`
+* Tweak - Removed filters: `tec_events_pro_custom_tables_v1_series_default_view`, `tribe_all_occurences_link`
+* Tweak - Changed views: `v2/widgets/shortcodes/components/view-more`
+
+= [6.0.5.1] 2022-12-14 =
+
+* Fix - Avoid fatal when `tribe_get_global_query_object` is called too early. [BTRIA-1556]
+
+= [6.0.5] 2022-12-14 =
+
+* Fix - Fix for recursion error in `Provisional_Post_Cache`, looping on the `ID_Generator::current()` call. [ECP-1432]
+* Fix - Fixes `Fatal error: Uncaught TypeError: Cannot increment WP_Post in ...Series/Autogenerated_Series.php on line 359` when unintentionally incrementing WP_Post object in PHP 8. [ECP-1427]
+* Fix - Adds support for `series` repository arguments in Tribe__Events__Pro__Repositories__Event. [ECP-1417]
+* Fix - Prevent problems with international date formats for the timepicker causing Events to be saved with the incorrect Start and End date. [ECP-1352]
+* Fix - Prevent fatals when using Widgets in a Shortcode [ECP-1434]
+* Fix - Correct the override template pathing for the series templates. [ECP-1400]
+* Tweak - Add aria label to Google Maps iFrame embed to improve accessibility. [TEC-4404]
+* Tweak - Update the recurrence deletion notice copy to help users make clear and informed decisions about removing recurrences. [ECP-1413]
+* Tweak - Add some context for abbreviated day translations. [ECP-1430]
+* Tweak - Changed views: `custom-tables-v1/components/icons/series`, `custom-tables-v1/components/series-relationship-icon-link-pill`, `custom-tables-v1/components/series-relationship-icon-link`, `custom-tables-v1/components/series-relationship-icon`, `custom-tables-v1/components/series-relationship-marker-link`, `custom-tables-v1/recurrence/hide-recurring`, `custom-tables-v1/single/series-relationship-marker`, `v2/map/map/google-maps/default`, `v2/venue/meta/map`, `v2/widgets/shortcodes/components/after`, `v2/widgets/shortcodes/components/before`, `v2/widgets/shortcodes/components/title`
+* Language - 10 new strings added, 3 updated, 0 fuzzied, and 6 obsoleted
+
+= [6.0.4] 2022-11-29 =
+
+* Version - Events Calendar PRO 6.0.4 is only compatible with The Events Calendar 6.0.5 and higher
+* Feature - Reorganization of Event Settings. [TCMN-149]
+* Fix - Prevent events from outside a series from showing on the series summary page. [ECP-1372]
+* Fix - Fix a query issue where getting Event taxonomy terms would compromise the following query results. [ECP-1416]
+* Fix - Avoid array access errors when adding a date exclusions to recurrence rules. [ECP-1419]
+* Deprecation - `Tribe__Events__Pro__Main::filter_settings_tab_fields()`.
+* Language - 78 new strings added, 231 updated, 3 fuzzied, and 22 obsoleted.
+
+= [6.0.3] 2022-11-15 =
+
+* Version - Events Calendar PRO 6.0.3 is only compatible with The Events Calendar 6.0.4 and higher
+* Fix - Prevent broken view related `tribe_is_*()` methods to be broken when using with WordPress 6.1 [TEC-4552]
+* Fix - Fix for migrating offset RRULE with different time > The RRULE shows as being the same time as the first occurrence. [ECP-1269]
+* Fix - Fix for fatal when saving an empty recurrence date in classic editor. [ECP-1363]
+* Fix - Refactor Custom Tables v1 post-decorating code to avoid serialization/unserialization issues. [TEC-4379]
+* Fix - Fixed issue where "Event will not occur" option doesn't work unless events begin at the top of the hour (:00). [ECP-1355]
+* Fix - Fixed fatal error with queueing of the migration telemetry report. [ECP-1403]
+* Fix - Avoid fatal errors when hydrating Occurrences cache on incoherent database or cache state. [ECP-1402]
+* Fix - Ensure view labels are translated appropriately. [TEC-4485]
+* Fix - Prevent `E_ERROR` when using third-party plugins with blocks editor around `tec_event_series()` method [ECP-1409]
+* Fix - Avoid type errors in the `tec_events_pro_blocks_recurrence_meta` filter. [TEC-4559]
+* Fix - Ensure tribe() singletons are bound before attempting to use them. [ECP-1396]
+* Fix - Avoid duplicated queries by including a memoization for Occurrence data. [TBD]
+* Fix - Prevent errors when adding exclusion dates to recurring events using the Custom Tables implementation. [ECP-1401]
+* Fix - Mitigated PHP errors related Occurrence and Provisional Post objects. [ECP-1402]
+* Language - 6 new strings added, 113 updated, 0 fuzzied, and 0 obsoleted.
+
+= [6.0.2.1] 2022-11-03 =
+
+* Fix - Fixed an issue where migrated Recurring Event Occurrences would not be displayed on the frontend. [ECP-1398]
+* Fix - Refactor Custom Tables v1 post-decorating code to avoid serialization/unserialization issues. [TEC-4379]
+
+= [6.0.2] 2022-10-20 =
+
+* Fix - Series Post Type now is registered with `with_front => false` which prevents the URL weirdness for Series Archive page. [ECP-1340]
+* Fix - Correct a few misnamed custom prop references. [TEC-4445]
+* Fix - Ensure all the Virtual Event assets required by the Elementor Event widget load correctly. [ECP-1255]
+* Fix - Remove strict type hinting from Custom Tables v1 code that could cause fatals in some environments. [ECP-1343]
+* Fix - Avoid post ID related issues in Custom Tables v1 queries. [TEC-4770]
+* Fix - Solve issues with unregistred Series post type during migration. [ECP-1321]
+* Fix - Redirect was failing on edge case where RDATE would be split to new event. Centralized redirection. [ECP-1366]
+* Fix - Language fix. A typo in evaluating whether an occurrence update notice message was for a recurring event or not, would cause to evaluate incorrectly. [ECP-1366]
+* Fix - Editing an RDATE occurrence > Issue when saving for "This and following events". The events would be split but the RDATEs were not moved properly and the date would not adjust correctly. [ECP-1361]
+* Fix - Improve the logic of the Blocks Editor code to detect recurring events. [ECP-1374]
+* Fix - Ensure Week View checks positive for `tribe_is_by_date`. [TEC-4509]
+* Fix - Some "event updated" messages were displaying wrong verbs and a duplicate published notice was showing. [ECP-1383]
+* Fix - Correct some migration errors around ensuring we have an object before accessing its properties. [ECP-1361]
+* Tweak - Hook into the filter in TEC to allow Week view to be listed as a by-date-view. [TEC-4458]
+* Tweak - Improve some error messaging around migrations. [ECP-1336]
+* Language - 3 new strings added, 126 updated, 0 fuzzied, and 3 obsoleted.
+
+= [6.0.1] 2022-09-22 =
+
+* Feature - Add a link to convert an Event to single in the Events Manager and Series edit screens [ECP-1308]
+* Fix - Prevent fatal Fatal error `Call to undefined method DateTimeImmutable::format_i18n()` on Week view that occurred on certain versions of php 8.0 [ECP-1346]
+* Fix - Correct some translation domains pointing to the wrong plugin. [ECP-1229]
+* Fix - Correct a mismatch between the get_terms filter and our hooked function signature. [ECP-1327]
+* Fix - Normalize and reformat Event recurrence and date-related meta before migration to fix a number of migration warnings. [ECP-1304]
+* Fix - Fix regression that was making the Events Calendar PRO tabs show up on the Event Tickets settings. [ECP-1338]
+* Fix - Ensure we don't try to check nonexistent globals ($_POST, $_GET, etc). [ECP-1162]
+* Fix - Correct a block editor fatal. [ECP-1330]
+* Fix - Fix a fatal in the mini-calendar widget. [ECP-1317]
+* Fix - Ensure that taxonomies get carried over when splitting recurring events. [ECP-1303]
+* Fix - Ensure recurring events have a series generated for them when one is not specified. [ECP-1274]
+* Fix - Prevent duplicated JOINs on View Series filters. [ECP-1246]
+* Fix - Prevent editing the first occurrence of a recurring event from creating a new event. [ECP-1232]
+* Tweak - Add some explanatory text to the Single Update option. [ECP-1307]
+* Tweak - Prevent conflicts with the WooCommerce product page shortcode when in the editor. [ECP-1231]
+* Language - 6 new strings added, 130 updated, 1 fuzzied, and 2 obsoleted
+
+= [6.0.0] 2022-09-06 =
+
+* Version - Events Calendar PRO 6.0.0 is only compatible with The Events Calendar 6.0.0 and higher
+* Feature - Custom tables and optimization of Cache Primers to enable reduced and stabilized number of queries on Event views.
+* Feature - Event Series are available to manage Recurring Events.
+* Feature - Inclusion of Event Series custom table `{$prefix}_tec_series_relationships`.
+* Feature - Duplication of Events.
+* Fix - Avoid infinite loops in some combinations of recurrence rules and dates.
+* Language - 323 new strings added, 321 updated, 4 fuzzied, and 59 obsoleted
+* Tweak - Legacy views are now fully deprecated and most of the template files and code was removed, please see other changelog items to see modifications.
+* Tweak - Added filters: `tec_events_pro_custom_tables_v1_redirect_id`, `tec_events_pro_custom_tables_v1_duplicate_arguments`, `tec_events_pro_custom_tables_v1_duplicate_event_taxonomies`, `tec_events_pro_custom_tables_v1_duplicate_event_additional_meta`, `tec_events_pro_custom_tables_v1_duplicate_event_virtual_meta`, `tec_events_pro_custom_tables_v1_duplicate_event_virtual_meeting_meta`, `tec_events_pro_custom_tables_v1_series_occurrent_list_metabox_per_page`, `tribe_events_pro_recurrence_template_custom_recurrence_months_before`, `tribe_events_pro_recurrence_template_year_same_day_select_before`, `tec_events_pro_lock_rules_ui`, `tec_events_pro_lock_exclusions_ui`, `tec_events_pro_custom_tables_v1_editor_occurrences_months_in_advance`, `tec_events_pro_custom_tables_v1_provisional_post_base_threshold`, `tec_events_pro_custom_tables_v1_provisional_post_base_initial`, `tec_events_custom_tables_v1_clone_post_fields`, `tec_events_custom_tables_v1_clone_post_meta`, `tec_events_pro_custom_tables_v1_migration_enabled`, `tec_events_pro_custom_tables_v1_occurrence_cache_post`, `tec_events_pro_custom_tables_v1_occurrence_cache_meta`, `tec_events_custom_tables_v1_remove_series_autogenerated_flag`, `tribe_events_register_series_type_args`, `tribe_series_label_singular`, `tribe_series_label_plural`, `tribe_series_label_singular_lowercase`, `tribe_series_label_plural_lowercase`, `tec_community_events_use_series`, `tec_events_pro_custom_tables_v1_redirect_event_link_to_series`, `tec_events_pro_custom_tables_v1_template_assets_is_event_single`, `tec_events_pro_custom_tables_v1_series_default_view`, `tec_events_pro_custom_tables_v1_series_event_view_slug`, `the_title`, `tec_events_custom_tables_v1_redirect_nonce_action`, `tec_events_pro_manager_boundary_datetime_by_status`, `tribe_events_pro_editor_config`, `tec_events_pro_recurrence_meta_get`, `tec_events_pro_blocks_recurrence_meta`, `tec_events_pro_editor_meta_value`, `tec_events_pro_recurrence_update_commit`, `tec_events_pro_recurrence_meta_update`, `tribe_events_pro_recurrence_recurrence_strings`, `tribe_events_pro_recurrence_admin_template_strings`, `tribe_events_pro_recurrence_template_rule_type_buttons_after`, `tribe_events_pro_recurrence_template_add_recurrence_button_after`, `tribe_events_pro_exclusion_template_rule_type_buttons_after`, `tribe_events_pro_recurrence_template_recurrence_month_on_the_after`, `tribe_events_pro_recurrence_template_recurrence_week_days_after`, `tribe_events_pro_recurrence_template_year_not_same_day_after`, `tec_events_custom_tables_v1_show_series_title`, `tec_events_custom_tables_v1_series_marker_label_classes`
+* Tweak - Removed filters: `tribe_events_pro_google_maps_api`, `tribe_events_pro_countdown_widget_limit`, `tribe_events_pro_countdown_widget_paged`, `tribe_events_pro_countdown_widget_allowed_status`, `widget_title`, `tribe_events_`, `tribe_events_widget_jsonld_enabled`, `tribe_events_pro_add_title`, `tribe_events_pro_js_version`, `tribe_allow_widget_on_post_page_edit_screen`, `tribe_events_display_user_toggle_subsequent_recurrences`, `tribe_events_ajax_response`, `tribe_events_pro_shortcodes_countdown_widget_class`, `tribe_events_pro_shortcodes_list_widget_class`, `tribe_events_pro_shortcodes_venue_widget_class`, `tribe_events_pro_tribe_events_shortcode_truthy_values`, `tribe_events_pro_tribe_events_shortcode_output`, `tribe_events_pro_tribe_events_shortcode_wrapper_classes`, `tribe_events_pro_header_attributes`, `tribe_events_pro_week_hour_format`, `tribe_events_pro_week_header_date_format`, `tribe_events_pro_this_week_widget_query_args`, `tribe_events_this_week_date_format`, `tribe_events_pro_venue_widget_event_query_args`, `tribe_events_pro_stylesheet_url`, `tribe_get_map_view_permalink`, `tribe_get_week_permalink`, `tribe_get_photo_view_permalink`, `tribe_events_single_organizer_posts_per_page`, `tribe_organizer_upcoming_events`, `tribe_events_single_venue_posts_per_page`, `tribe_venue_upcoming_events`, `tribe_events_week_get_current_day`, `tribe_events_week_has_all_day_events`, `tribe_events_week_get_hours`, `tribe_events_week_get_days`, `tribe_events_week_day_header_classes`, `tribe_events_week_day_header`, `tribe_events_week_column_classes`, `tribe_events_week_get_the_date`, `tribe_events_week_event_attributes`, `tribe_events_the_mini_calendar_header_attributes`, `tribe_events_the_mini_calendar_prev_link`, `tribe_events_the_mini_calendar_title`, `tribe_events_the_mini_calendar_next_link`, `tribe_events_the_mini_calendar_day_link`, `tribe_events_get_mini_calendar_args`, `tribe_events_map_view_event_type`, `tribe_events_pro_min_calendar_widget_query_args`, `tribe_events_this_week_header_attributes`, `tribe_events_venue_widget_thumbnail_size`
+* Tweak - Added actions: `tec_events_pro_custom_tables_v1_before_duplicate_event`, `tribe_log`, `tec_events_pro_custom_tables_v1_after_duplicate_event`, `tec_events_pro_custom_tables_v1_editors_provider_registered`, `tec_events_custom_tables_v1_error`, `tec_events_pro_output_before_rules_ui`, `tec_events_pro_output_before_exclusions_ui`
+* Tweak - Removed actions: `tribe_events_pro_widget_render`, `tribe_events_pro_pre_get_posts`, `tribe_events_mini_cal_before_the_title`, `tribe_events_mini_cal_after_the_title`, `tribe_events_pro_tribe_events_shortcode_prepare`, `tribe_events_pro_tribe_events_shortcode_prepare_`, `tribe_events_pro_tribe_events_shortcode_prepare_view`, `tribe_events_pro_tribe_events_shortcode_pre_render`, `tribe_events_pro_tribe_events_shortcode_before_render`, `tribe_events_pro_tribe_events_shortcode_title_bar`, `tribe_events_pro_tribe_events_shortcode_after_render`, `tribe_events_pro_tribe_events_shortcode_post_render`, `tribe_events_this_week_widget_before_the_title`, `tribe_events_this_week_widget_after_the_title`, `tribe_events_venue_widget_before_the_title`, `tribe_events_venue_widget_after_the_title`, `tribe_events_before_template`, `tribe_events_after_template`, `tribe_events_before_header`, `tribe_events_before_header_nav`, `tribe_events_after_header_nav`, `tribe_events_after_header`, `tribe_events_before_loop`, `tribe_events_after_loop`, `tribe_events_before_footer`, `tribe_events_before_footer_nav`, `tribe_events_after_footer_nav`, `tribe_events_after_footer`, `tribe_events_inside_before_loop`, `tribe_events_inside_after_loop`, `tribe_events_before_the_event_title`, `tribe_events_after_the_event_title`, `tribe_events_before_the_meta`, `tribe_events_inside_cost`, `tribe_events_after_the_meta`, `tribe_events_before_the_content`, `tribe_events_after_the_content`, `tribe_events_before_the_title`, `tribe_events_after_the_title`, `tribe_events_widget_list_inside_before_loop`, `tribe_events_widget_list_inside_after_loop`, `tribe_events_mini_cal_before_header`, `tribe_events_mini_cal_after_header`, `tribe_events_mini_cal_before_the_grid`, `tribe_events_mini_cal_after_the_grid`, `tribe_events_mini_cal_list_inside_before_loop`, `tribe_events_mini_cal_list_inside_after_loop`, `tribe_events_before_this_week_title`, `tribe_events_after_this_week_title`, `tribe_events_venue_widget_before_the_list`, `tribe_events_list_venue_before_the_event_image`, `tribe_events_venue_widget_after_the_event_image`, `tribe_events_venue_widget_after_the_list`
+* Tweak - Changed views: `custom-tables-v1/components/icons/series`, `custom-tables-v1/components/series-relationship-icon-link-pill`, `custom-tables-v1/components/series-relationship-icon-link`, `custom-tables-v1/components/series-relationship-icon`, `custom-tables-v1/components/series-relationship-marker-link`, `custom-tables-v1/recurrence/hide-recurring`, `custom-tables-v1/single/series-relationship-marker`, `pro/list/venue-nav`, `pro/map-basic`, `pro/map`, `pro/map/content`, `pro/map/gmap-container`, `pro/map/loop`, `pro/map/nav`, `pro/map/single-event`, `pro/map/single-featured`, `pro/map/title-bar`, `pro/photo`, `pro/photo/content`, `pro/photo/loop`, `pro/photo/nav`, `pro/photo/single-event`, `pro/photo/title-bar`, `pro/week`, `pro/week/content`, `pro/week/loop-grid-allday`, `pro/week/loop-grid-hourly`, `pro/week/loop-grid`, `pro/week/mobile`, `pro/week/nav`, `pro/week/single-event`, `pro/week/title-bar`, `pro/week/tooltip`, `pro/widgets/countdown-widget`, `pro/widgets/list-widget`, `pro/widgets/mini-calendar-widget`, `pro/widgets/mini-calendar/grid`, `pro/widgets/mini-calendar/list`, `pro/widgets/mini-calendar/single-day`, `pro/widgets/this-week-widget`, `pro/widgets/this-week/loop-grid-day`, `pro/widgets/this-week/nav`, `pro/widgets/this-week/single-event`, `pro/widgets/venue-widget`, `v2/map/event-cards/event-card/tooltip/title`
+
+= [5.14.5] 2022-08-09 =
+
+* Feature - Add Elementor styling support to the `Events View` widget. [ECP-1106]
+* Fix - Add integrations to ensure the Brizy Page Builder plays well with the [tribe_events] shortcode. [ECP-1094]
+* Fix - Correct issue with Week and Day views on datepicker change. [ECP-1136]
+* Fix - Ensure the taxonomy dropdown works in Beaver Builder FE editor. [ECP-1129]
+* Tweak - Update the calendar print design. [TEC-4425]
+* Tweak - Added new function load_brizy_builder_integration to selectively load integrations for Brizy Page Builder. [ECP-1094]
+* Language - 31 new strings added, 313 updated, 0 fuzzied, and 318 obsoleted.
+
+= [5.14.4] 2022-07-20 =
+
+* Feature - Enabled Filter Bar on the admin Events manager. [FBAR-270]
+* Tweak - Add Tag filtering to the TEC `Events List` and `Events View` Elementor widgets. [ECP-1140]
+* Fix - Correct errors when filtering shortcodes or widgets by taxonomy. [ECP-1186]
+* Fix - Ensure custom fields are displayed correctly on the Elementor `Event Widget` for events created using the Block Editor. [ECP-1191]
+* Fix - Ensure the recurring event tooltip displays correctly on the Elementor `Event Widget` for events created using the classic editor. [ECP-1196]
+
+= [5.14.3] 2022-07-06 =
+
+* Fix - Ensure the `Next` arrow in `Photo` view navigates to the correct page when the `Main Events Page` is set as the homepage. [TEC-4247]
+* Fix - Correct admin url used to determine when assets are loaded for Event Settings. [ECP-1175]
+* Tweak - Remove the `Advanced Post Manager` plugin admin notice. [ECP-1163]
+
+= [5.14.2.1] 2022-06-09 =
+
+* Fix - Correct an accidental reversion of 5.14.1.1.
+
+= [5.14.2] 2022-06-09 =
+
+* Fix - Add rel="noindex" to links that point to empty week views so as to not dilute SEO with empty results. [TEC-4354]
+* Fix - Squash bugs related to the Elementor styling support to the `Event` widget. [ECP-1105]
+* Tweak - Changed views: `v2/week/top-bar/nav/next`, `v2/week/top-bar/nav/prev`
 
 = [5.14.1.1] 2022-06-01 =
 
@@ -218,7 +456,7 @@ Our Premium Plugins:
 * Tweak - Add transport to Customizer to support live preview for view selector. [TEC-4055]
 * Fix - Events hidden from Upcoming List on the frontend will still show on the Events Manager. [ECP-1001]
 * Fix - Ensure we sort distances as numbers, not strings, in Map View. [ECP-1033]
-* Fix - Don't try ot access an undefined index on the week view widget. [ECP-1165]
+* Fix - Don't try to access an undefined index on the week view widget. [ECP-1165]
 * Fix - Prevent fatal error in PHP 8.0 in recurring events by ensure queue processor methods do_deletions, do_creations, and do_updates return an array.  [ECP-1112]
 * Fix - On Event tag archives only show events with the tag, change the single event tag links to use the event tag archive, and add link to event tag archive in the admin. [TEC-4314]
 * Language - 0 new strings added, 10 updated, 0 fuzzied, and 0 obsoleted

@@ -18,8 +18,22 @@ class Tribe__Events__Pro__Integrations__Beaver_Builder__Page_Builder {
 			function() {
 				if ( FLBuilderModel::is_builder_active() ) {
 					add_filter( 'tribe_allow_widget_on_post_page_edit_screen', '__return_true' );
+					tribe_asset_enqueue( 'tribe-admin-widget' );
+
+					$plugin = 	Tribe__Events__Pro__Main::instance();
+
+					tribe_asset(
+						$plugin,
+						'tribe-admin-widget-beaver-builder-compatibility',
+						'tec-beaver-builder-compat.css',
+						[
+							'tribe-admin-widget',
+						],
+						'wp_print_footer_scripts'
+					);
 				}
-			}
+			},
+			12
 		);
 	}
 }

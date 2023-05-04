@@ -46,10 +46,7 @@ class Tribe__Events__iCal {
 	 */
 	public function hook() {
 		add_action( 'tribe_events_after_footer', [ $this, 'maybe_add_link' ], 10, 1 );
-		add_action(
-			'tribe_events_single_event_after_the_content',
-			[ $this, 'single_event_links' ]
-		);
+		add_action( 'tribe_events_single_event_after_the_content', [ $this, 'single_event_links' ] );
 		add_action( 'template_redirect', [ $this, 'do_ical_template' ] );
 		add_filter( 'tribe_get_ical_link', [ $this, 'day_view_ical_link' ], 20, 1 );
 		add_action( 'wp_head', [ $this, 'set_feed_link' ], 2, 0 );
@@ -138,8 +135,8 @@ class Tribe__Events__iCal {
 			return;
 		}
 		$calendar_links = '<div class="tribe-events-cal-links">';
-		$calendar_links .= '<a class="tribe-events-gcal tribe-events-button" href="' . Tribe__Events__Main::instance()->esc_gcal_url( tribe_get_gcal_link() ) . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__( 'Add to Google Calendar', 'the-events-calendar' ) . '">+ ' . esc_html__( 'Google Calendar', 'the-events-calendar' ) . '</a>';
-		$calendar_links .= '<a class="tribe-events-ical tribe-events-button" href="' . esc_url( tribe_get_single_ical_link() ) . '" title="' . esc_attr__( 'Download .ics file', 'the-events-calendar' ) . '" >+ ' . esc_html__( 'Add to iCalendar', 'the-events-calendar' ) . '</a>';
+		$calendar_links .= '<a class="tribe-events-gcal tribe-events-button" href="' . Tribe__Events__Main::instance()->esc_gcal_url( tribe_get_gcal_link() ) . '" target="_blank" rel="noopener noreferrer noindex" title="' . esc_attr__( 'Add to Google Calendar', 'the-events-calendar' ) . '">+ ' . esc_html__( 'Google Calendar', 'the-events-calendar' ) . '</a>';
+		$calendar_links .= '<a class="tribe-events-ical tribe-events-button" href="' . esc_url( tribe_get_single_ical_link() ) . '" title="' . esc_attr__( 'Download .ics file', 'the-events-calendar' ) . '"  rel="noopener noreferrer noindex" >+ ' . esc_html__( 'Add to iCalendar', 'the-events-calendar' ) . '</a>';
 		$calendar_links .= '</div><!-- .tribe-events-cal-links -->';
 
 		/**
@@ -301,11 +298,13 @@ class Tribe__Events__iCal {
 			return $this->get_month_view_events();
 		}
 
+		$list_view_slug = \Tribe\Events\Views\V2\Views\List_View::get_view_slug();
+
 		if ( tribe_is_organizer() ) {
 			return $this->get_events_list(
 				[
-					'organizer' => get_the_ID(),
-					'eventDisplay' => 'list',
+					'organizer'    => get_the_ID(),
+					'eventDisplay' => $list_view_slug,
 				]
 			);
 		}
@@ -313,8 +312,8 @@ class Tribe__Events__iCal {
 		if ( tribe_is_venue() ) {
 			return $this->get_events_list(
 				[
-					'venue' => get_the_ID(),
-					'eventDisplay' => tribe_get_request_var( 'tribe_event_display', 'list' ),
+					'venue'        => get_the_ID(),
+					'eventDisplay' => tribe_get_request_var( 'tribe_event_display', $list_view_slug ),
 				]
 			);
 		}
@@ -325,7 +324,7 @@ class Tribe__Events__iCal {
 
 		$args = $wp_query->query_vars;
 
-		if ( 'list' === $args['eventDisplay'] ) {
+		if ( $list_view_slug === $args['eventDisplay'] ) {
 			// Whe producing a List view iCal feed the `eventDate` is misleading.
 			unset( $args['eventDate'] );
 		}
@@ -357,11 +356,11 @@ class Tribe__Events__iCal {
 			: $wp_query->get( 'eventDate' );
 
 		$args = [
-			'eventDisplay' => 'custom',
-			'start_date' => Tribe__Events__Template__Month::calculate_first_cell_date( $month ),
-			'end_date' => Tribe__Events__Template__Month::calculate_final_cell_date( $month ),
+			'eventDisplay'   => 'custom',
+			'start_date'     => \Tribe\Events\Views\V2\Views\Month_View::calculate_first_cell_date( $month ),
+			'end_date'       => \Tribe\Events\Views\V2\Views\Month_View::calculate_final_cell_date( $month ),
 			'posts_per_page' => -1,
-			'hide_upcoming' => true,
+			'hide_upcoming'  => true,
 		];
 
 		// Verify the Initial Category.
@@ -519,7 +518,7 @@ class Tribe__Events__iCal {
 			}
 
 			$transitions = $timezone->getTransitions( $start, $end );
-			if ( count( $transitions ) === 1 ) {
+			if ( is_array( $transitions ) && count( $transitions ) === 1 ) {
 				$transitions[] = array_values( $transitions )[ 0 ];
 			}
 
@@ -720,7 +719,7 @@ class Tribe__Events__iCal {
 		$item['URL'] = 'URL:' . get_permalink( $event_post->ID );
 
 		// Add location if available.
-		$location = $tec->fullAddressString( $event_post->ID );
+		$location = \Tribe__Events__Venue::get_address_full_string( $event_post->ID );
 		if ( ! empty( $location ) ) {
 			$str_location = $this->replace( $location, [ ',', "\n" ], [ '\,', '\n' ] );
 
@@ -728,10 +727,10 @@ class Tribe__Events__iCal {
 		}
 
 		// Add categories if available.
-		$event_cats = (array) wp_get_object_terms( $event_post->ID, Tribe__Events__Main::TAXONOMY, [ 'fields' => 'names' ] );
+		$event_cats = wp_get_object_terms( $event_post->ID, Tribe__Events__Main::TAXONOMY, [ 'fields' => 'names' ] );
 
-		if ( ! empty( $event_cats ) ) {
-			$item['CATEGORIES'] = 'CATEGORIES:' . $this->html_decode( join( ',', $event_cats ) );
+		if ( ! is_wp_error( $event_cats ) && ! empty( $event_cats ) ) {
+			$item['CATEGORIES'] = 'CATEGORIES:' . $this->html_decode( join( ',', (array) $event_cats ) );
 		}
 
 		// Add featured image if available.

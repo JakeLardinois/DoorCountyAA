@@ -89,6 +89,27 @@ class Assets extends \tad_DI52_ServiceProvider {
 
 		tribe_asset(
 			$plugin,
+			'tribe-events-pro-views-v2-print',
+			'views-print.css',
+			[
+				'tribe-events-views-v2-skeleton',
+			],
+			'wp_enqueue_scripts',
+			[
+				'priority'     => 10,
+				'conditionals' => [
+					'operator' => 'AND',
+					[ $this, 'should_enqueue_frontend' ],
+					[ tribe( TEC_Assets::class ), 'should_enqueue_full_styles' ],
+				],
+				'groups'       => [ static::$group_key ],
+				'print'        => true,
+				'media'        => 'print',
+			]
+		);
+
+		tribe_asset(
+			$plugin,
 			'tribe-events-pro-views-v2-nanoscroller',
 			'vendor/nanoscroller/jquery.nanoscroller.js',
 			[ 'jquery-ui-draggable' ],
@@ -355,6 +376,17 @@ class Assets extends \tad_DI52_ServiceProvider {
 		}
 
 		$should_enqueue = tribe( Template_Bootstrap::class )->should_load();
+
+		/**
+		 * Checks whether the page is being viewed in Elementor preview mode.
+		 *
+		 * @since 5.14.5
+		 *
+		 * @return bool $should_enqueue Should the frontend assets be enqueued.
+		 */
+		if ( defined( 'ELEMENTOR_PATH' ) && ! empty( ELEMENTOR_PATH ) && isset( $_GET[ 'elementor-preview' ] ) ) {
+			$should_enqueue = true;
+		}
 
 		/**
 		 * Allow filtering of where the base Frontend Assets will be loaded

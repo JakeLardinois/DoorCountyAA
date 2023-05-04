@@ -11,6 +11,7 @@ namespace Tribe\Events\Pro\Views\V2\Widgets;
 
 use Tribe\Events\Views\V2\View_Interface;
 use Tribe\Events\Views\V2\Widgets\Widget_Abstract;
+use Tribe\Events\Views\V2\Views\List_View;
 use Tribe__Main as Main;
 use Tribe__Utils__Array as Arr;
 use Tribe\Events\Pro\Views\V2\Widgets\Taxonomy_Filter;
@@ -49,6 +50,7 @@ class Widget_Advanced_List {
 		'phone'     => false,
 		'cost'      => false,
 		'organizer' => false,
+		'website'   => false,
 		'operand'   => 'OR',
 		'filters'   => '',
 	];
@@ -95,6 +97,17 @@ class Widget_Advanced_List {
 	 */
 	public function render_event_organizers( $template ) {
 		$template->template( 'widgets/widget-events-list/event/organizers', $template->get_values() );
+	}
+
+	/**
+	 * Renders the event website in the event.
+	 *
+	 * @since TBD
+	 *
+	 * @param \Tribe__Template $template Current instance of the `Tribe__Template` that's being rendered.
+	 */
+	public function render_event_website( $template ) {
+		$template->template( 'widgets/widget-events-list/event/website', $template->get_values() );
 	}
 
 	/**
@@ -176,6 +189,10 @@ class Widget_Advanced_List {
 						'type'  => 'checkbox',
 						'label' => _x( 'Organizer', 'The label for the option to enable organizer display in the List Widget.', 'tribe-events-calendar-pro' ),
 					],
+					'website'   => [
+						'type'  => 'checkbox',
+						'label' => _x( 'Website', 'The label for the option to enable website display in the List Widget.', 'tribe-events-calendar-pro' ),
+					],
 				],
 			],
 		];
@@ -206,6 +223,7 @@ class Widget_Advanced_List {
 		$updated_instance['phone']     = ! empty( $new_instance['phone'] );
 		$updated_instance['cost']      = ! empty( $new_instance['cost'] );
 		$updated_instance['organizer'] = ! empty( $new_instance['organizer'] );
+		$updated_instance['website']   = ! empty( $new_instance['website'] );
 		$updated_instance['operand']   = ! empty( $new_instance['operand'] ) ? $new_instance['operand'] : false;
 		$updated_instance['filters']   = ! empty( $new_instance['filters'] ) ? tribe( 'pro.views.v2.widgets.taxonomy' )->format_taxonomy_filters( $new_instance['filters'] ) : false;
 
@@ -228,11 +246,10 @@ class Widget_Advanced_List {
 		$taxonomy_filters = tribe( 'pro.views.v2.widgets.taxonomy' );
 
 		// Pagination to 1.
-		$alterations['page']  = 1;
-		$alterations['paged'] = 1;
-
-		$alterations['event_display']     = 'list';
-		$alterations['view']              = 'list';
+		$alterations['page']          = 1;
+		$alterations['paged']         = 1;
+		$alterations['event_display'] = List_View::get_view_slug();
+		$alterations['view']          = List_View::get_view_slug();
 
 		$alterations['widget_list_display'] = [
 			'cost'      => tribe_is_truthy( $arguments['cost'] ),
@@ -244,6 +261,7 @@ class Widget_Advanced_List {
 			'country'   => tribe_is_truthy( $arguments['country'] ),
 			'phone'     => tribe_is_truthy( $arguments['phone'] ),
 			'organizer' => tribe_is_truthy( $arguments['organizer'] ),
+			'website'   => tribe_is_truthy( $arguments['website'] ),
 		];
 
 		// Handle tax filters.
@@ -279,6 +297,7 @@ class Widget_Advanced_List {
 			'country'   => Arr::get( $display, 'country' ),
 			'phone'     => Arr::get( $display, 'phone' ),
 			'organizer' => Arr::get( $display, 'organizer' ),
+			'website'   => Arr::get( $display, 'website' ),
 		];
 
 		return $template_vars;

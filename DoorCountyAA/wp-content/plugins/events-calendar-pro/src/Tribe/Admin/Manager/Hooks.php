@@ -62,7 +62,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	protected function add_filters() {
 		add_filter( 'admin_title', [ $this, 'filter_admin_title' ], 15, 2 );
 		add_filter( 'submenu_file', [ $this, 'change_default_events_menu_url' ] );
-		add_filter( 'tribe-event-general-settings-fields', [ $this, 'filter_settings_general_tab' ], 25 );
+		add_filter( 'tribe_general_settings_tab_fields', [ $this, 'filter_settings_general_tab' ], 25 );
 		add_filter( 'wp_redirect', [ $this, 'filter_edit_page_redirect_to_render_admin_manager' ] );
 		add_filter( 'tec_events_views_v2_disable_tribe_bar', [ $this, 'filter_views_v2_disable_tribe_bar_on_event_manager_page' ] );
 		add_filter( 'tec_events_views_v2_hide_location_search', [ $this, 'filter_views_v2_hide_location_search_on_event_manager_page' ] );

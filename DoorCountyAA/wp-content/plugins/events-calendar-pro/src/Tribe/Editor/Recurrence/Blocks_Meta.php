@@ -14,7 +14,7 @@ class Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta {
 	 * Meta key used to get the rules associated with the recurrence on the new UI
 	 *
 	 * @since 4.5
-	 * @depreacated
+	 * @deprecated
 	 *
 	 * @return string
 	 */

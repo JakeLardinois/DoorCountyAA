@@ -212,12 +212,12 @@ class Tribe_Events extends Shortcode_Abstract {
 			add_filter( 'tribe_events_filter_bar_views_v2_assets_should_enqueue_frontend', '__return_false' );
 			add_filter( 'tribe_events_views_v2_filter_bar_view_html_classes', '__return_false' );
 
-			if ( class_exists( 'Tribe\Events\Filterbar\Views\V2_1\Hooks' ) ) {
+			if ( tribe()->isBound( 'filterbar.views.v2_1.hooks' ) ) {
 				remove_filter(
 					'tribe_events_pro_shortcode_tribe_events_before_assets',
 					[ tribe( 'filterbar.views.v2_1.hooks' ), 'action_include_assets' ]
 				);
-			} else if ( class_exists( 'Tribe\Events\Filterbar\Views\V2\Hooks' ) ) {
+			} else if ( tribe()->isBound( 'filterbar.views.v2.hooks' ) ) {
 				remove_filter(
 					'tribe_events_pro_shortcode_tribe_events_before_assets',
 					[ tribe( 'filterbar.views.v2.hooks' ), 'action_include_assets' ]
@@ -226,13 +226,16 @@ class Tribe_Events extends Shortcode_Abstract {
 		}
 
 		/* Month widget only. */
-		if ( 'month' === $this->get_argument( 'view' ) && tribe_is_truthy( $this->get_argument( 'is-widget' ) ) ) {
+		if (
+			\Tribe\Events\Views\V2\Views\Month_View::get_view_slug() === $this->get_argument( 'view' )
+			&& tribe_is_truthy( $this->get_argument( 'is-widget' ) )
+		) {
 			/* Mobile "footer" nav */
 			add_filter( 'tribe_template_html:events/v2/month/mobile-events/nav', '__return_false' );
 		}
 
 		/* Week view & widget only. */
-		if ( 0 === stripos( $this->get_argument( 'view' ), 'week' ) ) {
+		if ( 0 === stripos( $this->get_argument( 'view' ), \Tribe\Events\Pro\Views\V2\Views\Week_View::get_view_slug() ) ) {
 			// Allows for the "hide_weekends" attribute.
 			if ( tribe_is_truthy( $this->get_argument( 'hide_weekends' ) ) ) {
 				add_filter( 'tribe_get_option', [ $this, 'week_view_hide_weekends' ], 10, 2 );
@@ -303,9 +306,9 @@ class Tribe_Events extends Shortcode_Abstract {
 		remove_filter( 'tribe_events_filter_bar_views_v2_assets_should_enqueue_frontend', '__return_false' );
 		remove_filter( 'tribe_events_views_v2_filter_bar_view_html_classes', '__return_false' );
 		// Yes, add - we're adding it back.
-		if ( class_exists( 'Tribe\Events\Filterbar\Views\V2_1\Hooks' ) ) {
+		if ( tribe()->isBound( 'filterbar.views.v2_1.hooks' ) ) {
 			add_filter( 'tribe_events_pro_shortcode_tribe_events_before_assets', [ tribe( 'filterbar.views.v2_1.hooks' ), 'action_include_assets' ] );
-		} else if ( class_exists( 'Tribe\Events\Filterbar\Views\V2\Hooks' ) ) {
+		} else if ( tribe()->isBound( 'filterbar.views.v2.hooks' ) ) {
 			add_filter( 'tribe_events_pro_shortcode_tribe_events_before_assets', [ tribe( 'filterbar.views.v2.hooks' ), 'action_include_assets' ] );
 		}
 
@@ -887,7 +890,7 @@ class Tribe_Events extends Shortcode_Abstract {
 					continue;
 				}
 
-				$repository_args['tax_query'] = array_merge_recursive(
+				$repository_args['tax_query'] = Arr::merge_recursive_query_vars(
 					$repository_args['tax_query'],
 					Taxonomy::translate_to_repository_args( $taxonomy, $arguments[ $key ], $operand )
 				);
@@ -923,7 +926,7 @@ class Tribe_Events extends Shortcode_Abstract {
 				$built_query = $repo->build_query();
 
 				if ( ! empty( $built_query->query_vars['tax_query'] ) ) {
-					$repository_args['tax_query'] = array_merge_recursive(
+					$repository_args['tax_query'] = Arr::merge_recursive_query_vars(
 						$repository_args['tax_query'],
 						$built_query->query_vars['tax_query']
 					);
@@ -1055,7 +1058,7 @@ class Tribe_Events extends Shortcode_Abstract {
 		}
 
 		/* Week view/widget only. */
-		if ( false !== stripos( $view_slug, 'week' ) ) {
+		if ( false !== stripos( $view_slug, \Tribe\Events\Pro\Views\V2\Views\Week_View::get_view_slug() ) ) {
 			$offset = $this->get_argument( 'week_offset' );
 
 			if (
@@ -1082,7 +1085,7 @@ class Tribe_Events extends Shortcode_Abstract {
 			}
 
 			$arguments['week_events_per_day'] = $this->get_argument( 'week_events_per_day' );
-		} elseif ( false !== stripos( $view_slug, 'day' ) ) {
+		} elseif ( false !== stripos( $view_slug, \Tribe\Events\Views\V2\Views\Day_View::get_view_slug() ) ) {
 			/* Day view/widget only. */
 			$event_date = $view_context->get( 'eventDate' );
 

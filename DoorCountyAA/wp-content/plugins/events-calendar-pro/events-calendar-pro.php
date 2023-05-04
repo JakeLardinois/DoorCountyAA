@@ -1,13 +1,13 @@
 <?php
-/*
-Plugin Name: The Events Calendar PRO
-Description: The Events Calendar PRO, a premium add-on to the open source The Events Calendar plugin (required), enables recurring events, custom attributes, venue pages, new widgets and a host of other premium features.
-Version: 5.14.1.1
-Author: The Events Calendar
-Author URI: https://evnt.is/20
-Text Domain: tribe-events-calendar-pro
-License: GPLv2 or later
-*/
+/**
+ * Plugin Name: The Events Calendar Pro
+ * Description: The Events Calendar Pro, a premium add-on to the open source The Events Calendar plugin (required), enables recurring events, custom attributes, venue pages, new widgets and a host of other premium features.
+ * Version: 6.0.11
+ * Author: The Events Calendar
+ * Author URI: https://evnt.is/20
+ * Text Domain: tribe-events-calendar-pro
+ * License: GPLv2 or later
+ */
 
 /*
 Copyright 2010-2012 by The Events Calendar and the contributors
@@ -84,7 +84,7 @@ function tribe_register_pro() {
 		add_action( 'admin_notices', 'tribe_show_fail_message' );
 		add_action( 'network_admin_notices', 'tribe_show_fail_message' );
 
-		//prevent loading of PRO
+		//prevent loading of Pro
 		remove_action( 'tribe_common_loaded', 'tribe_events_calendar_pro_init' );
 
 		return;
@@ -171,7 +171,7 @@ function tribe_show_fail_message() {
 	echo '<div class="error"><p>'
 	. sprintf(
 		'%1s <a href="%2s" class="thickbox" title="%3s">%4s</a>.',
-		esc_html__( 'To begin using Events Calendar PRO, please install the latest version of', 'tribe-events-calendar-pro' ),
+		esc_html__( 'To begin using Events Calendar Pro, please install the latest version of', 'tribe-events-calendar-pro' ),
 		esc_url( $url ),
 		esc_html__( 'The Events Calendar', 'tribe-events-calendar-pro' ),
 		esc_html__( 'The Events Calendar', 'tribe-events-calendar-pro' )
@@ -222,6 +222,15 @@ function tribe_events_pro_activation() {
 		// We set with a string to avoid having to include a file here.
 		set_transient( '_tribe_events_delayed_flush_rewrite_rules', 'yes', 0 );
 	}
+
+	if (
+		class_exists( 'Tribe__Events__Main' )
+		&& class_exists( '\\TEC\\Events_Pro\\Custom_Tables\\V1\\Activation' )
+		&& ! ( defined( 'TEC_CUSTOM_TABLES_V1_DISABLED' ) && TEC_CUSTOM_TABLES_V1_DISABLED )
+	) {
+		// Register the Custom Tables V1 provider, if defined, to set up the custom tables.
+		TEC\Events_Pro\Custom_Tables\V1\Activation::activate();
+	}
 }
 
 /**
@@ -237,7 +246,7 @@ function Tribe_ECP_Load() {
 }
 
 /**
- * Add Events PRO to the list of add-ons to check required version.
+ * Add Events Pro to the list of add-ons to check required version.
  *
  * @deprecated 4.6
  *
@@ -249,7 +258,7 @@ function tribe_init_ecp_addon( $plugins ) {
 	_deprecated_function( __FUNCTION__, '4.6', '' );
 
 	$plugins['Tribe__Events__Pro__Main'] = array(
-		'plugin_name' => 'Events Calendar PRO',
+		'plugin_name' => 'Events Calendar Pro',
 		'required_version' => Tribe__Events__Pro__Main::REQUIRED_TEC_VERSION,
 		'current_version' => Tribe__Events__Pro__Main::VERSION,
 		'plugin_dir_file' => basename( dirname( __FILE__ ) ) . '/events-calendar-pro.php',

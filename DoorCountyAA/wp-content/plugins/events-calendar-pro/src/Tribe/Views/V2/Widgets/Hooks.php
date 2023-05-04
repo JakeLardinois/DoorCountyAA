@@ -26,6 +26,7 @@ use Tribe\Events\Views\V2\Views\Widgets\Widget_View;
 use Tribe\Events\Views\V2\Widgets\Widget_Abstract;
 use Tribe\Events\Views\V2\Widgets\Widget_List;
 use \Tribe\Events\Pro\Views\V2\Shortcodes\Tribe_Events as Tribe_Events_Shortcode;
+use WP_Screen;
 
 /**
  * Class Hooks.
@@ -74,20 +75,17 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		);
 
 		add_action(
-			'tribe_template_entry_point:events/v2/widgets/widget-events-list/event/date:after_event_datetime',
-			[ $this, 'widget_events_list_event_recurring_icon' ],
-			10,
+			'tribe_template_entry_point:events/v2/widgets/widget-events-list/event:event_meta',
+			[ $this, 'widget_events_list_event_meta_website' ],
+			20,
 			3
 		);
 
 		add_action(
-			'tribe_events_pro_v1_registered_widget_classes',
-			[ $this, 'deregister_v1_widgets' ]
-		);
-
-		add_action(
-			'tribe_events_pro_v1_unregistered_widget_classes',
-			[ $this, 'unregister_v1_widgets' ]
+			'tribe_template_entry_point:events/v2/widgets/widget-events-list/event/date:after_event_datetime',
+			[ $this, 'widget_events_list_event_recurring_icon' ],
+			10,
+			3
 		);
 
 		add_action(
@@ -158,50 +156,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		add_filter( 'tribe_events_pro_shortcodes_week_widget_class', [ $this, 'alter_week_widget_class' ], 10, 2 );
 		add_filter( 'tribe_events_pro_shortcodes_month_widget_class', [ $this, 'alter_shortcode_month_widget_class' ], 10, 2 );
 
-		add_filter(
-			'tribe_events_pro_shortcode_compatibility_required',
-			[ $this, 'alter_shortcode_compatibility_required' ],
-			10,
-			2
-		);
-	}
-
-	/**
-	 * Stop registration of the v1 Widgets as needed.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @param array<string> $widgets The array of widget classes to register.
-	 *
-	 * @return array<string> $widgets The modified array of widget classes to register.
-	 */
-	public function deregister_v1_widgets( $widgets ) {
-		unset( $widgets['Tribe__Events__Pro__Advanced_List_Widget'] );
-		unset( $widgets['Tribe__Events__Pro__Countdown_Widget'] );
-		unset( $widgets['Tribe__Events__Pro__Venue_Widget'] );
-		unset( $widgets['Tribe__Events__Pro__Mini_Calendar_Widget'] );
-		unset( $widgets['Tribe__Events__Pro__This_Week_Widget'] );
-
-		return $widgets;
-	}
-
-	/**
-	 * Un-registration of the v1 Widgets as needed.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @param array<string> $widgets The array of widget classes to unregister.
-	 *
-	 * @return array<string> $widgets The modified array of widget classes to unregister.
-	 */
-	public function unregister_v1_widgets( $widgets ) {
-		$widgets[] = 'Tribe__Events__Pro__Advanced_List_Widget';
-		$widgets[] = 'Tribe__Events__Pro__Countdown_Widget';
-		$widgets[] = 'Tribe__Events__Pro__Venue_Widget';
-		$widgets[] = 'Tribe__Events__Pro__Mini_Calendar_Widget';
-		$widgets[] = 'Tribe__Events__Pro__This_Week_Widget';
-
-		return $widgets;
+		add_filter( 'tribe_events_pro_shortcode_compatibility_required', [ $this, 'alter_shortcode_compatibility_required' ], 10, 2 );
 	}
 
 	/**
@@ -236,15 +191,16 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return array<string,string> $views The modified array of views in the shape `[ <slug> => <class> ]`.
 	 */
 	public function filter_add_widget_views( $views ) {
-		$views['widget-countdown']      = Countdown_View::class;
-		$views['widget-featured-venue'] = Venue_View::class;
-		$views['widget-week']           = Week_View::class;
+		$views[ Countdown_View::get_view_slug() ] = Countdown_View::class;
+		$views[ Venue_View::get_view_slug() ]     = Venue_View::class;
+		$views[ Week_View::get_view_slug() ]      = Week_View::class;
 
 		return $views;
 	}
 
 	public function enqueue_widget_admin_assets( $slug ) {
-		if ( is_admin() && get_current_screen()->is_block_editor ) {
+		$current_screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $current_screen instanceof WP_Screen && $current_screen->is_block_editor && is_admin() ) {
 			tribe_asset_enqueue( 'tribe-select2' );
 			tribe_asset_enqueue( 'tribe-admin-widget' );
 		}
@@ -412,6 +368,19 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	public function widget_events_list_event_meta_organizers( $file, $name, $template ) {
 		$this->container->make( Widget_Advanced_List::class )->render_event_organizers( $template );
+	}
+
+	/**
+	 * Action to inject the website meta into the events list widget event.
+	 *
+	 * @since TBD
+	 *
+	 * @param string           $file     Complete path to include the PHP File.
+	 * @param array<string>    $name     Template name.
+	 * @param \Tribe__Template $template Current instance of the Tribe__Template.
+	 */
+	public function widget_events_list_event_meta_website( $file, $name, $template ) {
+		$this->container->make( Widget_Advanced_List::class )->render_event_website( $template );
 	}
 
 	/**

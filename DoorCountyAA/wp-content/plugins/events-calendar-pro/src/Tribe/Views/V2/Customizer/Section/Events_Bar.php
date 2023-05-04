@@ -86,7 +86,7 @@ class Events_Bar {
 					'default' => esc_html_x(
 						'Use Event Bar Color',
 						'Label for the default option.',
-						'the-events-calendar'
+						'tribe-events-calendar-pro'
 					),
 					'custom'  => esc_html_x(
 						'Custom',

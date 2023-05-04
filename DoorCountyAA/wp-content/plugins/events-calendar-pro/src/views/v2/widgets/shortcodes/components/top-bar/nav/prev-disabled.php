@@ -16,8 +16,8 @@
 <li class="tribe-events-c-top-bar__nav-list-item">
 	<button
 		class="tribe-common-c-btn-icon tribe-common-c-btn-icon--caret-left tribe-events-c-top-bar__nav-link tribe-events-c-top-bar__nav-link--prev"
-		aria-label="<?php esc_attr_e( 'Previous month', 'the-events-calendar' ); ?>"
-		title="<?php esc_attr_e( 'Previous month', 'the-events-calendar' ); ?>"
+		aria-label="<?php esc_attr_e( 'Previous month', 'tribe-events-calendar-pro' ); ?>"
+		title="<?php esc_attr_e( 'Previous month', 'tribe-events-calendar-pro' ); ?>"
 		disabled
 	>
 		<?php $this->template( 'components/icons/caret-left', [ 'classes' => [ 'tribe-common-c-btn-icon__icon-svg', 'tribe-events-c-top-bar__nav-link-icon-svg' ] ] ); ?>

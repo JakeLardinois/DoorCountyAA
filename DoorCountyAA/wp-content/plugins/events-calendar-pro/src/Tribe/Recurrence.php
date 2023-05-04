@@ -73,9 +73,16 @@ class Tribe__Events__Pro__Recurrence {
 		if ( $this->series_rules && ! is_wp_error( $this->series_rules ) ) {
 			$dates    = array();
 			$cur_date = $this->start_date;
+			$last_date = $cur_date;
 
 			$i = 0;
 			while ( $cur_date = $this->getNextDate( $cur_date, $i, $rule_count ) ) {
+				if ( $cur_date === $last_date ) {
+					// We're looping, break out of the loop.
+					break;
+				}
+
+				$last_date = $cur_date;
 
 				$i++;
 

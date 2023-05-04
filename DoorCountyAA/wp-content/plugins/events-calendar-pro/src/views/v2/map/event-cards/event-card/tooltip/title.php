@@ -19,7 +19,7 @@
 ?>
 <h3 class="tribe-events-pro-map__event-tooltip-title tribe-common-h7">
 	<a
-		href="<?php echo esc_url( $event->permalink ) ?>"
+		href="<?php echo esc_url( $event->permalink ); ?>"
 		title="<?php echo esc_attr( get_the_title( $event->ID ) ); ?>"
 		rel="bookmark"
 		class="tribe-events-pro-map__event-tooltip-title-link tribe-common-anchor-thin"

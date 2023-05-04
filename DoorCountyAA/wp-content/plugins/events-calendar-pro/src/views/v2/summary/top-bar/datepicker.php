@@ -31,8 +31,8 @@
 		class="tribe-common-h3 tribe-common-h--alt tribe-events-c-top-bar__datepicker-button"
 		data-js="tribe-events-top-bar-datepicker-button"
 		type="button"
-		aria-label="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
-		title="<?php esc_attr_e( 'Click to toggle datepicker', 'the-events-calendar' ); ?>"
+		aria-label="<?php esc_attr_e( 'Click to toggle datepicker', 'tribe-events-calendar-pro' ); ?>"
+		title="<?php esc_attr_e( 'Click to toggle datepicker', 'tribe-events-calendar-pro' ); ?>"
 	>
 		<time
 			datetime="<?php echo esc_attr( $selected_start_datetime ); ?>"
@@ -74,7 +74,7 @@
 		class="tribe-events-c-top-bar__datepicker-label tribe-common-a11y-visual-hide"
 		for="tribe-events-top-bar-date"
 	>
-		<?php esc_html_e( 'Select date.', 'the-events-calendar' ); ?>
+		<?php esc_html_e( 'Select date.', 'tribe-events-calendar-pro' ); ?>
 	</label>
 	<input
 		type="text"

@@ -53,7 +53,6 @@ class Tribe__Events__Pro__APM_Filters__APM_Filters {
 	public function ecp_filters() {
 
 		if ( ! class_exists( 'Tribe_APM' ) ) {
-			add_action( 'admin_notices', array( $this, 'maybe_notify_about_new_plugin' ) );
 			return;
 		}
 
@@ -134,50 +133,5 @@ class Tribe__Events__Pro__APM_Filters__APM_Filters {
 		}
 
 		return $options;
-	}
-
-	public function maybe_notify_about_new_plugin() {
-
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return;
-		}
-
-		if ( isset( $_GET['dismiss_apm_nag'] ) ) {
-			add_user_meta( get_current_user_id(), '_tribe_apm_plugin_nag', true );
-		}
-
-		$screen = get_current_screen();
-
-		if ( ! $screen instanceof WP_Screen || $screen->id !== 'edit-tribe_events' ) {
-			return;
-		}
-
-		if ( get_user_meta( get_current_user_id(), '_tribe_apm_plugin_nag', true ) ) {
-			return;
-		}
-
-
-		echo '<div class="updated"><p>';
-
-		$download_link = sprintf(
-			'<a href="%s">%s</a>',
-			'https://wordpress.org/plugins/advanced-post-manager/',
-			esc_html__( 'Download for free', 'tribe-events-calendar-pro' )
-		);
-
-		$dismiss_link = sprintf(
-			'<a href="%s">%s</a>',
-			esc_url( add_query_arg( 'dismiss_apm_nag', 1 ) ),
-			esc_html__( 'Dismiss', 'tribe-events-calendar-pro' )
-		);
-
-		printf(
-			esc_html__( 'Pssst! Looking for the filters? They live in a separate plugin now | %s | %s', 'tribe-events-calendar-pro' ),
-			$download_link,
-			$dismiss_link
-		);
-
-		echo '</p></div>';
-
 	}
 }

@@ -1,4 +1,6 @@
 <?php
+
+use TEC\Events_Pro\Custom_Tables\V1\Series\Post_Type as Series;
 /**
  * Object used to handle the linking/unlinking of post types for events
  */
@@ -1055,18 +1057,27 @@ class Tribe__Events__Linked_Posts {
 
 		add_filter( 'tribe_events_return_all_linked_posts_if_none', '__return_true' );
 
-		$my_linked_posts = $this->get_linked_post_info(
-			$post_type,
-			[
-				'post_status' => [
-					'publish',
-					'draft',
-					'private',
-					'pending',
-				],
-				'author'      => $current_user->ID,
-			]
-		);
+		$available_post_status = [
+			'publish',
+			'draft',
+			'private',
+			'pending',
+		];
+
+		/**
+		 *  Filters the available post statuses that are used to retrieve `my posts`.
+		 *
+		 * @since TBD
+		 *
+		 * @param array  $available_post_status Array of available post status. Example: publish, draft, private, pending
+		 * @param string $post_type Post type of the linked post
+		 */
+		$my_posts_post_status = apply_filters( 'tec_events_linked_posts_my_posts_post_status', $available_post_status, $post_type );
+
+		$my_linked_posts = $this->get_linked_post_info( $post_type, [
+			'post_status' => $my_posts_post_status,
+			'author'      => $current_user->ID,
+		] );
 
 		if ( ! empty( $my_linked_posts ) ) {
 			foreach ( $my_linked_posts as $my_linked_post ) {
@@ -1090,18 +1101,22 @@ class Tribe__Events__Linked_Posts {
 		}
 
 		if ( $can_edit_others_posts ) {
-			$linked_posts = $this->get_linked_post_info(
-				$post_type,
-				[
-					'post_status'  => [
-						'publish',
-						'draft',
-						'private',
-						'pending',
-					],
-					'post__not_in' => $my_linked_post_ids,
-				]
-			);
+
+			/**
+			 *  Filters the available post statuses that are used to retrieve ` posts`.
+			 *
+			 * @since TBD
+			 *
+			 * @param array  $available_post_status Array of available post status. Example: publish, draft, private, pending
+			 * @param string $post_type Post type of the linked post
+			 */
+			$all_posts_post_status = apply_filters( 'tec_events_linked_posts_all_posts_post_status', $available_post_status, $post_type );
+
+
+			$linked_posts = $this->get_linked_post_info( $post_type, [
+				'post_status'  => $all_posts_post_status,
+				'post__not_in' => $my_linked_post_ids,
+			] );
 		} else {
 			$linked_posts = $this->get_linked_post_info(
 				$post_type,
@@ -1207,8 +1222,24 @@ class Tribe__Events__Linked_Posts {
 		}
 	}
 
+	/**
+	 * Outputs the metabox form sections for our linked posttypes.
+	 *
+	 * @param $event
+	 */
 	public function render_meta_box_sections( $event ) {
-		foreach ( $this->linked_post_types as $linked_post_type => $linked_post_type_data ) {
+		/**
+		 * A filter to control which linked posts will automatically render a metabox inside the editor.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param array<string> List of post types that are linked to the main tribe post type.
+		 *
+		 * @returns array<string> The list of post types we should render metaboxes for via the default means.
+		 */
+		$linked_post_types = apply_filters( 'tribe_events_linked_posts_should_render_meta_box', $this->linked_post_types );
+
+		foreach ( $linked_post_types as $linked_post_type => $linked_post_type_data ) {
 			$template = apply_filters( 'tribe_events_linked_post_meta_box_section', $this->main->plugin_path . 'src/admin-views/linked-post-section.php', $linked_post_type );
 			include $template;
 		}

@@ -3,10 +3,10 @@
  * Renders the events part of a series in a list-like layout.
  *
  * @since   4.7.9
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 
-namespace Tribe\Events\PRO\Views\V2\Views;
+namespace Tribe\Events\Pro\Views\V2\Views;
 
 use Tribe\Events\Pro\Rewrite\Rewrite as Pro_Rewrite;
 use Tribe\Events\Views\V2\Messages;
@@ -22,17 +22,27 @@ use Tribe__Utils__Array as Arr;
  *
  * @since   4.7.9
  *
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 class Organizer_View extends List_View {
 	/**
-	 * Slug for this view
+	 * Slug for this view.
 	 *
 	 * @since 4.7.9
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'organizer';
+
+	/**
+	 * Statically accessible slug for this view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'organizer';
 
 	/**
 	 * The organizer parent post name.
@@ -83,6 +93,24 @@ class Organizer_View extends List_View {
 	}
 
 	/**
+	 * Default untranslated value for the label of this view.
+	 *
+	 * @since 6.0.3
+	 *
+	 * @var string
+	 */
+	protected static $label = 'Organizer';
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function get_view_label(): string {
+		static::$label = _x( 'Organizer', 'The text label for the Organizer View.', 'tribe-events-calendar-pro' );
+
+		return static::filter_view_label( static::$label );
+	}
+
+	/**
 	 * Gets the Organizer ID for this view.
 	 *
 	 * @since 5.0.0
@@ -102,7 +130,7 @@ class Organizer_View extends List_View {
 		 * templates for the `all` view, but fallback on the `list` one if not found.
 		 */
 		if ( $this->template->get_base_template_file() === $this->template->get_template_file() ) {
-			$this->template_slug = 'list';
+			$this->template_slug = List_View::get_view_slug();
 		}
 
 		return parent::get_html();
@@ -149,7 +177,7 @@ class Organizer_View extends List_View {
 		$current_page = (int) $this->context->get( 'page', 1 );
 		$display      = $this->context->get( 'event_display_mode', 'organizer' );
 
-		if ( $this->slug === $display || 'default' === $display ) {
+		if ( static::$view_slug === $display || 'default' === $display ) {
 			$url = View::next_url( $canonical );
 		} elseif ( $current_page > 1 ) {
 			$url = View::prev_url( $canonical, [ Utils\View::get_past_event_display_key() => 'past' ] );
@@ -240,7 +268,7 @@ class Organizer_View extends List_View {
 				$this->page_key    => $page,
 				'eventDate'        => $event_date_var,
 				'tribe-bar-search' => $this->context->get( 'keyword' ),
-				'eventDisplay'     => $this->slug,
+				'eventDisplay'     => static::$view_slug,
 			] ) );
 
 			$upcoming_url = (string) $upcoming_url_object;
@@ -325,7 +353,7 @@ class Organizer_View extends List_View {
 		$page = $this->url->get_current_page();
 
 		$query_args = [
-			'eventDisplay'  => $this->slug,
+			'eventDisplay'  => static::$view_slug,
 			Organizer::POSTTYPE => $this->post_name,
 			'paged'         => $page > 1 ? $page : false,
 		];
@@ -360,9 +388,9 @@ class Organizer_View extends List_View {
 	 * @since 4.7.9
 	 *
 	 * @param array $breadcrumbs The breadcrumbs array.
-	 * @param array $view        The instance of the view being rendered.
+	 * @param View $view        The instance of the view being rendered.
 	 *
-	 * @return array The filtered breadcrums
+	 * @return array The filtered breadcrumbs.
 	 *
 	 * @see \Tribe\Events\Views\V2\View::get_breadcrumbs() for where this code is applying.
 	 */

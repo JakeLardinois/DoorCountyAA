@@ -144,6 +144,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			'widget-featured-venue-skeleton.css',
 			[
 				'tribe-common-skeleton-style',
+				'tribe-events-pro-views-v2-skeleton',
 			],
 			'wp_print_footer_scripts',
 			[
@@ -164,6 +165,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			[
 				'tribe-events-pro-widgets-v2-featured-venue-skeleton',
 				'tribe-common-full-style',
+				'tribe-events-views-v2-full',
 			],
 			'wp_print_footer_scripts',
 			[
@@ -251,6 +253,7 @@ class Assets extends \tad_DI52_ServiceProvider {
 			[
 				'jquery',
 				'underscore',
+				'tribe-dropdowns',
 				'tribe-select2',
 			],
 			null,

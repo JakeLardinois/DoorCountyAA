@@ -37,6 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		'country'   => __( 'Country', 'tribe-events-calendar-pro' ),
 		'phone'     => __( 'Phone', 'tribe-events-calendar-pro' ),
 		'organizer' => __( 'Organizer', 'tribe-events-calendar-pro' ),
+		'website'   => __( 'Website', 'tribe-events-calendar-pro' ),
 	);
 
 	/**

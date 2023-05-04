@@ -13,8 +13,11 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Text_Shadow;
 use Tribe\Events\Views\V2\Assets;
+use Tribe\Events\Pro\Integrations\Elementor\Traits;
 
 class Widget_Event_List extends Widget_Abstract {
+	use Traits\Tags;
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -58,8 +61,10 @@ class Widget_Event_List extends Widget_Abstract {
 				'phone',
 				'region',
 				'street',
+				'tag',
 				'venue',
 				'zip',
+				'website',
 			]
 		);
 
@@ -237,6 +242,19 @@ class Widget_Event_List extends Widget_Abstract {
 				]
 			);
 
+			$this->add_control(
+				'website',
+				[
+					'label'        => __( 'Website', 'tribe-events-calendar-pro' ),
+					'type'         => Controls_Manager::SWITCHER,
+					'label_block'  => false,
+					'label_on'     => __( 'Yes', 'tribe-events-calendar-pro' ),
+					'label_off'    => __( 'No', 'tribe-events-calendar-pro' ),
+					'return_value' => 'yes',
+					'default'      => 'no',
+				]
+			);
+
 		$this->end_controls_tab();
 	}
 
@@ -254,6 +272,17 @@ class Widget_Event_List extends Widget_Abstract {
 					'label'       => __( 'Category', 'tribe-events-calendar-pro' ),
 					'type'        => Controls_Manager::SELECT2,
 					'options'     => $this->get_event_categories(),
+					'label_block' => true,
+					'multiple'    => true,
+				]
+			);
+
+			$this->add_control(
+				'tag',
+				[
+					'label'       => __( 'Tag', 'tribe-events-calendar-pro' ),
+					'type'        => Controls_Manager::SELECT2,
+					'options'     => $this->get_event_tags(),
 					'label_block' => true,
 					'multiple'    => true,
 				]
@@ -313,6 +342,9 @@ class Widget_Event_List extends Widget_Abstract {
 
 		// Start phone section
 		$this->do_phone_section();
+
+		// Website section
+		$this->do_website_section();
 	}
 
 	protected function do_events_styles() {
@@ -940,6 +972,53 @@ class Widget_Event_List extends Widget_Abstract {
 			[
 				'name' => 'event_phone_typography',
 				'selector' => '{{WRAPPER}} .tribe-events-widget-events-list__event-venue-phone',
+			]
+		);
+
+		$this->end_controls_section();
+	}
+
+	/**
+	 * Assembles the Website settings in the styling panel.
+	 *
+	 * @since TBD
+	 */
+	protected function do_website_section() {
+		$this->start_controls_section(
+			'event_website',
+			[
+				'label' => esc_html__( 'Website', 'tribe-events-calendar-pro' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'website' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'event_website_color',
+			[
+				'label' => esc_html__( 'Text Color', 'tribe-events-calendar-pro' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .tribe-events-widget-events-list__event-website a' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'event_website_typography',
+				'selector' => '{{WRAPPER}} .tribe-events-widget-events-list__event-website',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'event_website_text_shadow',
+				'selector' => '{{WRAPPER}} .tribe-events-widget-events-list__event-website',
 			]
 		);
 

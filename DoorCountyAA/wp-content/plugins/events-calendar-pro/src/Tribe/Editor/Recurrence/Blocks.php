@@ -1,5 +1,8 @@
 <?php
 
+use Tribe__Utils__Array as Arr;
+use Tribe__Date_Utils as Dates;
+
 /**
  * Class Tribe__Events__Pro__Editor__Recurrence__Blocks
  *
@@ -109,7 +112,7 @@ class Tribe__Events__Pro__Editor__Recurrence__Blocks
 		}
 
 		$this->custom = $this->fields['custom'];
-		$this->set_type( $this->custom['type'] );;
+		$this->set_type( $this->custom['type'] );
 		$this->set_limit_type();
 		$this->set_limit_count();
 		$this->set_interval();
@@ -274,12 +277,28 @@ class Tribe__Events__Pro__Editor__Recurrence__Blocks
 	 * @since 4.5
 	 */
 	protected function set_once_fields() {
-		$date = isset( $this->custom['date'] ) ? $this->custom['date'] : array();
+		$date = $this->custom['date'] ?? [];
+
 		if ( ! isset( $date['date'] ) ) {
 			return;
 		}
-		$this->data['start_date']        = $date['date'];
+
+		$this->data['start_date'] = $date['date'];
 		$this->data['_start_date_input'] = date( 'F j, Y', strtotime( $date['date'] ) );
+
+		$time_format = get_option( 'time_format', Dates::TIMEFORMAT );
+
+		if ( isset( $this->custom['start-time'], $this->custom['end-time'] ) ) {
+			// Build the start and end times from the diff. time information.
+			$this->data['_start_time_input'] = Dates::immutable( $this->custom['start-time'] )->format( $time_format );
+			$this->data['_end_time_input'] = Dates::immutable( $this->custom['end-time'] )->format( $time_format );
+		} else if ( isset( $this->fields['EventStartDate'], $this->fields['EventEndDate'] ) ) {
+			// Build the start and end time input from the event start and end date.
+			$this->data['_start_time_input'] = Dates::immutable( $this->fields['EventStartDate'] )
+				->format( $time_format );
+			$this->data['_end_time_input'] = Dates::immutable( $this->fields['EventEndDate'] )
+				->format( $time_format );
+		}
 	}
 
 	/**
@@ -335,8 +354,8 @@ class Tribe__Events__Pro__Editor__Recurrence__Blocks
 	 * @since 4.5
 	 */
 	protected function set_yearly_fields() {
-		$year                = isset( $this->custom['year'] ) ? $this->custom['year'] : array();
-		$months              = isset( $year['month'] ) ? explode( ',', $year['month'] ) : array();
+		$year                = isset( $this->custom['year'] ) ? $this->custom['year'] : [];
+		$months              = isset( $year['month'] ) ? Arr::list_to_array( $year['month'] ) : [];
 		$this->data['month'] = array_unique( array_map( 'absint', $months ) );
 	}
 

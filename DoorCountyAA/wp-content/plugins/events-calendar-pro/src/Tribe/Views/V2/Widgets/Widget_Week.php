@@ -461,7 +461,7 @@ class Widget_Week extends Widget_Abstract {
 		}
 
 		$view      = $template->get_view();
-		$view_slug = $view->get_slug();
+		$view_slug = $view::get_view_slug();
 
 		// Bail if it's not week view for some reason.
 		if ( 'week' !== $view_slug && 'widget-week' !== $view_slug ) {

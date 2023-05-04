@@ -22,6 +22,7 @@ class MPSUM_Disable_Updates_Translations {
 		 * @author	sLa NGjI's @ slangji.wordpress.com
 		 */
 		add_filter('auto_update_translation', '__return_false');
+		add_filter('async_update_translation', '__return_false');
 		
 		/*
 		 * Disable Theme Translations

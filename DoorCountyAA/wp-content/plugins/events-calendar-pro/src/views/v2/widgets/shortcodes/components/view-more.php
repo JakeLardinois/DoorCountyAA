@@ -11,9 +11,10 @@
  *
  * @version 5.5.0
  *
- * @var string $view_more_link  The URL to view all events.
- * @var string $view_more_text  The text for the "view more" link.
- * @var string $view_more_title The widget "view more" link title attribute. Adds some context to the link for screen readers.
+ * @var Widget_Shortcode $widget The widget object.
+ * @var string           $view_more_link  The URL to view all events.
+ * @var string           $view_more_text  The text for the "view more" link.
+ * @var string           $view_more_title The widget "view more" link title attribute. Adds some context to the link for screen readers.
  */
 
 if ( empty( $view_more_link ) ) {

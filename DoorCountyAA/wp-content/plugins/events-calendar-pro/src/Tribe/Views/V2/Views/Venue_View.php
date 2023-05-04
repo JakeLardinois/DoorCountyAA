@@ -3,7 +3,7 @@
  * Renders the events part of a series in a list-like layout.
  *
  * @since   4.7.9
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 
 namespace Tribe\Events\Pro\Views\V2\Views;
@@ -24,7 +24,7 @@ use Tribe__Utils__Array as Arr;
  *
  * @since   4.7.9
  *
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 class Venue_View extends View {
 	use List_Behavior;
@@ -32,11 +32,20 @@ class Venue_View extends View {
 	/**
 	 * Slug for this view
 	 *
-	 * @since 4.7.9
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'venue';
+
+	/**
+	 * Statically accessible slug for this view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'venue';
 
 	/**
 	 * The venue parent post name.
@@ -87,6 +96,24 @@ class Venue_View extends View {
 	}
 
 	/**
+	 * Default untranslated value for the label of this view.
+	 *
+	 * @since 6.0.3
+	 *
+	 * @var string
+	 */
+	protected static $label = 'Venue';
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function get_view_label(): string {
+		static::$label = _x( 'Venue', 'The text label for the Venue View.', 'tribe-events-calendar-pro' );
+
+		return static::filter_view_label( static::$label );
+	}
+
+	/**
 	 * Gets the Venue ID for this view.
 	 *
 	 * @since 5.0.0
@@ -106,7 +133,7 @@ class Venue_View extends View {
 		 * templates for the `all` view, but fallback on the `list` one if not found.
 		 */
 		if ( $this->template->get_base_template_file() === $this->template->get_template_file() ) {
-			$this->template_slug = 'list';
+			$this->template_slug = \Tribe\Events\Views\V2\Views\List_View::get_view_slug();
 		}
 
 		return parent::get_html();
@@ -153,7 +180,7 @@ class Venue_View extends View {
 		$current_page = (int) $this->context->get( 'page', 1 );
 		$display      = $this->context->get( 'event_display_mode', 'venue' );
 
-		if ( $this->slug === $display || 'default' === $display ) {
+		if ( static::$view_slug === $display || 'default' === $display ) {
 			$url = View::next_url( $canonical );
 		} elseif ( $current_page > 1 ) {
 			$url = View::prev_url( $canonical, [ Utils\View::get_past_event_display_key() => 'past' ] );
@@ -244,7 +271,7 @@ class Venue_View extends View {
 				$this->page_key    => $page,
 				'eventDate'        => $event_date_var,
 				'tribe-bar-search' => $this->context->get( 'keyword' ),
-				'eventDisplay'     => $this->slug,
+				'eventDisplay'     => static::$view_slug,
 			] ) );
 
 			$upcoming_url = (string) $upcoming_url_object;
@@ -326,7 +353,7 @@ class Venue_View extends View {
 		$page = $this->url->get_current_page();
 
 		$query_args = [
-			'eventDisplay'  => $this->slug,
+			'eventDisplay'  => static::$view_slug,
 			Venue::POSTTYPE => $this->post_name,
 			'paged'         => $page > 1 ? $page : false,
 		];

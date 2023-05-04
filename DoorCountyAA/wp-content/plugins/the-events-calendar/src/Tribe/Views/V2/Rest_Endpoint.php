@@ -75,7 +75,7 @@ class Rest_Endpoint {
 		 *
 		 * @param string $url            The View endpoint URL, either a REST API URL or a admin-ajax.php fallback URL if REST API
 		 *                               is not available.
-		 * @param bool   $rest_available Whether the REST API endpoing URL is available on the current site or not.
+		 * @param bool   $rest_available Whether the REST API endpoint URL is available on the current site or not.
 		 */
 		$url = apply_filters( 'tribe_events_views_v2_endpoint_url', $url, $rest_available );
 
@@ -108,7 +108,7 @@ class Rest_Endpoint {
 					return is_string( $view );
 				},
 				'sanitize_callback' => static function ( $view ) {
-					return filter_var( $view, FILTER_SANITIZE_STRING );
+					return tec_sanitize_string( $view );
 				},
 			],
 			'_wpnonce' => [
@@ -117,7 +117,7 @@ class Rest_Endpoint {
 					return is_string( $nonce );
 				},
 				'sanitize_callback' => static function ( $nonce ) {
-					return filter_var( $nonce, FILTER_SANITIZE_STRING );
+					return tec_sanitize_string( $nonce );
 				},
 			],
 			'view_data' => [
@@ -138,7 +138,7 @@ class Rest_Endpoint {
 				return is_string( $action );
 			},
 			'sanitize_callback' => static function ( $action ) {
-				return filter_var( $action, FILTER_SANITIZE_STRING );
+				return tec_sanitize_string( $action );
 			},
 		];
 

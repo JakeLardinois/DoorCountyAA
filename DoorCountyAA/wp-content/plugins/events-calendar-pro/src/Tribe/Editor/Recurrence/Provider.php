@@ -156,9 +156,19 @@ class Tribe__Events__Pro__Editor__Recurrence__Provider {
 			return $is_recurring;
 		}
 
-		$rules       = get_post_meta( $post_id, Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$rules_key, true );
+		$rules = get_post_meta( $post_id, Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$rules_key, true );
 
-		return ! empty( $rules );
+		if ( empty( $rules ) || $rules === '[]' ) {
+			return false;
+		}
+
+		try {
+			$decoded_json = json_decode( $rules, true, 512, JSON_THROW_ON_ERROR );
+
+			return is_array( $decoded_json ) && count( array_filter( $decoded_json ) ) > 0;
+		} catch ( JsonException $e ) {
+			return false;
+		}
 	}
 }
 

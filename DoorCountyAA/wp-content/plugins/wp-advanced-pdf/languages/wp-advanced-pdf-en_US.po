@@ -1,0 +1,646 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Advanced PDF 1.1.5\n"
+"POT-Creation-Date: 2017-11-21 12:21+0530\n"
+"PO-Revision-Date: 2017-11-21 12:21+0530\n"
+"Last-Translator: \n"
+"Language-Team: CedCommerce <plugins@cedcommerce.com>\n"
+"Language: english\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath:\n"
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: pdf_options.php:29
+msgid "enter your e-mail address"
+msgstr ""
+
+#: pdf_options.php:30
+msgid "Know More"
+msgstr ""
+
+#: pdf_options.php:44
+msgid "WP Advanced PDF Settings"
+msgstr ""
+
+#: wp-advanced-pdf.php:98
+msgid ""
+"Soon you will receive the more details of this extension on the given mail."
+msgstr ""
+
+#: wp-advanced-pdf.php:102
+msgid "Sorry,an error occured.Please try again."
+msgstr ""
+
+#: wp-advanced-pdf.php:107
+msgid "Sorry,an error occured.Please try again"
+msgstr ""
+
+#: wp-advanced-pdf.php:231
+msgid "MAIL SENT!"
+msgstr ""
+
+#: wp-advanced-pdf.php:239
+msgid "NOT SENT!"
+msgstr ""
+
+#: wp-advanced-pdf.php:294 wp-advanced-pdf.php:312
+msgid "Exportpdf"
+msgstr ""
+
+#: wp-advanced-pdf.php:362
+msgid "Export"
+msgstr ""
+
+#: wp-advanced-pdf.php:442
+msgid "You do not have sufficient permissions to access this page"
+msgstr ""
+
+#: wp-advanced-pdf.php:1696
+msgid "PDF Cache Schedule Interval"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:346
+msgid "Display Option"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:350
+msgid "Front End"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:353
+msgid "Admin Panel"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:357
+msgid "Availability"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:361
+msgid "For all visitors"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:362
+msgid "Only for logged in users"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:367
+msgid "General"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:372
+msgid "Allowed Post Types"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:381
+msgid "Select Post type for which You want to export PDF."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:385
+msgid "Include Cache"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:388
+msgid ""
+"By default PDF will be generated on fly. Select to generate PDF from cache."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:392
+msgid "Schedule Cache Updation"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:396 libs/wpppdf-tab-general.php:497
+#: libs/wpppdf-tab-general.php:703
+msgid "None"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:397
+msgid "Daily"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:398
+msgid "Weekly"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:405
+msgid "Default File Name"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:408
+msgid "Post ID"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:409
+msgid "Post Name"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:416
+msgid "Display Author Detail"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:434
+msgid ""
+"Select if you would like to include the author name in the PDF, and how it "
+"should be formatted."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:438
+msgid "Display Post Category List"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:442
+msgid "Select if you would like to include the post category list in the PDF."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:445
+msgid "Display Post Tag List"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:449
+msgid ""
+"Select if you would like to include the post\n"
+"\t\t\t\t\t\t\t\ttag list in the PDF."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:453
+msgid "Display Post Date"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:457
+msgid ""
+"Select if you would like to include the post\n"
+"\t\t\t\t\t\t\t\tdate in the PDF."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:461
+msgid "Send mail on publish"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:465
+msgid "Select if you would like to send PDF through mail on post publish."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:486
+msgid "Button Positioning"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:490
+msgid "Alignment"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:494
+msgid "Left Align"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:495
+msgid "Right Align"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:496
+msgid "Center"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:502
+msgid "Select Placement"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:506
+msgid "Above Content"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:507
+msgid "Below Content"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:508
+msgid "Below and Above Content"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:511
+msgid ""
+"Select where to place the PDF icon (before or\n"
+"\t\t\t\t\t\t\t\tafter content; left or right aligned)."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:515
+msgid "Select Button"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:519
+msgid "Default"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:520
+msgid "Custom"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:524 libs/wpppdf-tab-general.php:707
+#: libs/wpppdf-tab-general.php:968 libs/wpppdf-tab-general.php:993
+msgid "Upload/Add image"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:537 libs/wpppdf-tab-general.php:720
+#: libs/wpppdf-tab-general.php:969 libs/wpppdf-tab-general.php:994
+msgid "Remove image"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:544
+msgid "Body"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:548
+msgid "Display Featured Image"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:553
+msgid ""
+"If a featured image has been set for the\n"
+"\t\t\t\t\t\t\t\tparticular post/page,<br/> it will be displayed just below "
+"the title."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:558
+msgid "Image Scaling Ratio"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:562
+msgid ""
+"\n"
+"\t\t\t\t\t\t\t\tEnter your desired image scaling ratio as a decimal (default "
+"is\n"
+"\t\t\t\t\t\t\t\t1.25). This represents <br> the relative size of the image "
+"in\n"
+"\t\t\t\t\t\t\t\tthe browser vs the size of the image in the PDF.<br> Thus, "
+"1.25\n"
+"\t\t\t\t\t\t\t\tyields a 1.25:1 scale of web:PDF."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:570
+msgid "Top Margin"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:574
+msgid "Enter your desired top margin (default is 27"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:578
+msgid "Left Margin"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:582
+msgid "Enter your desired left margin (default is 15"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:586
+msgid "Right Margin"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:590
+msgid "Enter your desired right margin (default is 15"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:594
+msgid "Page Size"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:601
+msgid ""
+"Select the desired page size (default is\n"
+"\t\t\t\t\t\t\t\tLETTER)."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:605
+msgid "Orientation"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:612
+msgid ""
+"Select the desired page orientation (default\n"
+"\t\t\t\t\t\t\t\tis Portrait)."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:616
+msgid "Unit of Measurement"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:640
+msgid ""
+"Select the desired unit of\n"
+"\t\t\t\t\t\t\t\tmeasurement (default is mm)."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:646
+msgid "Content Font"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:655
+msgid "Content Font Size"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:662
+msgid "RTL Support"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:666
+msgid ""
+"Select if you want to generate pdf for Post in Persian and Arabic language"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:670
+msgid "Custom Title"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:673
+msgid "Enter custom title to replace with post title."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:677
+msgid "Custom CSS"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:681
+msgid ""
+"Select if you would like to apply a custom css\n"
+"\t\t\t\t\t\t\t\tto all PDFs generated."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:696
+msgid "Header"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:700
+msgid "Page Header"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:704
+msgid "Upload an Image"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:726
+msgid "Show Site name "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:730
+msgid "Select if you would like to show site name along with logo."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:733
+msgid "Show Site Description "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:737
+msgid "Select if you would like to show site description along with logo."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:741
+msgid "Show Site URL "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:745
+msgid "Select if you would like to show site URL along with logo."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:748
+msgid "Logo Image Factor"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:752
+msgid ""
+"\n"
+"\t\t\t\t\t\t\t\tThis will applied to logo width/height<br>to provide logo "
+"image\n"
+"\t\t\t\t\t\t\t\tsome surrounding space."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:758
+msgid "Logo Top Margin"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:762
+msgid "Enter your desired top margin (default is 10"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:766
+msgid "Header Font"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:775
+msgid "Header Font Size"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:785
+msgid "Footer"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:789
+msgid "Custom Footer Text"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:805
+msgid "Footer Font"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:814
+msgid "Footer Font Size"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:817
+msgid "Select desired footer font size(default is 10"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:821
+msgid "Footer Cell Width"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:825
+msgid "Select desired Footer Cell Width(default is 0"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:829
+msgid "Footer Cell Minimum Height"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:833
+msgid "Select desired Footer Cell Minimum Height(default is 0"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:837
+msgid "Footer Cell Upper Left Corner (X)"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:840
+msgid "Select desired Footer Cell Upper Left Corner (X)(default is 15"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:844
+msgid "Footer Cell Upper Left Corner (Y)"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:848
+msgid "Select your desired Footer Cell Upper Left Corner (Y)(default is 290"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:852
+msgid "Footer Margin"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:856
+msgid "Select desired footer font margin(default is 10"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:860
+msgid "Footer Cell Fill"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:864
+msgid "Select if you like the footer cell to be painted (default is no)."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:869
+msgid "Footer Cell Text Alignment"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:874
+msgid "Select your desired text alignment for the footer cell.."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:878
+msgid "Footer Cell Auto-padding"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:889
+msgid "Watermark"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:891
+msgid ""
+"This options gives you the possibility to add\n"
+"\t\t\t\t\twatermark text to PDF pages."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:895
+msgid "Watermark Text"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:906
+msgid "Watermark Font"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:914
+msgid "Rotation"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:920
+msgid "Watermark Text:"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:928
+msgid "Image"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:938
+msgid "Image Height"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:944
+msgid "Image Weight"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:950
+msgid "Image Transparency"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:956
+msgid "Watermark Image:"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:976
+msgid "Custom Bullet Style"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:978
+msgid ""
+"Set the default bullet to be used as LI bullet\n"
+"\t\t\t\t\tsymbol."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:982
+msgid "Bullet Symbol:"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:999
+msgid "Custom Bullet Image Height"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1003
+msgid "Select custom Bullet Image Height (default 2 "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1007
+msgid "Custom Bullet Image Width"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1011
+msgid "Select custom Bullet Image Width (default 3 "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1017
+msgid "Advanced Setting"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1019
+msgid "Add Advanced Setting Options\t."
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1022
+msgid "Browse to Select Your Font in "
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1022
+msgid ".ttf format"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1036
+msgid "Set Page Rotation"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1041
+msgid "No Rotation"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1042
+msgid "90 degree"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1043
+msgid "180 degree"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1044
+msgid "270 degree"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1052
+msgid "Set FontStretching"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1056
+msgid "Select desired font Stretching(default is 100"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1062
+msgid "Set FontSpacing"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1066
+msgid "Select desired font Spacing(default is 0"
+msgstr ""
+
+#: libs/wpppdf-tab-general.php:1074
+msgid "Save Changes"
+msgstr ""

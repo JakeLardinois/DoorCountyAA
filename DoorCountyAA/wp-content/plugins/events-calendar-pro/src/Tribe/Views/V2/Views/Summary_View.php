@@ -16,15 +16,14 @@ use Tribe\Utils\Date_I18n;
 use Tribe\Utils\Date_I18n_Immutable;
 
 class Summary_View extends List_View {
-
 	/**
-	 * Slug for this view.
+	 * Statically accessible slug for this view.
 	 *
 	 * @since 5.7.0
 	 *
 	 * @var string
 	 */
-	public static $view_slug = 'summary';
+	protected static $view_slug = 'summary';
 
 	/**
 	 * @inheritdoc
@@ -36,6 +35,24 @@ class Summary_View extends List_View {
 
 		add_action( 'tribe_template_before_include:events-pro/v2/summary', [ $this, 'add_view_hooks' ] );
 		add_action( 'tribe_template_after_include:events-pro/v2/summary', [ $this, 'remove_view_hooks' ] );
+	}
+
+	/**
+	 * Default untranslated value for the label of this view.
+	 *
+	 * @since 6.0.3
+	 *
+	 * @var string
+	 */
+	protected static $label = 'Summary';
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function get_view_label(): string {
+		static::$label = _x( 'Summary', 'The text label for the Summary View.', 'tribe-events-calendar-pro' );
+
+		return static::filter_view_label( static::$label );
 	}
 
 	/**
@@ -242,6 +259,7 @@ class Summary_View extends List_View {
 		$last_date_end_of_day        = tribe_end_of_day( $last_date->format( Dates::DBDATEFORMAT ) );
 
 		return tribe_events()
+			->by_args( $this->get_global_repository_args() )
 			->where( 'starts_before', $first_date_beginning_of_day )
 			->where( 'ends_between', $first_date_beginning_of_day, $last_date_end_of_day )
 			->all();
@@ -262,6 +280,7 @@ class Summary_View extends List_View {
 		$last_date_beginning_of_day  = tribe_beginning_of_day( $last_date->format( Dates::DBDATEFORMAT ) );
 
 		return tribe_events()
+			->by_args( $this->get_global_repository_args() )
 			->where( 'starts_before', $first_date_beginning_of_day )
 			->where( 'ends_after', $last_date_beginning_of_day )
 			->all();
@@ -279,6 +298,7 @@ class Summary_View extends List_View {
 	 */
 	protected function get_previous_event( \WP_Post $earliest_event, array $exclude_ids = [] ) {
 		return tribe_events()
+			->by_args( $this->get_global_repository_args() )
 			->where( 'starts_before', $earliest_event->dates->start )
 			->not_in( $exclude_ids )
 			->per_page( 1 )
@@ -426,5 +446,15 @@ class Summary_View extends List_View {
 	 */
 	public static function get_asset_origin( $slug ) {
 		return tribe( 'events-pro.main' );
+	}
+
+	/**
+	 * Overrides the base method to provide the correct text domain to translate the rewrite slug.
+	 *
+	 * {@inheritdoc }
+	 */
+	public function get_rewrite_slugs(): array {
+		return  [ static::get_view_slug(), translate( static::get_view_slug(), 'tribe-events-calendar-pro' ) ];
+
 	}
 }

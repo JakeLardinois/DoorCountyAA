@@ -1,4 +1,7 @@
 <?php
+
+use Tribe\Events\Views\V2\Views\List_View;
+
 /**
  * Facilitates setup of the query used to generate the /all/ events page.
  */
@@ -59,7 +62,7 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 }
 
 	/**
-	 * Unattach all the hooks associated with this class.
+	 * Detach all the hooks associated with this class.
 	 *
 	 * @since 4.7
 	 */
@@ -197,7 +200,7 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 		 */
 		$args = apply_filters( 'tribe_events_pro_all_events_query_args', array(
 			'post_parent'    => $this->parent_event->ID,
-			'eventDisplay'   => 'list',
+			'eventDisplay'   => List_View::get_view_slug(),
 			'fields'         => 'ids',
 			'posts_per_page' => 1,
 			'starts_after'   => tribe_get_request_var( 'tribe-bar-date', 'now' ),
@@ -214,7 +217,7 @@ class Tribe__Events__Pro__Recurrence__Event_Query {
 		 *
 		 * Removing the date filters means *all* instances including past event instances will
 		 * be queried for. Not removing them means only upcoming instances will be returned:
-		 * the default behaviour is to remove them only if there are no upcoming events in the
+		 * the default behavior is to remove them only if there are no upcoming events in the
 		 * series.
 		 *
 		 * @since 4.4.14

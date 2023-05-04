@@ -47,7 +47,6 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @since 5.5.0
 	 */
 	public function add_actions() {
-		add_action( 'init', [ $this, 'action_disable_shortcode_v1' ], 15 );
 		add_action( 'init', [ $this, 'action_add_shortcodes' ], 20 );
 		add_action( 'tribe_events_pro_shortcode_tribe_events_after_assets', [ $this, 'action_disable_shortcode_assets_v1' ] );
 		add_action( 'tribe_events_views_v2_before_make_view_for_rest', [ $this, 'action_shortcode_toggle_hooks' ], 10, 3 );
@@ -86,10 +85,12 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return array The modified shortcodes array.
 	 */
 	public function filter_tribe_shortcodes( $shortcodes ) {
-		$shortcodes['tribe_events']        = Tribe_Events::class;
-		$shortcodes['tribe_events_list']   = Shortcode_Tribe_Events_List::class;
-		$shortcodes['tribe_this_week']     = Shortcode_Tribe_Week::class;
-		$shortcodes['tribe_mini_calendar'] = Shortcode_Tribe_Mini_Calendar::class;
+		$shortcodes['tribe_events']          = Tribe_Events::class;
+		$shortcodes['tribe_events_list']     = Shortcode_Tribe_Events_List::class;
+		$shortcodes['tribe_this_week']       = Shortcode_Tribe_Week::class;
+		$shortcodes['tribe_mini_calendar']   = Shortcode_Tribe_Mini_Calendar::class;
+		$shortcodes['tribe_event_countdown'] = Shortcode_Tribe_Event_Countdown::class;
+		$shortcodes['tribe_featured_venue']  = Shortcode_Tribe_Featured_Venue::class;
 
 		return $shortcodes;
 	}
@@ -132,36 +133,6 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	public function action_shortcode_toggle_hooks( $slug, $params, Request $request ) {
 		Tribe_Events::maybe_toggle_hooks_for_rest( $slug, $params, $request );
-	}
-
-	/**
-	 * Remove old shortcode methods from views v1.
-	 *
-	 * @since  4.7.5
-	 * @since 5.5.0 Moved this from deprecated Shortcodes\Manager.
-	 *
-	 * @return void
-	 */
-	public function action_disable_shortcode_v1() {
-		remove_shortcode( 'tribe_events' );
-		remove_shortcode( 'tribe_events_list' );
-		remove_shortcode( 'tribe_this_week' );
-		remove_shortcode( 'tribe_mini_calendar' );
-
-		$legacy_shortcodes_instance = tribe( 'events-pro.main' )->shortcodes;
-
-		// Prevents removal with the incorrect class.
-		if ( ! $legacy_shortcodes_instance instanceof Legacy_Shortcodes ) {
-			return;
-		}
-
-		remove_action( 'tribe_events_ical_before', [ $legacy_shortcodes_instance, 'search_shortcodes' ] );
-		remove_action( 'save_post', [ $legacy_shortcodes_instance, 'update_shortcode_main_calendar' ] );
-		remove_action( 'trashed_post', [ $legacy_shortcodes_instance, 'maybe_reset_main_calendar' ] );
-		remove_action( 'deleted_post', [ $legacy_shortcodes_instance, 'maybe_reset_main_calendar' ] );
-
-		// Hooks attached to the main calendar attribute on the shortcodes
-		remove_filter( 'tribe_events_get_link', [ $legacy_shortcodes_instance, 'shortcode_main_calendar_link' ], 10 );
 	}
 
 	/**

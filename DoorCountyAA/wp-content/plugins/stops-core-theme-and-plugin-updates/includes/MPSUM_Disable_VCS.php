@@ -82,7 +82,7 @@ class MPSUM_Disable_VCS {
 	public function show_eum_plugins_tab_warning() {
 		$this->excluded_plugins = array_unique($this->excluded_plugins);
 		if (!empty($this->excluded_plugins)) {
-			$plugin_list = sprintf('<strong>%s</strong>', esc_html(implode($this->excluded_plugins, ', ')));
+			$plugin_list = sprintf('<strong>%s</strong>', esc_html(implode(', ', $this->excluded_plugins)));
 		}
 		if (empty($plugin_list)) {
 			return;
@@ -102,7 +102,7 @@ class MPSUM_Disable_VCS {
 	public function show_eum_themes_tab_warning() {
 		$this->excluded_themes = array_unique($this->excluded_themes);
 		if (!empty($this->excluded_themes)) {
-			$theme_list = sprintf('<strong>%s</strong>', esc_html(implode($this->excluded_themes, ', ')));
+			$theme_list = sprintf('<strong>%s</strong>', esc_html(implode(', ', $this->excluded_themes)));
 		}
 		if (empty($theme_list)) {
 			return;
@@ -168,10 +168,10 @@ class MPSUM_Disable_VCS {
 			$theme_list  = '';
 
 			if (!empty($this->excluded_plugins)) {
-				$plugin_list = sprintf('<strong>%s</strong>', implode($this->excluded_plugins, ', '));
+				$plugin_list = sprintf('<strong>%s</strong>', implode(', ', $this->excluded_plugins));
 			}
 			if (!empty($this->excluded_themes)) {
-				$theme_list = sprintf('<strong>%s</strong>', implode($this->excluded_themes, ', '));
+				$theme_list = sprintf('<strong>%s</strong>', implode(', ', $this->excluded_themes));
 			}
 			?>
 			<div class="notice notice-warning">

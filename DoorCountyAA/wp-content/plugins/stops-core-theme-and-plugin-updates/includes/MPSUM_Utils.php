@@ -278,4 +278,16 @@ class MPSUM_Utils {
 		}
 		return false;
 	}
+
+	/**
+	 * Determine whether the given item is a fake plugin/theme that is used by WP Site Health for diagnosing auto-updating problems
+	 *
+	 * @param object $item Object holding the asset to be updated
+	 * @return boolean True if the given parameter is an object that contains fake WP's Site Health plugin or theme
+	 */
+	public static function is_wp_site_health_plugin_theme($item) {
+		if (isset($item->theme) && 'a-fake-theme' === $item->theme) return true;
+		if (isset($item->plugin) && 'a-fake-plugin/a-fake-plugin.php' === $item->plugin) return true;
+		return false;
+	}
 }

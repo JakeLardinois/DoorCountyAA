@@ -18,7 +18,7 @@ class Tribe__Events__Pro__Recurrence__Engines__Version_1 implements Tribe__Event
 	 * {@inheritdoc}
 	 */
 	public function get_name() {
-		return __( 'Version 1', 'events-pro' );
+		return __( 'Version 1', 'tribe-events-calendar-pro' );
 	}
 
 	/**
@@ -48,7 +48,6 @@ class Tribe__Events__Pro__Recurrence__Engines__Version_1 implements Tribe__Event
 		$main->queue_realtime  = new Tribe__Events__Pro__Recurrence__Queue_Realtime;
 		$main->aggregator      = new Tribe__Events__Pro__Recurrence__Aggregator;
 
-		add_action( 'tribe_events_pre_get_posts', array( $main, 'pre_get_posts' ) );
 		add_filter( 'tribe_enable_recurring_event_queries', '__return_true', 10 );
 		add_action( 'tribe_events_pre_get_posts', array( $main, 'setup_hide_recurrence_in_query' ) );
 

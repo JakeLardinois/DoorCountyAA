@@ -2,12 +2,12 @@
 
 if (!defined('EASY_UPDATES_MANAGER_MAIN_PATH')) die('No direct access allowed');
 
-if (!class_exists('Updraft_Notices_1_0')) require_once(EASY_UPDATES_MANAGER_MAIN_PATH.'includes/updraft-notices.php');
+if (!class_exists('Updraft_Notices_1_2')) require_once(EASY_UPDATES_MANAGER_MAIN_PATH.'/vendor/team-updraft/common-libs/src/updraft-notices/updraft-notices.php');
 
 /**
  * Class Easy_Updates_Manager_Notices
  */
-class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
+class Easy_Updates_Manager_Notices extends Updraft_Notices_1_2 {
 
 	protected static $_instance = null;
 
@@ -110,9 +110,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'blackfridaysale2021',
-				'valid_from' => '2021-11-20 00:00:00',
-				'valid_to' => '2021-11-30 23:59:59',
+				'discount_code' => 'blackfridaysale2022',
+				'valid_from' => '2022-11-20 00:00:00',
+				'valid_to' => '2022-11-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -124,9 +124,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'newyearsale2022',
-				'valid_from' => '2021-12-26 00:00:00',
-				'valid_to' => '2022-01-14 23:59:59',
+				'discount_code' => 'newyearsale2023',
+				'valid_from' => '2022-12-26 00:00:00',
+				'valid_to' => '2023-01-14 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -138,9 +138,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'springsale2021',
-				'valid_from' => '2021-05-01 00:00:00',
-				'valid_to' => '2021-05-31 23:59:59',
+				'discount_code' => 'springsale2022',
+				'valid_from' => '2022-05-01 00:00:00',
+				'valid_to' => '2022-05-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -152,9 +152,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'button_link' => 'https://easyupdatesmanager.com/',
 				'button_meta' => 'eum_premium',
 				'dismiss_time' => 'dismiss_season_notice_until',
-				'discount_code' => 'summersale2021',
-				'valid_from' => '2021-07-01 00:00:00',
-				'valid_to' => '2021-07-31 23:59:59',
+				'discount_code' => 'summersale2022',
+				'valid_from' => '2022-07-01 00:00:00',
+				'valid_to' => '2022-07-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 				'validity_function' => 'is_premium_installed',
 			),
@@ -167,9 +167,9 @@ class Easy_Updates_Manager_Notices extends Updraft_Notices_1_0 {
 				'campaign' => 'collection',
 				'button_meta' => 'collection',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'EUM2021',
-				'valid_from' => '2021-09-01 00:00:00',
-				'valid_to' => '2021-09-30 23:59:59',
+				'discount_code' => 'EUM2022',
+				'valid_from' => '2022-09-01 00:00:00',
+				'valid_to' => '2022-09-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			)
 		);

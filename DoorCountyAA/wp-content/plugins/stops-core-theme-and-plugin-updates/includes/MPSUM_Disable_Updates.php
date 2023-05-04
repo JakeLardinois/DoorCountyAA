@@ -16,6 +16,8 @@ class MPSUM_Disable_Updates {
 	 */
 	private static $instance = null;
 
+	private $is_core_updating_allowed = true;
+
 	/**
 	 * Set a class instance.
 	 *
@@ -60,6 +62,9 @@ class MPSUM_Disable_Updates {
 		if (isset($core_options['all_updates']) && 'off' == $core_options['all_updates']) {
 			new MPSUM_Disable_Updates_All();
 			return;
+		} else {
+			add_filter('automatic_updater_disabled', '__return_false', PHP_INT_MAX - 10);
+			add_filter('file_mod_allowed', array($this, 'allow_file_modifications_for_automatic_updating'), PHP_INT_MAX - 10, 2);
 		}
 
 		// Enable or disable version control protection
@@ -74,13 +79,17 @@ class MPSUM_Disable_Updates {
 			new MPSUM_Disable_Updates_WordPress();
 		} else {
 			// Core Development Updates
-			add_filter('allow_dev_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) && isset($core_options['automatic_development_updates']) && 'on' == $core_options['automatic_development_updates'] ? 'true' : 'false'), PHP_INT_MAX - 10);
+			add_filter('allow_dev_auto_core_updates', array($this, 'core_should_update_to_new_version'), PHP_INT_MAX - 10);
 
 			// Core Major Updates
-			add_filter('allow_major_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && 'automatic' === $core_options['core_updates'] ? 'true' : 'false'), PHP_INT_MAX - 10);
+			add_filter('allow_major_auto_core_updates', array($this, 'core_should_update_to_new_version'), PHP_INT_MAX - 10);
 
 			// Core Minor Updates
-			add_filter('allow_minor_auto_core_updates', '__return_'.(isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) ? 'true' : 'false'), PHP_INT_MAX - 10);
+			add_filter('allow_minor_auto_core_updates', array($this, 'core_should_update_to_new_version'), PHP_INT_MAX - 10);
+
+			// Core Global Updates - a hook for making final decision as to whether core updating is allowed after examing other core-related hooks, also ensuring that no other filters will override our value
+			add_filter('auto_update_core', array($this, 'is_core_updating_allowed'), PHP_INT_MAX - 10);
+			if (!isset($core_options['core_updates']) || 'on' == $core_options['core_updates']) $this->is_core_updating_allowed = false; // on means manually update
 
 			// Manually update / Disables Core Automatic Updates
 			// When the __return_false function is hooked to the three filters above, that means core automatic updates is disabled or it's a manually update
@@ -104,23 +113,16 @@ class MPSUM_Disable_Updates {
 		// Enable Translation Updates
 		if (isset($core_options['translation_updates']) && 'automatic' == $core_options['translation_updates']) {
 			add_filter('auto_update_translation', '__return_true', PHP_INT_MAX - 10);
+			add_filter('async_update_translation', '__return_true', PHP_INT_MAX - 10);
 		}
 		
 		// Disable Translation Updates
-		if (isset($core_options['translation_updates']) && 'automatic_off' == $core_options['translation_updates']) {
+		if (!isset($core_options['translation_updates']) || in_array($core_options['translation_updates'], array('on', 'automatic_off'))) { // After 9.0.12 version, translation 'Disable auto updates' is removed and is united to 'Manually update' as they are just the same
 			add_filter('auto_update_translation', '__return_false', PHP_INT_MAX - 10);
+			add_filter('async_update_translation', '__return_false', PHP_INT_MAX - 10);
 		}
 
 		// Disable the Update Notification
-		if (isset($core_options['notification_core_update_emails']) && 'on' == $core_options['notification_core_update_emails']) {
-			add_filter('auto_core_update_send_email', '__return_true', PHP_INT_MAX - 10);
-			add_filter('send_core_update_notification_email', array($this, 'email_flood_control'), PHP_INT_MAX - 10);
-			add_filter('automatic_updates_send_debug_email', '__return_true', PHP_INT_MAX - 10);
-		} elseif (isset($core_options['notification_core_update_emails']) && 'off' == $core_options['notification_core_update_emails']) {
-			add_filter('auto_core_update_send_email', '__return_false', PHP_INT_MAX - 10);
-			add_filter('send_core_update_notification_email', '__return_false', PHP_INT_MAX - 10);
-			add_filter('automatic_updates_send_debug_email', '__return_false', PHP_INT_MAX - 10);
-		}
 		if (isset($core_options['notification_core_update_emails_plugins']) && 'off' == $core_options['notification_core_update_emails_plugins']) {
 			add_filter('send_update_notification_email', array( $this, 'maybe_disable_emails' ), 10, 3);
 		}
@@ -161,18 +163,7 @@ class MPSUM_Disable_Updates {
 		} else {
 			add_filter('auto_update_theme',  '__return_false', 1, 2); // should be one that corresponds with earlier execution (as early as it could)
 		}
-
-		// Automatic Updates E-mail Address
-		add_filter('automatic_updates_debug_email', array( $this, 'maybe_change_automatic_update_email' ), PHP_INT_MAX - 10);
-		add_filter('auto_core_update_email', array( $this, 'maybe_change_automatic_update_email' ), PHP_INT_MAX - 10);
 		
-		// Disable Plugin Auto-updates E-mail Notifications
-		if (isset($core_options['plugin_auto_updates_notification_emails'])) {
-			if ('off' === $core_options['plugin_auto_updates_notification_emails']) {
-				add_filter('auto_plugin_update_send_email',  '__return_false', PHP_INT_MAX - 10, 2);
-			}
-		}
-
 
 		// Prevent updates on themes/plugins
 		add_filter('site_transient_update_plugins', array( $this, 'disable_plugin_notifications' ), PHP_INT_MAX - 10);
@@ -184,7 +175,9 @@ class MPSUM_Disable_Updates {
 			$divi_upgrader = $GLOBALS['et_core_updates'];
 			remove_action('after_setup_theme', array($divi_upgrader, 'remove_theme_update_actions'), 11);
 		}
-
+		
+		// Initialize and configure notification email filters, whether to disable or enable based on pre-defined user settings
+		MPSUM_Send_Email_Notifications::get_instance();
 	} //end constructor
 
 	/**
@@ -197,54 +190,6 @@ class MPSUM_Disable_Updates {
 		if (wp_doing_cron() && ! doing_action('wp_maybe_auto_update')) {
 			do_action('wp_maybe_auto_update');
 		}
-	}
-
-	/**
-	 * Maybe change automatic update email
-	 *
-	 * @since 6.1.0
-	 * @access public
-	 * @see __construct
-	 *
-	 * @param array $email array
-	 *
-	 * @return array email array
-	 */
-	public function maybe_change_automatic_update_email( $email ) {
-		$core_options = MPSUM_Updates_Manager::get_options('core');
-		$email_addresses = isset($core_options['email_addresses']) ? $core_options['email_addresses'] : array();
-		$email_addresses_to_override = array();
-		foreach ($email_addresses as $emails) {
-			if (is_email($emails)) {
-				$email_addresses_to_override[] = $emails;
-			}
-		}
-		if (! empty($email_addresses_to_override)) {
-			$email['to'] = $email_addresses_to_override;
-		}
-		return $email;
-	}
-
-	/**
-	 * Flood control WordPress core update notifications; called by the WP filter send_core_update_notification_email
-	 *
-	 * @since 8.0.6
-	 * @access public
-	 * @see __construct
-	 *
-	 * @param bool $value Whether to send emails or not.
-	 *
-	 * @return bool Whether to send emails or not.
-	 */
-	public function email_flood_control($value) {
-		$no_core_email_before = get_site_option('eum_no_core_email_before');
-		if (!$no_core_email_before || time() > $no_core_email_before) {
-			// Set site option for the next 24 hours to prevent users from being overwhelmed with emails.
-			update_site_option('eum_no_core_email_before', apply_filters('eum_no_core_email_before', time() + 86400));
-			return $value;
-		}
-		// Blocked because we've already been here in the last 24 hours
-		return false;
 	}
 
 	/**
@@ -305,7 +250,7 @@ class MPSUM_Disable_Updates {
 	 */
 	public function automatic_updates_plugins($update, $item) {
 		$plugin_automatic_options = MPSUM_Updates_Manager::get_options('plugins_automatic');
-		if (in_array($item->plugin, $plugin_automatic_options)) {
+		if (MPSUM_Utils::is_wp_site_health_plugin_theme($item) || (isset($item->plugin) && in_array($item->plugin, $plugin_automatic_options))) {
 			return true;
 		}
 		return false;
@@ -327,7 +272,7 @@ class MPSUM_Disable_Updates {
 	 */
 	public function automatic_updates_theme($update, $item) {
 		$theme_automatic_options = MPSUM_Updates_Manager::get_options('themes_automatic');
-		if (in_array($item->theme, $theme_automatic_options)) {
+		if (MPSUM_Utils::is_wp_site_health_plugin_theme($item) || (isset($item->theme) && in_array($item->theme, $theme_automatic_options))) {
 			return true;
 		}
 		return false;
@@ -425,5 +370,44 @@ class MPSUM_Disable_Updates {
 			$r['body']['themes'] = json_encode($r_themes);
 		}
 		return $r;
+	}
+
+	/**
+	 * Determine whether  WordPress Core should update to a new version or not
+	 *
+	 * @return boolean True if we should update to the new version, false otherwise
+	 */
+	public function core_should_update_to_new_version() {
+
+		$core_options = MPSUM_Updates_Manager::get_options('core');
+
+		if (doing_filter('allow_dev_auto_core_updates')) {
+			$this->is_core_updating_allowed = isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) && isset($core_options['automatic_development_updates']) && 'on' == $core_options['automatic_development_updates'] ? true : false;
+		} elseif (doing_filter('allow_major_auto_core_updates')) {
+			$this->is_core_updating_allowed = isset($core_options['core_updates']) && 'automatic' === $core_options['core_updates'] ? true : false;
+		} elseif (doing_filter('allow_minor_auto_core_updates')) {
+			$this->is_core_updating_allowed = isset($core_options['core_updates']) && in_array($core_options['core_updates'], array('automatic', 'automatic_minor')) ? true : false;
+		}
+		
+		return $this->is_core_updating_allowed;
+	}
+
+	/**
+	 * Allow and force file modifications for automatic updating
+	 *
+	 * @param boolean $file_mod_allowed Whether file modifications are allowed
+	 * @param string  $context          The usage context
+	 * @return boolean True if the context is automatic updater, false if file modification isn't allowed
+	 */
+	public function allow_file_modifications_for_automatic_updating($file_mod_allowed, $context) {
+		if ('automatic_updater' === $context) return true;
+		return $file_mod_allowed;
+	}
+
+	/**
+	 * Return the value that previously has been looked over the core-related filters as to whether core updating is allowed or not
+	 */
+	public function is_core_updating_allowed() {
+		return $this->is_core_updating_allowed;
 	}
 }

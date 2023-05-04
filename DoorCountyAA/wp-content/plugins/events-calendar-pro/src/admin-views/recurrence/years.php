@@ -59,6 +59,17 @@ for ( $i = 1; $i <= 12; $i++ ) {
 	</select>
 </div>
 <div class="tribe-dame-day-select">
+	<?php
+	/**
+	 * Filters the recurrence year same day select before template for the recurrence UI.
+	 *
+	 * @param $template The recurrence year same day select before template.
+	 */
+	$template = apply_filters( 'tribe_events_pro_recurrence_template_year_same_day_select_before', '' );
+	if ( ! empty( $template ) ) {
+		echo $template;
+	}
+	?>
 	<span class="tribe-field-inline-text first-label-in-line">
 		<?php esc_html_e( 'On', 'tribe-events-calendar-pro' ); ?>
 	</span>
@@ -154,6 +165,17 @@ for ( $i = 1; $i <= 12; $i++ ) {
 			>
 				<?php echo esc_html_x( 'of the month', 'As in: day 12 of the month', 'tribe-events-calendar-pro' ); ?>
 			</span>
+			<?php
+			/**
+			 * Filters the recurrence year not same day after template for the recurrence UI.
+			 *
+			 * @param $template The recurrence year not same day after template.
+			 */
+			$template = apply_filters( 'tribe_events_pro_recurrence_template_year_not_same_day_after', '' );
+			if ( ! empty( $template ) ) {
+				echo $template;
+			}
+			?>
 		</span>
 </div>
 </select>

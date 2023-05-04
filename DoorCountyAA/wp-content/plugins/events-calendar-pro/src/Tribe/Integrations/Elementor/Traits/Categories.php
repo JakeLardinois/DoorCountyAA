@@ -42,6 +42,14 @@ trait Categories {
 			}
 		}
 
+		if ( $category_objects instanceof \WP_Error ) {
+			return [];
+		}
+
+		$category_objects = array_values( array_filter( $category_objects, static function ( $category ) {
+			return $category instanceof \WP_Term;
+		} ) );
+
 		$categories = [];
 		foreach ( $category_objects as $category ) {
 			$categories[ $category->slug ] = $category->name;

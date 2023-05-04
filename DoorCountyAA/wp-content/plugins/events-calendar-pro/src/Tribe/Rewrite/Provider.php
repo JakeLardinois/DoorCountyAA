@@ -86,14 +86,14 @@ class Provider extends \tad_DI52_ServiceProvider {
 			->single( [ '(\d{4}-\d{2}-\d{2})', 'ical' ], [ TEC::POSTTYPE => '%1', 'eventDate' => '%2', 'ical' => 1 ] )
 			->archive( [ '{{ week }}' ], [ 'eventDisplay' => 'week' ] )
 			->archive( [ '{{ week }}', '{{ featured }}' ], [ 'eventDisplay' => 'week', 'featured' => true ] )
-			->archive( [ '{{ week }}', '(\d{2})' ], [ 'eventDisplay' => 'week', 'eventDate' => '%1' ] )
-			->archive( [ '{{ week }}', '(\d{2})', '{{ featured }}' ], [
+			->archive( [ '{{ week }}', '(\d{4}-\d{2}-\d{2})' ], [ 'eventDisplay' => 'week', 'eventDate' => '%1' ] )
+			->archive( [ '{{ week }}', '(\d{4}-\d{2}-\d{2})', '{{ featured }}' ], [
 				'eventDisplay' => 'week',
 				'eventDate'    => '%1',
 				'featured'     => true
 			] )
-			->archive( [ '{{ week }}', '(\d{4}-\d{2}-\d{2})' ], [ 'eventDisplay' => 'week', 'eventDate' => '%1' ] )
-			->archive( [ '{{ week }}', '(\d{4}-\d{2}-\d{2})', '{{ featured }}' ], [
+			->archive( [ '{{ week }}', '(\d{2})' ], [ 'eventDisplay' => 'week', 'eventDate' => '%1' ] )
+			->archive( [ '{{ week }}', '(\d{2})', '{{ featured }}' ], [
 				'eventDisplay' => 'week',
 				'eventDate'    => '%1',
 				'featured'     => true
@@ -155,9 +155,10 @@ class Provider extends \tad_DI52_ServiceProvider {
 	public function filter_add_base_slugs( $bases = [] ) {
 
 		// Support the original and translated forms for added robustness
-		$bases['all']   = [ 'all', tribe( 'events-pro.main' )->all_slug ];
-		$bases['week']  = [ 'week', tribe( 'events-pro.main' )->weekSlug ];
-		$bases['photo'] = [ 'photo', tribe( 'events-pro.main' )->photoSlug ];
+		$bases['all'] = [ 'all', sanitize_title( __( 'all', 'tribe-events-calendar-pro' ) ) ];
+		$bases['week'] = [ 'week', sanitize_title( __( 'week', 'tribe-events-calendar-pro' ) ) ];
+		$bases['photo'] = [ 'photo', sanitize_title( __( 'photo', 'tribe-events-calendar-pro' ) ) ];
+		$bases['map'] = [ 'map', sanitize_title( __( 'map', 'tribe-events-calendar-pro' ) ) ];
 
 		return $bases;
 	}

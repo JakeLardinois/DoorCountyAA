@@ -8,6 +8,7 @@
 
 namespace Tribe\Events\Pro\Rewrite;
 
+use Tribe\Events\Pro\Views\V2\Views\Week_View;
 use Tribe__Events__Main as TEC;
 use Tribe__Events__Organizer as Organizer;
 use Tribe__Events__Venue as Venue;
@@ -32,16 +33,29 @@ class Rewrite extends \Tribe__Events__Rewrite {
 		$dynamic_matchers = parent::get_dynamic_matchers( $query_vars );
 		$bases            = (array) $this->get_bases();
 
-		if ( isset( $query_vars['tribe_recurrence_list'], $query_vars[ TEC::POSTTYPE ] ) ) {
-			$all_regex = $bases['all'];
-			preg_match( '/^\(\?:(?<slugs>[^\\)]+)\)/', $all_regex, $matches );
-			if ( isset( $matches['slugs'] ) ) {
-				$slugs = explode( '|', $matches['slugs'] );
-				// The localized version is the last.
-				$localized_slug                           = end( $slugs );
-				$dynamic_matchers["([^/]+)/{$all_regex}"] = "{$query_vars[TEC::POSTTYPE]}/{$localized_slug}";
+		if ( isset( $query_vars[ TEC::POSTTYPE ] ) ) {
+			if ( isset( $query_vars['tribe_recurrence_list'] ) ) {
+				// Request for the /events/all/<slug> URI.
+				$all_regex = $bases['all'];
+				preg_match( '/^\(\?:(?<slugs>[^\\)]+)\)/', $all_regex, $matches );
+				if ( isset( $matches['slugs'] ) ) {
+					$slugs = explode( '|', $matches['slugs'] );
+					// The localized version is the last.
+					$localized_slug                           = end( $slugs );
+					$dynamic_matchers["([^/]+)/{$all_regex}"] = "{$query_vars[TEC::POSTTYPE]}/{$localized_slug}";
+				}
+			} elseif ( isset( $query_vars['eventDate'] ) ) {
+				// Request for a specific date in the context of a recurring event.
+				$dynamic_matchers['([^/]+)']                = $query_vars[ TEC::POSTTYPE ];
+				$dynamic_matchers['(\\d{4}-\\d{2}-\\d{2})'] = $query_vars['eventDate'];
+
+				if ( isset( $query_vars['eventSequence'] ) ) {
+					// Support sequence number for Occurrences of the same event on the same day.
+					$dynamic_matchers['(\\d+)'] = (int) $query_vars['eventSequence'];
+				}
 			}
 		}
+
 
 		if ( isset( $query_vars[ Venue::POSTTYPE ] ) ) {
 			// Add the Venue slug as a dynamic matcher.
@@ -51,6 +65,15 @@ class Rewrite extends \Tribe__Events__Rewrite {
 		if ( isset( $query_vars[ Organizer::POSTTYPE ] ) ) {
 			// Add the Organizer slug as a dynamic matcher.
 			$dynamic_matchers['([^/]+)'] = $query_vars[ Organizer::POSTTYPE ];
+		}
+
+		if (
+			( $query_vars['eventDisplay'] ?? false ) === Week_View::get_view_slug()
+			&& ( $query_vars['eventDate'] ?? false )
+			&& preg_match( '/^\\d{1,2}$/', $query_vars['eventDate'] )
+		) {
+			// Add the week number dynamic matcher.
+			$dynamic_matchers['(\d{2})'] = (int) $query_vars['eventDate'];
 		}
 
 		$dynamic_matchers = array_merge(
@@ -157,5 +180,30 @@ class Rewrite extends \Tribe__Events__Rewrite {
 		}
 
 		return $dynamic_matchers;
+	}
+
+	/**
+	 * Filters the handled rewrite rules to add the ones specific to ECP and Recurring Events.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @return array<string,string> The filtered list of rewrite rules.
+	 */
+	protected function get_handled_rewrite_rules() {
+		$cache       = tribe_cache();
+		$ecp_handled = $cache['ecp_handled_rewrite_rules'] ?? null;
+
+		if ( ! is_array( $ecp_handled ) ) {
+			$tec_handled                        = parent::get_handled_rewrite_rules();
+			$all_rules                          = isset( $this->rewrite->rules ) ? (array) $this->rewrite->rules : [];
+			$recurring_event_rules              = array_filter( $all_rules, static function ( $rule_query_string ) {
+				return is_string( $rule_query_string )
+				       && strpos( $rule_query_string, 'index.php?tribe_events=$matches[1]' ) === 0;
+			} );
+			$ecp_handled                        = array_merge( $tec_handled, $recurring_event_rules );
+			$cache['ecp_handled_rewrite_rules'] = $ecp_handled;
+		}
+
+		return $ecp_handled;
 	}
 }

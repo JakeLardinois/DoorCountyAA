@@ -147,7 +147,7 @@ class Tribe__Events__Pro__Editor__Recurrence__Classic
 	 */
 	protected function set_custom_args() {
 		$this->data['custom'] = array(
-			'same-time'  => 'no',
+			'same-time'  => $this->fields['same-time'] ?? 'no',
 			'start-time' => $this->fields['start_time'],
 			'end-time'   => $this->fields['end_time'],
 		);

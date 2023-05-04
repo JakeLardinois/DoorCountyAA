@@ -8,7 +8,6 @@
  */
 ?>
 
-<a name="geoloc_fix"></a>
 <fieldset class="tribe-field tribe-field-html">
 	<legend><?php esc_html_e( 'Fix geolocation data', 'tribe-events-calendar-pro' ); ?></legend>
 	<div class="tribe-field-wrap">

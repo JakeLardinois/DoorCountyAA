@@ -237,6 +237,8 @@ tribe_events_pro_admin.recurrence = {
 
 		// check active recurrence input to use for dependencies
 		$( '#tribe-recurrence-active.inactive' ).trigger( 'click' ).prop( 'checked', true ).removeClass( 'inactive' );
+
+		$document.trigger( 'verify.dependency' );
 	};
 
 	my.setup_weekly_select = function ( $rule ) {
@@ -320,7 +322,8 @@ tribe_events_pro_admin.recurrence = {
 	};
 
 	/**
-	 * sets up the section that indicates if the recurrence rule uses the same day as the main event or not
+	 * sets up the section that indicates if the recurrence rule uses the same
+	 * day as the main event or not
 	 */
 	my.setup_same_day = function() {
 		$( '.tribe-event-recurrence, .tribe-event-exclusion' ).each( function() {
@@ -336,7 +339,8 @@ tribe_events_pro_admin.recurrence = {
 	};
 
 	/**
-	 * sets up the section that indicates if the recurrence rule uses the same time as the main event or not
+	 * sets up the section that indicates if the recurrence rule uses the same
+	 * time as the main event or not
 	 */
 	my.setup_same_time = function() {
 		$( '.tribe-event-recurrence, .tribe-event-exclusion' ).each( function() {
@@ -528,7 +532,8 @@ tribe_events_pro_admin.recurrence = {
 	 *
 	 * @param {Function} callback Function executed on each iteration
 	 * @param {Array} collection Collection of items from where iterate
-	 * @param {Function} done Function called  when all the iterations has been completed.
+	 * @param {Function} done Function called  when all the iterations has been
+	 *     completed.
 	 * @param {int} index The index of the current iteration.
 	 *
 	 * @since 4.4.23
@@ -557,8 +562,8 @@ tribe_events_pro_admin.recurrence = {
 	};
 
 	/**
-	 * checks the current state of fields and sets appropriate data attributes for them
-	 * on the recurrence rule
+	 * checks the current state of fields and sets appropriate data attributes
+	 * for them on the recurrence rule
 	 */
 	my.set_recurrence_data_attributes = function( $rules ) {
 		var $rules_to_set = $rules || this.$recurrence_rules;
@@ -757,13 +762,52 @@ tribe_events_pro_admin.recurrence = {
 	 */
 	my.convert_date_format_php_to_moment = function( format ) {
 		// this format conversion is pretty fragile, but the best we can do at the moment
+		var replacements = {
+			d: 'DD',
+			D: 'ddd',
+			j: 'D',
+			l: 'dddd',
+			N: 'E',
+			S: 'o',
+			w: 'e',
+			z: 'DDD',
+			W: 'W',
+			F: 'MMMM',
+			m: 'MM',
+			M: 'MMM',
+			n: 'M',
+			t: '', // no equivalent
+			L: '', // no equivalent
+			o: 'YYYY',
+			Y: 'YYYY',
+			y: 'YY',
+			a: 'a',
+			A: 'A',
+			B: '', // no equivalent
+			g: 'h',
+			G: 'H',
+			h: 'hh',
+			H: 'HH',
+			i: 'mm',
+			s: 'ss',
+			u: 'SSS',
+			e: 'zz', // deprecated since version 1.6.0 of moment.js
+			I: '', // no equivalent
+			O: '', // no equivalent
+			P: '', // no equivalent
+			T: '', // no equivalent
+			Z: '', // no equivalent
+			c: '', // no equivalent
+			r: '', // no equivalent
+			U: 'X',
+		};
+
 		return format
-			.replace( 'S', 'o' )
-			.replace( 'j', 'D' )
-			.replace( 'F', 'MMMM' )
-			.replace( 'Y', 'YYYY' )
-			.replace( 'm', 'MM' )
-			.replace( 'd', 'DD' );
+			.split( '' )
+			.map( function( char ) {
+				return char in replacements ? replacements[ char ] : char;
+			} )
+			.join( '' );
 	};
 
 	my.update_rule_recurrence_text = function( $rule ) {
@@ -938,10 +982,11 @@ tribe_events_pro_admin.recurrence = {
 		if ( ! end ) {
 			end = $rule.find( '[data-field="end"]' ).attr( 'placeholder' );
 		}
-		
+
 		/**
-		 * Gets the lang attribute of the page’s <html> element, which is set by WP on the server,
-		 * then passes the value to moment js to ensure that all the strings output are translatable. 
+		 * Gets the lang attribute of the page’s <html> element, which is set by WP
+		 * on the server, then passes the value to moment js to ensure that all the
+		 * strings output are translatable.
 		 */
 		moment.locale( document.documentElement.getAttribute( 'lang' ) );
 
@@ -1038,7 +1083,8 @@ tribe_events_pro_admin.recurrence = {
 	};
 
 	/**
-	 * When a recurrence row changes, make sure the recurrence changed row is displayed
+	 * When a recurrence row changes, make sure the recurrence changed row is
+	 * displayed
 	 */
 	my.event.recurrence_changed = function() {
 		var $el   = $( this );
@@ -1074,7 +1120,7 @@ tribe_events_pro_admin.recurrence = {
 		if ( ! tribe_events_pro_admin.validate_recurrence() ) {
 			e.preventDefault();
 			e.stopPropagation();
-			tribe_events_pro_admin.reset_submit_button();
+			my.reset_submit_button();
 			return false;
 		}
 	};
@@ -1208,6 +1254,11 @@ tribe_events_pro_admin.recurrence = {
 				// remove the click/resize events that cause dialogs to close
 				$( 'body' ).off( 'click', my.event.close_dialogs );
 				$( window ).off( 'resize', my.event.close_dialogs );
+
+				// give it a second so animations finish running before we trigger the event
+				setTimeout( function() {
+					$document.trigger( 'verify.dependency' );
+				}, 1000 );
 			}
 		} );
 	};

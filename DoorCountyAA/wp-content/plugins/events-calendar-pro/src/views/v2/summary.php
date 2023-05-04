@@ -46,7 +46,7 @@ if ( empty( $disable_event_search ) ) {
 	<?php endif; ?>
 >
 	<div class="tribe-common-l-container tribe-events-l-container">
-		<?php $this->template( 'components/loader', [ 'text' => __( 'Loading...', 'the-events-calendar' ) ] ); ?>
+		<?php $this->template( 'components/loader', [ 'text' => __( 'Loading...', 'tribe-events-calendar-pro' ) ] ); ?>
 
 		<?php $this->template( 'components/json-ld-data' ); ?>
 

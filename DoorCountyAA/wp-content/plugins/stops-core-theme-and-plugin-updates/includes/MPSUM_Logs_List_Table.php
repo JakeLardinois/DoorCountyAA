@@ -617,11 +617,13 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	/**
 	 * Get stacktrace column
 	 *
-	 * @param array $stacktrace raw stacktrace data
+	 * @param string $stacktrace raw stacktrace data
 	 * @return array
 	 */
 	public function get_stacktrace_column($stacktrace) {
-		$trace = array_reverse(json_decode($stacktrace, true));
+		$stacktrace = maybe_unserialize($stacktrace);
+		if (!is_array($stacktrace)) $stacktrace = array();
+		$trace = array_reverse($stacktrace);
 		$stackrarr = array();
 		$i = 1;
 		$truncate_paths = array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH));
@@ -633,6 +635,16 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			}
 			if (isset($node['class'])) {
 				$stack .= $node['class'].$node['type'].$node['function'];
+				$stack .= "(";
+				$args = '';
+				foreach ((array) $node['args'] as $arg) {
+					if (is_string($arg)) {
+						if (!empty($args)) $args .= ", ";
+						$args .= ('' === $arg) ? "''" : $arg;
+					}
+					// if the argument is not in a string type, then this will ensure compatibility with older data from the older versions, also will prevent PHP warning "Array to string conversion"
+				}
+				$stack .= "$args)";
 			} else {
 				if (in_array($node['function'], array('do_action', 'apply_filters', 'do_action_ref_array', 'apply_filters_ref_array'), true)) {
 					$stack .= $node['function'] . "('".$node['args'][0]."')";

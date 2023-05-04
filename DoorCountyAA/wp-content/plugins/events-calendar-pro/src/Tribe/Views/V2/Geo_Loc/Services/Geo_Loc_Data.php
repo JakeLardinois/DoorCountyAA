@@ -1,6 +1,6 @@
 <?php
 /**
- * A value object Geo Location Services should use to pass around gelocation information.
+ * A value object Geo Location Services should use to pass around geolocation information.
  *
  * @since   4.7.9
  *

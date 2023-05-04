@@ -51,6 +51,7 @@ class Service_Provider extends \tad_DI52_ServiceProvider {
 		// Register the SP on the container
 		$this->container->singleton( 'pro.views.v2.provider', $this );
 		$this->container->singleton( static::class, $this );
+		$this->container->singleton( Rewrite::class );
 	}
 
 	/**

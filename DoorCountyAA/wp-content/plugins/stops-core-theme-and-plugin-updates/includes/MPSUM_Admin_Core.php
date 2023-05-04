@@ -73,6 +73,9 @@ class MPSUM_Admin_Core {
 			'logs'                            => 'on',
 			'email_addresses'                 => array(),
 			'ratings_nag'                     => 'on',
+			'plugin_auto_updates_notification_emails' => 'on',
+			'theme_auto_updates_notification_emails' => 'on',
+			'translation_auto_updates_notification_emails' => 'on',
 		));
 	}
 

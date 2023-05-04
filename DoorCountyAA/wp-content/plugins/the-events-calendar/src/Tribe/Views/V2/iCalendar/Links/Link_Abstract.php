@@ -47,13 +47,22 @@ abstract class Link_Abstract implements Link_Interface {
 	public $visible = true;
 
 	/**
-	 * the link provider slug.
+	 * The link provider slug.
 	 *
 	 * @since 5.12.0
 	 *
 	 * @var string
 	 */
 	public static $slug;
+
+	/**
+	 * The slug used for the single event sharing block toggle.
+	 *
+	 * @since 5.16.1
+	 *
+	 * @var string
+	 */
+	public $block_slug;
 
 	/**
 	 * Determines if this instance of the class has it's actions and filters hooked.
@@ -131,10 +140,13 @@ abstract class Link_Abstract implements Link_Interface {
 		}
 
 		$class   = sanitize_html_class( 'tribe-events-' . self::get_slug() );
-		$links[ self::get_slug() ] = '<a class="tribe-events-button ' . $class
-		           . '" href="' . esc_url( $uri )
-		           . '" title="' . esc_attr( $label )
-		           . '">+ ' . esc_html( $label ) . '</a>';
+		$links[ self::get_slug() ] = sprintf(
+			'<a class="tribe-events-button %1$s" href="%2$s" title="%3$s"  rel="noopener noreferrer noindex">%4$s</a>',
+			$class,
+			esc_url( $uri ),
+			esc_attr( $label ),
+			esc_html( $label )
+		);
 
 		return $links;
 	}
@@ -245,6 +257,10 @@ abstract class Link_Abstract implements Link_Interface {
 			$feed_url = $this->get_canonical_ics_feed_url( $view );
 		}
 
+		if ( empty( $feed_url ) ) {
+			return '';
+		}
+
 		$feed_url = str_replace( [ 'http://', 'https://' ], 'webcal://', $feed_url );
 
 		return $feed_url;
@@ -288,7 +304,7 @@ abstract class Link_Abstract implements Link_Interface {
 			$view_url_args['tribe-bar-date'] = $view_url_args['eventDate'];
 		} else {
 			// Subscribe from today (default calendar view).
-			$view_url_args['tribe-bar-date'] = Dates::build_date_object()->format( Dates::DBDATEFORMAT );
+			$view_url_args['tribe-bar-date'] = Dates::build_date_object( $view->get_context()->get( 'today' ) )->format( Dates::DBDATEFORMAT );
 		}
 
 
@@ -321,7 +337,7 @@ abstract class Link_Abstract implements Link_Interface {
 
 		// Allow all views to utilize the list view so they collect the appropriate number of events.
 		// Note: this is only applied to subscription links - the ics direct link downloads what you see on the page!
-		$passthrough_args["eventDisplay"] = 'list';
+		$passthrough_args["eventDisplay"] = \Tribe\Events\Views\V2\Views\List_View::get_view_slug();
 
 		// Tidy (remove empty-value pairs).
 		$passthrough_args = array_filter( $passthrough_args );

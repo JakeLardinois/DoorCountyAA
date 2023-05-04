@@ -62,7 +62,7 @@ var tribe_events_pro_admin = {
 		} );
 
 		$( 'body' ).on( 'click', '.ui-dialog-titlebar .ui-dialog-titlebar-close', function() {
-			tribe_events_pro_admin.reset_submit_button();
+			tribe_events_pro_admin.recurrence.reset_submit_button();
 		} );
 
 		$( 'input[name="post[]"]' ).click( function() {

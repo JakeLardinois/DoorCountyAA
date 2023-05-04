@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Class Tribe__Events__Pro__Integrations__WPML__WPML
  *

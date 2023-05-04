@@ -5,6 +5,19 @@
  */
 class Tribe__Events__Pro__Recurrence__Permalinks {
 
+	/**
+	 * Builds recurring event view permalinks.
+	 * Listens to the `post_type_link` filter.
+	 *
+	 * @since 4.4.23 Filters added.
+	 *
+	 * @param string  $post_link The link to parse and potentially modify.
+	 * @param WP_Post $post      The post for this event.
+	 * @param bool    $leavename Whether to keep the post name.
+	 * @param bool    $sample    Is it a sample permalink.
+	 *
+	 * @return string|false The post permalink URL. False if the post does not exist.
+	 */
 	public function filter_recurring_event_permalinks( $post_link, $post, $leavename, $sample ) {
 		if ( ! $this->should_filter_permalink( $post, $sample ) ) {
 			return $post_link;
@@ -48,7 +61,17 @@ class Tribe__Events__Pro__Recurrence__Permalinks {
 			}
 			$post_link = trailingslashit( $post_link ) . $date;
 			$sequence_number = get_post_meta( $post->ID, '_EventSequence', true );
-			if ( ! empty( $sequence_number ) && ( is_numeric( $sequence_number ) && intval( $sequence_number ) > 1 ) ) {
+			/**
+			 * Provides an opportunity to override or modify the Event Sequence value, before being appended to the URL.
+			 *
+			 * @since 6.0.11
+			 *
+			 * @param null|numeric $sequence_number The sequence number if there is one.
+			 * @param WP_Post      $post            The post object for this event.
+			 * @param string       $post_link       The current URL for this event.
+			 */
+			$sequence_number = apply_filters( 'tec_events_pro_recurring_event_permalink_sequence_number', $sequence_number, $post, $post_link );
+			if ( ! empty( $sequence_number ) && ( is_numeric( $sequence_number ) && intval( $sequence_number ) > 0 ) ) {
 				$post_link = trailingslashit( $post_link ) . $sequence_number;
 			}
 			$home_url = home_url( '/' );
@@ -175,4 +198,3 @@ class Tribe__Events__Pro__Recurrence__Permalinks {
 		return $permalink_html;
 	}
 }
-

@@ -30,17 +30,15 @@ class MPSUM_CONSTANT_CHECKS {
 	}
 
 	/**
-	 * Outputs feature heading
+	 * Get a list of constants which are active but prohibited
 	 *
-	 * @return bool true if there are constants that disable EUM, false if not.
+	 * @return array a list of constants that may prevent automatic updates from being work properly
 	 */
-	public function is_config_options_disabled() {
-		if (defined('AUTOMATIC_UPDATER_DISABLED') && true === AUTOMATIC_UPDATER_DISABLED) {
-			return true;
+	public function get_prohibited_active_constants() {
+		$constants = array();
+		if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) {
+			$constants[] = 'DISABLE_WP_CRON';
 		}
-		if (defined('WP_AUTO_UPDATE_CORE') && (false === WP_AUTO_UPDATE_CORE || 'minor' === WP_AUTO_UPDATE_CORE)) {
-			return true;
-		}
-		return false;
+		return $constants;
 	}
 }

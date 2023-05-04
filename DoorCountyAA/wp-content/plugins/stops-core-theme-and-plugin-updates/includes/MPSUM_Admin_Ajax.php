@@ -133,7 +133,7 @@ class MPSUM_Admin_Ajax {
 		$nonce = $_REQUEST['nonce'];
 		$data = empty($_REQUEST['data']) ? array() : $_REQUEST['data'];
 
-		if (!wp_verify_nonce($nonce, 'eum_nonce') || empty($subaction) || 'axios_ajax_handler' == $subaction) die('Security check');
+		if (!wp_verify_nonce($nonce, 'eum_nonce') || !current_user_can(MPSUM_Updates_Manager::get_instance()->capability_required()) || empty($subaction) || 'axios_ajax_handler' == $subaction) die('Security check');
 
 		$results = array();
 		if (!method_exists($this, $subaction)) {
@@ -228,7 +228,7 @@ class MPSUM_Admin_Ajax {
 			case 'automatic-updates-off':
 				$options['theme_updates'] = 'automatic_off';
 				$options['plugin_updates'] = 'automatic_off';
-				$options['translation_updates'] = 'automatic_off';
+				$options['translation_updates'] = 'on'; // After 9.0.12 version, translation 'Disable auto updates' is removed and is united to 'Manually update' as they are just the same
 				$options['core_updates'] = 'on'; // 'on' is for 'Manually update', it's different with 'automatic', since 'automatic_off' and 'on' is basically the same, so we use 'on' instead and remove the 'automatic_off', also the UI.
 				$options['automatic_development_updates'] = 'off';
 				break;
@@ -289,12 +289,10 @@ class MPSUM_Admin_Ajax {
 				}
 				break;
 			case 'translation-updates':
-				if ('on' == $value) {
+				if (in_array($value, array('on', 'automatic_off'), true)) { // After 9.0.12 version, translation 'Disable auto updates' is removed and is united to 'Manually update' as they are just the same
 					$options['translation_updates'] = 'on';
 				} elseif ('off' == $value) {
 					$options['translation_updates'] = 'off';
-				} elseif ('automatic_off' == $value) {
-					$options['translation_updates'] = 'automatic_off';
 				} elseif ('automatic' == $value) {
 					$options['translation_updates'] = 'automatic';
 				}
@@ -351,6 +349,20 @@ class MPSUM_Admin_Ajax {
 					$options['plugin_auto_updates_notification_emails'] = 'off';
 				}
 				break;
+			case 'theme-auto-updates-notification-emails':
+				if ('on' === $value) {
+					$options['theme_auto_updates_notification_emails'] = 'on';
+				} else {
+					$options['theme_auto_updates_notification_emails'] = 'off';
+				}
+				break;
+			case 'translation-auto-updates-notification-emails':
+				if ('on' === $value) {
+					$options['translation_auto_updates_notification_emails'] = 'on';
+				} else {
+					$options['translation_auto_updates_notification_emails'] = 'off';
+				}
+				break;
 			case 'rollback-updates-notification-emails':
 				if ('off' === $value) {
 					$options['rollback_updates_notification_emails'] = 'off';
@@ -388,20 +400,16 @@ class MPSUM_Admin_Ajax {
 			$options['update_notification_updates'] = 'off';
 		}
 		
-		// Check if plugin auto updates notification emails is set
-		if (!isset($options['plugin_auto_updates_notification_emails'])) {
-			$options['plugin_auto_updates_notification_emails'] = 'on';
-		}
 
 		// Add error to options for returning
 		if ($email_errors) {
-			$options['errors'] = true;
+			if ('notification-emails' === $id) $options['errors'] = true;
 			$options['email_addresses'] = $options['email_addresses'];
-			$options['success'] = false;
+			if ('notification-emails' === $id) $options['success'] = false;
 		} else {
-			$options['errors'] = false;
+			if ('notification-emails' === $id) $options['errors'] = false;
 			$options['email_addresses'] = $options['email_addresses'];
-			$options['success'] = true;
+			if ('notification-emails' === $id) $options['success'] = true;
 		}
 		return $options;
 	}
@@ -440,11 +448,6 @@ class MPSUM_Admin_Ajax {
 		// Check if update notification emails is set
 		if (!isset($options['update_notification_updates'])) {
 			$options['update_notification_updates'] = 'off';
-		}
-		
-		// Check if plugin auto updates notification emails is set
-		if (!isset($options['plugin_auto_updates_notification_emails'])) {
-			$options['plugin_auto_updates_notification_emails'] = 'on';
 		}
 		
 
@@ -974,6 +977,16 @@ class MPSUM_Admin_Ajax {
 		$ran_immediately = false;
 		delete_site_transient('MPSUM_PLUGINS');
 		delete_site_transient('MPSUM_THEMES');
+		$constants = array();
+		if (defined('AUTOMATIC_UPDATER_DISABLED') && true == AUTOMATIC_UPDATER_DISABLED) {
+			$constants[] = 'AUTOMATIC_UPDATER_DISABLED';
+		}
+		if (defined('WP_AUTO_UPDATE_CORE') && false === WP_AUTO_UPDATE_CORE) {
+			$constants[] = 'WP_AUTO_UPDATE_CORE';
+		}
+		if (!empty($constants)) {
+			error_log(sprintf("The constant(s) %s is/are currently active, but Easy Updates Manager has overriden it/them so that it/they won't take any effect during forced updates. It is recommended to unset them to remove ambiguity.", implode(', ', $constants)));
+		}
 		if (function_exists('wp_maybe_auto_update')) {
 			// Constant to show that a Force Update is in effect. Since 9.0.1.
 			if (!defined('EUM_DOING_FORCE_UPDATES')) {

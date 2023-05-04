@@ -3,7 +3,7 @@
  * Renders the week view
  *
  * @since   4.7.5
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 
 namespace Tribe\Events\Pro\Views\V2\Views\Widgets;
@@ -15,18 +15,27 @@ use Tribe\Events\Pro\Views\V2\Views\Week_View as Original_Week_View;
  *
  * @since   4.7.5
  *
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 class Week_View extends Original_Week_View {
 
 	/**
 	 * Slug for this view
 	 *
-	 * @since 4.7.5
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'widget-week';
+
+	/**
+	 * Slug for this view
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'widget-week';
 
 	/**
 	 * Visibility for this view.
@@ -45,7 +54,7 @@ class Week_View extends Original_Week_View {
 		$template_vars = parent::setup_template_vars();
 
 		// For the purposes of widget we don't ever display this since it will break.
-		$template_vars['display_events_bar']       = false;
+		$template_vars['display_events_bar'] = false;
 
 		return $template_vars;
 	}

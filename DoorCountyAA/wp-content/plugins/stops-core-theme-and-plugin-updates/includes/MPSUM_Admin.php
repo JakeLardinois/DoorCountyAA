@@ -271,7 +271,7 @@ class MPSUM_Admin {
 			wp_enqueue_style('thickbox');
 		}
 
-		wp_enqueue_script('jquery-blockui', MPSUM_Updates_Manager::get_plugin_url('/js/jquery.blockUI' . $min_or_not . '.js'), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
+		wp_enqueue_script('jquery-blockui', MPSUM_Updates_Manager::get_plugin_url('/includes/blockui/jquery.blockUI' . $min_or_not . '.js'), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
 		wp_enqueue_script('jquery-serializejson', MPSUM_Updates_Manager::get_plugin_url('/js/jquery.serializejson' . $min_or_not . '.js'), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
 		wp_enqueue_script('mpsum_dashboard_js', MPSUM_Updates_Manager::get_plugin_url('/js/eum-admin' . $min_or_not .'.js'), array( 'jquery', 'wp-ajax-response' ), EASY_UPDATES_MANAGER_VERSION, true);
 		wp_enqueue_script('mpsum_dashboard_react', MPSUM_Updates_Manager::get_plugin_url('/js/admin' . $min_or_not . '.js'), array( 'jquery', 'mpsum_dashboard_js' ), EASY_UPDATES_MANAGER_VERSION, true);
@@ -359,12 +359,8 @@ class MPSUM_Admin {
 			'ratings_nag_description'                    => __('We work very hard on this plugin. Please show your appreciation and rate the plugin as you see fit.', 'stops-core-theme-and-plugin-updates'),
 			'ratings_nag_label_on'                       => __('Rate the plugin on WordPress.org', 'stops-core-theme-and-plugin-updates'),
 			'ratings_nag_label_off'                      => __('I have already left a rating', 'stops-core-theme-and-plugin-updates'),
-			'emails'                                     => __('Core notification e-mails', 'stops-core-theme-and-plugin-updates'),
-			'emails_description'                         => __('WordPress periodically sends update notification e-mails, such as in the case of automatic updates. By default, the e-mail address used is the one in Settings->General, but you can override this below.', 'stops-core-theme-and-plugin-updates'),
-			'emails_label_on'                            => __('Enable core notification e-mails', 'stops-core-theme-and-plugin-updates'),
-			'emails_label_on_status'                     => __('E-mail notifications are on. You can configure which e-mail addresses are sent to below.', 'stops-core-theme-and-plugin-updates'),
-			'emails_label_off'                           => __('Disable core notification e-mails', 'stops-core-theme-and-plugin-updates'),
-			'emails_label_off_status'                    => __('E-mail notifications are off', 'stops-core-theme-and-plugin-updates'),
+			'emails'                                     => __('Notification e-mails', 'stops-core-theme-and-plugin-updates'),
+			'emails_description'                         => __('This plugin periodically sends update notification e-mails, such as in the case of automatic updates. By default, the e-mail address used is the one in Settings->General, but you can override this below.', 'stops-core-theme-and-plugin-updates'),
 			'emails_placeholder'                         => __('Add an e-mail address', 'stops-core-theme-and-plugin-updates'),
 			'emails_input_label'                         => __('Enter comma-separated e-mail addresses', 'stops-core-theme-and-plugin-updates'),
 			'emails_invalid'                             => __('One or more e-mail addresses are invalid.', 'stops-core-theme-and-plugin-updates'),
@@ -372,10 +368,19 @@ class MPSUM_Admin {
 			'emails_save'                                => __('Save e-mail addresses', 'stops-core-theme-and-plugin-updates'),
 			'emails_save_empty'                          => __('Please enter an e-mail address', 'stops-core-theme-and-plugin-updates'),
 			'emails_saving'                              => __('Saving...', 'stops-core-theme-and-plugin-updates'),
-			'plugin_auto_updates_notification_label'     => __('Automatic plugin updates notification e-mails', 'stops-core-theme-and-plugin-updates'),
+			'auto_updates_notification_label'            => __('Automatic updates notification e-mails', 'stops-core-theme-and-plugin-updates'),
+			'core_auto_updates_notification_description' => __('Be notified when WordPress core files are updated.', 'stops-core-theme-and-plugin-updates'),
+			'core_auto_notification_emails_off_status'   => __('Notifications for automatic core update are now off.', 'stops-core-theme-and-plugin-updates'),
+			'core_auto_notification_emails_on_status'  => __('Notifications for automatic core update are now on.', 'stops-core-theme-and-plugin-updates'),
 			'plugin_auto_updates_notification_description' => __('Be notified when a plugin automatically updates.', 'stops-core-theme-and-plugin-updates'),
-			'plugin_auto_notification_emails_off_status'   => __('E-mail notifications for automatic plugin updates are now off.', 'stops-core-theme-and-plugin-updates'),
-			'plugin_auto_notification_emails_on_status'  => __('E-mail notifications for automatic plugin updates are now on.', 'stops-core-theme-and-plugin-updates'),
+			'plugin_auto_notification_emails_off_status'   => __('Notifications for automatic plugin updates are now off.', 'stops-core-theme-and-plugin-updates'),
+			'plugin_auto_notification_emails_on_status'  => __('Notifications for automatic plugin updates are now on.', 'stops-core-theme-and-plugin-updates'),
+			'theme_auto_updates_notification_description' => __('Be notified when a theme automatically updates.', 'stops-core-theme-and-plugin-updates'),
+			'theme_auto_notification_emails_off_status'   => __('Notifications for automatic theme updates are now off.', 'stops-core-theme-and-plugin-updates'),
+			'theme_auto_notification_emails_on_status'   => __('Notifications for automatic theme updates are now on.', 'stops-core-theme-and-plugin-updates'),
+			'translation_auto_updates_notification_description' => __('Be notified when a translation automatically updates.', 'stops-core-theme-and-plugin-updates'),
+			'translation_auto_notification_emails_off_status'   => __('Notifications for automatic translation updates are now off.', 'stops-core-theme-and-plugin-updates'),
+			'translation_auto_notification_emails_on_status'   => __('Notifications for automatic translation updates are now on.', 'stops-core-theme-and-plugin-updates'),
 			'core_updates'                               => __('WordPress core updates', 'stops-core-theme-and-plugin-updates'),
 			'core_updates_description'                   => __('This allows you to configure how WordPress updates are handled, including automatic updates.', 'stops-core-theme-and-plugin-updates'),
 			'core_updates_label_on'                      => __('Manually update', 'stops-core-theme-and-plugin-updates'),
@@ -426,8 +431,6 @@ class MPSUM_Admin {
 			'translation_updates_label_off_tooltip'      => __('Turn off all translation updates and prevent update notices from being shown.', 'stops-core-theme-and-plugin-updates'),
 			'translation_updates_label_automatic'        => __('Enable auto updates', 'stops-core-theme-and-plugin-updates'),
 			'translation_updates_automatic_tooltip'      => __('Automatically update all translations as they are ready.', 'stops-core-theme-and-plugin-updates'),
-			'translation_updates_label_auto_disabled'    => __('Disable auto updates', 'stops-core-theme-and-plugin-updates'),
-			'translation_updates__auto_disabled_tooltip' => __('Turn off automatic updates for translations.', 'stops-core-theme-and-plugin-updates'),
 			'translation_updates_label_off_status'       => __('Translation updates are disabled.', 'stops-core-theme-and-plugin-updates'),
 			'general_section_title_updates_settings'     => __('Updates settings', 'stops-core-theme-and-plugin-updates'),
 			'general_section_title_notifications'        => __('Notifications', 'stops-core-theme-and-plugin-updates'),

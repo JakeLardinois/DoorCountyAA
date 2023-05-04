@@ -1,32 +1,45 @@
 <?php
-/**
- * Events Calendar Pro template Tags
- *
- * Display functions for use in WordPress templates.
- * @todo move view specific functions to their own file
- */
 
-// Don't load directly
-if ( ! defined( 'ABSPATH' ) ) {
-	die( '-1' );
+use TEC\Events\Custom_Tables\V1\Models\Event;
+use TEC\Events_Pro\Custom_Tables\V1\Series\Relationship;
+use TEC\Events_Pro\Custom_Tables\V1\Series\Post_Type as Series;
+use Tribe\Events\Pro\Views\V2\Views\Map_View;
+use Tribe\Events\Pro\Views\V2\Views\Organizer_View;
+use Tribe\Events\Pro\Views\V2\Views\Photo_View;
+use Tribe\Events\Pro\Views\V2\Views\Venue_View;
+use Tribe\Events\Pro\Views\V2\Views\Week_View;
+use \Tribe\Events\Views\V2\Manager;
+use Tribe__Events__Main as TEC;
+
+if ( ! function_exists( 'tribe_get_mapview_link' ) ) {
+	/**
+	 * Events Calendar Pro template Tags
+	 *
+	 * Display functions for use in WordPress templates.
+	 *
+	 * @todo  move view specific functions to their own file
+	 * @since 6.0.0 Refactor to use Views V2 URL building.
+	 *
+	 */
+	function tribe_get_mapview_link( $term = null ) {
+		$wp_query = tribe_get_global_query_object();
+
+		if ( ! is_null( $wp_query ) && isset( $wp_query->query_vars[ TEC::TAXONOMY ] ) ) {
+			$term = $wp_query->query_vars[ TEC::TAXONOMY ];
+		}
+
+		apply_filters_deprecated( 'tribe_get_map_view_permalink', [ null ], '6.0.0' );
+
+		$args = [ 'view' => \Tribe\Events\Pro\Views\V2\Views\Map_View::get_view_slug() ];
+		if ( $term ) {
+			$args[ TEC::TAXONOMY ] = $term;
+		}
+
+		return tribe_events_get_url( $args );
+	}
 }
 
-if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
-
-	if ( ! function_exists( 'tribe_get_mapview_link' ) ) {
-		function tribe_get_mapview_link( $term = null ) {
-
-			$wp_query = tribe_get_global_query_object();
-
-			if ( ! is_null( $wp_query ) && isset( $wp_query->query_vars[ Tribe__Events__Main::TAXONOMY ] ) ) {
-				$term = $wp_query->query_vars[ Tribe__Events__Main::TAXONOMY ];
-			}
-			$output = Tribe__Events__Main::instance()->getLink( 'map', null, $term );
-
-			return apply_filters( 'tribe_get_map_view_permalink', $output );
-		}
-	}
-
+if ( ! function_exists( 'tribe_is_recurring_event' ) ) {
 	/**
 	 * Event Recurrence
 	 *
@@ -36,57 +49,57 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 *
 	 * @return bool true if event is a recurring event.
 	 */
-	if ( ! function_exists( 'tribe_is_recurring_event' ) ) {
-		function tribe_is_recurring_event( $post_id = null ) {
+	function tribe_is_recurring_event( $post_id = null ) {
 
-			$post_id = Tribe__Events__Main::postIdHelper( $post_id );
+		$post_id = TEC::postIdHelper( $post_id );
 
-			if ( empty( $post_id ) ) {
-				return false;
-			}
+		if ( empty( $post_id ) ) {
+			return false;
+		}
 
-			$post = get_post( $post_id );
-			if ( $post->post_type != Tribe__Events__Main::POSTTYPE ) {
-				return false;
-			}
+		$post = get_post( $post_id );
+		if ( empty( $post ) || $post->post_type != TEC::POSTTYPE ) {
+			return false;
+		}
 
-			$recurring = false;
+		$recurring = false;
 
-			if ( $post->post_parent > 0 ) {
-				$recurring = true;
-			} else {
-				$recurrence_meta = get_post_meta( $post_id, '_EventRecurrence', true );
+		if ( $post->post_parent > 0 ) {
+			$recurring = true;
+		} else {
+			$recurrence_meta = get_post_meta( $post_id, '_EventRecurrence', true );
 
-				if ( ! empty( $recurrence_meta['rules'] ) ) {
-					// check if this is event has old-style meta (pre 3.12)
-					if ( ! isset( $recurrence_meta['rules'] ) && isset( $recurrence_meta['type'] ) ) {
-						$recurrence_meta['rules'] = array( $recurrence_meta );
-					}
-					foreach ( $recurrence_meta['rules'] as &$recurrence ) {
-						if ( 'None' !== $recurrence['type'] ) {
-							$recurring = true;
-							break;
-						}
-					}
-
-				// Support legacy Recurrence
-				} elseif ( ! empty( $recurrence_meta['type'] ) ) {
-					if ( 'None' !== $recurrence_meta['type'] ) {
+			if ( ! empty( $recurrence_meta['rules'] ) ) {
+				// check if this is event has old-style meta (pre 3.12)
+				if ( ! isset( $recurrence_meta['rules'] ) && isset( $recurrence_meta['type'] ) ) {
+					$recurrence_meta['rules'] = array( $recurrence_meta );
+				}
+				foreach ( $recurrence_meta['rules'] as &$recurrence ) {
+					if ( 'None' !== $recurrence['type'] ) {
 						$recurring = true;
+						break;
 					}
 				}
+
+				// Support legacy Recurrence
+			} elseif ( ! empty( $recurrence_meta['type'] ) ) {
+				if ( 'None' !== $recurrence_meta['type'] ) {
+					$recurring = true;
+				}
 			}
-
-			/**
-			 * Allows for filtering whether the specified event is recurring or not.
-			 *
-			 * @param boolean $recurring Whether the specified event is recurring or not.
-			 * @param int $post_id The post ID of the specificed event.
-			 */
-			return apply_filters( 'tribe_is_recurring_event', $recurring, $post_id );
 		}
-	}
 
+		/**
+		 * Allows for filtering whether the specified event is recurring or not.
+		 *
+		 * @param boolean $recurring Whether the specified event is recurring or not.
+		 * @param int     $post_id   The post ID of the specified event.
+		 */
+		return apply_filters( 'tribe_is_recurring_event', $recurring, $post_id );
+	}
+}
+
+if ( ! function_exists( 'tribe_get_recurrence_start_dates' ) ) {
 	/**
 	 * Get the start dates of all instances of the event,
 	 * in ascending order
@@ -96,37 +109,61 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @return array Start times, as Y-m-d H:i:s
 	 */
 	function tribe_get_recurrence_start_dates( $post_id = null ) {
-		$post_id = Tribe__Events__Main::postIdHelper( $post_id );
+		$post_id = TEC::postIdHelper( $post_id );
 
 		return Tribe__Events__Pro__Recurrence__Meta::get_start_dates( $post_id );
 	}
+}
 
-	/**
-	 * Recurrence Text
-	 *
-	 * Get the textual version of event recurrence
-	 * e.g Repeats daily for three days
-	 *
-	 * @param int $post_id (optional)
-	 *
-	 * @return string Summary of recurrence.
-	 */
-	if ( ! function_exists( 'tribe_get_recurrence_text' ) ) {
+/**
+ * Recurrence Text
+ *
+ * Get the textual version of event recurrence
+ * e.g Repeats daily for three days
+ *
+ * @param int $post_id (optional)
+ *
+ * @return string Summary of recurrence.
+ */
+if ( ! function_exists( 'tribe_get_recurrence_text' ) ) {
+	function tribe_get_recurrence_text( $post_id = null ) {
 
-		function tribe_get_recurrence_text( $post_id = null ) {
+		$post_id = TEC::postIdHelper( $post_id );
 
-			$post_id = Tribe__Events__Main::postIdHelper( $post_id );
-
-			/**
-			 * Allow for filtering the textual version of event recurrence.
-			 *
-			 * @param string $recurrence_text The textual version of the specified event's recurrence details.
-			 * @param int $post_id The post ID of the specificed event.
-			 */
-			return apply_filters( 'tribe_get_recurrence_text', Tribe__Events__Pro__Recurrence__Meta::recurrenceToTextByPost( $post_id ), $post_id );
-		}
+		/**
+		 * Allow for filtering the textual version of event recurrence.
+		 *
+		 * @param string $recurrence_text The textual version of the specified event's recurrence details.
+		 * @param int    $post_id         The post ID of the specified event.
+		 */
+		return apply_filters( 'tribe_get_recurrence_text', Tribe__Events__Pro__Recurrence__Meta::recurrenceToTextByPost( $post_id ), $post_id );
 	}
+}
 
+if ( ! function_exists( 'tribe_all_occurences_link' ) ) {
+	/**
+	 * Recurring Event List Link
+	 *
+	 * Display link for all occurrences of an event (based on the currently queried event).
+	 *
+	 * @since 3.0.0
+	 * @since 5.0.0 Introduced caching based on Post ID or Parent Post ID.
+	 * @deprecated 6.0.7 To correct misspelling.
+	 *
+	 * @param int     $post_id (optional) Which post we are looking for the All link.
+	 * @param boolean $echo    (optional) Should be echoed along side returning the value.
+	 *
+	 * @return string  Link reference to all events in a recurrent event.
+	 */
+	function tribe_all_occurences_link( $post_id = null, $echo = true ) {
+		_deprecated_function( __METHOD__, '6.0.7', 'tribe_all_occurrences_link' );
+
+		return tribe_all_occurrences_link( $post_id, $echo );
+	}
+}
+
+
+if ( ! function_exists( 'tribe_all_occurrences_link' ) ) {
 	/**
 	 * Recurring Event List Link
 	 *
@@ -135,66 +172,76 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @since 3.0.0
 	 * @since 5.0.0 Introduced caching based on Post ID or Parent Post ID.
 	 *
-	 * @param int      $post_id (optional) Which post we are looking for the All link.
-	 * @param booolean $echo    (optional) Should be echoed along side returning the value.
+	 * @param int     $post_id (optional) Which post we are looking for the All link.
+	 * @param boolean $echo    (optional) Should be echoed along side returning the value.
 	 *
 	 * @return string  Link reference to all events in a recurrent event.
 	 */
-	if ( ! function_exists( 'tribe_all_occurences_link' ) ) {
-		function tribe_all_occurences_link( $post_id = null, $echo = true ) {
-			$cache_key_links = __FUNCTION__ . ':links';
-			$cache_key_parent_ids = __FUNCTION__ . ':parent_ids';
-			$cache_links = tribe_get_var( $cache_key_links, [] );
-			$cache_parent_ids = tribe_get_var( $cache_key_parent_ids, [] );
+	function tribe_all_occurrences_link( $post_id = null, $echo = true ) {
+		$cache_key_links      = __FUNCTION__ . ':links';
+		$cache_key_parent_ids = __FUNCTION__ . ':parent_ids';
+		$cache_links          = tribe_get_var( $cache_key_links, [] );
+		$cache_parent_ids     = tribe_get_var( $cache_key_parent_ids, [] );
 
-			$post_id = Tribe__Events__Main::postIdHelper( $post_id );
+		$post_id = TEC::postIdHelper( $post_id );
 
-			if ( ! isset( $cache_parent_ids[ $post_id ] ) ) {
-				$cache_parent_ids[ $post_id ] = wp_get_post_parent_id( $post_id );
-				tribe_set_var( $cache_key_parent_ids, $cache_parent_ids );
-			}
-
-			// The ID to cache will be diff depending on Parent or child post of recurrent event.
-			$cache_id = $cache_parent_ids[ $post_id ] ? $cache_parent_ids[ $post_id ] : $post_id;
-
-			if ( ! isset( $cache_links[ $cache_id ] ) ) {
-				$tribe_ecp = Tribe__Events__Main::instance();
-				$cache_links[ $cache_id ] = apply_filters( 'tribe_all_occurences_link', $tribe_ecp->getLink( 'all', $post_id ) );
-				tribe_set_var( $cache_key_links, $cache_links );
-			}
-
-			if ( $echo ) {
-				echo $cache_links[ $cache_id ];
-			}
-
-			return $cache_links[ $cache_id ];
+		if ( ! isset( $cache_parent_ids[ $post_id ] ) ) {
+			$cache_parent_ids[ $post_id ] = wp_get_post_parent_id( $post_id );
+			tribe_set_var( $cache_key_parent_ids, $cache_parent_ids );
 		}
-	}
 
-	// show user front-end settings only if ECP is active
-	function tribe_recurring_instances_toggle( $post_id = null ) {
-			$hide_recurrence = ( ! empty( $_REQUEST['tribeHideRecurrence'] ) && $_REQUEST['tribeHideRecurrence'] == '1' ) || ( empty( $_REQUEST['tribeHideRecurrence'] ) && empty( $_REQUEST['action'] ) && tribe_get_option( 'hideSubsequentRecurrencesDefault', false ) ) ? '1' : false;
-		if ( ! tribe_is_week() && ! tribe_is_month() ) {
-			echo '<span class="tribe-events-user-recurrence-toggle">';
-				echo '<label for="tribeHideRecurrence">';
-					echo '<input type="checkbox" name="tribeHideRecurrence" value="1" id="tribeHideRecurrence" ' . checked( $hide_recurrence, 1, false ) . '>' . sprintf( __( 'Show only the first upcoming instance of recurring %s', 'tribe-events-calendar-pro' ), tribe_get_event_label_plural_lowercase() );
-				echo '</label>';
-			echo '</span>';
+		// The ID to cache will be diff depending on Parent or child post of recurrent event.
+		$cache_id = $cache_parent_ids[ $post_id ] ? $cache_parent_ids[ $post_id ] : $post_id;
+
+		if ( ! isset( $cache_links[ $cache_id ] ) ) {
+			$tribe_ecp                = TEC::instance();
+			/**
+			 * Filters the "all occurrences" link.
+			 * @since 6.0.7
+			 * @deprecated 6.0.7 To correct misspelling.
+			 *
+			 * @param string $link The link HTML string.
+			 */
+			$cache_links[ $cache_id ] = apply_filters_deprecated(
+				'tribe_all_occurences_link',
+				[ $tribe_ecp->getLink( 'all', $post_id ) ],
+				'6.0.7',
+				'tribe_all_occurrences_link',
+				'Filter deprecated to correct misspelling.'
+			);
+
+			/**
+			 * Filters the "all occurrences" link.
+			 * @since 6.0.7
+			 *
+			 * @param string $link The link HTML string.
+			 */
+			$cache_links[ $cache_id ] = apply_filters( 'tribe_all_occurrences_link', $tribe_ecp->getLink( 'all', $post_id ) );
+			tribe_set_var( $cache_key_links, $cache_links );
 		}
-	}
 
+		if ( $echo ) {
+			echo $cache_links[ $cache_id ];
+		}
+
+		return $cache_links[ $cache_id ];
+	}
+}
+
+if ( ! function_exists( 'tribe_get_custom_fields' ) ) {
 	/**
 	 * Event Custom Fields
 	 *
 	 * Get an array of custom fields
 	 *
+	 * @todo move logic to Tribe__Events__Pro__Custom_Meta class
+	 *
 	 * @param int $post_id (optional)
 	 *
 	 * @return array $data of custom fields
-	 * @todo move logic to Tribe__Events__Pro__Custom_Meta class
 	 */
 	function tribe_get_custom_fields( $post_id = null ) {
-		$post_id      = Tribe__Events__Main::postIdHelper( $post_id );
+		$post_id      = TEC::postIdHelper( $post_id );
 		$data         = array();
 		$customFields = tribe_get_option( 'custom-fields', false );
 
@@ -219,8 +266,6 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 					$target = apply_filters( 'tribe_get_event_website_link_target', '_self' );
 
 
-
-
 					/**
 					 * Filter any link label
 					 *
@@ -228,10 +273,10 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 					 *
 					 * @param string the link label/text.
 					 */
-					$label  = apply_filters( 'tribe_get_event_website_link_label', $url_label, $post_id );
+					$label = apply_filters( 'tribe_get_event_website_link_label', $url_label, $post_id );
 
 
-					$meta   = sprintf(
+					$meta = sprintf(
 						'<a href="%s" target="%s">%s</a>',
 						esc_url( $meta ),
 						esc_attr( $target ),
@@ -249,142 +294,9 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 
 		return apply_filters( 'tribe_get_custom_fields', $data );
 	}
+}
 
-	/**
-	 * Displays the saved organizer
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_organizer() {
-		$current_organizer_id = Tribe__Events__Main::instance()->defaults()->organizer_id();
-		$current_organizer = ( $current_organizer_id != 'none' && $current_organizer_id != 0 && $current_organizer_id ) ? tribe_get_organizer( $current_organizer_id ) : __( 'No default set', 'tribe-events-calendar-pro' );
-		$current_organizer = esc_html( $current_organizer );
-		echo '<p class="tribe-field-indent description">' . sprintf( __( 'The current default organizer is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $current_organizer . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved venue
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_venue() {
-		$current_venue_id = Tribe__Events__Main::instance()->defaults()->venue_id();
-		$current_venue = ( $current_venue_id != 'none' && $current_venue_id != 0 && $current_venue_id ) ? tribe_get_venue( $current_venue_id ) : __( 'No default set', 'tribe-events-calendar-pro' );
-		$current_venue = esc_html( $current_venue );
-		echo '<p class="tribe-field-indent tribe-field-description description">' . sprintf( __( 'The current default venue is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $current_venue . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved address
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_address() {
-		$option = Tribe__Events__Main::instance()->defaults()->address();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default address is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved city
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_city() {
-		$option = Tribe__Events__Main::instance()->defaults()->city();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default city is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved state
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_state() {
-		$option = Tribe__Events__Main::instance()->defaults()->state();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description tribe-saved-state">' . sprintf( __( 'The current default state/province is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved province
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_province() {
-		$option = Tribe__Events__Main::instance()->defaults()->province();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description tribe-saved-province">' . sprintf( __( 'The current default state/province is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved zip
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_zip() {
-		$option = Tribe__Events__Main::instance()->defaults()->zip();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default postal code/zip code is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved country
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_country() {
-		$option = Tribe__Events__Main::instance()->defaults()->country();
-		$option = empty( $option[1] ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option[1];
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default country is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
-	/**
-	 * Displays the saved phone
-	 * Used in the settings screen
-	 *
-	 * @return void
-	 * @deprecated
-	 * @todo move this to the settings classes and remove
-	 */
-	function tribe_display_saved_phone() {
-		$option = Tribe__Events__Main::instance()->defaults()->phone();
-		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
-		$option = esc_html( $option );
-		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default phone is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
-	}
-
+if ( ! function_exists( 'tribe_get_distance_with_unit' ) ) {
 	/**
 	 * Returns the formatted and converted distance from the db (always in kms.) to the unit selected
 	 * by the user in the 'defaults' tab of our settings.
@@ -400,21 +312,9 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 
 		return apply_filters( 'tribe_get_distance_with_unit', $distance . ' ' . $unit, $distance, $distance_in_kms, $unit );
 	}
+}
 
-	/**
-	 * Returns an events distance from location search term
-	 *
-	 * @return string
-	 * @todo move tags to template
-	 *
-	 */
-	function tribe_event_distance() {
-		global $post;
-		if ( ! empty( $post->distance ) ) {
-			return '<span class="tribe-events-distance">'. tribe_get_distance_with_unit( $post->distance ) .'</span>';
-		}
-	}
-
+if ( ! function_exists( 'tribe_convert_units' ) ) {
 	/**
 	 *
 	 * Converts units. Uses tribe_convert_$unit_to_$unit_ratio filter to get the ratio.
@@ -438,13 +338,14 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		}
 
 		return ( $value * $ratio );
-
 	}
+}
 
+if ( ! function_exists( 'tribe_get_first_week_day' ) ) {
 	/**
 	 * Get the first day of the week from a provided date
 	 *
-	 * @param null|mixed $date  given date or week # (week # assumes current year)
+	 * @param null|mixed $date given date or week # (week # assumes current year)
 	 *
 	 * @return string
 	 * @todo move logic to Tribe__Date_Utils
@@ -452,19 +353,9 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	function tribe_get_first_week_day( $date = null ) {
 
 		$wp_query = tribe_get_global_query_object();
+		$offset   = 7 - (int) get_option( 'start_of_week', '0' );
 
-		$offset = 7 - get_option( 'start_of_week', 0 );
-
-		if ( tribe_is_ajax_view_request() ) {
-
-			$date = is_null( $date ) ? $_REQUEST['eventDate'] : $date;
-
-			// get the first value if we receiv an array
-			$date = is_array( $date ) ? Tribe__Utils__Array::get( $date, array( 0 ) ) : $date;
-
-		} else {
-			$date = is_null( $date ) && ! is_null( $wp_query ) ? $wp_query->get( 'start_date' ) : $date;
-		}
+		$date = is_null( $date ) && ! is_null( $wp_query ) ? $wp_query->get( 'start_date' ) : $date;
 
 		$timezone = Tribe__Timezones::wp_timezone_string();
 		$timezone = Tribe__Timezones::generate_timezone_string_from_utc_offset( $timezone );
@@ -481,97 +372,159 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 
 		return apply_filters( 'tribe_get_first_week_day', $r->format( 'Y-m-d' ) );
 	}
+}
 
+if ( ! function_exists( 'tribe_get_last_week_day' ) ) {
 	/**
 	 * Get the last day of the week from a provided date
 	 *
 	 * @param string|int $date_or_int A given date or week # (week # assumes current year)
-	 * @param bool $by_date determines how to parse the date vs week provided
-	 * @param int $first_day sets start of the week (offset) respectively, accepts 0-6
+	 * @param bool       $by_date     determines how to parse the date vs week provided
+	 * @param int        $first_day   sets start of the week (offset) respectively, accepts 0-6
 	 *
 	 * @return DateTime
 	 */
 	function tribe_get_last_week_day( $date_or_int, $by_date = true ) {
 		return apply_filters( 'tribe_get_last_week_day', date( 'Y-m-d', strtotime( tribe_get_first_week_day( $date_or_int, $by_date ) . ' +7 days' ) ) );
 	}
+}
 
+if ( ! function_exists( 'tribe_is_week' ) ) {
 	/**
-	 * Week View Test
+	 * Conditional function for if we are in the week view.
 	 *
-	 * Returns true when on the "real" Week View itself, but not in other secondary instances of the
-	 * Week View like instance of the [tribe_events] shortcode.
+	 * @since 6.0.0 Uses `tribe( 'context' )` for determining it's value.
+	 * @since 6.0.7 Uses tec_is_view() for better view filtering.
 	 *
 	 * @return bool
 	 */
-	function tribe_is_week() {
-		$is_week = ( 'week' === Tribe__Events__Main::instance()->displaying ) ? true : false;
+	function tribe_is_week(): bool {
+		$context  = tribe_context();
+		$is_week = tec_is_view( Week_View::get_view_slug() );
 
 		/**
 		 * Allows filtering of the tribe_is_week boolean value.
 		 *
 		 * @since 4.4.26 Added inline documentation for this filter.
+		 * @since 6.0.0  Remove the `$instance` param.
+		 * @since 6.0.7 add `$context` param.
 		 *
 		 * @param boolean $is_week Whether you're on the main Week View or not
-		 * @param Tribe__Events__Main $tribe_ecp The current Tribe__Events__Main instance.
 		 */
-		return apply_filters( 'tribe_is_week', $is_week, Tribe__Events__Main::instance() );
+		return (bool) apply_filters( 'tribe_is_week', $is_week, $context );
 	}
+}
 
+if ( ! function_exists( 'tribe_is_photo' ) ) {
 	/**
-	 * Photo View Test
+	 * Conditional function for if we are in the photo view.
 	 *
-	 * Returns true when on the "real" Photo View itself, but not in other secondary instances of the
-	 * Photo View like instance of the [tribe_events] shortcode.
+	 * @since 6.0.0 Uses `tribe( 'context' )` for determining it's value.
+	 * @since 6.0.7 Uses tec_is_view() for better view filtering.
 	 *
 	 * @return bool
 	 */
-	function tribe_is_photo() {
-		$is_photo = ( 'photo' === Tribe__Events__Main::instance()->displaying ) ? true : false;
+	function tribe_is_photo(): bool {
+		$context  = tribe_context();
+		$is_photo = tec_is_view( Photo_View::get_view_slug() );
 
 		/**
 		 * Allows filtering of the tribe_is_photo boolean value.
 		 *
 		 * @since 4.4.26 Added inline documentation for this filter.
+		 * @since 6.0.0  Remove the `$instance` param.
+		 * @since 6.0.7 add `$context` param.
 		 *
-		 * @param boolean $is_photo Whether you're on the main Photo View or not
-		 * @param Tribe__Events__Main $tribe_ecp The current Tribe__Events__Main instance.
+		 * @param boolean $is_photo Whether you're on the main Photo View or not.
 		 */
-		return apply_filters( 'tribe_is_photo', $is_photo, Tribe__Events__Main::instance() );
+		return (bool) apply_filters( 'tribe_is_photo', $is_photo, $context );
 	}
+}
 
+if ( ! function_exists( 'tribe_is_map' ) ) {
 	/**
-	 * Map View Test
+	 * Conditional function for if we are in the map view.
 	 *
-	 * Returns true when on the "real" Map View itself, but not in other secondary instances of the
-	 * Map View like instance of the [tribe_events] shortcode.
+	 * @since 6.0.0 Uses `tribe( 'context' )` for determining it's value.
+	 * @since 6.0.7 Uses tec_is_view() for better view filtering.
 	 *
 	 * @return bool
 	 */
-	function tribe_is_map() {
-		$tribe_ecp = Tribe__Events__Main::instance();
-		$is_map    = ( 'map' === $tribe_ecp->displaying ) ? true : false;
+	function tribe_is_map(): bool {
+		$context  = tribe_context();
+		$is_map = tec_is_view( Map_View::get_view_slug() );
 
 		/**
 		 * Allows filtering of the tribe_is_map boolean value.
 		 *
 		 * @since 4.4.26 Added inline documentation for this filter.
+		 * @since 6.0.0 Remove the `$instance` param.
+		 * @since 6.0.7 add `$context` param.
 		 *
 		 * @param boolean $is_map Whether you're on the main Map View or not
-		 * @param Tribe__Events__Main $tribe_ecp The current Tribe__Events__Main instance.
 		 */
-		return apply_filters( 'tribe_is_map', $is_map, $tribe_ecp );
+		return (bool) apply_filters( 'tribe_is_map', $is_map, $context );
 	}
+}
 
+if ( ! function_exists( 'tec_is_venue_view' ) ) {
+	/**
+	 * Conditional function for if we are on a venue view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @return bool
+	 */
+	function tec_is_venue_view(): bool {
+		$context  = tribe_context();
+		$is_venue_view = tec_is_view( Venue_View::get_view_slug() );
+
+		/**
+		 * Allows filtering of the tec_is_venue_view boolean value.
+		 *
+		 * @since 6.0.7
+		 *
+		 * @param boolean $is_venue_view Whether you're on a venue view or not
+		 */
+		return (bool) apply_filters( 'tec_is_venue_view', $is_venue_view, $context );
+	}
+}
+
+if ( ! function_exists( 'tec_is_organizer_view' ) ) {
+	/**
+	 * Conditional function for if we are on an organizer view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @return bool
+	 */
+	function tec_is_organizer_view(): bool {
+		$context  = tribe_context();
+		$is_organizer_view = tec_is_view( Organizer_View::get_view_slug() );
+
+		/**
+		 * Allows filtering of the tec_is_organizer_view boolean value.
+		 *
+		 * @since 6.0.7
+		 *
+		 * @param boolean $is_organizer_view Whether you're on an organizer view or not
+		 */
+		return (bool) apply_filters( 'tec_is_organizer_view', $is_organizer_view, $context );
+	}
+}
+
+if ( ! function_exists( 'tribe_get_last_week_permalink' ) ) {
 	/**
 	 * Get last week permalink by provided date (7 days offset)
 	 *
+	 * @todo move logic to week template class
 	 * @uses tribe_get_week_permalink
 	 *
+	 * @param bool   $is_current
+	 *
 	 * @param string $week
-	 * @param bool $is_current
 	 *
 	 * @return string $permalink
-	 * @todo move logic to week template class
 	 */
 	function tribe_get_last_week_permalink( $week = null ) {
 		$week = ! empty( $week ) ? $week : tribe_get_first_week_day();
@@ -581,20 +534,22 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 			}
 		}
 
-		$week = date( 'Y-m-d', strtotime( $week . ' -1 week') );
+		$week = date( 'Y-m-d', strtotime( $week . ' -1 week' ) );
 
 		return apply_filters( 'tribe_get_last_week_permalink', tribe_get_week_permalink( $week ) );
 	}
+}
 
+if ( ! function_exists( 'tribe_get_next_week_permalink' ) ) {
 	/**
 	 * Get next week permalink by provided date (7 days offset)
 	 *
+	 * @todo move logic to week template class
 	 * @uses tribe_get_week_permalink
 	 *
 	 * @param string $week
 	 *
 	 * @return string $permalink
-	 * @todo move logic to week template class
 	 */
 	function tribe_get_next_week_permalink( $week = null ) {
 		$week = ! empty( $week ) ? $week : tribe_get_first_week_day();
@@ -607,9 +562,13 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 
 		return apply_filters( 'tribe_get_next_week_permalink', tribe_get_week_permalink( $week ) );
 	}
+}
 
+if ( ! function_exists( 'tribe_get_week_permalink' ) ) {
 	/**
 	 * Get the week view permalink.
+	 *
+	 * @since 6.0.0 Refactored to use Views V2 URL system.
 	 *
 	 * @param string        $week
 	 * @param bool|int|null $term
@@ -617,20 +576,24 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @return string $permalink
 	 */
 	function tribe_get_week_permalink( $week = null, $term = null ) {
-		$week      = is_null( $week ) ? false : date( 'Y-m-d', strtotime( $week ) );
-		$permalink = Tribe__Events__Main::instance()->getLink( 'week', $week, $term );
+		$week = is_null( $week ) ? false : date( 'Y-m-d', strtotime( $week ) );
 
-		/**
-		 * Provides an opportunity to modify the week view permalink.
-		 *
-		 * @var string $permalink
-		 * @var string $week
-		 * @var mixed  $term
-		 */
-		return apply_filters( 'tribe_get_week_permalink', $permalink, $week, $term );
+		$args = [ 'view' => \Tribe\Events\Pro\Views\V2\Views\Week_View::get_view_slug() ];
+		if ( $week ) {
+			$args['date'] = $week;
+		}
+
+		if ( $term ) {
+			$args[ TEC::TAXONOMY ] = $term;
+		}
+
+		apply_filters_deprecated( 'tribe_get_week_permalink', [ null, $week, $term ], '6.0.0' );
+
+		return tribe_events_get_url( $args );
 	}
+}
 
-
+if ( ! function_exists( 'tribe_get_photo_permalink' ) ) {
 	/**
 	 * Get the photo permalink.
 	 *
@@ -639,39 +602,46 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @return string $permalink
 	 */
 	function tribe_get_photo_permalink( $term = null ) {
-		$permalink = Tribe__Events__Main::instance()->getLink( 'photo', null, $term );
+		$args = [ 'view' => \Tribe\Events\Pro\Views\V2\Views\Photo_View::get_view_slug() ];
 
-		/**
-		 * Provides an opportunity to modify the photo view permalink.
-		 *
-		 * @var string $permalink
-		 * @var mixed  $term
-		 */
-		return apply_filters( 'tribe_get_photo_view_permalink', $permalink, $term );
+		if ( $term ) {
+			$args[ TEC::TAXONOMY ] = $term;
+		}
+
+		apply_filters_deprecated( 'tribe_get_photo_view_permalink', [ null, $term ], '6.0.0' );
+
+		return tribe_events_get_url( $args );
 	}
+}
 
+if ( ! function_exists( 'tribe_single_related_events' ) ) {
 	/**
 	 * Echos the single events page related events boxes.
+	 *
+	 * @todo Deprecate any template include that is not using the Template Engine.
+	 *
 	 * @return void.
 	 */
-	function tribe_single_related_events( ) {
+	function tribe_single_related_events() {
 		tribe_get_template_part( 'pro/related-events' );
 	}
+}
 
+if ( ! function_exists( 'tribe_get_related_posts' ) ) {
 	/**
 	 * Template tag to get related posts for the current post.
 	 *
-	 * @param int $count number of related posts to return.
-	 * @param int|obj $post the post to get related posts to, defaults to current global $post
+	 * @param int     $count number of related posts to return.
+	 * @param int|obj $post  the post to get related posts to, defaults to current global $post
 	 *
 	 * @return array the related posts.
 	 */
 	function tribe_get_related_posts( $count = 3, $post = false ) {
-		$post_id = Tribe__Events__Main::postIdHelper( $post );
+		$post_id = TEC::postIdHelper( $post );
 
-		$args = [
+		$args  = [
 			'posts_per_page' => $count,
-			'start_date' => 'now',
+			'start_date'     => 'now',
 		];
 		$posts = [];
 
@@ -688,15 +658,18 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		/**
 		 * Filter the related posts for the current post.
 		 *
-		 * @param array $posts   The related posts.
+		 * @since 3.2
+		 *
 		 * @param int   $post_id Current Post ID.
 		 * @param array $args    Query arguments.
 		 *
-		 * @since 3.2
+		 * @param array $posts   The related posts.
 		 */
 		return apply_filters( 'tribe_get_related_posts', $posts, $post_id, $args );
 	}
+}
 
+if ( ! function_exists( 'tribe_events_recurrence_tooltip' ) ) {
 	/**
 	 * Shows the recurring event info in a tooltip, including details of the start/end date/time.
 	 *
@@ -705,7 +678,6 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @return string
 	 */
 	function tribe_events_recurrence_tooltip( $post_id = null ) {
-
 		if ( empty( $post_id ) ) {
 			$post_id = get_the_ID();
 		}
@@ -718,10 +690,10 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 			$tooltip .= '<span class="tribe-events-divider">|</span>';
 			$tooltip .= sprintf( esc_html__( 'Recurring %s', 'tribe-events-calendar-pro' ), tribe_get_event_label_singular() );
 			$tooltip .= sprintf( ' <a href="%s">%s</a>',
-				esc_url( tribe_all_occurences_link( $post_id, false ) ),
+				esc_url( tribe_all_occurrences_link( $post_id, false ) ),
 				esc_html__( '(See all)', 'tribe-events-calendar-pro' )
 			);
-			$tooltip .= '<div id="tribe-events-tooltip-'. $post_id .'" class="tribe-events-tooltip recurring-info-tooltip">';
+			$tooltip .= '<div id="tribe-events-tooltip-' . $post_id . '" class="tribe-events-tooltip recurring-info-tooltip">';
 			$tooltip .= '<div class="tribe-events-event-body">';
 			$tooltip .= tribe_get_recurrence_text( $post_id );
 			$tooltip .= '</div>';
@@ -735,12 +707,14 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		 * Allows filtering the recurrence tooltip HTML for the specified event.
 		 *
 		 * @param string $tooltip The HTML of the recurrence tooltip for the specified event.
-		 * @param int $post_id The post ID of the event.
+		 * @param int    $post_id The post ID of the event.
 		 */
 		return apply_filters( 'tribe_events_recurrence_tooltip', $tooltip, $post_id );
 	}
+}
 
-	/*
+if ( ! function_exists( 'tribe_events_pro_resource_url' ) ) {
+	/**
 	 * Returns or echoes a url to a file in the Events Calendar PRO plugin resources directory
 	 *
 	 * @param string $resource the filename of the resource
@@ -748,17 +722,17 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 	 * @return string
 	 **/
 	function tribe_events_pro_resource_url( $resource, $echo = false ) {
-		$extension = pathinfo( $resource, PATHINFO_EXTENSION );
+		$extension      = pathinfo( $resource, PATHINFO_EXTENSION );
 		$resources_path = 'src/resources/';
 		switch ( $extension ) {
 			case 'css':
-				$resource_path = $resources_path .'css/';
+				$resource_path = $resources_path . 'css/';
 				break;
 			case 'js':
-				$resource_path = $resources_path .'js/';
+				$resource_path = $resources_path . 'js/';
 				break;
 			case 'scss':
-				$resource_path = $resources_path .'scss/';
+				$resource_path = $resources_path . 'scss/';
 				break;
 			default:
 				$resource_path = $resources_path;
@@ -766,38 +740,16 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		}
 
 		$path = $resource_path . $resource;
-		$url = apply_filters( 'tribe_events_pro_resource_url', trailingslashit( Tribe__Events__Pro__Main::instance()->pluginUrl ) . $path, $resource );
+		$url  = apply_filters( 'tribe_events_pro_resource_url', trailingslashit( Tribe__Events__Pro__Main::instance()->pluginUrl ) . $path, $resource );
 		if ( $echo ) {
 			echo $url;
 		}
 
 		return $url;
 	}
+}
 
-	/**
-	 * Output the upcoming events associated with a venue
-	 *
-	 * @return void
-	 */
-	function tribe_organizer_upcoming_events( $post_id = false ) {
-
-		$post_id = Tribe__Events__Main::postIdHelper( $post_id );
-
-		if ( $post_id ) {
-
-			$args = array(
-				'organizer'      => $post_id,
-				'eventDisplay'   => 'list',
-				'posts_per_page' => apply_filters( 'tribe_events_single_organizer_posts_per_page', 100 ),
-				'starts_after'   => 'now',
-			);
-
-			$html = tribe_include_view_list( $args );
-
-			return apply_filters( 'tribe_organizer_upcoming_events', $html );
-		}
-	}
-
+if ( ! function_exists( 'tribe_get_upcoming_recurring_event_id_from_url' ) ) {
 	/**
 	 * Returns the next upcoming event in a recurring series from the /all/ URL
 	 * if one can be found, else returns null.
@@ -812,14 +764,14 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 		$path = @parse_url( $url );
 
 		// Ensure we were able to parse the URL and have an actual path to look at (could be just a scheme, host and query etc)
-		if ( empty( $path ) || ! isset( $path[ 'path' ] ) ) {
+		if ( empty( $path ) || ! isset( $path['path'] ) ) {
 			return null;
 		}
 
 		$path = trim( $path['path'], '/' );
 		$path = explode( '/', $path );
 
-		// We expect $path to contain at least 3 elements (could be more, for subdir installations etc)
+		// We expect $path to contain at least 3 elements (could be more, for subdirectory installations etc)
 		if ( count( $path ) < 3 ) {
 			return null;
 		}
@@ -863,25 +815,176 @@ if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
 
 		return current( $upcoming_child )->ID;
 	}
+}
 
+if ( ! function_exists( 'tribe_display_saved_organizer' ) ) {
+	/**
+	 * Displays the saved organizer
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_organizer() {
+		$current_organizer_id = TEC::instance()->defaults()->organizer_id();
+		$current_organizer = ( $current_organizer_id != 'none' && $current_organizer_id != 0 && $current_organizer_id ) ? tribe_get_organizer( $current_organizer_id ) : __( 'No default set', 'tribe-events-calendar-pro' );
+		$current_organizer = esc_html( $current_organizer );
+		echo '<p class="tribe-field-indent description">' . sprintf( __( 'The current default organizer is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $current_organizer . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_venue' ) ) {
+	/**
+	 * Displays the saved venue
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_venue() {
+		$current_venue_id = TEC::instance()->defaults()->venue_id();
+		$current_venue = ( $current_venue_id != 'none' && $current_venue_id != 0 && $current_venue_id ) ? tribe_get_venue( $current_venue_id ) : __( 'No default set', 'tribe-events-calendar-pro' );
+		$current_venue = esc_html( $current_venue );
+		echo '<p class="tribe-field-indent tribe-field-description description">' . sprintf( __( 'The current default venue is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $current_venue . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_address' ) ) {
+	/**
+	 * Displays the saved address
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_address() {
+		$option = TEC::instance()->defaults()->address();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default address is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_city' ) ) {
+	/**
+	 * Displays the saved city
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_city() {
+		$option = TEC::instance()->defaults()->city();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default city is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_state' ) ) {
+	/**
+	 * Displays the saved state
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_state() {
+		$option = TEC::instance()->defaults()->state();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description tribe-saved-state">' . sprintf( __( 'The current default state/province is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_province' ) ) {
+	/**
+	 * Displays the saved province
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_province() {
+		$option = TEC::instance()->defaults()->province();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description tribe-saved-province">' . sprintf( __( 'The current default state/province is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_zip' ) ) {
+	/**
+	 * Displays the saved zip
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_zip() {
+		$option = TEC::instance()->defaults()->zip();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default postal code/zip code is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_country' ) ) {
+	/**
+	 * Displays the saved country
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_country() {
+		$option = TEC::instance()->defaults()->country();
+		$option = empty( $option[1] ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option[1];
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default country is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
+}
+
+if ( ! function_exists( 'tribe_display_saved_phone' ) ) {
+	/**
+	}
+	 * Displays the saved phone
+	 * Used in the settings screen
+	 *
+	 * @return void
+	 * @deprecated
+	 * @todo move this to the settings classes and remove
+	 */
+	function tribe_display_saved_phone() {
+		$option = TEC::instance()->defaults()->phone();
+		$option = empty( $option ) ? __( 'No default set', 'tribe-events-calendar-pro' ) : $option;
+		$option = esc_html( $option );
+		echo '<p class="tribe-field-indent tribe-field-description venue-default-info description">' . sprintf( __( 'The current default phone is: %s', 'tribe-events-calendar-pro' ), '<strong>' . $option . '</strong>' ) . '</p>';
+	}
 }
 
 if ( ! function_exists( 'tribe_get_mobile_default_view' ) ) {
 	/**
 	 * Allow users to fetch default view For Mobile
 	 *
+	 * @return int
 	 * @category Events
 	 *
-	 * @return int
 	 */
 	function tribe_get_mobile_default_view() {
-		$default = Tribe__Events__Main::instance()->default_view();
-
 		// If there isn't a default mobile set, it will get the default from the normal settings
 		$default_view = tribe_get_option( 'mobile_default_view', 'default' );
 
 		if ( 'default' === $default_view ) {
-			$default_view = $default;
+			$default_view = tribe( Manager::class )->get_default_view_slug();;
 		}
 
 		/**
@@ -891,4 +994,36 @@ if ( ! function_exists( 'tribe_get_mobile_default_view' ) ) {
 		 */
 		return apply_filters( 'tribe_events_mobile_default_view', $default_view );
 	}
-}//end if
+}
+
+if ( ! function_exists( 'tribe_update_event_with_series' ) ) {
+	/**
+	 * Updates an Event to be attached to a given Series post.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param WP_Post $event  A reference to the Event post.
+	 * @param WP_Post $series A reference to the Series post.
+	 *
+	 * @return bool Whether the Event was attached to the Series or not.
+	 */
+	function tribe_update_event_with_series( WP_Post $event, WP_Post $series ): bool {
+		if ( TEC::POSTTYPE !== $event->post_type || Series::POSTTYPE !== $series->post_type ) {
+			return false;
+		}
+
+		if ( Event::upsert( [ 'post_id' ], Event::data_from_post( $event->ID ) ) === false ) {
+			return false;
+		}
+
+		$event_model = Event::find( $event->ID, 'post_id' );
+
+		if ( ! $event_model instanceof Event ) {
+			return false;
+		}
+
+		tribe( Relationship::class )->with_event( $event_model, [ $series->ID ] );
+
+		return true;
+	}
+}

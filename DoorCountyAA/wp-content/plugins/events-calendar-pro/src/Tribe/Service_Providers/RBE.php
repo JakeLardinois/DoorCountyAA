@@ -48,7 +48,8 @@ class Tribe__Events__Pro__Service_Providers__RBE extends tad_DI52_ServiceProvide
 		$main = Tribe__Events__Pro__Main::instance();
 		// Init the common functions.
 		Tribe__Events__Pro__Recurrence__Meta::init( false );
-		add_action( 'tribe_events_parse_query', array( $main, 'parse_query' ) );
+		// Gustavo commented out this line due to legacy view removal.
+		// add_action( 'tribe_events_parse_query', array( $main, 'parse_query' ) );
 	}
 
 	/**

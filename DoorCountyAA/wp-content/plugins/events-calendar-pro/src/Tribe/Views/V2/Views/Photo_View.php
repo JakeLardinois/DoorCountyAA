@@ -19,13 +19,22 @@ class Photo_View extends View {
 	use List_Behavior;
 
 	/**
-	 * Slug for this view
+	 * Slug for this view.
 	 *
-	 * @since 4.7.5
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'photo';
+
+	/**
+	 * Statically accessible slug for this view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'photo';
 
 	/**
 	 * Visibility for this view.
@@ -36,6 +45,24 @@ class Photo_View extends View {
 	 * @var bool
 	 */
 	protected static $publicly_visible = true;
+
+	/**
+	 * Default untranslated value for the label of this view.
+	 *
+	 * @since 6.0.3
+	 *
+	 * @var string
+	 */
+	protected static $label = 'Photo';
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function get_view_label(): string {
+		static::$label = _x( 'Photo', 'The text label for the Photo View.', 'tribe-events-calendar-pro' );
+
+		return static::filter_view_label( static::$label );
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -78,7 +105,7 @@ class Photo_View extends View {
 		$current_page = (int) $this->context->get( 'page', 1 );
 		$display      = $this->context->get( 'event_display_mode', 'photo' );
 
-		if ( $this->slug === $display || 'default' === $display ) {
+		if ( static::$view_slug === $display || 'default' === $display || $this instanceof $display ) {
 			$url = parent::next_url( $canonical );
 		} elseif ( $current_page > 1 ) {
 			$url = parent::prev_url( $canonical, [ Utils\View::get_past_event_display_key() => 'past' ] );
@@ -136,7 +163,7 @@ class Photo_View extends View {
 			// We've got rewrite rules handling `eventDate` and `eventDisplay`, but not List. Let's remove it.
 			$canonical_url = Rewrite::instance()->get_clean_url(
 				add_query_arg(
-					[ 'eventDisplay' => $this->slug ],
+					[ 'eventDisplay' => static::$view_slug ],
 					remove_query_arg( [ 'eventDate' ], $past_url )
 				)
 			);
@@ -174,14 +201,14 @@ class Photo_View extends View {
 		$event_date_var = $default_date === $date ? '' : $date;
 
 		$upcoming = tribe_events()->by_args( $this->setup_repository_args( $this->context->alter( [
-			'eventDisplay' => $this->slug,
+			'eventDisplay' => static::$view_slug,
 			'paged'        => $page,
 		] ) ) );
 
 		if ( $upcoming->count() > 0 ) {
 			$query_args = [
 				'post_type'        => TEC::POSTTYPE,
-				'eventDisplay'     => $this->slug,
+				'eventDisplay'     => static::$view_slug,
 				$this->page_key    => $page,
 				'eventDate'        => $event_date_var,
 				'tribe-bar-search' => $this->context->get( 'keyword' ),

@@ -3,7 +3,7 @@
  * Renders the week view
  *
  * @since   4.7.5
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 
 namespace Tribe\Events\Pro\Views\V2\Views;
@@ -11,7 +11,9 @@ namespace Tribe\Events\Pro\Views\V2\Views;
 use Tribe\Events\Views\V2\Messages;
 use Tribe\Events\Views\V2\Utils\Stack;
 use Tribe\Events\Views\V2\Views\By_Day_View;
+use Tribe\Events\Views\V2\Views\Day_View;
 use Tribe\Events\Views\V2\Views\Traits\With_Fast_Forward_Link;
+use Tribe\Utils\Date_I18n;
 use Tribe__Context as Context;
 use Tribe__Date_Utils as Dates;
 use Tribe__Events__Timezones as Timezones;
@@ -21,7 +23,7 @@ use Tribe__Events__Timezones as Timezones;
  *
  * @since   4.7.5
  *
- * @package Tribe\Events\PRO\Views\V2\Views
+ * @package Tribe\Events\Pro\Views\V2\Views
  */
 class Week_View extends By_Day_View {
 	use With_Fast_Forward_Link;
@@ -29,11 +31,29 @@ class Week_View extends By_Day_View {
 	/**
 	 * Slug for this view
 	 *
-	 * @since 4.7.5
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'week';
+
+	/**
+	 * Statically accessible slug for this view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'week';
+
+	/**
+	 * Cached dates for the prev/next links.
+	 *
+	 * @since 5.14.2
+	 *
+	 * @var array
+	 */
+	protected $cached_event_dates = [];
 
 	/**
 	 * Visibility for this view.
@@ -53,6 +73,43 @@ class Week_View extends By_Day_View {
 	 * @var bool
 	 */
 	protected $hide_weekends = false;
+
+	/**
+	 * Week_View constructor.
+	 *
+	 * @since 5.0.0
+	 *
+	 * {@inheritDoc}
+	 */
+	public function __construct( Messages $messages, Stack $stack ) {
+		parent::__construct( $messages, $stack );
+		/**
+		 *  Allows filtering of the week_view_hide_weekends option.
+		 *
+		 * @since 5.6.0
+		 *
+		 * @param boolean $hide_weekends whether to hide weekend on the view or not.
+		 */
+		$this->hide_weekends = apply_filters( 'tribe_week_view_hide_weekends', tribe_is_truthy( tribe_get_option( 'week_view_hide_weekends', false ) ) );
+	}
+
+	/**
+	 * Default untranslated value for the label of this view.
+	 *
+	 * @since 6.0.3
+	 *
+	 * @var string
+	 */
+	protected static $label = 'Week';
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function get_view_label(): string {
+		static::$label = _x( 'Week', 'The text label for the Week View.', 'tribe-events-calendar-pro' );
+
+		return static::filter_view_label( static::$label );
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -137,6 +194,17 @@ class Week_View extends By_Day_View {
 		$template_vars['has_multiday_events']       = $this->get_has_multiday_events( $list_ready_stack );
 		$template_vars['events']                    = $events;
 
+		// Handle indexing on prev/next links.
+		$next_week_num       = Dates::build_date_object( $this->context->get( 'event_date' ) )->modify( '+1 week' )->format( 'W' );
+		$prev_week_num       = Dates::build_date_object( $this->context->get( 'event_date' ) )->modify( '-1 week' )->format( 'W' );
+		$next_event_date     = $this->get_next_event_date();
+		$previous_event_date = $this->get_previous_event_date();
+
+		$index_next_rel = $next_event_date && $next_week_num === $next_event_date;
+		$index_prev_rel = $previous_event_date && $prev_week_num === $previous_event_date;
+		$template_vars['next_rel'] = $index_next_rel ? 'next' : 'noindex';
+		$template_vars['prev_rel'] = $index_prev_rel ? 'prev' : 'noindex';
+
 		$template_vars['multiday_min_toggle'] = $stack_toggle_threshold;
 
 		// If any of the days in the stack has more events than the threshold, then show the toggle.
@@ -201,7 +269,7 @@ class Week_View extends By_Day_View {
 				'event_times'    => $this->parse_event_times( $event_ids ),
 				'message_mobile' => $message_mobile,
 				'more_events'    => max( count( $event_ids ) - $this->get_events_per_day(), 0 ),
-				'day_url'        => tribe_events_get_url( [ 'eventDisplay' => 'day', 'eventDate' => $date_string ] ),
+				'day_url'        => tribe_events_get_url( [ 'eventDisplay' => Day_View::get_view_slug(), 'eventDate' => $date_string ] ),
 			];
 		}
 
@@ -304,30 +372,11 @@ class Week_View extends By_Day_View {
 				'daynum'       => $day_date->format( 'j' ),
 				'found_events' => count( $event_ids ),
 				'more_events'  => max( count( $event_ids ) - $this->get_events_per_day(), 0 ),
-				'day_url'      => tribe_events_get_url( [ 'eventDisplay' => 'day', 'eventDate' => $day_date->format( 'Y-m-d' ) ] ),
+				'day_url'      => tribe_events_get_url( [ 'eventDisplay' => Day_View::get_view_slug(), 'eventDate' => $day_date->format( 'Y-m-d' ) ] ),
 			];
 		}
 
 		return $grid_days;
-	}
-
-	/**
-	 * Week_View constructor.
-	 *
-	 * @since 5.0.0
-	 *
-	 * {@inheritDoc}
-	 */
-	public function __construct( Messages $messages, Stack $stack ) {
-		parent::__construct( $messages, $stack );
-		/**
-		 *  Allows filtering of the week_view_hide_weekends option.
-		 *
-		 * @since 5.6.0
-		 *
-		 * @param boolean $hide_weekends whether to hide weekend on the view or not.
-		 */
-		$this->hide_weekends = apply_filters( 'tribe_week_view_hide_weekends', tribe_is_truthy( tribe_get_option( 'week_view_hide_weekends', false ) ) );
 	}
 
 	/**
@@ -471,12 +520,13 @@ class Week_View extends By_Day_View {
 
 		/** @var \DateTime $day */
 		foreach ( $interval as $day ) {
+			$day = Date_I18n::createFromImmutable( $day );
 			if ( $this->hide_weekends && in_array( (int) $day->format( 'w' ), [ 0, 6 ], true ) ) {
 				continue;
 			}
 
-			$day_y_m_d          = $day->format( 'Y-m-d' );
-			$day_url            = tribe_events_get_url( [ 'eventDisplay' => 'day', 'eventDate' => $day_y_m_d ] );
+			$day_y_m_d = $day->format( 'Y-m-d' );
+			$day_url   = tribe_events_get_url( [ 'eventDisplay' => Day_View::get_view_slug(), 'eventDate' => $day_y_m_d ] );
 
 			$grid[ $day_y_m_d ] = [
 				'full_date'    => $day->format( tribe_get_option( 'date_with_year', Dates::DATEONLYFORMAT ) ),
@@ -583,7 +633,7 @@ class Week_View extends By_Day_View {
 	 * @return string The full vertical position CSS class for the event, if required, else an empty string.
 	 */
 	protected function get_event_vertical_position_class( \WP_Post $event ) {
-		$start         = Timezones::is_mode( 'site' ) ? $event->dates->start_site : $event->dates->start; 
+		$start         = Timezones::is_mode( 'site' ) ? $event->dates->start_site : $event->dates->start;
 		$start_hour    = (int) $start->format( 'H' );
 		$start_minutes = (int) $start->format( 'i' );
 
@@ -674,6 +724,53 @@ class Week_View extends By_Day_View {
 	}
 
 	/**
+	 * Get the date of the event immediately previous to the current view date.
+	 *
+	 * @since 5.14.2
+	 *
+	 * @param DateTime $current_date A DateTime object signifying the current date for the view.
+	 *
+	 * @return DateTime|false Either the previous event chronologically, the previous month, or false if no next event found.
+	 */
+	public function get_previous_event_date() {
+		$args = $this->filter_repository_args( parent::setup_repository_args( $this->context ) );
+		$date         = $this->context->get( 'event_date', 'today' );
+		$current_date = Dates::build_date_object( $date );
+
+		// Use cache to reduce the performance impact.
+		$cache_key = __METHOD__ . '_' . substr( md5( wp_json_encode( [ $current_date, $args ] ) ), 10 );
+
+		if ( isset( $this->cached_event_dates[ $cache_key ] ) ) {
+			return $this->cached_event_dates[ $cache_key ];
+		}
+
+		list( $week_start ) = $this->calculate_grid_start_end( $current_date );
+
+		// Find the first event that starts before the start of this month.
+		$prev_event = tribe_events()
+			->by_args( $args )
+			->where( 'ends_before', tribe_beginning_of_day( $week_start->format( 'Y-m-d' ) ) )
+			->order( 'DESC' )
+			->first();
+
+		if ( ! $prev_event instanceof \WP_Post ) {
+			return false;
+		}
+
+		// Show the closest week on which that event appears (but not the current week).
+		$prev_date  = min(
+			Dates::build_date_object( $prev_event->dates->start ),
+			$current_date->modify( '-1 week' )
+		);
+
+		$prev_date = $prev_date->format( 'W' );
+
+		$this->cached_event_dates[ $cache_key ] = $prev_date;
+
+		return $prev_date;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function prev_url( $canonical = false, array $passthru_vars = [] ) {
@@ -710,6 +807,54 @@ class Week_View extends By_Day_View {
 		$this->cached_urls[ $cache_key ] = $url;
 
 		return $url;
+	}
+
+	/**
+	 * Get the date of the event immediately after to the current view date.
+	 *
+	 * @since 5.14.2
+	 *
+	 * @param DateTime|false $current_date A DateTime object signifying the current date for the view.
+	 *
+	 * @return DateTime|false Either the next event chronologically, the next month, or false if no next event found.
+	 */
+	public function get_next_event_date() {
+		$args = $this->filter_repository_args( parent::setup_repository_args( $this->context ) );
+		$date         = $this->context->get( 'event_date', 'today' );
+		$current_date = Dates::build_date_object( $date );
+		list( $week_start ) = $this->calculate_grid_start_end( $current_date );
+
+		// Use cache to reduce the performance impact.
+		$cache_key = __METHOD__ . '_' . substr( md5( wp_json_encode( [ $current_date, $args ] ) ), 10 );
+
+		if ( isset( $this->cached_event_dates[ $cache_key ] ) ) {
+			return $this->cached_event_dates[ $cache_key ];
+		}
+
+		list( $week_start, $week_end ) = $this->calculate_grid_start_end( $current_date );
+
+		// The first event that ends after the end of the month; it could still begin in this month.
+		$next_event = tribe_events()
+			->by_args( $this->filter_repository_args( $args ) )
+			->where( 'starts_after', tribe_end_of_day( $week_end->format( 'Y-m-d' ) ) )
+			->order( 'ASC' )
+			->first();
+
+		if ( ! $next_event instanceof \WP_Post ) {
+			return false;
+		}
+
+		// At a minimum pick the next week or the week the next event starts.
+		$next_date = max(
+			Dates::build_date_object( $next_event->dates->start ),
+			$current_date->modify( '+1 week' )
+		);
+
+		$next_date = $next_date->format( 'W' );
+
+		$this->cached_event_dates[ $cache_key ] = $next_date;
+
+		return $next_date;
 	}
 
 	/**
@@ -946,5 +1091,19 @@ class Week_View extends By_Day_View {
 		 * @param Week_View $this The current Week View instance.
 		 */
 		return apply_filters( 'tribe_events_views_v2_week_events_per_day', $events_per_day, $this );
+	}
+
+	/**
+	 * Adds Week View to the views that get cache.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @param array               $views Should the current view have its HTML cached?
+	 * @param View_Interface|null $view  The object using the trait, or null in case of static usage.
+	 */
+	public function filter_tribe_events_views_v2_cached_views( $views, $view ) {
+		$views[ self::get_view_slug() ] = true;
+
+		return $views;
 	}
 }

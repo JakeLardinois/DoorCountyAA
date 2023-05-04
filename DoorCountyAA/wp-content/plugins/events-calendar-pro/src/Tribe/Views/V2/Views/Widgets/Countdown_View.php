@@ -26,10 +26,20 @@ class Countdown_View extends \Tribe\Events\Views\V2\Views\Widgets\Widget_View {
 	 * The slug for this view.
 	 *
 	 * @since 5.3.0
+	 * @deprecated 6.0.7
 	 *
 	 * @var string
 	 */
 	protected $slug = 'widget-countdown';
+
+	/**
+	 * The slug for this view.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @var string
+	 */
+	protected static $view_slug = 'widget-countdown';
 
 	/**
 	 * Sets up the View repository arguments from the View context or a provided Context object.

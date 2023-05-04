@@ -14,6 +14,7 @@ use Tribe\Events\Views\V2\Widgets\Widget_Abstract;
 use Tribe__Context as Context;
 use Tribe__Date_Utils as Dates;
 use Tribe\Events\Views\V2\Template as View_Template;
+use Tribe\Events\Views\V2\Views\Month_View;
 
 /**
  * Class for the Month Widget.
@@ -166,9 +167,9 @@ class Widget_Month extends Widget_Abstract {
 			return;
 		}
 
-		$view_slug = $template->get_view()->get_slug();
+		$view_slug = $template->get_view_slug();
 
-		if ( 'month' !== $view_slug && 'widget-month' !== $view_slug ) {
+		if ( Month_View::get_view_slug() !== $view_slug && 'widget-month' !== $view_slug ) {
 			return;
 		}
 

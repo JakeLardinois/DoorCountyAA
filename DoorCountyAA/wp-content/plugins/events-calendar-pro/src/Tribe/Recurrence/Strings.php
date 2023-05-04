@@ -182,6 +182,6 @@ class Tribe__Events__Pro__Recurrence__Strings {
 			'delete-cancel'                            => __( 'Cancel', 'tribe-events-calendar-pro' ),
 		);
 
-		return $strings;
+		return apply_filters( 'tribe_events_pro_recurrence_recurrence_strings', $strings );
 	}
 }

@@ -54,7 +54,7 @@ $default_end_time = $admin_box->get_timepicker_default( 'end' );
 		value="{{#if custom.[start-time]}}{{custom.[start-time]}}{{else}}<?php echo esc_attr( $default_start_time ); ?>{{/if}}"
 	/>
 	<span class="tribe-field-inline-text eventduration-preamble">
-		<?php echo esc_html_x( 'to', 'custom recurrence time separator', 'tribe-events-calendar-pro' ); ?>
+		<?php echo esc_html( $strings[ 'time-recurrence-time-separator' ] ); ?>
 	</span>
 	<input
 		autocomplete="off"
@@ -70,7 +70,7 @@ $default_end_time = $admin_box->get_timepicker_default( 'end' );
 		value="{{#if custom.[end-time]}}{{custom.[end-time]}}{{else}}<?php echo esc_attr( $default_end_time ); ?>{{/if}}"
 	/>
 	<span class="tribe-field-inline-text">
-		<?php echo esc_html_x( 'the', 'custom recurrence time/date separator', 'tribe-events-calendar-pro' ); ?>
+		<?php echo esc_html( $strings[ 'time-recurrence-time-date-separator' ] ); ?>
 	</span>
 	<select
 		type="text"

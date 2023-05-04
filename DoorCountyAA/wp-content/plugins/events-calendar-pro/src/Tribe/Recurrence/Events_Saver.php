@@ -119,6 +119,31 @@ class Tribe__Events__Pro__Recurrence__Events_Saver {
 			}
 		}
 
+		$commit_payload = [
+			'to_create'  => $to_create,
+			'to_update'  => $to_update,
+			'to_delete'  => $to_delete,
+			'exclusions' => $exclusions,
+		];
+
+		/**
+		 * Whether the Event occurrence should be updated or not by the default behavior.
+		 *
+		 * Returning a non `null` value will override the default behavior.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param bool                $commit         Whether the Event Occurrences should be updated using the default behavior
+		 *                                            or not.
+		 * @param int                 $post_id        The ID of the Event.
+		 * @param array<string,array> $commit_payload The payload that will be used to update the Event Occurrences.
+		 */
+		$commit = apply_filters( 'tec_events_pro_recurrence_update_commit', null, $this->event_id, $commit_payload );
+
+		if ( $commit !== null ) {
+			return (bool) $commit;
+		}
+
 		// Store the list of instances to create/update/delete etc for future processing
 		$queue = new Tribe__Events__Pro__Recurrence__Queue( $this->event_id );
 		$queue->update( $to_create, $to_update, $to_delete, $exclusions );

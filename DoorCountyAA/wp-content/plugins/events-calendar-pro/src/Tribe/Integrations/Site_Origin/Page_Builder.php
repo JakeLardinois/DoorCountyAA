@@ -23,12 +23,13 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 	/**
 	 * Enqueue the scripts for the widgets
 	 *
-	 * @since 4.4.29
+	 * @since  4.4.29
 	 *
 	 * @return [type] [description]
 	 */
 	public function load_widget_admin_scripts() {
-		Tribe__Events__Pro__Main::instance()->load_widget_assets();
+		tribe_asset_enqueue( 'tribe-select2' );
+		tribe_asset_enqueue( 'tribe-admin-widget' );
 
 		// For the "This Week Widget"
 		wp_enqueue_script( 'underscore' );
@@ -39,13 +40,13 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 	/**
 	 * Enqueue all assets for the widgets
 	 *
-	 * @since 4.4.29
+	 * @since  4.4.29
 	 *
 	 * @return [type] [description]
 	 */
 	public function load_widget_admin_assets() {
 		$this->load_widget_admin_scripts();
-		Tribe__Events__Pro__Main::instance()->admin_enqueue_styles();
+		tribe_asset_enqueue( 'tribe-select2-css' );
 	}
 
 	/**
@@ -53,8 +54,8 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 	 *
 	 * @since 4.4.29
 	 *
-	 * @param  bool   $allow
-	 * @param  string $hook
+	 * @param bool   $allow
+	 * @param string $hook
 	 *
 	 * @return bool
 	 */
@@ -79,7 +80,7 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 			return false;
 		}
 
-		if (  ! siteorigin_panels_is_panel() ) {
+		if ( ! siteorigin_panels_is_panel() ) {
 			return false;
 		}
 
@@ -92,18 +93,20 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 		$panels_data = get_post_meta( $page->ID, 'panels_data', true );
 
 		// No widget on page - bail
-		if ( empty( $panels_data ) || empty( $panels_data[ 'widgets' ] ) ) {
+		if ( empty( $panels_data ) || empty( $panels_data['widgets'] ) ) {
 			return false;
 		}
 
-		foreach ( $panels_data[ 'widgets' ] as $widget ) {
+		foreach ( $panels_data['widgets'] as $widget ) {
 			// If $widget[ 'panels_info' ][ 'class' ] is the calling class, enqueue styles.
 			if (
 				empty( $styles_enqueued )
 				&& ! empty( $widget['panels_info']['class'] )
 				&& $class === $widget['panels_info']['class']
 			) {
-				Tribe__Events__Pro__Widgets::enqueue_calendar_widget_styles();
+				tribe_asset_enqueue( 'widget-calendar-pro-style' );
+				tribe_asset_enqueue( Tribe__Events__Main::POSTTYPE . '-widget-calendar-pro-override-style' );
+
 				// Only need to enqueue them once
 				$styles_enqueued = true;
 			} else {
@@ -112,7 +115,7 @@ class Tribe__Events__Pro__Integrations__Site_Origin__Page_Builder {
 			}
 
 			// Specific to only one widget
-			switch ( $widget[ 'panels_info' ][ 'class' ] ) {
+			switch ( $widget['panels_info']['class'] ) {
 				case 'Tribe__Events__Pro__Mini_Calendar_Widget':
 					tribe_asset_enqueue( 'tribe-mini-calendar' );
 					break;

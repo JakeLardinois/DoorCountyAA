@@ -31,7 +31,15 @@ class Tribe__Events__Pro__Admin__Custom_Meta_Tools {
 	 */
 	public function updater_listen() {
 		// Inspect any post/get data (but not cookie data) for updater requests
-		$request = array_merge( array( 'do_additional_fields_update' => false ), $_POST, $_GET );
+		$request = [ 'do_additional_fields_update' => false ];
+
+		if ( isset( $_POST ) ) {
+			$request = array_merge( $request, $_POST );
+		}
+
+		if ( isset( $_GET ) ) {
+			$request = array_merge( $request, $_GET );
+		}
 
 		if ( ! wp_verify_nonce( $request[ 'do_additional_fields_update' ], 'custom_meta_tools:updater' ) ) {
 			return;

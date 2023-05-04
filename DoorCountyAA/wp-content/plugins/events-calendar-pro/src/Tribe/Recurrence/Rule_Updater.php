@@ -142,22 +142,28 @@ class Tribe__Events__Pro__Recurrence__Rule_Updater {
 	 * Given a legacy recurrence rule, attempts to update it to the currently
 	 * expected structure.
 	 *
+	 * @since 6.0.0 Now changes to the `custom` array will be merged, and not destroy existing `custom` values.
+	 *
 	 * @param array $rule
 	 *
 	 * @return array
 	 */
 	protected function fix_rule( array $rule ) {
-		$original_type = $rule['type'];
-
-		$rule['type'] = 'Custom';
-		$rule['custom'] = array(
-			'interval' => 1,
+		$original_type      = $rule['type'];
+		$new_rule           = $rule;
+		$new_rule['type']   = 'Custom';
+		$new_rule['custom'] = array(
+			'interval'  => 1,
 			'same-time' => 'yes',
-			'type' => $this->convert_type( $original_type ),
+			'type'      => $this->convert_type( $original_type ),
 		);
 
-		$rule['custom'] = $this->add_rule_details( $rule['custom'] );
-		return $rule;
+		$new_rule['custom'] = $this->add_rule_details( $new_rule['custom'] );
+		if ( isset( $rule['custom'] ) ) {
+			$new_rule['custom'] = array_merge( $rule['custom'], $new_rule['custom'] );
+		}
+
+		return $new_rule;
 	}
 
 	/**

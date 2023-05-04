@@ -173,7 +173,7 @@ class Tribe__Events__Pro__Editor extends Tribe__Editor {
 	public function maybe_load_custom_field_assets() {
 		$screen = get_current_screen();
 
-		if ( ! $screen instanceof WP_Screen || $screen->id !== 'tribe_events_page_tribe-common' ) {
+		if ( ! $screen instanceof WP_Screen || $screen->id !== 'tribe_events_page_tec-events-settings' ) {
 			return false;
 
 		}
@@ -209,7 +209,7 @@ class Tribe__Events__Pro__Editor extends Tribe__Editor {
 			[
 				[
 					'slug'  => 'tribe-events-pro-additional-fields',
-					'title' => __( 'Additional Fields', 'events-pro' ),
+					'title' => __( 'Additional Fields', 'tribe-events-calendar-pro' ),
 				],
 			]
 		);
@@ -247,7 +247,7 @@ class Tribe__Events__Pro__Editor extends Tribe__Editor {
 			[
 				[
 					'slug'  => 'tribe-events-pro-additional-fields',
-					'title' => __( 'Additional Fields', 'events-pro' ),
+					'title' => __( 'Additional Fields', 'tribe-events-calendar-pro' ),
 				],
 			]
 		);

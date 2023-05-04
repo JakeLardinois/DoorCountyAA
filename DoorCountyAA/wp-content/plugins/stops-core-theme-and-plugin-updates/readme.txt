@@ -4,8 +4,8 @@ Tags: updates manager, easy updates manager, disable updates manager, disable up
 Requires at least: 5.1
 Requires PHP: 5.6
 Donate link: https://easyupdatesmanager.com
-Tested up to: 6.0
-Stable tag: 9.0.12
+Tested up to: 6.2
+Stable tag: 9.0.15
 License: GPLv2 or later
 
 Manage all your WordPress updates, including individual updates, automatic updates, logs, and loads more. This also works very well with WordPress Multisite.
@@ -125,6 +125,45 @@ Since third-party providers use custom update mechanisms, we cannot always guara
 For additional information and FAQs for Easy Updates Manager <a href="https://easyupdatesmanager.com">check out our website</a>.
 
 == Changelog ==
+
+= 9.0.15 - 2023-04-13 =
+
+* TWEAK: Improve MPSUM_Logs::normalise_call_stack_args() method to reduce the size of call stacks being stored in the database, also to prevent silent termination due to size of the call stacks that swell
+* TWEAK: Get rid of PHP 8.1+'s "automatic conversion of false to array is deprecated" message when first time activating the plugin
+* TWEAK: Add a user capabilities check when receiving a request through the `wp_ajax_eum_ajax` handler
+* TWEAK: Prevent PHP8+ ErrorException and/or suppress PHP notice/warning for undefined stdClass::$plugin and/or stdClass::$theme variables during auto-updates (this usually happens due to the plugin or theme doesn't follow WordPress standards)
+* TWEAK: Remove notices regarding WP_AUTO_UPDATE_CORE and AUTOMATIC_UPDATER_DISABLED constants from force automatic updates screen as they now won't prevent automatic updates from being run
+* TWEAK: Get rid of PHP deprecated message on PHP 8.1+ when presenting admin constant notices by removing sprintf() function that shouldn't had wrapped the esc_html_e() function
+* TWEAK: All updates settings should be compatible and compliant with WordPress Site Health
+* TWEAK: Prevent making a nonce available to logged-in users who could not manage Easy Updates Manager (no impact as all actions (dismissal of notices) were unreachable without proper user capability)
+* FIX: Wrong parameters order in PHP implode() function calls for showing a list of plugins and/or themes that are under version control
+* FIX: Some fields were not cleared when switching from one auto-update schedule time to another
+
+= 9.0.14 - 2022-10-24 =
+
+* TWEAK: Add admin notice for DISABLE_WP_CRON constant and remove notices regarding WP_AUTO_UPDATE_CORE and AUTOMATIC_UPDATER_DISABLED constants as they now won't prevent automatic updates from being run
+* FIX: Core minor updates became major when two updates-related scheduled events got triggered in the same process
+* FIX: In some cases the serialisation of call stack could cause a PHP fatal error due to the output of a backtrace (debug_backtrace) containing 'Closure' (anonymous) functions
+* TWEAK: Update notice class
+
+= 9.0.13 - 2022-06-07 =
+
+* TWEAK: Update logs are sent separately causing a huge number of emails being sent to the user (Premium)
+* TWEAK: Override potential constants and filters that might be used by other plugins for disabling WordPress automatic updater
+* TWEAK: Prevent other plugins from overriding the 'auto_update_core' filter when 'Manually update' or 'Auto update all minor versions' core setting is selected
+* FIX: The logs option/setting got stuck in 'off' value when upgrading from old versions (prior to 8.1.0) to the recent versions
+* FIX: When plugin notification emails setting is disabled but core notification setting is enabled, the user would still receive a notification email regarding plugin updates
+* FIX: Redundant emails were sent when core notification setting is enabled
+* TWEAK: Improve the notification settings by adding two new options for enabling/disabling theme and translation notification emails
+* FIX: In any update operation (manual or automatic), translation update was automatically triggered when 'Manually update' or 'Disable auto updates' is chosen
+* TWEAK: Remove 'Disable auto updates' setting as it's the same as 'Manually update'
+* FIX: '0.00' version numbers were logged when upgrading plugins and/or theme, at the same time the information about core update wasn't presented in the logs table, some warnings and WordPress database errors were logged in the PHP error log file too
+* FIX: Users with very limited access were recorded in the logs table
+* FIX: Failure status was recorded in the log entry and the 'From' and 'To' versions are in the same version number, though the update process was successful
+* FIX: Unneeded and misleading log entry when upgrading to minor versions
+* FIX: Incorrect WordPress version number was logged after upgrading to a minor version
+* TWEAK: Refactor Log classes to improve how log reporting is handled during updates
+* TWEAK: Update seasonal notices
 
 = 9.0.12 - 2021-12-17 =
 
@@ -366,4 +405,4 @@ For past changelogs, <a href="https://easyupdatesmanager.com/blog/">please visit
 
 == Upgrade Notice ==
 
-* 9.0.12 : Semantic versioning feature that when enabled it will allow only patch/security release updates for plugins and/or themes. The log table didn't get updated when upgrading from the very old table versions (1.0.0 and 1.1.3) to the current latest (1.1.5); a recommended update for all.
+* 9.0.15: Various tweaks and fixes. Compatibility with WP Site Health, PHP's deprecated, warning and notice messages removal. See changelog for full details. A recommended update for all.

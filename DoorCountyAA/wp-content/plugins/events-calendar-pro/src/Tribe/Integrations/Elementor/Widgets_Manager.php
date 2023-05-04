@@ -39,7 +39,7 @@ class Widgets_Manager extends Manager_Abstract {
 		$widgets = $this->get_registered_objects();
 
 		foreach ( $widgets as $slug => $widget_class ) {
-			Elementor_Plugin::instance()->widgets_manager->register_widget_type( tribe( $widget_class ) );
+			Elementor_Plugin::instance()->widgets_manager->register( tribe( $widget_class ) );
 		}
 	}
 }

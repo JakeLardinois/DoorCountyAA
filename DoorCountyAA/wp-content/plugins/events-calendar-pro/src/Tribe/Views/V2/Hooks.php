@@ -104,6 +104,8 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		add_filter( 'tribe_events_views_v2_messages_map', [ $this, 'filter_tribe_events_views_v2_messages_map' ] );
 		add_filter( 'tribe_events_views_v2_messages_need_events_label_keys', [ $this, 'filter_tribe_events_views_v2_messages_need_events_label_keys' ] );
 		add_filter( 'tribe_events_pro_geocode_rewrite_rules', [ $this, 'filter_geocode_rewrite_rules' ], 10, 3 );
+		add_filter( 'tec_events_view_week_today_button_label', [ $this, 'filter_tec_events_view_week_today_button_label' ], 10, 2 );
+		add_filter( 'tec_events_view_week_today_button_title', [ $this, 'filter_tec_events_view_week_today_button_title' ], 10, 2 );
 
 		add_filter( 'tribe_events_views_v2_view_all_breadcrumbs', [ $this, 'filter_view_all_breadcrumbs' ], 10, 2 );
 		add_filter( 'tribe_events_views_v2_view_page_reset_ignored_params', [ $this, 'filter_page_reset_ignored_params' ], 10, 2 );
@@ -133,11 +135,14 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		add_filter( 'tribe_events_filter_bar_views_v2_should_display_filters', [ $this, 'filter_hide_filter_bar' ], 10, 2 );
 		add_filter( 'tribe_events_filter_bar_views_v2_1_should_display_filters', [ $this, 'filter_hide_filter_bar' ], 10, 2 );
 
-		add_filter( 'tribe_events_views_v2_manager_view_label_domain', [ $this, 'filter_view_label_domain'], 10, 3 );
 		add_filter( 'tribe_customizer_inline_stylesheets', [ $this, 'customizer_inline_stylesheets' ], 12 );
 		add_filter( 'tribe_events_views_v2_view_map_template_vars', [ $this, 'filter_map_view_pin' ], 10, 2 );
 
 		add_filter( 'tec_events_default_view', [ $this, 'filter_tec_events_default_view' ], 10, 2 );
+		add_filter( 'query_vars', [ $this, 'filter_include_query_vars' ] );
+
+		add_filter( 'tribe_is_by_date', [ $this, 'filter_tribe_is_by_date' ], 10, 2 );
+		add_filter( 'tribe_events_views_v2_cached_views', [ $this, 'filter_tribe_events_views_v2_cached_views' ], 10, 2 );
 	}
 
 	/**
@@ -182,14 +187,45 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return array The array of available views, including the PRO ones.
 	 */
 	public function filter_events_views( array $views = [] ) {
-		$views['all']       = All_View::class;
-		$views['venue']     = Venue_View::class;
-		$views['organizer'] = Organizer_View::class;
-		$views['photo']     = Photo_View::class;
-		$views['week']      = Week_View::class;
-		$views['map']       = Map_View::class;
+		$views[ Organizer_View::get_view_slug() ] = Organizer_View::class;
+		$views[ Venue_View::get_view_slug() ]     = Venue_View::class;
+		$views[ Photo_View::get_view_slug() ]     = Photo_View::class;
+		$views[ Week_View::get_view_slug() ]      = Week_View::class;
+		$views[ Map_View::get_view_slug() ]       = Map_View::class;
+		$views[ All_View::get_view_slug() ]       = All_View::class;
 
 		return $views;
+	}
+
+	/**
+	 * Adds Week View to the list of date-based views.
+	 *
+	 * @since 6.0.2
+	 *
+	 * @param bool $is_by_date Is the current view a by-date-view?
+	 *
+	 * @return bool
+	 */
+	public function filter_tribe_is_by_date( $is_by_date, $context ): bool {
+		if ( Week_View::get_view_slug() === $context->get( 'view' ) ) {
+			$is_by_date = true;
+		}
+
+		return (bool) $is_by_date;
+	}
+
+	/**
+	 * Register the new variable available on the permalink structure
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param $vars array An array with the query variables
+	 *
+	 * @return array
+	 */
+	public function filter_include_query_vars( array $vars ) : array {
+		$vars[] = 'tribe_recurrence_list';
+		return $vars;
 	}
 
 	/**
@@ -197,24 +233,19 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * Organizer Views.
 	 *
 	 * @since 4.7.9
+	 * @since 6.0.5 Moved the logic to th the `Tribe\Events\Pro\Views\V2\View_Filters` class.
 	 *
-	 * @param string          $slug    The View slug that would be loaded.
-	 * @param \Tribe__Context $context The current request context.
+	 * @param string  $slug    The View slug that would be loaded.
+	 * @param Context $context The current request context.
 	 *
 	 * @return string The filtered View slug, set to the Venue or Organizer ones, if required.
 	 */
 	public function filter_bootstrap_view_slug( $slug, $context ) {
-		$post_types = [
-			Organizer::POSTTYPE => 'organizer',
-			Venue::POSTTYPE     => 'venue',
-		];
-		$post_type  = $context->get( 'post_type', $slug );
-
-		if ( empty( $post_type ) ) {
+		if ( ! ( is_string( $slug ) && $context instanceof Context ) ) {
 			return $slug;
 		}
 
-		return isset( $post_types[ $post_type ] ) ? $post_types[ $post_type ] : $slug;
+		return $this->container->make( View_Filters::class )->filter_bootstrap_view_slug( $slug, $context );
 	}
 
 	/**
@@ -393,10 +424,10 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 *
 	 * @since 4.7.9
 	 *
-	 * @param string          $title The current page title.
-	 * @param bool            $depth Flag to build the title of a taxonomy archive with depth in hierarchical taxonomies or not.
-	 * @param \Tribe__Context $context The current title render context.
-	 * @param array           $posts An array of events fetched by the View.
+	 * @param string  $title   The current page title.
+	 * @param bool    $depth   Flag to build the title of a taxonomy archive with depth in hierarchical taxonomies or not.
+	 * @param Context $context The current title render context.
+	 * @param array   $posts   An array of events fetched by the View.
 	 *
 	 * @return string The title, either the modified version if the rendering View is a PRO one requiring it, or the
 	 *                original one.
@@ -653,12 +684,11 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return string The organizer meta HTML.
 	 */
 	public function action_include_organizer_meta( $unused_file, $unused_name, $template ) {
-		$view      = $template->get_view();
-
-		if ( 'organizer' !== $view->get_slug() ) {
+		if ( Organizer_View::get_view_slug() !== $template->get_view_slug() ) {
 			return;
 		}
 
+		$view      = $template->get_view();
 		$organizer = get_post( $view->get_post_id() );
 
 		if ( ! $organizer || Organizer::POSTTYPE !== $organizer->post_type ) {
@@ -680,12 +710,12 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return string The venue meta HTML.
 	 */
 	public function action_include_venue_meta( $unused_file, $unused_name, $template ) {
-		$view    = $template->get_view();
 
-		if ( 'venue' !== $view->get_slug() ) {
+		if ( Venue_View::get_view_slug() !== $template->get_view_slug() ) {
 			return;
 		}
 
+		$view    = $template->get_view();
 		$venue   = tribe_get_venue_object( $view->get_post_id() );
 
 		if ( ! $venue || Venue::POSTTYPE !== $venue->post_type ) {
@@ -748,16 +778,21 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @return bool
 	 */
 	public function filter_hide_filter_bar( $should_display_filters, $view ) {
-		$slug     = $view->get_slug();
-		$wp_query = tribe_get_global_query_object();
+		$view_slug = $view::get_view_slug();
+		$all_slug  = All_View::get_view_slug();
+		$wp_query  = tribe_get_global_query_object();
+
+		if ( ! $wp_query instanceof \WP_Query ) {
+			return $should_display_filters;
+		}
 
 		// Don't show for organizers or venues.
-		if ( in_array( $slug, [ 'organizer', 'venue' ] ) ) {
+		if ( in_array( $view_slug, [ 'organizer', 'venue' ] ) ) {
 			return false;
 		}
 
 		// Don't show for a recurring event "all" page.
-		if ( 'all' === $slug || 'all' === $wp_query->get( 'eventDisplay' ) || $wp_query->tribe_is_recurrence_list ) {
+		if ( $all_slug === $view_slug || $all_slug === $wp_query->get( 'eventDisplay' ) || $wp_query->tribe_is_recurrence_list ) {
 			return false;
 		}
 
@@ -785,17 +820,44 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		return $this->container->make( Rewrite::class )->filter_events_rewrite_rules_custom( $rewrite_rules );
 	}
 
-	public function filter_view_label_domain( $domain, $slug, $view_class ) {
-		if (
-			'photo' !== $slug
-			&& 'week' !== $slug
-			&& 'map' !== $slug
-			&& 'summary' !== $slug
-		) {
-			return $domain;
-		}
+	/**
+	 * Filters the Today button label to change the text to something appropriate for Week View.
+	 *
+	 * @since 6.0.2
+	 *
+	 * @param string         $today The string used for the "Today" button on calendar views.
+	 * @param View_Interface $view  The View currently rendering.
+	 *
+	 * @return string $today
+	 */
+	public function filter_tec_events_view_week_today_button_label( $today, $view ) {
+		$today = esc_html_x(
+			'This Week',
+			'The default text label for the "today" button on the Week View.',
+			'tribe-events-calendar-pro'
+		);
 
-		return  'tribe-events-calendar-pro';
+		return $today;
+	}
+
+	/**
+	 * Filters the Today button title and aria-label to change the text to something appropriate for Week View.
+	 *
+	 * @since 6.0.2
+	 *
+	 * @param string         $label The title string.
+	 * @param View_Interface $view  The View currently rendering.
+	 *
+	 * @return string $label
+	 */
+	public function filter_tec_events_view_week_today_button_title( $label, $view ) {
+		$label = esc_html_x(
+			'Click to select the current week',
+			"The default text for the 'today' button's title and aria-label on the Week View.",
+			'tribe-events-calendar-pro'
+		);
+
+		return $label;
 	}
 
 	/**
@@ -847,6 +909,18 @@ class Hooks extends \tad_DI52_ServiceProvider {
 		return  $this->container->make( View_Filters::class )->filter_tec_events_default_view( $default_view, $type );
 	}
 
+	/**
+	 * Adds Week View to the views that get cache.
+	 *
+	 * @since 6.0.7
+	 *
+	 * @param array               $views Should the current view have its HTML cached?
+	 * @param View_Interface|null $view  The object using the trait, or null in case of static usage.
+	 */
+	public function filter_tribe_events_views_v2_cached_views( $views, $view ) {
+		return $this->container->make( Week_View::class )->filter_tribe_events_views_v2_cached_views( $views, $view );
+	}
+
 	/************************
 	 *                      *
 	 *  Deprecated Methods  *
@@ -855,7 +929,25 @@ class Hooks extends \tad_DI52_ServiceProvider {
 
 	// @codingStandardsIgnoreStart
 
+	/**
+	 * This function used to pass the domain to code in common for translations.
+	 * That doesn't work properly, so we've deprecated this, it's now handled in the View classes.
+	 *
+	 * @since 5.1.0
+	 * @deprecated 6.0.3 This is no longer necessary. Handled in the View classes themselves.
+	 */
+	public function filter_view_label_domain( $domain, $slug, $view_class ) {
+		if (
+			'photo' !== $slug
+			&& 'week' !== $slug
+			&& 'map' !== $slug
+			&& 'summary' !== $slug
+		) {
+			return $domain;
+		}
 
+		return  'tribe-events-calendar-pro';
+	}
 
 	/**
 	 * Filters the currently registered Customizer sections to add or modify them.
@@ -883,9 +975,9 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @since 5.1.1
 	 * @deprecated 5.9.0
 	 *
-	 * @param string                      $css_template The CSS template, as produced by the Global Elements.
-	 * @param \Tribe__Customizer__Section $section      The Global Elements section.
-	 * @param \Tribe__Customizer          $customizer   The current Customizer instance.
+	 * @param string             $css_template The CSS template, as produced by the Global Elements.
+	 * @param Customizer_Section $section      The Global Elements section.
+	 * @param \Tribe__Customizer $customizer   The current Customizer instance.
 	 *
 	 * @return string The filtered CSS template.
 	 */
@@ -908,9 +1000,9 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @since 5.1.1
 	 * @deprecated 5.9.0
 	 *
-	 * @param string                      $css_template The CSS template, as produced by the Global Elements.
-	 * @param \Tribe__Customizer__Section $section      The Single Event section.
-	 * @param \Tribe__Customizer          $customizer   The current Customizer instance.
+	 * @param string             $css_template The CSS template, as produced by the Global Elements.
+	 * @param Customizer_Section $section      The Single Event section.
+	 * @param \Tribe__Customizer $customizer   The current Customizer instance.
 	 *
 	 * @return string The filtered CSS template.
 	 */
@@ -983,9 +1075,9 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @since 4.7.9
 	 * @deprecated 5.5.0 Move the filtering into Tribe_Events shortcode class.
 	 *
-	 * @param array                        $query_args  Arguments used to build the URL.
-	 * @param string                       $view_slug   The current view slug.
-	 * @param \Tribe\Events\Views\V2\View  $instance    The current View object.
+	 * @param array  $query_args Arguments used to build the URL.
+	 * @param string $view_slug  The current view slug.
+	 * @param View   $instance   The current View object.
 	 *
 	 * @return  array  Filtered the query arguments for shortcodes.
 	 */
@@ -1017,8 +1109,8 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 * @deprecated 5.5.0 Move the filtering into Tribe_Events shortcode class.
 	 *
 	 * @param array<string,mixed> $repository_args An array of repository arguments that will be set for all Views.
-	 * @param \Tribe__Context     $context         The current render context object.
-	 * @param View_Interface  $view            The View that will use the repository arguments.
+	 * @param Context             $context         The current render context object.
+	 * @param View_Interface      $view            The View that will use the repository arguments.
 	 *
 	 * @return array<string,mixed> The filtered repository arguments.
 	 */

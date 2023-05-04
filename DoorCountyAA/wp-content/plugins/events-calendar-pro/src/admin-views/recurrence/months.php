@@ -1,4 +1,15 @@
 <div class="recurrence-row custom-recurrence-months">
+	<?php
+	/**
+	 * Filters the recurrence custom recurrence months before template for the recurrence UI.
+	 *
+	 * @param $template The recurrence custom recurrence months before template.
+	 */
+	$template = apply_filters( 'tribe_events_pro_recurrence_template_custom_recurrence_months_before', '' );
+	if ( ! empty( $template ) ) {
+		echo $template;
+	}
+	?>
 	<span class="tribe-field-inline-text first-label-in-line"><?php esc_html_e( 'On', 'tribe-events-calendar-pro' ); ?></span>
 	<select
 		name="recurrence[<?php echo esc_attr( $rule_type ); ?>][][custom][month][same-day]"
@@ -98,5 +109,16 @@
 		>
 			<?php echo esc_html_x( 'of the month', 'As in: day 12 of the month', 'tribe-events-calendar-pro' ); ?>
 		</span>
+		<?php
+		/**
+		 * Filters the recurrence month on the after template for the recurrence UI.
+		 *
+		 * @param string $template The recurrence month on the after template.
+		 */
+		$template = apply_filters( 'tribe_events_pro_recurrence_template_recurrence_month_on_the_after', '' );
+		if ( ! empty( $template ) ) {
+			echo $template;
+		}
+		?>
 	</span>
 </div>

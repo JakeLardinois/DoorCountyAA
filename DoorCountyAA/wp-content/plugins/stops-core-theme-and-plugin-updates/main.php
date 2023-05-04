@@ -5,7 +5,7 @@ Plugin Name: Easy Updates Manager
 Plugin URI: https://easyupdatesmanager.com
 Description: Manage and disable WordPress updates, including core, plugin, theme, and automatic updates - Works with Multisite and has built-in logging features.
 Author: Easy Updates Manager Team
-Version: 9.0.12
+Version: 9.0.15
 Update URI: https://wordpress.org/plugins/stops-core-theme-and-plugin-updates/
 Author URI: https://easyupdatesmanager.com
 Contributors: kidsguide, ronalfy
@@ -18,7 +18,7 @@ Network: true
 
 if (!defined('ABSPATH')) die('No direct access allowed');
 
-if (!defined('EASY_UPDATES_MANAGER_VERSION')) define('EASY_UPDATES_MANAGER_VERSION', '9.0.12');
+if (!defined('EASY_UPDATES_MANAGER_VERSION')) define('EASY_UPDATES_MANAGER_VERSION', '9.0.15');
 
 if (!defined('EASY_UPDATES_MANAGER_MAIN_PATH')) define('EASY_UPDATES_MANAGER_MAIN_PATH', plugin_dir_path(__FILE__));
 if (!defined('EASY_UPDATES_MANAGER_URL')) define('EASY_UPDATES_MANAGER_URL', plugin_dir_url(__FILE__));
@@ -169,11 +169,11 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 
 			// Logging
 			$options = MPSUM_Updates_Manager::get_options('core');
-			if (!isset($options['logs'])) {
+			if (!isset($options['logs']) || 'off' === $options['logs']) { // As of 8.1.0, the `Enable Logs` button is no longer used, hence we need to ensure the 'logs' option is always turned on
 				$options['logs'] = 'on';
 				MPSUM_Updates_Manager::update_options($options, 'core');
 			}
-			if ('on' === $options['logs']) {
+			if (!$this->is_premium() && 'on' === $options['logs']) {
 				MPSUM_Logs::run();
 			}
 
@@ -256,17 +256,17 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 				$options = self::maybe_migrate_options();
 			}
 
+			// Store options
+			if (!is_array($options)) { // this may indicate that the plugin is being activated the first time or it's not a migration from the older versions
+				$options = array();
+			}
+
 			if ('advanced' === $context) {
 				$options = self::maybe_migrate_excluded_users_options($options);
 			}
 
 			// Migrate to new UI
 			$options = self::maybe_migrate_ui_options($options);
-
-			// Store options
-			if (!is_array($options)) {
-				$options = array();
-			}
 
 			// Assign options for caching
 			self::$options = $options;
@@ -458,12 +458,14 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 				if ('on' === $options['core']['automatic_translation_updates']) {
 					$new_options['core']['translation_updates'] = 'automatic';
 				} elseif ('off' === $options['core']['automatic_translation_updates']) {
-					$new_options['core']['translation_updates'] = 'automatic_off';
+					$new_options['core']['translation_updates'] = 'on'; // After 9.0.12 version, translation 'Disable auto updates' is removed and is united to 'Manually update' as they are just the same
 				}
 				unset($options['core']['automatic_translation_updates']);
 			}
 			if (isset($options['core']['translation_updates']) && 'off' === $options['core']['translation_updates']) {
 				$new_options['core']['translation_updates'] = 'off';
+			} elseif (isset($options['core']['translation_updates']) && 'automatic_off' ===  $options['core']['translation_updates']) { // After 9.0.12 version, translation 'Disable auto updates' is removed and is united to 'Manually update' as they are just the same
+				$new_options['core']['translation_updates'] = 'on';
 			}
 			if (isset($new_options['core']['translation_updates'])) {
 				$options['core']['translation_updates'] = $new_options['core']['translation_updates'];
@@ -492,7 +494,7 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 			} elseif (isset($options['advanced']['excluded_users']) && isset($options['excluded_users'])) {
 				$options['advanced']['excluded_users'] = $options['excluded_users'];
 			} else {
-				$options['advanced']['excluded_users'] = array();
+				$options = array_merge(array('advanced' => array('excluded_users' => array())), $options);
 			}
 			return $options;
 		}
@@ -687,17 +689,18 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 		 * @return void
 		 */
 		public function admin_init() {
+			global $plugin_page;
 			$pagenow = $GLOBALS['pagenow'];
 
 			$this->register_template_directories();
 
 			// Check for WP Constants that disable updates and display a notice.
-			$upgrade_constants = MPSUM_Constant_Checks::get_instance();
-			if ($upgrade_constants->is_config_options_disabled()) {
-				$upgrade_constant_notice = get_site_option('easy_updates_manager_dismiss_constant_notices', 0);
-				if (!$upgrade_constant_notice) {
-					add_action('all_admin_notices', array($this, 'show_autoupdate_constant_warning'));
-				}
+			$prohibited_active_constants = MPSUM_Constant_Checks::get_instance()->get_prohibited_active_constants();
+			$upgrade_constant_notice = get_site_option('easy_updates_manager_dismiss_constant_notices', array());
+			if (!is_array($upgrade_constant_notice)) $upgrade_constant_notice = array();
+			$prohibited_active_constants = array_diff($prohibited_active_constants, $upgrade_constant_notice);
+			if (!empty($prohibited_active_constants)) {
+				if ('mpsum-update-options' === $plugin_page || current_user_can($this->capability_required())) add_action('all_admin_notices', array($this, 'show_autoupdate_constant_warning'));
 			}
 
 			// Add filters to overwrite auto update UI in WP 5.5
@@ -721,7 +724,7 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 					$is_eum_admin = true;
 				}
 				if (!$is_eum_admin) {
-					add_action('all_admin_notices', array($this, 'maybe_show_admin_notice_upgraded'));
+					if (current_user_can($this->capability_required())) add_action('all_admin_notices', array($this, 'maybe_show_admin_notice_upgraded'));
 				}
 
 				if (!$is_eum_admin) return;
@@ -932,7 +935,7 @@ if (!class_exists('MPSUM_Updates_Manager')) {
 			} elseif ('dismiss_survey_notice_until' == $subaction) {
 				update_site_option('easy_updates_manager_dismiss_survey_notice_until', (time() + 366 * 86400));
 			} elseif ('dismiss_constant_notices' == $subaction) {
-				update_site_option('easy_updates_manager_dismiss_constant_notices', true);
+				update_site_option('easy_updates_manager_dismiss_constant_notices', MPSUM_Constant_Checks::get_instance()->get_prohibited_active_constants());
 			}
 
 			wp_send_json($results);

@@ -174,6 +174,49 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 	}
 
 	/**
+	 * Will generate the JOIN clause for filtering by series.
+	 *
+	 * @since 6.0.5
+	 *
+	 * @return string The JOIN clause for in series meta filtering.
+	 */
+	public static function get_in_series_join_sql(): string {
+		global $wpdb;
+
+		return "JOIN {$wpdb->postmeta} in_series_meta ON {$wpdb->posts}.ID = in_series_meta.post_id ";
+	}
+
+	/**
+	 * Will generate the WHERE clause for the in series param.
+	 *
+	 * @since 6.0.5
+	 *
+	 * @param mixed $in_series The series to filter by.
+	 *
+	 * @return string The WHERE clause to filter by this series.
+	 */
+	public static function get_in_series_where_sql( $in_series ): string {
+		global $wpdb;
+
+		if ( is_numeric( $in_series ) || $in_series instanceof WP_Post ) {
+			$parent_post_id  = $in_series instanceof WP_Post ? $in_series->ID : absint( $in_series );
+			$children_clause = $wpdb->prepare( "{$wpdb->posts}.post_parent = %d", $parent_post_id );
+			$parent_clause   = $wpdb->prepare( "{$wpdb->posts}.ID = %d", $parent_post_id );
+		} else {
+			$children_clause = "{$wpdb->posts}.post_parent != 0";
+			$parent_clause   = "{$wpdb->posts}.post_parent = 0";
+		}
+
+		return "{$children_clause}
+				OR (
+					{$parent_clause}
+					AND in_series_meta.meta_key = '_EventRecurrence'
+					AND in_series_meta.meta_value IS NOT NULL
+				)";
+
+	}
+
+	/**
 	 * Filters events to include only those that match the provided series state.
 	 *
 	 * @since 4.7
@@ -185,25 +228,31 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 	 *                    added to the query otherwise.
 	 */
 	public function filter_by_in_series( $in_series ) {
-		global $wpdb;
+		/**
+		 * Will give an opportunity to provide custom filtering for series params.
+		 *
+		 * @since 6.0.5
+		 *
+		 * @param bool                             $did_handle_filter Flag whether to continue using filter parsing.
+		 * @param Tribe__Repository__Query_Filters $filter_query      This instance of the filter object.
+		 * @param bool|numeric|WP_Post             $in_series         The series param.
+		 */
+		$did_handle_filter = apply_filters(
+			'tec_events_pro_tribe_repository_event_series_filter_override',
+			false,
+			$this->filter_query,
+			$in_series
+		);
 
+		// We handled this filter elsewhere, we are done.
+		if ( $did_handle_filter === true ) {
+			return null;
+		}
+
+		// Continue as usual.
 		if ( (bool) $in_series ) {
-			if ( is_numeric( $in_series ) || $in_series instanceof WP_Post ) {
-				$parent_post_id = $in_series instanceof WP_Post ? $in_series->ID : absint( $in_series );
-				$children_clause = $wpdb->prepare( "{$wpdb->posts}.post_parent = %d", $parent_post_id );
-				$parent_clause   = $wpdb->prepare( "{$wpdb->posts}.ID = %d", $parent_post_id );
-			} else {
-				$children_clause = "{$wpdb->posts}.post_parent != 0";
-				$parent_clause   = "{$wpdb->posts}.post_parent = 0";
-			}
-			$this->filter_query->join( "JOIN {$wpdb->postmeta} in_series_meta ON {$wpdb->posts}.ID = in_series_meta.post_id " );
-			$this->filter_query->where( "{$children_clause}
-				OR (
-					{$parent_clause}
-					AND in_series_meta.meta_key = '_EventRecurrence'
-					AND in_series_meta.meta_value IS NOT NULL
-				)"
-			);
+			$this->filter_query->join( self::get_in_series_join_sql() );
+			$this->filter_query->where( self::get_in_series_where_sql( $in_series ) );
 
 			return null;
 		}
@@ -432,6 +481,7 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 
 		foreach ( $taxonomies as $taxonomy ) {
 			$term_ids = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
+			$term_ids = array_values( array_filter( $term_ids, 'is_numeric' ) );
 
 			if ( $term_ids && ! is_wp_error( $term_ids ) ) {
 				$args['tax_query'][ 'by-' . $taxonomy ] = array(
@@ -481,6 +531,11 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 
 		// Then, if a `recurrence` entry is present, save it to use it after the event has been created.
 		if ( isset( $filtered['meta_input']['recurrence'] ) ) {
+			// If the `recurrence` entry is a callback, resolve it now.
+			if ( is_callable( $filtered['meta_input']['recurrence'] ) ) {
+				$callback = $filtered['meta_input']['recurrence'];
+				$filtered['meta_input']['recurrence'] = $callback( $filtered );
+			}
 
 			/*
 			 * Independently of what method is handling the recurrence creation we store the whole
@@ -535,7 +590,7 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 				$recurrence_payload = Tribe__Utils__Array::add_unprefixed_keys_to( $this->create_recurrence_payload );
 			}
 
-			$callback           = $this->get_recurrence_creation_callback( $event_post->ID, $recurrence_payload, $this->postarr );
+			$callback           = $this->get_recurrence_creation_callback( $event_post->ID, $recurrence_payload, $this->updates );
 
 			/*
 			 * Since the burden of logging and handling falls on the callback we're not collecting this value.
@@ -833,7 +888,7 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 		 */
 		$contexts = apply_filters(
 			"tribe_repository_{$this->filter_name}_display_contexts_requiring_collapse",
-			array( 'list' ),
+			[ \Tribe\Events\Views\V2\Views\List_View::get_view_slug() ],
 			$this
 		);
 
@@ -847,7 +902,7 @@ class Tribe__Events__Pro__Repositories__Event extends Tribe__Events__Repositorie
 	 *
 	 * @since 4.7
 	 *
-	 * @return array A filtered list of render contexts that reauire recurring event
+	 * @return array A filtered list of render contexts that require recurring event
 	 *               instance collapsing if the "Show only the first instance of each recurring event"
 	 *               setting is truthy.
 	 */

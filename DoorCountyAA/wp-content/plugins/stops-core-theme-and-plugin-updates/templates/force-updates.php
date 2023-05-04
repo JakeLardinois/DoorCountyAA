@@ -2,14 +2,6 @@
 if (!defined('ABSPATH')) die('No direct access.');
 echo '<div class="eum-advanced-settings-container force-updates">';
 
-// Check for wp-config constants that disable force updates
-if (defined('AUTOMATIC_UPDATER_DISABLED') && true == AUTOMATIC_UPDATER_DISABLED) {
-	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('Automatic updates are disabled. Please check your wp-config.php file for AUTOMATIC_UPDATER_DISABLED and remove the line.'));
-}
-if (defined('WP_AUTO_UPDATE_CORE') && false == WP_AUTO_UPDATE_CORE) {
-	printf('<div class="mpsum-error mpsum-bold">%s</div>', esc_html__('Automatic updates for Core are disabled. Please check your wp-config.php file for WP_AUTO_UPDATE_CORE and remove the line.'));
-}
-
 // Check for options that also disable force updates
 $options = MPSUM_Updates_Manager::get_options('core');
 

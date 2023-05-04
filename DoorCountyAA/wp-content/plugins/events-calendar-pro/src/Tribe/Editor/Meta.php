@@ -72,6 +72,12 @@ class Tribe__Events__Pro__Editor__Meta extends Tribe__Editor__Meta {
 	 * @since 4.5
 	 */
 	public function hook() {
+		$valid_request = is_admin() || wp_doing_ajax() || Tribe__REST__System::is_rest_api();
+
+		if ( ! $valid_request ) {
+			return;
+		}
+
 		add_filter( 'get_post_metadata', array( $this, 'fake_blocks_response' ), 15, 4 );
 		add_filter( 'get_post_metadata', array( $this, 'fake_recurrence_description' ), 15, 4 );
 		add_action( 'deleted_post_meta', array( $this, 'remove_recurrence_meta' ), 10, 3 );
@@ -94,40 +100,87 @@ class Tribe__Events__Pro__Editor__Meta extends Tribe__Editor__Meta {
 	 * @return array|null|string The attachment metadata value, array of values, or null.
 	 */
 	public function fake_blocks_response( $value, $post_id, $meta_key, $single ) {
-		$valid_keys  = [
-			Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$exclusions_key,
-			Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$rules_key,
-		];
-
-		if ( ! in_array( $meta_key, $valid_keys ) ) {
-			return $value;
-		}
-
-		$recurrence = get_post_meta( $post_id, '_EventRecurrence', true );
-		$result     = $this->get_value( $post_id, $meta_key );
-		if ( empty( $recurrence ) || ! empty( $result ) ) {
-			return $value;
-		}
-
-		$keys = array(
+		$keys_map = [
 			Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$rules_key      => 'rules',
 			Tribe__Events__Pro__Editor__Recurrence__Blocks_Meta::$exclusions_key => 'exclusions',
-		);
-		$key  = $keys[ $meta_key ];
-		if ( empty( $recurrence[ $key ] ) ) {
+		];
+
+		if ( ! array_key_exists( $meta_key, $keys_map ) ) {
 			return $value;
 		}
 
-		$types = $recurrence[ $key ];
-		$data  = array();
-		foreach ( $types as $type ) {
-			$blocks = new Tribe__Events__Pro__Editor__Recurrence__Blocks( $type );
+		$key = $keys_map[ $meta_key ];
+
+		// Fetch the database value directly.
+		$result = $this->get_value( $post_id, $meta_key );
+
+		if ( ! empty( $result ) ) {
+			// The database, or the filtered value, is not empty: use this.
+			$data = json_decode( $result, true );
+		} else {
+			// Work out the Blocks format rules, or exclusions, from the `_EventRecurrence` format ones.
+			$recurrence = get_post_meta( $post_id, '_EventRecurrence', true );
+
+			/**
+			 * Filter the `_EventRecurrence` meta value after it's read from the database.
+			 *
+			 * @since 6.0.0
+			 *
+			 * @param array<string,mixed> $recurrence The `_EventRecurrence` meta value.
+			 * @param int                 $post_id    The Event post ID.
+			 */
+			$recurrence = apply_filters( 'tec_events_pro_recurrence_meta_get', $recurrence, $post_id );
+
+			if ( empty( $recurrence ) ) {
+				// We cannot work it out since we lack information: return the unfiltered value.
+				return $value;
+			}
+
+			if ( empty( $recurrence[ $key ] ) ) {
+				return $value;
+			}
+
+			$rules = $recurrence[ $key ];
+			$data = $this->parse_for_rules( $rules );
+		}
+
+		/**
+		 * Filters the data produced by the Blocks Editor to represent an Event recurrence or exclusion rules.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param array<array<string,mixed>> $data       A list of the Event recurrence rules, in the format used
+		 *                                               by the Blocks Editor.
+		 * @param string                     $key        Either `rules` or `exclusions` to indicate the type of data
+		 *                                               that is being filtered.
+		 * @param int                        $post_id    The Event post ID.
+		 */
+		$data = apply_filters( 'tec_events_pro_blocks_recurrence_meta', $data, $key, (int) $post_id );
+
+		$encoded = json_encode( $data, JSON_UNESCAPED_SLASHES );
+
+		return $single ? $encoded : array( $encoded );
+	}
+
+	/**
+	 * Handles parsing and converting an array of rules from
+	 * classic format to the blocks format.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param array<string,mixed> $rules Classic rules format.
+	 *
+	 * @return array<string,mixed> Blocks rules format.
+	 */
+	public function parse_for_rules( $rules = [] ) {
+		$data = array();
+		foreach ( $rules as $rule ) {
+			$blocks = new Tribe__Events__Pro__Editor__Recurrence__Blocks( $rule );
 			$blocks->parse();
 			$data[] = $blocks->get_parsed();
 		}
-		$encoded = json_encode( $data );
 
-		return $single ? $encoded : array( $encoded );
+		return $data;
 	}
 
 	/**
@@ -169,6 +222,22 @@ class Tribe__Events__Pro__Editor__Meta extends Tribe__Editor__Meta {
 	 * @return mixed
 	 */
 	public function get_value( $post_id = 0, $meta_key = '' ) {
+		/**
+		 * Allows filtering the value fetched for a specific meta before the default logic
+		 * runs.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param mixed|null $value    The initial value, by default `null`.
+		 * @param int        $post_id  The post ID the value is being fetched for.
+		 * @param string     $meta_key The meta key to fetch the value of.
+		 */
+		$value = apply_filters( 'tec_events_pro_editor_meta_value', null, $post_id, $meta_key );
+
+		if ( null !== $value ) {
+			return $value;
+		}
+
 		global $wpdb;
 		$query = "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d AND meta_key = %s";
 
@@ -238,5 +307,21 @@ class Tribe__Events__Pro__Editor__Meta extends Tribe__Editor__Meta {
 		}
 
 		return add_query_arg( $args, $url );
+	}
+
+	/**
+	 * Unsubscribes the instance from the actions and filters it subscribed to
+	 * in the `hook` method.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @return void The method will unsubscribe the instance from all the hooks it subscribed to.
+	 */
+	public function unhook(): void {
+		remove_filter( 'get_post_metadata', [ $this, 'fake_blocks_response' ], 15 );
+		remove_filter( 'get_post_metadata', [ $this, 'fake_recurrence_description' ], 15 );
+		remove_action( 'deleted_post_meta', [ $this, 'remove_recurrence_meta' ] );
+		remove_filter( 'tribe_events_pro_show_recurrence_meta_box', [ $this, 'show_recurrence_classic_meta' ] );
+		remove_filter( 'tribe_events_pro_split_redirect_url', [ $this, 'split_series_link' ] );
 	}
 }

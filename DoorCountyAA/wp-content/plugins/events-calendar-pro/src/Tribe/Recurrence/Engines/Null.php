@@ -19,7 +19,7 @@ class Tribe__Events__Pro__Recurrence__Engines__Null implements Tribe__Events__Pr
 	 * {@inheritdoc}
 	 */
 	public function get_name() {
-		return __( 'None', 'events-pro' );
+		return __( 'None', 'tribe-events-calendar-pro' );
 	}
 
 	/**

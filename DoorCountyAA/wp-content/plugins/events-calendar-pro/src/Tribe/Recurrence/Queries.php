@@ -22,14 +22,6 @@ class Tribe__Events__Pro__Recurrence__Queries {
 			return '';
 		}
 
-		// For month, week and day views we don't want to apply this logic - unless the current query
-		// belongs to a widget and just happens to be running inside one of those views
-		if ( ! isset( $query->query_vars['is_tribe_widget'] ) || ! $query->query_vars['is_tribe_widget'] ) {
-			if ( tribe_is_month() || tribe_is_week() || tribe_is_day() ) {
-				return $sql;
-			}
-		}
-
 		// If this is not an event query/a multi post type query there is no need to interfere
 		if ( empty( $query->tribe_is_event ) && empty( $query->tribe_is_multi_posttype ) ) {
 			return $sql;
@@ -37,6 +29,10 @@ class Tribe__Events__Pro__Recurrence__Queries {
 
 		// If the hide-recurring-events setting is not set/is false we do not need to interfere
 		if ( ! isset( $query->query_vars['tribeHideRecurrence'] ) || ! $query->query_vars['tribeHideRecurrence'] ) {
+			return $sql;
+		}
+
+		if ( tribe_is_month() || tribe_is_week() || tribe_is_day() ) {
 			return $sql;
 		}
 

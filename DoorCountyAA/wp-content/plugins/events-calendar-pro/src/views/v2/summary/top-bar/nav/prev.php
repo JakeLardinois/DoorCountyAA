@@ -14,7 +14,7 @@
  * @version 5.7.0
  */
 
-$label = sprintf( __( 'Previous %1$s', 'the-events-calendar' ), tribe_get_event_label_plural() );
+$label = sprintf( __( 'Previous %1$s', 'tribe-events-calendar-pro' ), tribe_get_event_label_plural() );
 ?>
 <li class="tribe-events-c-top-bar__nav-list-item">
 	<a

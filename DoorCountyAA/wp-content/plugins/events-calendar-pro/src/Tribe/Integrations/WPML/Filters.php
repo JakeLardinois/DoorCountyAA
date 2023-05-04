@@ -1,5 +1,7 @@
 <?php
 
+use Tribe\Events\Pro\Views\V2\Views\All_View;
+use Tribe__Events__Main as TEC;
 
 class Tribe__Events__Pro__Integrations__WPML__Filters {
 
@@ -26,7 +28,7 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 
 	public function filter_wpml_is_redirected_event( $redirect_target, $post_id, $query ) {
 		if ( $redirect_target ) {
-			if ( 'all' === $query->get( 'eventDisplay' ) || $query->get( 'eventDate' ) ) {
+			if ( All_View::get_view_slug() === $query->get( 'eventDisplay' ) || $query->get( 'eventDate' ) ) {
 				$redirect_target = false;
 			}
 		}
@@ -89,7 +91,7 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 	}
 
 	private function is_all_event_query( WP_Query $query ) {
-		return $query->get( 'post_type' ) == 'tribe_events' && 'all' === $query->get( 'eventDisplay' );
+		return $query->get( 'post_type' ) == 'tribe_events' && All_View::get_view_slug() === $query->get( 'eventDisplay' );
 	}
 
 	public function filter_recurring_event_parent_id() {
@@ -97,7 +99,7 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 	}
 
 	protected function is_single_event_main_query( WP_Query $query ) {
-		return $query->is_main_query() && $query->is_single() && $query->get( 'post_type' ) === Tribe__Events__Main::POSTTYPE;
+		return $query->is_main_query() && $query->is_single() && $query->get( 'post_type' ) === TEC::POSTTYPE;
 	}
 
 	/**
@@ -178,11 +180,12 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 	}
 
 	/**
-	 * We use the `post_type_link` filter as an action to move the `WPML_Slug_Translation::post_type_link_filter` method.
+	 * We use the `post_type_link` filter as an action to move the `WPML_Slug_Translation::post_type_link_filter`
+	 * method.
 	 *
-	 * The `WPML_Slug_Translation::post_type_link_filter` method is moved down the filter chain from 1 (WPML set priority)
-	 * to 15 (after default).
-	 * This change allows the smart WPML slug translation filter to work on the Eng version of the correct post permalink.
+	 * The `WPML_Slug_Translation::post_type_link_filter` method is moved down the filter chain from 1 (WPML set
+	 * priority) to 15 (after default). This change allows the smart WPML slug translation filter to work on the Eng
+	 * version of the correct post permalink.
 	 *
 	 * @param string $post_type_link
 	 *
@@ -202,13 +205,15 @@ class Tribe__Events__Pro__Integrations__WPML__Filters {
 	 *
 	 * @since 4.4.23
 	 *
-	 * @see https://wpml.org/wpml-hook/wpml_permalink/ Documentation of wpml_permalink
-	 *
-	 * @param string $post_link
+	 * @param string  $post_link
 	 * @param boolean $has_structure
+	 *
 	 * @return string
+	 * @see   https://wpml.org/wpml-hook/wpml_permalink/ Documentation of wpml_permalink
+	 *
 	 */
 	public function filter_recurring_event_permalinks( $post_link, $has_structure ) {
 		return apply_filters( 'wpml_permalink', $post_link );
 	}
+
 }

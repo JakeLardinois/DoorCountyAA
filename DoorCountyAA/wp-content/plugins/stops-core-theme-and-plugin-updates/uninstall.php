@@ -66,6 +66,10 @@ if (($isPremium && !$freeActive) || ($isFree && !$premiumActive)) {
 	delete_site_option('easy_updates_manager_author');
 	delete_site_option('easy_updates_manager_url');
 	delete_site_option('eum_unproven_updates_post_install');
+	if (is_multisite()) switch_to_blog(get_main_site_id(get_main_network_id()));
+	delete_option('eum_readable_email_logging_messages');
+	delete_option('eum_readable_email_logging_messages.lock');
+	if (is_multisite()) restore_current_blog();
 
 	// For logs removal
 	global $wpdb;

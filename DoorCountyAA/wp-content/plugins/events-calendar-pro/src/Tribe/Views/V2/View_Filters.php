@@ -9,10 +9,15 @@
 namespace Tribe\Events\Pro\Views\V2;
 
 use Tribe\Events\Pro\Views\V2\Geo_Loc\Handler_Interface as Geo_Loc_Handler;
+use Tribe\Events\Pro\Views\V2\Views\All_View;
+use Tribe\Events\Pro\Views\V2\Views\Organizer_View;
+use Tribe\Events\Pro\Views\V2\Views\Venue_View;
+use Tribe\Events\Pro\Views\V2\Views\Week_View;
 use Tribe\Events\Views\V2\Manager as Views_Manager;
 use Tribe\Events\Views\V2\View;
 use Tribe\Events\Views\V2\View_Interface;
 use Tribe\Events\Views\V2\Manager;
+use Tribe\Events\Views\V2\Views\Month_View;
 use Tribe__Context as Context;
 use Tribe__Events__Main as TEC;
 use Tribe__Events__Organizer as Organizer;
@@ -77,7 +82,16 @@ class View_Filters {
 			$view               = $manager->get_view_slug_by_class( $default_view_class );
 		}
 
-		if ( in_array( $view, [ 'all', 'month', 'week' ] ) ) {
+		if (
+			in_array(
+				$view,
+				[
+					Month_View::get_view_slug(),
+					Week_View::get_view_slug(),
+					All_View::get_view_slug(),
+				]
+			)
+		) {
 			$repository_args['hide_subsequent_recurrences'] = false;
 		} elseif ( $hide_subsequent_recurrences_default || $hide_subsequent_recurrences ) {
 			$repository_args['hide_subsequent_recurrences'] = true;
@@ -119,8 +133,8 @@ class View_Filters {
 	 */
 	public function filter_rest_request_view_slug( array $params, Request $request ) {
 		$post_types_map = [
-			Organizer::POSTTYPE => 'organizer',
-			Venue::POSTTYPE     => 'venue',
+			Organizer::POSTTYPE => Organizer_View::get_view_slug(),
+			Venue::POSTTYPE     => Venue_View::get_view_slug(),
 		];
 
 		$intersect_params = array_intersect( array_keys( $params ), array_keys( $post_types_map ) );
@@ -254,6 +268,7 @@ class View_Filters {
 	 *
 	 */
 	public function on_template_redirect() {
+		// This method will not set the `tribe_redirect` query arg in the URL, Event Tickets will use it.
 		if (
 			! wp_is_mobile()
 			|| tribe_is_truthy( tribe_get_request_var( 'tribe_redirected' ) )
@@ -263,6 +278,7 @@ class View_Filters {
 			|| 'embed' === tribe_context()->get( 'view' )
 			|| is_front_page()
 		) {
+			// The view does not require mobile redirection.
 			return;
 		}
 
@@ -296,23 +312,48 @@ class View_Filters {
 		// Add the base WordPress Url Query arguments.
 		$url = add_query_arg( $wp->query_vars, $url );
 
+		/*
+		 * Logic following this code in the request lifecycle will know we're redirecting.
+		 */
+		add_filter( 'tec_events_views_v2_redirected', '__return_true' );
+
 		// Add our mobile default to the arguments.
-		$url = add_query_arg(
-			[
-				'eventDisplay'     => $default_mobile_view,
-				'tribe_redirected' => true,
-			],
-			$url
-		);
+		$url = add_query_arg( [ 'eventDisplay' => $default_mobile_view, ], $url );
 
 		$location = TEC_Rewrite::instance()->get_canonical_url( $url );
 
-		wp_redirect(
-			$location,
-			302
-		);
+		wp_redirect( $location, 302 );
 
 		tribe_exit();
 	}
 
+	/**
+	 * Filters the slug of the view that will be built according to the request context to add support for Venue and
+	 * Organizer Views.
+	 *
+	 * @since    4.7.9
+	 *
+	 * @param string  $slug    The View slug that would be loaded.
+	 * @param Context $context The current request context.
+	 *
+	 * @return string The filtered View slug, set to the Venue or Organizer ones, if required.
+	 *
+	 * @internal This method is not meant be used outside of the plugin.
+	 */
+	public function filter_bootstrap_view_slug( string $slug, Context $context ): string {
+		$post_types         = [
+			Organizer::POSTTYPE => 'organizer',
+			Venue::POSTTYPE     => 'venue',
+		];
+		$context_post_types = (array) $context->get( 'post_type', $slug );
+
+		if ( empty( $context_post_types ) || count( $context_post_types ) > 1 )  {
+			// Either a multiple post type request or not a request for the Venue or Organizer post types.
+			return $slug;
+		}
+
+		$post_type = reset( $context_post_types );
+
+		return $post_types[ $post_type ] ?? $slug;
+	}
 }

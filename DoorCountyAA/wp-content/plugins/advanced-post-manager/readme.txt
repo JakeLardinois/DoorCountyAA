@@ -3,10 +3,10 @@
 Contributors: aguseo, bordoni, borkweb, brianjessee, GeoffBel, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell, juanfra
 Donate link: https://evnt.is/4o
 Tags: developer-tools, custom post, filter, column, metabox, taxonomy, wp-admin, admin, Post, post type, plugin, advanced, tribe
-Requires at least: 5.6
-Tested up to: 5.8.2
+Requires at least: 5.7
+Tested up to: 6.1.1
 License: GPL v2
-Stable tag: 4.5.1
+Stable tag: 4.5.4
 Requires PHP: 7.1
 
 Turbo charge your posts admin for any custom post type with sortable filters and columns, and auto-registration of metaboxes.
@@ -67,9 +67,26 @@ Our Premium Plugins and Services:
 
 == Changelog ==
 
+= [4.5.4] 2023-02-22 =
+
+* Version - Advanced post Manager 4.8.5 is only compatible with The Events Calendar 6.0.10 and higher.
+* Fix - Resolve error thrown by JSON decode issue. [APM-5]
+* Tweak - PHP version compatibility bumped to PHP 7.4
+* Tweak - Version Composer updated to 2
+* Tweak - Version Node updated to 18.13.0
+* Tweak - Version NPM update to 8.19.3
+
+= [4.5.3] 2022-08-05 =
+
+* Fix - Resolve issue where filters that were being set were being lost after editing posts.
+
+= [4.5.2] 2022-07-14 =
+
+* Security - Store filter data using JSON rather than serialized strings for safer and smaller strings.
+
 = [4.5.1] 2021-12-03 =
 
-* Fix - Use WP-provided jQuery UI datepicker to resolve JS error when interacting with filters. (props to @ethanclevenger91) 
+* Fix - Use WP-provided jQuery UI datepicker to resolve JS error when interacting with filters. (props to @ethanclevenger91)
 
 = [4.5] 2019-02-14 =
 
@@ -107,7 +124,7 @@ Our Premium Plugins and Services:
 
 = [4.0] 2015-12-02 =
 
-* Fix - improved code standardization to bring this up to Modern Tribe standards
+* Fix - improved code standardization to bring this up to The Events Calendar standards
 * Feature - increased language support including Catalan, Czech, French, and Portuguese (Portugal)
 
 = [3.12] 2015-09-08 =
@@ -123,7 +140,7 @@ Our Premium Plugins and Services:
 
 * Bug - fixed escaping throughout
 * Bug - fixed comments bubbles when they exist in the table
-* Tweak - Brought version in line with other Modern Tribe plugins
+* Tweak - Brought version in line with other The Events Calendar plugins
 * Tweak - Added some changelog formatting enhancements after seeing keepachangelog.com :)
 * Feature - added translation support
 * Feature - Added Brazilian Portuguese translation files, courtesy of Gustavo Bordoni
