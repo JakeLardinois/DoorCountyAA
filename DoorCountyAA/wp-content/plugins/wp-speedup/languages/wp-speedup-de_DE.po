@@ -1,0 +1,436 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-03-04 11:06+0500\n"
+"PO-Revision-Date: 2019-03-04 11:06+0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: inc/functions.php:85
+msgid "Click here to get information about image compression"
+msgstr "Klicken Sie hier, um Informationen zur Bildkomprimierung zu erhalten"
+
+#: inc/functions.php:86
+msgid "Your image files are currently using"
+msgstr "Ihre Bilddateien werden derzeit verwendet"
+
+#: inc/functions.php:86
+msgid "of your bandwidth!"
+msgstr "von Ihrer Bandbreite!"
+
+#: inc/functions.php:86
+msgid "Click here to optimize"
+msgstr "Klicken Sie hier, um zu optimieren"
+
+#: inc/functions.php:87
+msgid ""
+"You can compress and try the compressed version of your images by switching "
+"directories."
+msgstr ""
+"Sie können die komprimierte Version Ihrer Bilder komprimieren und "
+"ausprobieren, indem Sie das Verzeichnis wechseln."
+
+#: inc/functions.php:111
+msgid "Directory Name"
+msgstr "Verzeichnisname"
+
+#: inc/functions.php:118
+msgid "Click here to switch directory"
+msgstr "Klicken Sie hier, um das Verzeichnis zu wechseln"
+
+#: inc/functions.php:395 inc/wpsu_settings.php:3
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+"Sie haben keine ausreichenden Berechtigungen, um auf diese Seite zuzugreifen."
+
+#: inc/functions.php:452 inc/wpsu_settings.php:34
+msgid "Settings"
+msgstr "die Einstellungen"
+
+#: inc/functions.php:464 inc/wpsu_img_settings.php:8
+msgid "Go Premium"
+msgstr "Premium werden"
+
+#: inc/wpsu-css-class.php:778
+msgid "Delete CSS Cache"
+msgstr "CSS-Cache löschen"
+
+#: inc/wpsu-css-class.php:779
+msgid "Remove CSS Cache"
+msgstr "CSS-Cache entfernen"
+
+#: inc/wpsu_css_settings.php:34 inc/wpsu_js_settings.php:27
+msgid "Settings saved."
+msgstr "Einstellungen gespeichert."
+
+#: inc/wpsu_css_settings.php:41
+msgid "Temporary directory does not exist."
+msgstr "Temporäres Verzeichnis existiert nicht."
+
+#: inc/wpsu_css_settings.php:42
+msgid ""
+"You will need to manually create this directory by using the commands below. "
+msgstr ""
+"Sie müssen dieses Verzeichnis manuell erstellen, indem Sie die folgenden "
+"Befehle verwenden."
+
+#: inc/wpsu_css_settings.php:43
+msgid ""
+"After running the commands, be sure to update your settings and select the "
+"\"Save Changes\" button below."
+msgstr ""
+"Aktualisieren Sie nach dem Ausführen der Befehle Ihre Einstellungen und "
+"klicken Sie auf die Schaltfläche \"Änderungen speichern\"."
+
+#: inc/wpsu_css_settings.php:44
+msgid ""
+"Alternatively, you may use your FTP client to create a directory called \"tmp"
+"\" directly in the this plugin directory rather than running the commands "
+"above."
+msgstr ""
+"Alternativ können Sie Ihren FTP-Client verwenden, um ein Verzeichnis namens "
+"\"tmp\" direkt in diesem Plugin-Verzeichnis zu erstellen, anstatt die obigen "
+"Befehle auszuführen."
+
+#: inc/wpsu_css_settings.php:47
+msgid "Temporary directory is not writable. "
+msgstr "Temporäres Verzeichnis ist nicht beschreibbar."
+
+#: inc/wpsu_css_settings.php:48
+msgid ""
+"You will need to manually fix permissions by using this command (or use your "
+"FTP client to give 777 permissions to the tmp directory)"
+msgstr ""
+"Sie müssen Berechtigungen manuell mit diesem Befehl korrigieren (oder "
+"verwenden Sie Ihren FTP-Client, um 777-Berechtigungen für das Verzeichnis "
+"tmp zu erteilen.)"
+
+#: inc/wpsu_css_settings.php:51
+msgid "Settings file does not exist. "
+msgstr "Einstellungsdatei existiert nicht."
+
+#: inc/wpsu_css_settings.php:52
+msgid "Select the \"Save Changes\" button below to generate this file."
+msgstr ""
+"Klicken Sie unten auf die Schaltfläche \"Änderungen speichern\", um diese "
+"Datei zu erstellen."
+
+#: inc/wpsu_css_settings.php:53
+msgid ""
+"If the file does not exist after selecting the \"Save Changes\" button, you "
+"will need to manually create this file by using these commands (or using "
+"your FTP client to create the file)"
+msgstr ""
+"Wenn die Datei nach der Auswahl der Schaltfläche \"Änderungen speichern\" "
+"nicht vorhanden ist, müssen Sie diese Datei manuell erstellen, indem Sie "
+"diese Befehle verwenden (oder den FTP-Client verwenden, um die Datei zu "
+"erstellen)."
+
+#: inc/wpsu_css_settings.php:56
+msgid "Settings file is not writable. "
+msgstr "Einstellungsdatei ist nicht beschreibbar."
+
+#: inc/wpsu_css_settings.php:56
+msgid "You will need to manually fix permissions by using this command"
+msgstr "Einstellungsdatei ist nicht beschreibbar."
+
+#: inc/wpsu_css_settings.php:104 inc/wpsu_js_settings.php:38
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: inc/wpsu_img_settings.php:13
+msgid "Compress All Images "
+msgstr "Alle Bilder komprimieren "
+
+#: inc/wpsu_img_settings.php:13
+msgid "It's Safe"
+msgstr "Es ist sicher"
+
+#: inc/wpsu_img_settings.php:13
+msgid ""
+"Warning! Make sure that you didn't switch the original directories as temp "
+"directories because this action will remove temp directories permanantly."
+msgstr ""
+"Warnung! Stellen Sie sicher, dass Sie die ursprünglichen Verzeichnisse nicht "
+"als temporäre Verzeichnisse gewechselt haben, da durch diese Aktion "
+"temporäre Verzeichnisse dauerhaft entfernt werden."
+
+#: inc/wpsu_img_settings.php:13
+msgid "Delete All Temp Directories"
+msgstr "Löschen Sie alle temporären Verzeichnisse"
+
+#: inc/wpsu_img_settings.php:15
+msgid ""
+"A temp directory is created and compressed versions are copied there instead "
+"of replacing original images."
+msgstr ""
+"Ein temporäres Verzeichnis wird erstellt und komprimierte Versionen werden "
+"kopiert, anstatt die Originalbilder zu ersetzen."
+
+#: inc/wpsu_img_settings.php:15
+msgid "All files are successfully compressed."
+msgstr "Alle Dateien wurden erfolgreich komprimiert."
+
+#: inc/wpsu_img_settings.php:15
+msgid " Click here to refresh."
+msgstr " Klicken Sie hier zum Aktualisieren."
+
+#: inc/wpsu_js_settings.php:3
+msgid "Not recommended unless you understand the javascript minification."
+msgstr ""
+"Nicht zu empfehlen, es sei denn, Sie verstehen die JavaScript-Minifizierung."
+
+#: inc/wpsu_settings.php:15
+msgid "Sorry, your nonce did not verify."
+msgstr "Entschuldigung, Ihre Nachricht wurde nicht bestätigt."
+
+#: inc/wpsu_settings.php:38
+msgid "Booster"
+msgstr "Booster"
+
+#: inc/wpsu_settings.php:39
+msgid "Caching Mode"
+msgstr "Caching-Modus"
+
+#: inc/wpsu_settings.php:40
+msgid "Image Optimization"
+msgstr "Image Optimization"
+
+#: inc/wpsu_settings.php:55 inc/wpsu_settings.php:62
+msgid "There are"
+msgstr "Es gibt"
+
+#: inc/wpsu_settings.php:55 inc/wpsu_settings.php:62
+msgid "tables with"
+msgstr "Tische mit"
+
+#: inc/wpsu_settings.php:55
+msgid "engine type"
+msgstr "Motortyp"
+
+#: inc/wpsu_settings.php:62
+msgid "engine type."
+msgstr "Motortyp."
+
+#: inc/wpsu_settings.php:76 inc/wpsu_settings.php:98
+msgid "What is"
+msgstr "Was ist"
+
+#: inc/wpsu_settings.php:78
+msgid "is a storage engine for"
+msgstr "ist eine Storage Engine für"
+
+#: inc/wpsu_settings.php:79
+msgid "and later use it by default. "
+msgstr "und später verwenden Sie es standardmäßig."
+
+#: inc/wpsu_settings.php:80
+msgid "provides the standard"
+msgstr "liefert den Standard"
+
+#: inc/wpsu_settings.php:80
+msgid ""
+"transaction features, along with foreign key support (Declarative "
+"Referential Integrity)"
+msgstr ""
+"Transaktionsfunktionen sowie Unterstützung für Fremdschlüssel (deklarative "
+"referentielle Integrität)"
+
+#: inc/wpsu_settings.php:84 inc/wpsu_settings.php:107
+msgid "Advantages"
+msgstr "Vorteile"
+
+#: inc/wpsu_settings.php:86
+msgid "transactions"
+msgstr "Transaktionen"
+
+#: inc/wpsu_settings.php:87
+msgid "row-level locking"
+msgstr "Sperren auf Zeilenebene"
+
+#: inc/wpsu_settings.php:88
+msgid "foreign key constraints"
+msgstr "Fremdschlüsseleinschränkungen"
+
+#: inc/wpsu_settings.php:89
+msgid "automatic crash recovery"
+msgstr "automatische Wiederherstellung nach einem Absturz"
+
+#: inc/wpsu_settings.php:90
+msgid "table compression (read/write)"
+msgstr "Tabellenkomprimierung (Lesen / Schreiben)"
+
+#: inc/wpsu_settings.php:91
+msgid "spatial data types (no spatial indexes)"
+msgstr "räumliche Datentypen (keine räumlichen Indizes)"
+
+#: inc/wpsu_settings.php:100
+msgid "is the default storage engine for the"
+msgstr "ist die Standardspeicher-Engine für"
+
+#: inc/wpsu_settings.php:100
+msgid "relational database management system versions prior to"
+msgstr "Versionen relationaler Datenbankverwaltungssysteme vor"
+
+#: inc/wpsu_settings.php:101
+msgid "It is based on the older"
+msgstr "Es basiert auf dem älteren"
+
+#: inc/wpsu_settings.php:101
+msgid "code but has many useful extensions."
+msgstr "Code, hat aber viele nützliche Erweiterungen."
+
+#: inc/wpsu_settings.php:102
+msgid "The major deficiency of"
+msgstr "Der Hauptmangel von"
+
+#: inc/wpsu_settings.php:102
+msgid "is the absence of transactions support."
+msgstr "ist das Fehlen von Transaktionen Unterstützung."
+
+#: inc/wpsu_settings.php:109
+msgid "fast COUNT(*)s (when WHERE, GROUP BY, or JOIN is not used)"
+msgstr "Fast COUNT (*) s (wenn WHERE, GROUP BY oder JOIN nicht verwendet wird)"
+
+#: inc/wpsu_settings.php:110
+msgid "full text indexing (update: supported in"
+msgstr "Volltextindizierung (Update: unterstützt in"
+
+#: inc/wpsu_settings.php:110 inc/wpsu_settings.php:113
+msgid "from"
+msgstr "von"
+
+#: inc/wpsu_settings.php:111
+msgid "smaller disk footprint"
+msgstr "kleinerer Festplattenabdruck"
+
+#: inc/wpsu_settings.php:112
+msgid "very high table compression (read only)"
+msgstr "sehr hohe Komprimierung der Tabelle (nur Lesen)"
+
+#: inc/wpsu_settings.php:113
+msgid "spatial data types and indexes (R-tree) (update: supported in"
+msgstr "Geodatentypen und -indizes (R-Baum) (Update: unterstützt in"
+
+#: inc/wpsu_settings.php:137
+msgid "Please test your website speed on these platforms before optimization."
+msgstr "Testen Sie Ihre Website auf diesen Plattformen vor der Optimierung."
+
+#: inc/wpsu_settings.php:138
+msgid "Test on"
+msgstr "Test auf"
+
+#: inc/wpsu_settings.php:140
+msgid "Test on google.com pagespeed"
+msgstr "Testen Sie auf google.com pagepeed"
+
+#: inc/wpsu_settings.php:142
+msgid "Speed Up Todo list"
+msgstr "Beschleunigen Sie die Todo-Liste"
+
+#: inc/wpsu_settings.php:147
+msgid "Turn off pingbacks and trackbacks"
+msgstr "Deaktivieren Sie Pingbacks und Trackbacks"
+
+#: inc/wpsu_settings.php:148
+msgid "Uncheck"
+msgstr "Deaktivieren Sie das Kontrollkästchen"
+
+#: inc/wpsu_settings.php:149
+msgid ""
+"Allow link notifications from other blogs (pingbacks and trackbacks) on new "
+"articles"
+msgstr ""
+"Erlauben Sie Link-Benachrichtigungen aus anderen Blogs (Pingbacks und "
+"Trackbacks) für neue Artikel"
+
+#: inc/wpsu_settings.php:150
+msgid "Images"
+msgstr "Bilder"
+
+#: inc/wpsu_settings.php:152
+msgid "use for photos"
+msgstr "Verwenden Sie für Fotos"
+
+#: inc/wpsu_settings.php:153
+msgid "use for graphics (or not detailed images)"
+msgstr "Verwendung für Grafiken (oder nicht detaillierte Bilder)"
+
+#: inc/wpsu_settings.php:154
+msgid "use for simple small graphics or images"
+msgstr "Verwenden Sie diese Option für einfache kleine Grafiken oder Bilder"
+
+#: inc/wpsu_settings.php:155
+msgid "do not use them"
+msgstr "Verwenden Sie sie nicht"
+
+#: inc/wpsu_settings.php:158
+msgid "Optimization"
+msgstr "Optimierung"
+
+#: inc/wpsu_settings.php:166
+msgid "Permalink Settings"
+msgstr "Permalink-Einstellungen"
+
+#: inc/wpsu_settings.php:166
+msgid "Update permalinks every time you made changes here"
+msgstr ""
+"Aktualisieren Sie Permalinks jedes Mal, wenn Sie hier Änderungen vorgenommen "
+"haben"
+
+#: inc/wpsu_settings.php:172
+msgid ""
+"Before making any changes, its recommended that you connect FTP and backup "
+"your"
+msgstr ""
+"Bevor Sie Änderungen vornehmen, wird empfohlen, dass Sie eine FTP-Verbindung "
+"herstellen und Ihr System sichern"
+
+#: inc/wpsu_settings.php:172
+msgid "file on root."
+msgstr "Datei im Stammverzeichnis."
+
+#: inc/wpsu_settings.php:182
+msgid "A few blog posts related to"
+msgstr "Ein paar Blogbeiträge zu"
+
+#: inc/wpsu_settings.php:182
+msgid "handling"
+msgstr "Handhabung"
+
+#: inc/wpsu_settings.php:184
+msgid "at a Glance"
+msgstr "auf einen Blick"
+
+#: inc/wpsu_settings.php:185
+msgid "Caching with"
+msgstr "Zwischenspeichern mit"
+
+#: inc/wpsu_settings.php:186
+msgid "issue on"
+msgstr "Ausgabe am"
+
+#: inc/wpsu_settings.php:187
+msgid "Error Reporting"
+msgstr "Fehler melden"
+
+#: inc/wpsu_settings.php:188
+msgid "More Articles on"
+msgstr "Weitere Artikel zu"
+
+#: inc/wpsu_settings.php:188
+msgid "usage"
+msgstr "Verwendungszweck"
+
+#: inc/wpsu_settings.php:196 inc/wpsu_settings.php:197
+msgid "Click here for settings"
+msgstr "Klicken Sie hier für die Einstellungen"
